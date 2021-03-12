@@ -21,12 +21,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import util.enumeration.GenderEnum;
+import util.security.CryptographicHelper;
 
 /**
  *
@@ -54,6 +54,9 @@ public class CustomerEntity implements Serializable {
     @Size(min = 6, max = 50)
     private String password;
 
+    @Column(columnDefinition = "CHAR(32) NOT NULL")
+    private String salt;
+
     @NotNull
     @Past
     @Temporal(TemporalType.DATE)
@@ -80,7 +83,7 @@ public class CustomerEntity implements Serializable {
     private List<ComparisonEntity> savedComparisons;
 
     //bidirectional
-    @OneToOne(optional = false, cascade = {CascadeType.REMOVE})
+    @OneToOne(optional = false, cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, orphanRemoval = true)
     private AssetEntity asset;
 
     //unidirectional    
@@ -95,13 +98,14 @@ public class CustomerEntity implements Serializable {
         this.listOfIssues = new ArrayList<>();
         this.savedComparisons = new ArrayList<>();
         this.listOfLikeProducts = new ArrayList<>();
+        this.salt = CryptographicHelper.getInstance().generateRandomString(32);
     }
 
     public CustomerEntity(String fullName, String email, String password, GregorianCalendar dateOfBirth, String phoneNumber, GenderEnum gender, Boolean smoker, AssetEntity asset) {
         this();
         this.fullName = fullName;
         this.email = email;
-        this.password = password;
+        setPassword(password);
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
         this.gender = gender;
@@ -139,7 +143,11 @@ public class CustomerEntity implements Serializable {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        if (password != null) {
+            this.password = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + this.salt));
+        } else {
+            this.password = null;
+        }
     }
 
     public GregorianCalendar getDateOfBirth() {
