@@ -7,6 +7,7 @@ package ejb.entity;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -33,7 +34,7 @@ public class QuestionEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     private CategoryEnum categoryEnum;
     
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.REMOVE})
     @Column (nullable = false)
     private List<OptionEntity> listOfOptions; 
 
