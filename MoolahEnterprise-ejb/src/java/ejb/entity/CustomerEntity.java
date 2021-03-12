@@ -17,6 +17,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
@@ -33,6 +34,7 @@ import util.security.CryptographicHelper;
  * @author nickg
  */
 @Entity
+@NamedQuery(name="findCustWithEmail", query="SELECT c FROM Customer c WHERE c.email =:custEmail")
 public class CustomerEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -144,10 +146,18 @@ public class CustomerEntity implements Serializable {
 
     public void setPassword(String password) {
         if (password != null) {
-            this.password = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + this.salt));
+            this.password = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + this.getSalt()));
         } else {
             this.password = null;
         }
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     public GregorianCalendar getDateOfBirth() {

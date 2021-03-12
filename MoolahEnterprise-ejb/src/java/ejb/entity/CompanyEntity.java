@@ -69,10 +69,14 @@ public class CompanyEntity implements Serializable {
     @NotNull
     private BigInteger creditOwned;
 
+    @NotNull
     private Boolean isDeactivated;
 
     @NotNull
     private Boolean isDeleted;
+    
+    @NotNull
+    private Boolean isWarned;
 
     @Column(columnDefinition = "CHAR(32) NOT NULL")
     private String salt;
@@ -204,6 +208,14 @@ public class CompanyEntity implements Serializable {
 
     public void setIsDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
+    }
+
+    public Boolean getIsWarned() {
+        return isWarned;
+    }
+
+    public void setIsWarned(Boolean isWarned) {
+        this.isWarned = isWarned;
     }
 
     public String getSalt() {
