@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -55,7 +56,7 @@ public class CompanyEntity implements Serializable {
     private String companyContactNumber;
 
     @NotNull
-    private boolean isVerified;
+    private Boolean isVerified;
 
     @NotNull
     @Size(min = 8, max = 20)
@@ -67,26 +68,26 @@ public class CompanyEntity implements Serializable {
     @NotNull
     private BigInteger creditOwned;
 
-    private boolean isDeactivated;
+    private Boolean isDeactivated;
 
     @NotNull
-    private boolean isDeleted;
+    private Boolean isDeleted;
 
     @NotNull
     private String salt;
 
-    @OneToOne(mappedBy = "company")
+    @OneToOne(mappedBy = "company", cascade = {CascadeType.MERGE})
     private RefundEntity refund;
 
-    @OneToMany(mappedBy = "company")
+    @OneToMany(mappedBy = "company", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @Column(nullable = false)
     private List<PointOfContactEntity> listOfPointOfContacts;
 
-    @OneToMany(mappedBy = "company")
+    @OneToMany(mappedBy = "company", cascade = {CascadeType.MERGE})
     @Column(nullable = true)
     private List<MonthlyPaymentEntity> listOfMonthlyPayments;
 
-    @OneToMany(mappedBy = "company")
+    @OneToMany(mappedBy = "company", cascade = {CascadeType.MERGE})
     private List<ProductEntity> listOfProducts;
 
     public CompanyEntity() {
@@ -149,7 +150,7 @@ public class CompanyEntity implements Serializable {
         this.companyContactNumber = companyContactNumber;
     }
 
-    public boolean isIsVerified() {
+    public Boolean isIsVerified() {
         return isVerified;
     }
 
@@ -181,7 +182,7 @@ public class CompanyEntity implements Serializable {
         this.creditOwned = creditOwned;
     }
 
-    public boolean isIsDeactivated() {
+    public Boolean isIsDeactivated() {
         return isDeactivated;
     }
 
@@ -189,7 +190,7 @@ public class CompanyEntity implements Serializable {
         this.isDeactivated = isDeactivated;
     }
 
-    public boolean isIsDeleted() {
+    public Boolean isIsDeleted() {
         return isDeleted;
     }
 

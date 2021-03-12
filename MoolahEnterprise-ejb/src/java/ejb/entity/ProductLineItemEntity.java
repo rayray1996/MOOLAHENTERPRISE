@@ -25,11 +25,11 @@ public class ProductLineItemEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long prodcutLineItemId;
     @NotNull
-    private Long productId; 
+    private Long productId;
     @NotNull
     private BigInteger monthlyClicks;
     @NotNull
-    private BigInteger monthlySubtotalCredit; 
+    private BigInteger monthlySubtotalCredit;
     @NotNull
     private BigInteger fixedSubscriptionCredit;
 
@@ -42,8 +42,6 @@ public class ProductLineItemEntity implements Serializable {
         this.monthlySubtotalCredit = monthlySubtotalCredit;
         this.fixedSubscriptionCredit = fixedSubscriptionCredit;
     }
-    
-    
 
     public Long getProdcutLineItemId() {
         return prodcutLineItemId;
@@ -109,5 +107,5 @@ public class ProductLineItemEntity implements Serializable {
     public void setFixedSubscriptionCredit(BigInteger fixedSubscriptionCredit) {
         this.fixedSubscriptionCredit = fixedSubscriptionCredit;
     }
-    
+
 }

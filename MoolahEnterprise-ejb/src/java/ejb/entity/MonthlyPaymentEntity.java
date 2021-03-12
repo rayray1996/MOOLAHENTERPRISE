@@ -37,66 +37,64 @@ public class MonthlyPaymentEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long monthlyPaymentId;
-    
+
     private Boolean paid;
-    
+
     @Temporal(TemporalType.DATE)
     private GregorianCalendar dateTransacted; // This one can be null because havent pay then it is null
-    
-    private String paymentNumber; 
-    
+
+    private String paymentNumber;
+
     @NotNull
     @Min(value = 1)
     private BigInteger totalPayable;
-    
+
     @Temporal(TemporalType.DATE)
     @NotNull
     private GregorianCalendar dateGenerated; // This should not be null because it should indicate when it is generated
-    
+
     @ManyToOne(optional = false, cascade = {CascadeType.MERGE})
     @JoinColumn(nullable = false)
     @NotNull
-    private CompanyEntity comapny; 
-    
-    @OneToMany
+    private CompanyEntity company;
+
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<ProductLineItemEntity> listOfProductLineItems;
 
     public MonthlyPaymentEntity() {
         this.listOfProductLineItems = new ArrayList<>();
     }
 
-    public MonthlyPaymentEntity(BigInteger totalPayable, GregorianCalendar dateGenerated, CompanyEntity comapny, List<ProductLineItemEntity> listOfProductLineItems) {
+    public MonthlyPaymentEntity(BigInteger totalPayable, GregorianCalendar dateGenerated, CompanyEntity company, List<ProductLineItemEntity> listOfProductLineItems) {
         this.totalPayable = totalPayable;
         this.dateGenerated = dateGenerated;
-        this.comapny = comapny;
+        this.company = company;
         this.listOfProductLineItems = listOfProductLineItems;
         this.paid = false;
         this.paymentNumber = "";
         this.dateTransacted = null;
     }
 
-    public MonthlyPaymentEntity(BigInteger totalPayable, GregorianCalendar dateGenerated, CompanyEntity comapny) {
+    public MonthlyPaymentEntity(BigInteger totalPayable, GregorianCalendar dateGenerated, CompanyEntity company) {
         this();
         this.totalPayable = totalPayable;
         this.dateGenerated = dateGenerated;
-        this.comapny = comapny;
+        this.company = company;
         this.paid = false;
         this.paymentNumber = "";
         this.dateTransacted = null;
     }
 
-    public MonthlyPaymentEntity(Boolean paid, GregorianCalendar dateTransacted, String paymentNumber, BigInteger totalPayable, GregorianCalendar dateGenerated, CompanyEntity comapny, List<ProductLineItemEntity> listOfProductLineItems) {
+    public MonthlyPaymentEntity(Boolean paid, GregorianCalendar dateTransacted, String paymentNumber, BigInteger totalPayable, GregorianCalendar dateGenerated, CompanyEntity company, List<ProductLineItemEntity> listOfProductLineItems) {
         this.paid = paid;
         this.dateTransacted = dateTransacted;
         this.paymentNumber = paymentNumber;
         this.totalPayable = totalPayable;
         this.dateGenerated = dateGenerated;
-        this.comapny = comapny;
+        this.company = company;
         this.listOfProductLineItems = listOfProductLineItems;
     }
-    
 
-    
     public Long getMonthlyPaymentId() {
         return monthlyPaymentId;
     }
@@ -171,11 +169,11 @@ public class MonthlyPaymentEntity implements Serializable {
     }
 
     public CompanyEntity getComapny() {
-        return comapny;
+        return company;
     }
 
-    public void setComapny(CompanyEntity comapny) {
-        this.comapny = comapny;
+    public void setComapny(CompanyEntity company) {
+        this.company = company;
     }
 
     public List<ProductLineItemEntity> getListOfProductLineItems() {
@@ -185,5 +183,5 @@ public class MonthlyPaymentEntity implements Serializable {
     public void setListOfProductLineItems(List<ProductLineItemEntity> listOfProductLineItems) {
         this.listOfProductLineItems = listOfProductLineItems;
     }
-    
+
 }

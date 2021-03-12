@@ -7,6 +7,7 @@ package ejb.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -47,7 +48,7 @@ public class PointOfContactEntity implements Serializable {
     @Email
     private String pocEmail;
     
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(nullable = false)
     private CompanyEntity company;
 
