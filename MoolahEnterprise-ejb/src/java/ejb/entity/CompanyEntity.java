@@ -73,7 +73,7 @@ public class CompanyEntity implements Serializable {
     @NotNull
     private Boolean isDeleted;
 
-    @NotNull
+    @Column(columnDefinition = "CHAR(32) NOT NULL")
     private String salt;
 
     @OneToOne(mappedBy = "company", cascade = {CascadeType.MERGE})
@@ -91,14 +91,15 @@ public class CompanyEntity implements Serializable {
     private List<ProductEntity> listOfProducts;
 
     public CompanyEntity() {
-        refund = null;
-        listOfPointOfContacts = new ArrayList<>();
-        listOfMonthlyPayments = new ArrayList<>();
-        listOfProducts = new ArrayList<>();
-        isVerified = false;
-        isDeleted = false;
-        isDeactivated = false;
-        verificationDate = null;
+        this.refund = null;
+        this.listOfPointOfContacts = new ArrayList<>();
+        this.listOfMonthlyPayments = new ArrayList<>();
+        this.listOfProducts = new ArrayList<>();
+        this.isVerified = false;
+        this.isDeleted = false;
+        this.isDeactivated = false;
+        this.verificationDate = null;
+        this.salt = CryptographicHelper.getInstance().generateRandomString(32);
     }
 
     public CompanyEntity(String companyName, String companyEmail, String companyContactNumber, String password, BigInteger creditOwned) {
@@ -108,6 +109,16 @@ public class CompanyEntity implements Serializable {
         this.companyContactNumber = companyContactNumber;
         this.password = password;
         this.creditOwned = creditOwned;
+
+        setPassword(password);
+    }
+
+    public void setPassword(String password) {
+        if (password != null) {
+            this.password = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + this.salt));
+        } else {
+            this.password = null;
+        }
     }
 
     public Long getCompanyId() {
@@ -160,10 +171,6 @@ public class CompanyEntity implements Serializable {
 
     public String getPassword() {
         return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public GregorianCalendar getVerificationDate() {
@@ -261,5 +268,4 @@ public class CompanyEntity implements Serializable {
         return "CompanyEntity{" + "companyId=" + companyId + ", companyName=" + companyName + ", companyEmail=" + companyEmail + ", businessRegNumber=" + businessRegNumber + ", companyContactNumber=" + companyContactNumber + ", isVerified=" + isVerified + ", password=" + password + ", verificationDate=" + verificationDate + ", creditOwned=" + creditOwned + ", isDeactivated=" + isDeactivated + ", isDeleted=" + isDeleted + ", salt=" + salt + ", refund=" + refund + ", listOfPointOfContacts=" + listOfPointOfContacts + ", listOfMonthlyPayments=" + listOfMonthlyPayments + ", listOfProducts=" + listOfProducts + '}';
     }
 
-    
 }
