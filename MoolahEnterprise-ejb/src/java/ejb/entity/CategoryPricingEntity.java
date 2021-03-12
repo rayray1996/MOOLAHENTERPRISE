@@ -8,9 +8,12 @@ package ejb.entity;
 import java.io.Serializable;
 import java.math.BigInteger;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import util.enumeration.CategoryEnum;
 
@@ -25,10 +28,14 @@ public class CategoryPricingEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryPricingId;
+    @NotNull
+    @Enumerated
     private CategoryEnum categoryType;
-    @Size(min=1)
+    @Min(1)
+    @NotNull
     private BigInteger fixedSubscriptionCredit;
-    @Size(min=0)
+    @Min(1)
+    @NotNull
     private BigInteger creditPerClick;
 
     public CategoryEnum getCategoryType() {

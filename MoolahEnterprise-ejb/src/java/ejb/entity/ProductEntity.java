@@ -9,7 +9,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -46,24 +48,26 @@ public class ProductEntity implements Serializable {
     @Digits(integer=10, fraction=3)
     private BigDecimal assuredSum;
     @NotNull
+    @Size(min=1)
     private String description;
     @NotNull
-    private boolean isDeleted;
+    private Boolean isDeleted;
     @NotNull
     private Integer policyTerm;
     @NotNull
+    @Enumerated
     private PolicyCurrencyEnum policyCurrency;
-    @OneToMany
+    @OneToMany (cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     private List<FeatureEntity> listOfAdditionalFeatures;
-    @OneToMany
+    @OneToMany (cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     private List<RiderEntity> listOfRiders;
     @OneToOne
     private ClickThroughEntity clickThroughInfo;
-    @ManyToOne
+    @ManyToOne 
     private CategoryPricingEntity productCategoryPricing;
     @ManyToOne
     private CompanyEntity company;
-    @OneToMany
+    @OneToMany (cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     private List<PremiumEntity> listOfPremium;
 
     public ProductEntity() {
@@ -75,7 +79,7 @@ public class ProductEntity implements Serializable {
         listOfPremium  = new ArrayList<PremiumEntity>();
     }
 
-    public ProductEntity(String productName, Integer yearOfCoverage, BigDecimal assuredSum, String description, boolean isDeleted, Integer policyTerm) {
+    public ProductEntity(String productName, Integer yearOfCoverage, BigDecimal assuredSum, String description, Boolean isDeleted, Integer policyTerm) {
         this();
         this.productName = productName;
         this.yearOfCoverage = yearOfCoverage;
@@ -117,11 +121,11 @@ public class ProductEntity implements Serializable {
         this.description = description;
     }
 
-    public boolean isIsDeleted() {
+    public Boolean isIsDeleted() {
         return isDeleted;
     }
 
-    public void setIsDeleted(boolean isDeleted) {
+    public void setIsDeleted(Boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
 

@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -31,7 +32,49 @@ public class PremiumEntity implements Serializable {
     private Integer maxAgeGroup;
     @Digits(integer=10, fraction=3)
     private BigDecimal value;
-    private boolean isSmoker;
+    @NotNull
+    private Boolean isSmoker;
+
+    public Integer getMinAgeGroup() {
+        return minAgeGroup;
+    }
+
+    public void setMinAgeGroup(Integer minAgeGroup) {
+        this.minAgeGroup = minAgeGroup;
+    }
+
+    public Integer getMaxAgeGroup() {
+        return maxAgeGroup;
+    }
+
+    public void setMaxAgeGroup(Integer maxAgeGroup) {
+        this.maxAgeGroup = maxAgeGroup;
+    }
+
+    public BigDecimal getValue() {
+        return value;
+    }
+
+    public void setValue(BigDecimal value) {
+        this.value = value;
+    }
+
+    public Boolean getIsSmoker() {
+        return isSmoker;
+    }
+
+    public void setIsSmoker(Boolean isSmoker) {
+        this.isSmoker = isSmoker;
+    }
+
+    public BigDecimal getGuaranteeSum() {
+        return guaranteeSum;
+    }
+
+    public void setGuaranteeSum(BigDecimal guaranteeSum) {
+        this.guaranteeSum = guaranteeSum;
+    }
+    @NotNull
     @Digits(integer=10, fraction=3)
     private BigDecimal guaranteeSum;
     
