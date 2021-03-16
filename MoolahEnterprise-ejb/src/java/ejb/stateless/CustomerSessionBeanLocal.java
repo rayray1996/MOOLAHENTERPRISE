@@ -25,13 +25,13 @@ import util.exception.UnknownPersistenceException;
 @Local
 public interface CustomerSessionBeanLocal {
 
-    public Long createCustomer(CustomerEntity newCust) throws CustomerAlreadyExistException, UnknownPersistenceException, CustomerCreationException;
+    public CustomerEntity createCustomer(CustomerEntity newCust) throws CustomerAlreadyExistException, UnknownPersistenceException, CustomerCreationException;
 
     public CustomerEntity login(String email, String password) throws IncorrectLoginParticularsException;
 
     public void resetPassword(String email, String password) throws CustomerPasswordExistsException, CustomerDoesNotExistsException;
 
-    public void updateCustomer(CustomerEntity newCust) throws CustomerAlreadyExistException, UnknownPersistenceException;
+    public void updateCustomer(CustomerEntity newCust) throws CustomerDoesNotExistsException, UnknownPersistenceException;
 
     public CustomerEntity retrieveCustomerById(Long id) throws CustomerDoesNotExistsException;
 

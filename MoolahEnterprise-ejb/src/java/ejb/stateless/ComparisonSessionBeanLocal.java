@@ -6,8 +6,10 @@
 package ejb.stateless;
 
 import ejb.entity.ComparisonEntity;
+import java.util.List;
 import javax.ejb.Local;
 import util.exception.ComparisonErrorException;
+import util.exception.CustomerDoesNotExistsException;
 import util.exception.UnknownPersistenceException;
 
 /**
@@ -18,5 +20,7 @@ import util.exception.UnknownPersistenceException;
 public interface ComparisonSessionBeanLocal {
 
     public ComparisonEntity saveThisComparison(ComparisonEntity comparison) throws UnknownPersistenceException, ComparisonErrorException;
+
+    public List<ComparisonEntity> viewSavedComparisonByCustId(Long custId) throws CustomerDoesNotExistsException;
     
 }

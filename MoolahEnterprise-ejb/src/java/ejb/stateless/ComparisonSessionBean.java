@@ -70,6 +70,7 @@ public class ComparisonSessionBean implements ComparisonSessionBeanLocal {
         }
     }
 
+    @Override
     public List<ComparisonEntity> viewSavedComparisonByCustId(Long custId) throws CustomerDoesNotExistsException {
         CustomerEntity cust = customerSessionBean.retrieveCustomerById(custId);
         List<ComparisonEntity> listOfComparison = cust.getSavedComparisons();

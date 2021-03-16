@@ -44,6 +44,7 @@ public class QuestionnaireSessionBean implements QuestionnaireSessionBeanLocal {
         validator = validatorFactory.getValidator();
     }
 
+    @Override
     public QuestionnaireEntity createMyPreferences(QuestionnaireEntity newQuestion) throws UnknownPersistenceException, QuestionnaireErrorException {
         Set<ConstraintViolation<QuestionnaireEntity>> questionError = validator.validate(newQuestion);
         if (questionError.isEmpty()) {
@@ -69,6 +70,7 @@ public class QuestionnaireSessionBean implements QuestionnaireSessionBeanLocal {
 
     }
 
+    @Override
     public void updateMyPreferences(QuestionnaireEntity toUpdateQuestion) throws QuestionnaireErrorException, UnknownPersistenceException {
         try {
             em.persist(toUpdateQuestion);
@@ -87,6 +89,7 @@ public class QuestionnaireSessionBean implements QuestionnaireSessionBeanLocal {
         }
     }
 
+    @Override
     public List<QuestionnaireEntity> retrieveAllQuestionnaire(Long custId) throws CustomerDoesNotExistsException {
 
         CustomerEntity cust = customerSessionBean.retrieveCustomerById(custId);

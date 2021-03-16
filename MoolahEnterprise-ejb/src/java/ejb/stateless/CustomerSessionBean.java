@@ -54,14 +54,14 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     }
 
     @Override
-    public Long createCustomer(CustomerEntity newCust) throws CustomerAlreadyExistException, UnknownPersistenceException, CustomerCreationException {
+    public CustomerEntity createCustomer(CustomerEntity newCust) throws CustomerAlreadyExistException, UnknownPersistenceException, CustomerCreationException {
         Set<ConstraintViolation<CustomerEntity>> custError = validator.validate(newCust);
         if (custError.isEmpty()) {
             try {
                 em.persist(newCust);
                 em.flush();
 
-                return newCust.getCustomerId();
+                return newCust;
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
                     if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
@@ -121,7 +121,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     }
 
     @Override
-    public void updateCustomer(CustomerEntity newCust) throws CustomerAlreadyExistException, UnknownPersistenceException {
+    public void updateCustomer(CustomerEntity newCust) throws CustomerDoesNotExistsException, UnknownPersistenceException {
         try {
             em.merge(newCust);
             em.flush();
@@ -129,7 +129,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         } catch (PersistenceException ex) {
             if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
                 if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
-                    throw new CustomerAlreadyExistException(ex.getMessage());
+                    throw new CustomerDoesNotExistsException(ex.getMessage());
                 } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }

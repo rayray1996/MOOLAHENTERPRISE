@@ -5,7 +5,12 @@
  */
 package ejb.stateless;
 
+import ejb.entity.QuestionnaireEntity;
+import java.util.List;
 import javax.ejb.Local;
+import util.exception.CustomerDoesNotExistsException;
+import util.exception.QuestionnaireErrorException;
+import util.exception.UnknownPersistenceException;
 
 /**
  *
@@ -13,5 +18,11 @@ import javax.ejb.Local;
  */
 @Local
 public interface QuestionnaireSessionBeanLocal {
+
+    public List<QuestionnaireEntity> retrieveAllQuestionnaire(Long custId) throws CustomerDoesNotExistsException;
+
+    public void updateMyPreferences(QuestionnaireEntity toUpdateQuestion) throws QuestionnaireErrorException, UnknownPersistenceException;
+
+    public QuestionnaireEntity createMyPreferences(QuestionnaireEntity newQuestion) throws UnknownPersistenceException, QuestionnaireErrorException;
     
 }
