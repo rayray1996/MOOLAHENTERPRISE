@@ -20,6 +20,8 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import util.exception.CustomerAlreadyExistException;
 import util.exception.CustomerCreationException;
+import util.exception.CustomerDoesNotExistsException;
+import util.exception.CustomerPasswordExistsException;
 import util.exception.IncorrectLoginParticularsException;
 import util.exception.UnknownPersistenceException;
 import util.security.CryptographicHelper;
@@ -74,6 +76,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         }
     }
 
+    //will retrieve all the way till product only
     public CustomerEntity login(String email, String password) throws IncorrectLoginParticularsException {
         try {
             CustomerEntity cust = (CustomerEntity) em.createNamedQuery("findCustWithEmail").setParameter("custEmail", email).getSingleResult();
@@ -94,6 +97,22 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
             
         } catch (NoResultException ex) {
             throw new IncorrectLoginParticularsException(ex.getMessage());
+        }
+    }
+    
+    public void resetPassword(String email, String password) throws CustomerPasswordExistsException, CustomerDoesNotExistsException{
+        try{
+            CustomerEntity cust = (CustomerEntity) em.createNamedQuery("findCustWithEmail").setParameter("custEmail", email).getSingleResult();
+            String passwordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + cust.getSalt()));
+            
+            if(passwordHash.equals(cust.getPassword())){
+                throw new CustomerPasswordExistsException("Password cannot be the same!");
+            } else {
+                cust.setPassword(password);
+            }
+            
+        } catch(NoResultException ex){
+            throw new CustomerDoesNotExistsException("Customer does not exists!");
         }
     }
 
