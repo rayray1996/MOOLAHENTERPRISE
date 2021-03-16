@@ -44,6 +44,12 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
     public List<ProductEntity> retrieveAllFinancialProducts() {
         Query query = em.createQuery("SELECT p FROM ProductEntity p");
         List<ProductEntity> results = query.getResultList();
+
+        for (ProductEntity e : results) {
+            e.getListOfAdditionalFeatures().size();
+            e.getListOfPremium().size();
+            e.getListOfAdditionalFeatures().size();
+        }
         return results;
     }
 
@@ -51,6 +57,13 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
     public List<EndowmentEntity> retrieveAllEndowmentProducts() {
         Query query = em.createQuery("SELECT e FROM EndowmentEntity e");
         List<EndowmentEntity> results = query.getResultList();
+
+        for (EndowmentEntity e : results) {
+            e.getListOfAdditionalFeatures().size();
+            e.getListOfPremium().size();
+            e.getListOfAdditionalFeatures().size();
+        }
+
         return results;
     }
 
@@ -58,6 +71,12 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
     public List<InvestmentLinkedEntity> retrieveAllInvestmentLinkedProducts() {
         Query query = em.createQuery("SELECT i FROM InvestmentLinkedEntity i");
         List<InvestmentLinkedEntity> results = query.getResultList();
+
+        for (InvestmentLinkedEntity e : results) {
+            e.getListOfAdditionalFeatures().size();
+            e.getListOfPremium().size();
+            e.getListOfAdditionalFeatures().size();
+        }
         return results;
     }
 
@@ -65,6 +84,12 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
     public List<TermLifeProductEntity> retrieveAllTermLifeProducts() {
         Query query = em.createQuery("SELECT t FROM TermLifeProductEntity t");
         List<TermLifeProductEntity> results = query.getResultList();
+
+        for (TermLifeProductEntity e : results) {
+            e.getListOfAdditionalFeatures().size();
+            e.getListOfPremium().size();
+            e.getListOfAdditionalFeatures().size();
+        }
         return results;
     }
 
@@ -72,6 +97,12 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
     public List<WholeLifeProductEntity> retrieveAllWholeLifeProducts() {
         Query query = em.createQuery("SELECT w FROM WholeLifeProductEntity w");
         List<WholeLifeProductEntity> results = query.getResultList();
+
+        for (WholeLifeProductEntity e : results) {
+            e.getListOfAdditionalFeatures().size();
+            e.getListOfPremium().size();
+            e.getListOfAdditionalFeatures().size();
+        }
         return results;
     }
 
@@ -81,6 +112,9 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         if (product == null) {
             throw new ProductNotFoundException("Product is not found");
         } else {
+            product.getListOfAdditionalFeatures().size();
+            product.getListOfPremium().size();
+            product.getListOfAdditionalFeatures().size();
             return product;
         }
     }
