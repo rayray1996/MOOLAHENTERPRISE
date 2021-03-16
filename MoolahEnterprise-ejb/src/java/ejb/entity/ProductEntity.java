@@ -43,7 +43,7 @@ public class ProductEntity implements Serializable {
     private String productName;
     @NotNull
     @Min(1)
-    private Integer yearOfCoverage;
+    private Integer coverageTerm;
     @NotNull
     @Digits(integer=10, fraction=3)
     private BigDecimal assuredSum;
@@ -53,7 +53,7 @@ public class ProductEntity implements Serializable {
     @NotNull
     private Boolean isDeleted;
     @NotNull
-    private Integer policyTerm;
+    private Integer premiumTerm;
     @NotNull
     @Enumerated
     private PolicyCurrencyEnum policyCurrency;
@@ -79,14 +79,14 @@ public class ProductEntity implements Serializable {
         listOfPremium  = new ArrayList<PremiumEntity>();
     }
 
-    public ProductEntity(String productName, Integer yearOfCoverage, BigDecimal assuredSum, String description, Boolean isDeleted, Integer policyTerm) {
+    public ProductEntity(String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm) {
         this();
         this.productName = productName;
-        this.yearOfCoverage = yearOfCoverage;
+        this.coverageTerm = coverageTerm;
         this.assuredSum = assuredSum;
         this.description = description;
         this.isDeleted = isDeleted;
-        this.policyTerm = policyTerm;
+        this.premiumTerm = premiumTerm;
     }
 
     public String getProductName() {
@@ -97,13 +97,22 @@ public class ProductEntity implements Serializable {
         this.productName = productName;
     }
 
-    public Integer getYearOfCoverage() {
-        return yearOfCoverage;
+    public Integer getCoverageTerm() {
+        return coverageTerm;
     }
 
-    public void setYearOfCoverage(Integer yearOfCoverage) {
-        this.yearOfCoverage = yearOfCoverage;
+    public void setCoverageTerm(Integer coverageTerm) {
+        this.coverageTerm = coverageTerm;
     }
+
+    public Integer getPremiumTerm() {
+        return premiumTerm;
+    }
+
+    public void setPremiumTerm(Integer premiumTerm) {
+        this.premiumTerm = premiumTerm;
+    }
+
 
     public BigDecimal getAssuredSum() {
         return assuredSum;
@@ -129,13 +138,6 @@ public class ProductEntity implements Serializable {
         this.isDeleted = isDeleted;
     }
 
-    public Integer getPolicyTerm() {
-        return policyTerm;
-    }
-
-    public void setPolicyTerm(Integer policyTerm) {
-        this.policyTerm = policyTerm;
-    }
 
     public PolicyCurrencyEnum getPolicyCurrency() {
         return policyCurrency;
