@@ -84,7 +84,7 @@ public class CustomerEntity implements Serializable {
     @OneToMany
     private List<ComparisonEntity> savedComparisons;
 
-    //bidirectional
+    //Unidirectional
     @OneToOne(optional = false, cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, orphanRemoval = true)
     private AssetEntity asset;
 

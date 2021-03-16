@@ -44,17 +44,14 @@ public class AssetEntity implements Serializable {
     @DecimalMin(value = "0")
     private BigDecimal monthlyIncome;
     
-    @OneToOne(mappedBy = "asset", optional = false)
-    private CustomerEntity customer;
 
     public AssetEntity() {
     }
 
-    public AssetEntity(BigDecimal cashInHand, BigDecimal monthlyExpense, BigDecimal investments, CustomerEntity customer) {
+    public AssetEntity(BigDecimal cashInHand, BigDecimal monthlyExpense, BigDecimal investments) {
         this.cashInHand = cashInHand;
         this.monthlyExpense = monthlyExpense;
         this.investments = investments;
-        this.customer = customer;
     }
 
     public Long getAssetId() {
@@ -91,14 +88,6 @@ public class AssetEntity implements Serializable {
 
     public void setMonthlyIncome(BigDecimal monthlyIncome) {
         this.monthlyIncome = monthlyIncome;
-    }
-
-    public CustomerEntity getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(CustomerEntity customer) {
-        this.customer = customer;
     }
 
     @Override
