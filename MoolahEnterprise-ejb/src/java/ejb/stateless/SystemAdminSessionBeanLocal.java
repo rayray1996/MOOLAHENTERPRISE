@@ -5,7 +5,10 @@
  */
 package ejb.stateless;
 
+import ejb.entity.IssueEntity;
 import javax.ejb.Local;
+import util.exception.InvalidIssueCreationException;
+import util.exception.UnknownPersistenceException;
 
 /**
  *
@@ -13,5 +16,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface SystemAdminSessionBeanLocal {
+
+    public Long createIssue(IssueEntity newIssue) throws InvalidIssueCreationException, UnknownPersistenceException;
     
 }

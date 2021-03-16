@@ -37,6 +37,7 @@ public class SystemAdminSessionBean implements SystemAdminSessionBeanLocal {
         validator = validatorFactory.getValidator();
     }
 
+    @Override
     public Long createIssue(IssueEntity newIssue) throws InvalidIssueCreationException, UnknownPersistenceException {
         newIssue.setDateOfIssue(new GregorianCalendar());
 
