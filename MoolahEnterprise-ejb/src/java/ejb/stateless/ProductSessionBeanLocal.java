@@ -32,5 +32,7 @@ public interface ProductSessionBeanLocal {
     public List<EndowmentEntity> retrieveAllEndowmentProducts();
 
     public List<ProductEntity> retrieveAllFinancialProducts();
+
+    public List<ProductEntity> searchForProductsByName(String name);
     
 }

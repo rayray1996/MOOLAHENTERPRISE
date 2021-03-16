@@ -119,6 +119,21 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         }
     }
 
+    @Override
+    public List<ProductEntity> searchForProductsByName(String name) {
+        Query query = em.createQuery("SELECT p FROM ProductEntity p WHERE p.productName LIKE :name");
+        query.setParameter("name", "%" + name + "%");
+        List<ProductEntity> results = query.getResultList();
+
+        for (ProductEntity p : results) {
+            p.getListOfAdditionalFeatures().size();
+            p.getListOfPremium().size();
+            p.getListOfAdditionalFeatures().size();
+        }
+        
+        return results;
+    }
+
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<ProductEntity>> constraintViolations) {
         String msg = "Input data validation error!:";
 
