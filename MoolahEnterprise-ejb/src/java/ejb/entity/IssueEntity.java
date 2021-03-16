@@ -6,12 +6,15 @@
 package ejb.entity;
 
 import java.io.Serializable;
+import java.util.GregorianCalendar;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import util.enumeration.ReasonForContactEnum;
 
@@ -26,13 +29,25 @@ public class IssueEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long issueId;
-    
+
     @NotNull
     @Enumerated(EnumType.STRING)
     private ReasonForContactEnum reasonForContact;
-    
+
     @NotNull
     private String issueDescription;
+
+    @NotNull
+    @Temporal(TemporalType.TIMESTAMP)
+    private GregorianCalendar dateOfIssue;
+
+    public GregorianCalendar getDateOfIssue() {
+        return dateOfIssue;
+    }
+
+    public void setDateOfIssue(GregorianCalendar dateOfIssue) {
+        this.dateOfIssue = dateOfIssue;
+    }
 
     public IssueEntity() {
     }
@@ -90,5 +105,5 @@ public class IssueEntity implements Serializable {
     public String toString() {
         return "ejb.entity.IssueEntity[ id=" + issueId + " ]";
     }
-    
+
 }
