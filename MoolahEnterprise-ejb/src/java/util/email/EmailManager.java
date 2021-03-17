@@ -9,6 +9,9 @@ import ejb.entity.CompanyEntity;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.FormatStyle;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Properties;
@@ -39,15 +42,20 @@ public class EmailManager {
 
     public Boolean emailCreditTopupNotification(CompanyEntity company, String fromEmailAddress, String toEmailAddress) {
         String emailBody = "";
-        SimpleDateFormat fmt = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss ");
+//        SimpleDateFormat fmt = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss ");
         LocalDateTime currDate = LocalDateTime.now();
+        String dateFormattedcurrDate = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(currDate);
+
         LocalDateTime expiryDate = currDate.plusWeeks(1);
-        
-        String dateFormattedcurrDate = fmt.format(currDate);
-        String dateFormattedexpiryDate = fmt.format(expiryDate);
+        String dateFormattedexpiryDate = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(expiryDate);
+
+//        String dateFormat = currDate.format(fmt);
+
+//        String dateFormattedcurrDate = fmt.format(currDate.toString());
+//        String dateFormattedexpiryDate = fmt.format(expiryDate.toString());
 
         emailBody += "Dear " + company.getCompanyName() + ", \n\n";
-        emailBody += "You currently have insufficient credit!\n\n Current credit amount as of " + dateFormattedcurrDate + " is :"  + company.getCreditOwned() + "\n\n";
+        emailBody += "You currently have insufficient credit!\n\n Current credit amount as of " + dateFormattedcurrDate + " is :" + company.getCreditOwned() + "\n\n";
         emailBody += "Please top it up by " + dateFormattedexpiryDate + ". \n\n\n";
         emailBody += "Yours Sincerely, \n Moolah Enterprise";
 
@@ -86,20 +94,19 @@ public class EmailManager {
             return false;
         }
     }
-    
+
     public Boolean emailReminderAccountDeactivated(CompanyEntity company, String fromEmailAddress, String toEmailAddress) {
         String emailBody = "";
         SimpleDateFormat fmt = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss ");
         LocalDateTime currDate = LocalDateTime.now();
         LocalDateTime expiryDate = currDate.plusMonths(6);
-        
+
         String dateFormattedexpiryDate = fmt.format(expiryDate);
 
         emailBody += "Dear " + company.getCompanyName() + ", \n\n";
         emailBody += "You currently have insufficient credit!\n\n Due to lack of action, we will be deactivating your account." + "\n\n";
         emailBody += "Please top it up by " + dateFormattedexpiryDate + ". \n\n\n";
         emailBody += "Yours Sincerely, \n Moolah Enterprise";
-
 
         try {
             Properties props = new Properties();
