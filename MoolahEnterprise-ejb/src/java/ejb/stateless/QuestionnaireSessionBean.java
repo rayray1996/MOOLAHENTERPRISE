@@ -72,20 +72,25 @@ public class QuestionnaireSessionBean implements QuestionnaireSessionBeanLocal {
 
     @Override
     public void updateMyPreferences(QuestionnaireEntity toUpdateQuestion) throws QuestionnaireErrorException, UnknownPersistenceException {
-        try {
-            em.persist(toUpdateQuestion);
-            em.flush();
+        Set<ConstraintViolation<QuestionnaireEntity>> questionError = validator.validate(toUpdateQuestion);
+        if (questionError.isEmpty()) {
+            try {
+                em.merge(toUpdateQuestion);
+                em.flush();
 
-        } catch (PersistenceException ex) {
-            if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
-                if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
-                    throw new QuestionnaireErrorException(ex.getMessage());
+            } catch (PersistenceException ex) {
+                if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
+                    if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
+                        throw new QuestionnaireErrorException(ex.getMessage());
+                    } else {
+                        throw new UnknownPersistenceException(ex.getMessage());
+                    }
                 } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
-            } else {
-                throw new UnknownPersistenceException(ex.getMessage());
             }
+        } else {
+            throw new QuestionnaireErrorException(prepareInputDataValidationErrorsMessage(questionError));
         }
     }
 
@@ -95,13 +100,13 @@ public class QuestionnaireSessionBean implements QuestionnaireSessionBeanLocal {
         CustomerEntity cust = customerSessionBean.retrieveCustomerById(custId);
 
         List<QuestionnaireEntity> listOfQuestionnaire = cust.getListOfQuestionnaires();
-        for(QuestionnaireEntity qn : listOfQuestionnaire){
+        for (QuestionnaireEntity qn : listOfQuestionnaire) {
             qn.getListOfQuestions().size();
-            for(QuestionEntity question : qn.getListOfQuestions()){
+            for (QuestionEntity question : qn.getListOfQuestions()) {
                 question.getListOfOptions().size();
             }
         }
-        
+
         return listOfQuestionnaire;
     }
 

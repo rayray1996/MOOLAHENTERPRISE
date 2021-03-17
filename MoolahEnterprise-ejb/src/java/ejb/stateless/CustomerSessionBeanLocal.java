@@ -14,6 +14,7 @@ import util.exception.CustomerAlreadyExistException;
 import util.exception.CustomerCreationException;
 import util.exception.CustomerDoesNotExistsException;
 import util.exception.CustomerPasswordExistsException;
+import util.exception.CustomerUpdateException;
 import util.exception.IncorrectLoginParticularsException;
 import util.exception.ProductNotFoundException;
 import util.exception.UnknownPersistenceException;
@@ -31,7 +32,7 @@ public interface CustomerSessionBeanLocal {
 
     public void resetPassword(String email, String password) throws CustomerPasswordExistsException, CustomerDoesNotExistsException;
 
-    public void updateCustomer(CustomerEntity newCust) throws CustomerDoesNotExistsException, UnknownPersistenceException;
+    public void updateCustomer(CustomerEntity newCust) throws CustomerDoesNotExistsException, UnknownPersistenceException, CustomerUpdateException;
 
     public CustomerEntity retrieveCustomerById(Long id) throws CustomerDoesNotExistsException;
 

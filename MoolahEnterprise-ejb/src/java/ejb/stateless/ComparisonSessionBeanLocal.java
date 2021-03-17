@@ -22,5 +22,7 @@ public interface ComparisonSessionBeanLocal {
     public ComparisonEntity saveThisComparison(ComparisonEntity comparison) throws UnknownPersistenceException, ComparisonErrorException;
 
     public List<ComparisonEntity> viewSavedComparisonByCustId(Long custId) throws CustomerDoesNotExistsException;
+
+    public void updateThisComparison(ComparisonEntity comparison) throws UnknownPersistenceException, ComparisonErrorException;
     
 }

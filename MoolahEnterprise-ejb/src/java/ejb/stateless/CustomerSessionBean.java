@@ -27,6 +27,7 @@ import util.exception.CustomerAlreadyExistException;
 import util.exception.CustomerCreationException;
 import util.exception.CustomerDoesNotExistsException;
 import util.exception.CustomerPasswordExistsException;
+import util.exception.CustomerUpdateException;
 import util.exception.IncorrectLoginParticularsException;
 import util.exception.ProductNotFoundException;
 import util.exception.UnknownPersistenceException;
@@ -121,21 +122,27 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     }
 
     @Override
-    public void updateCustomer(CustomerEntity newCust) throws CustomerDoesNotExistsException, UnknownPersistenceException {
-        try {
-            em.merge(newCust);
-            em.flush();
+    public void updateCustomer(CustomerEntity newCust) throws CustomerDoesNotExistsException, UnknownPersistenceException, CustomerUpdateException {
+        Set<ConstraintViolation<CustomerEntity>> custError = validator.validate(newCust);
+        if (custError.isEmpty()) {
 
-        } catch (PersistenceException ex) {
-            if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
-                if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
-                    throw new CustomerDoesNotExistsException(ex.getMessage());
+            try {
+                em.merge(newCust);
+                em.flush();
+
+            } catch (PersistenceException ex) {
+                if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
+                    if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
+                        throw new CustomerDoesNotExistsException(ex.getMessage());
+                    } else {
+                        throw new UnknownPersistenceException(ex.getMessage());
+                    }
                 } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
-            } else {
-                throw new UnknownPersistenceException(ex.getMessage());
             }
+        } else {
+            throw new CustomerUpdateException(prepareInputDataValidationErrorsMessage(custError));
         }
 
     }
@@ -175,29 +182,29 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     public void removeLikedProduct(Long custId, Long prodId) throws ProductNotFoundException, CustomerDoesNotExistsException {
         CustomerEntity cust = retrieveCustomerById(custId);
         ProductEntity prod = productSessionBean.retrieveProductEntityById(prodId);
-        
-        for(ProductEntity likedProd : cust.getListOfLikeProducts()){
-            if(likedProd.getProductId().equals(prod.getProductId())){
+
+        for (ProductEntity likedProd : cust.getListOfLikeProducts()) {
+            if (likedProd.getProductId().equals(prod.getProductId())) {
                 cust.getListOfLikeProducts().remove(prod);
                 break;
             }
         }
 
     }
-    
+
     @Override
-    public AssetEntity retrieveMyAsset(Long custId) throws CustomerDoesNotExistsException{
+    public AssetEntity retrieveMyAsset(Long custId) throws CustomerDoesNotExistsException {
         CustomerEntity cust = retrieveCustomerById(custId);
         return cust.getAsset();
     }
-    
+
     @Override
-    public List<ProductEntity> viewLikedProductList(Long custId) throws CustomerDoesNotExistsException{
+    public List<ProductEntity> viewLikedProductList(Long custId) throws CustomerDoesNotExistsException {
         CustomerEntity cust = retrieveCustomerById(custId);
         cust.getListOfLikeProducts().size();
         return cust.getListOfLikeProducts();
     }
-    
+
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<CustomerEntity>> constraintViolations) {
         String msg = "Input data validation error!:";
 

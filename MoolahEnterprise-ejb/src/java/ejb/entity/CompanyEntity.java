@@ -137,30 +137,6 @@ public class CompanyEntity implements Serializable {
         this.profilePic = profilePic;
     }
 
-    public Boolean getIsVerified() {
-        return isVerified;
-    }
-
-    public void setIsVerified(Boolean isVerified) {
-        this.isVerified = isVerified;
-    }
-
-    public Boolean getIsDeactivated() {
-        return isDeactivated;
-    }
-
-    public void setIsDeactivated(Boolean isDeactivated) {
-        this.isDeactivated = isDeactivated;
-    }
-
-    public Boolean getIsDeleted() {
-        return isDeleted;
-    }
-
-    public void setIsDeleted(Boolean isDeleted) {
-        this.isDeleted = isDeleted;
-    }
-
     public void setPassword(String password) {
         if (password != null) {
             this.password = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + this.salt));

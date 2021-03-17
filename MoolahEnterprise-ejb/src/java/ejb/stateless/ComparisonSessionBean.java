@@ -71,12 +71,36 @@ public class ComparisonSessionBean implements ComparisonSessionBeanLocal {
     }
 
     @Override
+    public void updateThisComparison(ComparisonEntity comparison) throws UnknownPersistenceException, ComparisonErrorException {
+        Set<ConstraintViolation<ComparisonEntity>> comparisonError = validator.validate(comparison);
+        if (comparisonError.isEmpty()) {
+            try {
+                em.merge(comparison);
+                em.flush();
+
+            } catch (PersistenceException ex) {
+                if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
+                    if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
+                        throw new ComparisonErrorException(ex.getMessage());
+                    } else {
+                        throw new UnknownPersistenceException(ex.getMessage());
+                    }
+                } else {
+                    throw new UnknownPersistenceException(ex.getMessage());
+                }
+            }
+        } else {
+            throw new ComparisonErrorException(prepareInputDataValidationErrorsMessage(comparisonError));
+        }
+    }
+
+    @Override
     public List<ComparisonEntity> viewSavedComparisonByCustId(Long custId) throws CustomerDoesNotExistsException {
         CustomerEntity cust = customerSessionBean.retrieveCustomerById(custId);
         List<ComparisonEntity> listOfComparison = cust.getSavedComparisons();
-        for(ComparisonEntity compare : listOfComparison){
+        for (ComparisonEntity compare : listOfComparison) {
             compare.getProductsToCompare().size();
-            for(ProductEntity prod :compare.getProductsToCompare() ){
+            for (ProductEntity prod : compare.getProductsToCompare()) {
                 prod.getListOfAdditionalFeatures().size();
                 prod.getListOfPremium().size();
                 prod.getListOfRiders().size();
