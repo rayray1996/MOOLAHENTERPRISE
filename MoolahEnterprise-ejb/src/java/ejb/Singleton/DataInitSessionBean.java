@@ -43,10 +43,10 @@ public class DataInitSessionBean {
 
     @PostConstruct
     public void dataInit() {
-        try {
-            CompanyEntity curr = companySessionBean.retrieveCompanyByEmail("raytan96@gmail.com");
-            emailSessionBean.emailCreditTopupNotificationSync(curr, "raytan96@gmail.com");
-            
+//        try {
+//            CompanyEntity curr = companySessionBean.retrieveCompanyByEmail("raytan96@gmail.com");
+//            emailSessionBean.emailCreditTopupNotificationSync(curr, "raytan96@gmail.com");
+//            
 //            if (em.find(CompanyEntity.class, 1L) == null) {
 //                try {
 //                    //              String companyName, String companyEmail, String companyContactNumber, String password, BigInteger creditOwned
@@ -58,9 +58,9 @@ public class DataInitSessionBean {
 //                    System.out.println(ex.getMessage());
 //                }
 //            }
-        } catch (CompanyDoesNotExistException ex) {
-            System.out.println("Data Init: "  + ex.getMessage());
-        }
+//        } catch (CompanyDoesNotExistException ex) {
+//            System.out.println("Data Init: "  + ex.getMessage());
+//        }
 
     }
 

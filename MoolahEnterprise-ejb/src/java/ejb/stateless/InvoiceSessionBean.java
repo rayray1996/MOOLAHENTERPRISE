@@ -54,7 +54,8 @@ public class InvoiceSessionBean implements InvoiceSessionBeanLocal {
         CompanyEntity company = em.find(CompanyEntity.class, companyId);
 
         companySessionBean.topupCredit(company, creditToBuy);
-
+        
+        return null;
         // create a transaction
     }
 

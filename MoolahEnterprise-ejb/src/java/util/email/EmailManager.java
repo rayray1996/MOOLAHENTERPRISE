@@ -50,14 +50,12 @@ public class EmailManager {
         String dateFormattedexpiryDate = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(expiryDate);
 
 //        String dateFormat = currDate.format(fmt);
-
 //        String dateFormattedcurrDate = fmt.format(currDate.toString());
 //        String dateFormattedexpiryDate = fmt.format(expiryDate.toString());
-
         emailBody += "Dear " + company.getCompanyName() + ", \n\n";
-        emailBody += "You currently have insufficient credit!\n\n Current credit amount as of " + dateFormattedcurrDate + " is :" + company.getCreditOwned() + "\n\n";
+        emailBody += "You currently have insufficient credit.\n\nCurrent credit amount as of " + dateFormattedcurrDate + " is : " + company.getCreditOwned() + "\n\n";
         emailBody += "Please top it up by " + dateFormattedexpiryDate + ". \n\n\n";
-        emailBody += "Yours Sincerely, \n Moolah Enterprise";
+        emailBody += "Yours Sincerely, \nMoolah Enterprise";
 
         try {
             Properties props = new Properties();
@@ -67,6 +65,7 @@ public class EmailManager {
             props.put("mail.smtp.auth", "true");
             props.put("mail.smtp.starttls.enable", "true");
             props.put("mail.smtp.debug", "true");
+            props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
             javax.mail.Authenticator auth = new SMTPAuthenticator(smtpAuthUser, smtpAuthPassword);
             Session session = Session.getInstance(props, auth);
             session.setDebug(true);
@@ -75,7 +74,7 @@ public class EmailManager {
             if (msg != null) {
                 msg.setFrom(InternetAddress.parse(fromEmailAddress, false)[0]);
                 msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmailAddress, false));
-                msg.setSubject("Checkout Completed Successfully!");
+                msg.setSubject("Insufficient Credit for Moolah Enterprise!");
                 msg.setText(emailBody);
                 msg.setHeader("X-Mailer", mailer);
 
@@ -97,16 +96,20 @@ public class EmailManager {
 
     public Boolean emailReminderAccountDeactivated(CompanyEntity company, String fromEmailAddress, String toEmailAddress) {
         String emailBody = "";
-        SimpleDateFormat fmt = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss ");
-        LocalDateTime currDate = LocalDateTime.now();
-        LocalDateTime expiryDate = currDate.plusMonths(6);
+//        SimpleDateFormat fmt = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss ");
+//        LocalDateTime currDate = LocalDateTime.now();
+//        LocalDateTime expiryDate = currDate.plusMonths(6);
 
-        String dateFormattedexpiryDate = fmt.format(expiryDate);
+//        String dateFormattedexpiryDate = fmt.format(expiryDate);
+        LocalDateTime currDate = LocalDateTime.now();
+
+        LocalDateTime expiryDate = currDate.plusWeeks(1);
+        String dateFormattedexpiryDate = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(expiryDate);
 
         emailBody += "Dear " + company.getCompanyName() + ", \n\n";
-        emailBody += "You currently have insufficient credit!\n\n Due to lack of action, we will be deactivating your account." + "\n\n";
+        emailBody += "You currently have insufficient credit!\n\nDue to lack of action, we will be deactivating your account." + "\n\n";
         emailBody += "Please top it up by " + dateFormattedexpiryDate + ". \n\n\n";
-        emailBody += "Yours Sincerely, \n Moolah Enterprise";
+        emailBody += "Yours Sincerely, \nMoolah Enterprise";
 
         try {
             Properties props = new Properties();
@@ -116,6 +119,7 @@ public class EmailManager {
             props.put("mail.smtp.auth", "true");
             props.put("mail.smtp.starttls.enable", "true");
             props.put("mail.smtp.debug", "true");
+            props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
             javax.mail.Authenticator auth = new SMTPAuthenticator(smtpAuthUser, smtpAuthPassword);
             Session session = Session.getInstance(props, auth);
             session.setDebug(true);
@@ -124,7 +128,7 @@ public class EmailManager {
             if (msg != null) {
                 msg.setFrom(InternetAddress.parse(fromEmailAddress, false)[0]);
                 msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmailAddress, false));
-                msg.setSubject("Checkout Completed Successfully!");
+                msg.setSubject("Account Deactivation for Moolah Enterprise");
                 msg.setText(emailBody);
                 msg.setHeader("X-Mailer", mailer);
 

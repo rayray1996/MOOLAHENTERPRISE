@@ -8,6 +8,7 @@ package ejb.stateless;
 import com.sun.org.apache.bcel.internal.generic.DADD;
 import ejb.entity.CompanyEntity;
 import ejb.entity.MonthlyPaymentEntity;
+import ejb.entity.PaymentEntity;
 import ejb.entity.ProductEntity;
 import ejb.entity.RefundEntity;
 import java.math.BigDecimal;
@@ -71,7 +72,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
 //        timerService = sessionContext.getTimerService();
 
     }
- 
+
     @Override
     public CompanyEntity createAccountForCompany(CompanyEntity newCompany) throws CompanyAlreadyExistException, UnknownPersistenceException, CompanyCreationException {
         Set<ConstraintViolation<CompanyEntity>> companyError = validator.validate(newCompany);
@@ -114,7 +115,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
             CompanyEntity company = (CompanyEntity) em.createQuery("SELECT c FROM CompanyEntity c WHERE c.companyEmail =:coyEmail").setParameter("coyEmail", email).getSingleResult();
 
             company.getListOfPointOfContacts().size();
-            for (MonthlyPaymentEntity monthlyPayment : company.getListOfMonthlyPayments()) {
+            for (PaymentEntity monthlyPayment : company.getListOfMonthlyPayments()) {
                 monthlyPayment.getListOfProductLineItems().size();
             }
 
@@ -166,7 +167,6 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
         Date expiration = Date.from(expirationDate.atZone(ZoneId.systemDefault()).toInstant());
 
 //        timerService.createSingleActionTimer(300000, timerConfig);
-        
         //correct timerservice
         timerService.createSingleActionTimer(expiration, timerConfig);
     }
@@ -199,7 +199,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
             LocalDateTime expirationDate = LocalDateTime.now();
             expirationDate.plusMonths(6);
             Date expiration = Date.from(expirationDate.atZone(ZoneId.systemDefault()).toInstant());
-            
+
             //send email informing them of the deactivation of their account!!
             Boolean result = emailSessionBean.emailReminderAccountDeactivatedSync(company, company.getCompanyEmail());
             timerService.createSingleActionTimer(expiration, timerConfig);
@@ -212,13 +212,15 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
      * balance to ensure that there is no negative amount
      */
 //    @Schedule(hour = "7", minute = "0", second = "0", dayOfMonth = "20", month = "*", year = "*", persistent = true)
-    @Schedule(hour = "*", minute = "*/3", second = "*", dayOfMonth = "*", month = "*", year = "*", persistent = true)
+    @Schedule(hour = "*", minute = "*/3", second = "0", dayOfMonth = "*", month = "*", year = "*", persistent = true)
     public void automatedCheckCreditBalance() {
         System.out.println("Timer service triggered!");
         List<CompanyEntity> listOfCompanies = em.createQuery("SELECT coy FROM CompanyEntity coy WHERE coy.isDeleted = false").getResultList();
         for (CompanyEntity company : listOfCompanies) {
-            System.out.println("Timer Entry 2");
-            if (company.getCreditOwned().intValueExact() <= 100 && !company.getIsWarned()) {
+            System.out.println("Company Name: " + company.getCompanyName());
+            if (company.getCreditOwned().intValueExact() <= 1000 && !company.getIsWarned()) {
+                System.out.println("Timer Entry 2");
+
                 Boolean result = emailSessionBean.emailCreditTopupNotificationSync(company, company.getCompanyEmail());
                 company.setIsWarned(Boolean.TRUE);
 
