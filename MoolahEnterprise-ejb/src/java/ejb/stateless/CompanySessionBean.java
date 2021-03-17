@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
@@ -62,17 +63,15 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
     private final Validator validator;
 
     @Resource
-    private SessionContext sessionContext;
-
     private TimerService timerService;
 
     public CompanySessionBean() {
         validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
-        timerService = sessionContext.getTimerService();
+//        timerService = sessionContext.getTimerService();
 
     }
-
+ 
     @Override
     public CompanyEntity createAccountForCompany(CompanyEntity newCompany) throws CompanyAlreadyExistException, UnknownPersistenceException, CompanyCreationException {
         Set<ConstraintViolation<CompanyEntity>> companyError = validator.validate(newCompany);
@@ -212,10 +211,12 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
      * balance to ensure that there is no negative amount
      */
 //    @Schedule(hour = "7", minute = "0", second = "0", dayOfMonth = "20", month = "*", year = "*", persistent = true)
-    @Schedule(hour = "0", minute = "*/5", second = "0", dayOfMonth = "17", month = "*", year = "*", persistent = true)
+    @Schedule(hour = "*", minute = "*/3", second = "*", dayOfMonth = "*", month = "*", year = "*", persistent = true)
     public void automatedCheckCreditBalance() {
+        System.out.println("Timer service triggered!");
         List<CompanyEntity> listOfCompanies = em.createQuery("SELECT coy FROM CompanyEntity coy WHERE coy.isDeleted = false").getResultList();
         for (CompanyEntity company : listOfCompanies) {
+            System.out.println("Timer Entry 2");
             if (company.getCreditOwned().intValueExact() <= 100 && !company.getIsWarned()) {
                 Boolean result = emailSessionBean.emailCreditTopupNotificationSync(company, company.getCompanyEmail());
                 company.setIsWarned(Boolean.TRUE);
@@ -225,6 +226,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
                 expirationDate.plusWeeks(1);
                 Date expiration = Date.from(expirationDate.atZone(ZoneId.systemDefault()).toInstant());
                 timerService.createSingleActionTimer(expiration, timerConfig);
+                System.out.println("Check entry, email sent");
 
                 if (!result) {
                     company.setWarningMessage("We have failed to contact you via email. Please top up your credit by end of the month! ");
