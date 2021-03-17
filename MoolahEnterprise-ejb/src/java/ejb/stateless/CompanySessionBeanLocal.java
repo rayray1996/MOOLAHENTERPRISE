@@ -7,6 +7,7 @@ package ejb.stateless;
 
 import ejb.entity.CompanyEntity;
 import javax.ejb.Local;
+import javax.ejb.Timer;
 import util.exception.CompanyAlreadyExistException;
 import util.exception.CompanyCreationException;
 import util.exception.CompanyDoesNotExistException;
@@ -27,5 +28,9 @@ public interface CompanySessionBeanLocal {
     public CompanyEntity retrieveCompanyByEmail(String email) throws CompanyDoesNotExistException;
 
     public void updateCompanyInformation(CompanyEntity company) throws UnknownPersistenceException, CompanyDoesNotExistException;
+
+    public void deactivateAccount(String email) throws CompanyDoesNotExistException;
+
+    public void timeoutCleanUp(Timer timer);
     
 }

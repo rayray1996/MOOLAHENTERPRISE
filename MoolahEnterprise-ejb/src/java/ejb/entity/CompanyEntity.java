@@ -17,6 +17,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
@@ -38,6 +39,10 @@ public class CompanyEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long companyId;
 
+    @Lob
+    @Column(name = "company_profile")
+    private byte[] profilePic;
+
     @NotNull
     @Size(min = 1)
     private String companyName;
@@ -54,6 +59,10 @@ public class CompanyEntity implements Serializable {
     @NotNull
     @Size(min = 8)
     private String companyContactNumber;
+
+    @NotNull
+    @Size(min = 1)
+    private String warningMessage;
 
     @NotNull
     private Boolean isVerified;
@@ -73,7 +82,7 @@ public class CompanyEntity implements Serializable {
 
     @NotNull
     private Boolean isDeleted;
-    
+
     @NotNull
     private Boolean isWarned;
 
@@ -92,6 +101,7 @@ public class CompanyEntity implements Serializable {
     private List<MonthlyPaymentEntity> listOfMonthlyPayments;
 
     @OneToMany(mappedBy = "company", cascade = {CascadeType.MERGE})
+
     private List<ProductEntity> listOfProducts;
 
     public CompanyEntity() {
@@ -103,7 +113,9 @@ public class CompanyEntity implements Serializable {
         this.isDeleted = false;
         this.isDeactivated = false;
         this.verificationDate = null;
+        this.warningMessage = "";
         this.salt = CryptographicHelper.getInstance().generateRandomString(32);
+        this.profilePic = null;
     }
 
     public CompanyEntity(String companyName, String companyEmail, String companyContactNumber, String password, BigInteger creditOwned) {
@@ -115,6 +127,14 @@ public class CompanyEntity implements Serializable {
         this.creditOwned = creditOwned;
 
         setPassword(password);
+    }
+
+    public byte[] getProfilePic() {
+        return profilePic;
+    }
+
+    public void setProfilePic(byte[] profilePic) {
+        this.profilePic = profilePic;
     }
 
     public void setPassword(String password) {
@@ -255,6 +275,14 @@ public class CompanyEntity implements Serializable {
 
     public void setListOfProducts(List<ProductEntity> listOfProducts) {
         this.listOfProducts = listOfProducts;
+    }
+
+    public String getWarningMessage() {
+        return warningMessage;
+    }
+
+    public void setWarningMessage(String warningMessage) {
+        this.warningMessage = warningMessage;
     }
 
     @Override
