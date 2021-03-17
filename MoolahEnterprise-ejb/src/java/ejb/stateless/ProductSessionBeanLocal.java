@@ -15,7 +15,10 @@ import java.util.List;
 import javax.ejb.Local;
 import util.enumeration.CategoryEnum;
 import util.exception.InvalidFilterCriteriaException;
+import util.exception.InvalidProductCreationException;
+import util.exception.ProductAlreadyExistsException;
 import util.exception.ProductNotFoundException;
+import util.exception.UnknownPersistenceException;
 
 /**
  *
@@ -23,6 +26,16 @@ import util.exception.ProductNotFoundException;
  */
 @Local
 public interface ProductSessionBeanLocal {
+
+    public void deleteProductListing(Long productId) throws ProductNotFoundException;
+
+    public void updateProductListing(ProductEntity updateProduct) throws ProductAlreadyExistsException, UnknownPersistenceException, InvalidProductCreationException;
+
+    public ProductEntity createProductListing(ProductEntity newProduct, Long companyId) throws ProductAlreadyExistsException, UnknownPersistenceException, InvalidProductCreationException;
+
+    public List<ProductEntity> filterProductsByCriteria(CategoryEnum category, boolean wantsRider, boolean isSmoker, BigDecimal sumAssured, Integer coverageTerm, Integer premiumTerm) throws InvalidFilterCriteriaException;
+
+    public List<ProductEntity> searchForProductsByName(String name);
 
     public ProductEntity retrieveProductEntityById(Long productId) throws ProductNotFoundException;
 
@@ -36,8 +49,5 @@ public interface ProductSessionBeanLocal {
 
     public List<ProductEntity> retrieveAllFinancialProducts();
 
-    public List<ProductEntity> searchForProductsByName(String name);
-
-    public List<ProductEntity> filterProductsByCriteria(CategoryEnum category, boolean wantsRider, boolean isSmoker, BigDecimal sumAssured, Integer coverageTerm, Integer premiumTerm) throws InvalidFilterCriteriaException;
-    
+   
 }
