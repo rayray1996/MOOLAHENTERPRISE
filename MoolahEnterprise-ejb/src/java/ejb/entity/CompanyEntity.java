@@ -99,7 +99,7 @@ public class CompanyEntity implements Serializable {
 
     @OneToMany(mappedBy = "company", cascade = {CascadeType.MERGE})
     @JoinColumn(nullable = true)
-    private List<MonthlyPaymentEntity> listOfMonthlyPayments;
+    private List<PaymentEntity> listOfMonthlyPayments;
 
     @OneToMany(mappedBy = "company", cascade = {CascadeType.MERGE})
     private List<ProductEntity> listOfProducts;
@@ -263,11 +263,11 @@ public class CompanyEntity implements Serializable {
         this.listOfPointOfContacts = listOfPointOfContacts;
     }
 
-    public List<MonthlyPaymentEntity> getListOfMonthlyPayments() {
+    public List<PaymentEntity> getListOfMonthlyPayments() {
         return listOfMonthlyPayments;
     }
 
-    public void setListOfMonthlyPayments(List<MonthlyPaymentEntity> listOfMonthlyPayments) {
+    public void setListOfMonthlyPayments(List<PaymentEntity> listOfMonthlyPayments) {
         this.listOfMonthlyPayments = listOfMonthlyPayments;
     }
 
