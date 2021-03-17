@@ -62,14 +62,14 @@ public class CompanyEntity implements Serializable {
     private String companyContactNumber;
 
     @NotNull
-    @Size(min = 1)
+//    @Size(min = 1)
     private String warningMessage;
 
     @NotNull
     private Boolean isVerified;
 
     @NotNull
-    @Size(min = 8, max = 20)
+//    @Size(min = 8, max = 100)
     private String password;
 
     @Temporal(TemporalType.DATE)
@@ -119,7 +119,7 @@ public class CompanyEntity implements Serializable {
         this.isWarned = false;
     }
 
-    public CompanyEntity(String companyName, String companyEmail, String businessRegNumber ,String companyContactNumber, String password, BigInteger creditOwned) {
+    public CompanyEntity(String companyName, String companyEmail, String businessRegNumber, String companyContactNumber, String password, BigInteger creditOwned) {
         this();
         this.companyName = companyName;
         this.companyEmail = companyEmail;
