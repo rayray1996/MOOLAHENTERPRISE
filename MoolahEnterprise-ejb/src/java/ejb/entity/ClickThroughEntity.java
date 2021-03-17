@@ -30,6 +30,11 @@ public class ClickThroughEntity implements Serializable {
     private BigInteger monthCounter;
     @Min(0)
     private BigInteger overallCounter;
+
+    public ClickThroughEntity() {
+        monthCounter = BigInteger.ZERO;
+        overallCounter = BigInteger.ZERO;
+    }
     
     public Long getClickThroughId() {
         return clickThroughId;
