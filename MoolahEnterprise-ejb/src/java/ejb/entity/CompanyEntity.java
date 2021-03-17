@@ -56,6 +56,10 @@ public class CompanyEntity implements Serializable {
     private String companyContactNumber;
 
     @NotNull
+    @Size(min = 1)
+    private String warningMessage;
+
+    @NotNull
     private Boolean isVerified;
 
     @NotNull
@@ -73,7 +77,7 @@ public class CompanyEntity implements Serializable {
 
     @NotNull
     private Boolean isDeleted;
-    
+
     @NotNull
     private Boolean isWarned;
 
@@ -103,6 +107,7 @@ public class CompanyEntity implements Serializable {
         this.isDeleted = false;
         this.isDeactivated = false;
         this.verificationDate = null;
+        this.warningMessage = "";
         this.salt = CryptographicHelper.getInstance().generateRandomString(32);
     }
 
@@ -255,6 +260,14 @@ public class CompanyEntity implements Serializable {
 
     public void setListOfProducts(List<ProductEntity> listOfProducts) {
         this.listOfProducts = listOfProducts;
+    }
+
+    public String getWarningMessage() {
+        return warningMessage;
+    }
+
+    public void setWarningMessage(String warningMessage) {
+        this.warningMessage = warningMessage;
     }
 
     @Override
