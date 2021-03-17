@@ -17,6 +17,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
@@ -37,6 +38,10 @@ public class CompanyEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long companyId;
+
+    @Lob
+    @Column(name = "company_profile")
+    private byte[] profilePic;
 
     @NotNull
     @Size(min = 1)
@@ -96,6 +101,7 @@ public class CompanyEntity implements Serializable {
     private List<MonthlyPaymentEntity> listOfMonthlyPayments;
 
     @OneToMany(mappedBy = "company", cascade = {CascadeType.MERGE})
+
     private List<ProductEntity> listOfProducts;
 
     public CompanyEntity() {
@@ -109,6 +115,7 @@ public class CompanyEntity implements Serializable {
         this.verificationDate = null;
         this.warningMessage = "";
         this.salt = CryptographicHelper.getInstance().generateRandomString(32);
+        this.profilePic = null;
     }
 
     public CompanyEntity(String companyName, String companyEmail, String companyContactNumber, String password, BigInteger creditOwned) {
@@ -120,6 +127,38 @@ public class CompanyEntity implements Serializable {
         this.creditOwned = creditOwned;
 
         setPassword(password);
+    }
+
+    public byte[] getProfilePic() {
+        return profilePic;
+    }
+
+    public void setProfilePic(byte[] profilePic) {
+        this.profilePic = profilePic;
+    }
+
+    public Boolean getIsVerified() {
+        return isVerified;
+    }
+
+    public void setIsVerified(Boolean isVerified) {
+        this.isVerified = isVerified;
+    }
+
+    public Boolean getIsDeactivated() {
+        return isDeactivated;
+    }
+
+    public void setIsDeactivated(Boolean isDeactivated) {
+        this.isDeactivated = isDeactivated;
+    }
+
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
 
     public void setPassword(String password) {
