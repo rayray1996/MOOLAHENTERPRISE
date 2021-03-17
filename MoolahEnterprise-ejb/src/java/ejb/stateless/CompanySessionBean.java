@@ -148,6 +148,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
         }
     }
 
+    @Override
     public void topupCredit(CompanyEntity company, BigInteger creditAmount) throws CompanyDoesNotExistException {
         CompanyEntity companyToUpdate = retrieveCompanyByEmail(company.getCompanyEmail());
         companyToUpdate.setCreditOwned(companyToUpdate.getCreditOwned().add(creditAmount));
