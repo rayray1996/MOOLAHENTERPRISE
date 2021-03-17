@@ -165,10 +165,10 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
         expirationDate.plusMonths(6);
         Date expiration = Date.from(expirationDate.atZone(ZoneId.systemDefault()).toInstant());
 
-        timerService.createSingleActionTimer(300000, timerConfig);
+//        timerService.createSingleActionTimer(300000, timerConfig);
         
         //correct timerservice
-//        timerService.createSingleActionTimer(expiration, timerConfig);
+        timerService.createSingleActionTimer(expiration, timerConfig);
     }
 
     /**

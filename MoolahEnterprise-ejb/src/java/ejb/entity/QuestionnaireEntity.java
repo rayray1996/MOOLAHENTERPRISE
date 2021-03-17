@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -25,7 +26,7 @@ import javax.validation.constraints.PastOrPresent;
  * @author Ada Wong
  */
 @Entity
-@NamedQuery(name="retrieveQuestionnaireById", query="SELECT qe FROM QuestionnaireEntity qe WHERE qe.questionnaireId =: qid")
+@NamedQuery(name="retrieveQuestionnaireById", query="SELECT qe FROM QuestionnaireEntity qe WHERE qe.questionnaireId =:qid")
 public class QuestionnaireEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,7 +40,7 @@ public class QuestionnaireEntity implements Serializable {
     private GregorianCalendar dateCompleted;
    
     @OneToMany
-    @Column(nullable = true)
+    @JoinColumn(nullable = true)
     private List<QuestionEntity> listOfQuestions;
 
     public QuestionnaireEntity() {

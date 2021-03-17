@@ -17,6 +17,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -93,15 +94,14 @@ public class CompanyEntity implements Serializable {
     private RefundEntity refund;
 
     @OneToMany(mappedBy = "company", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     private List<PointOfContactEntity> listOfPointOfContacts;
 
     @OneToMany(mappedBy = "company", cascade = {CascadeType.MERGE})
-    @Column(nullable = true)
+    @JoinColumn(nullable = true)
     private List<MonthlyPaymentEntity> listOfMonthlyPayments;
 
     @OneToMany(mappedBy = "company", cascade = {CascadeType.MERGE})
-
     private List<ProductEntity> listOfProducts;
 
     public CompanyEntity() {
@@ -116,15 +116,17 @@ public class CompanyEntity implements Serializable {
         this.warningMessage = "";
         this.salt = CryptographicHelper.getInstance().generateRandomString(32);
         this.profilePic = null;
+        this.isWarned = false;
     }
 
-    public CompanyEntity(String companyName, String companyEmail, String companyContactNumber, String password, BigInteger creditOwned) {
+    public CompanyEntity(String companyName, String companyEmail, String businessRegNumber ,String companyContactNumber, String password, BigInteger creditOwned) {
         this();
         this.companyName = companyName;
         this.companyEmail = companyEmail;
         this.companyContactNumber = companyContactNumber;
         this.password = password;
         this.creditOwned = creditOwned;
+        this.businessRegNumber = businessRegNumber;
 
         setPassword(password);
     }

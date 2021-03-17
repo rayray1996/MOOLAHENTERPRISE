@@ -34,7 +34,7 @@ import util.security.CryptographicHelper;
  * @author nickg
  */
 @Entity
-@NamedQuery(name="findCustWithEmail", query="SELECT c FROM Customer c WHERE c.email =:custEmail")
+@NamedQuery(name="findCustWithEmail", query="SELECT c FROM CustomerEntity c WHERE c.email =:custEmail")
 public class CustomerEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

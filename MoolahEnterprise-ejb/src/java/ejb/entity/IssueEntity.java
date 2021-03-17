@@ -13,6 +13,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -40,6 +42,10 @@ public class IssueEntity implements Serializable {
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     private GregorianCalendar dateOfIssue;
+    
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false)
+    private CustomerEntity customer;
 
     public GregorianCalendar getDateOfIssue() {
         return dateOfIssue;
@@ -59,6 +65,14 @@ public class IssueEntity implements Serializable {
 
     public Long getIssueId() {
         return issueId;
+    }
+
+    public CustomerEntity getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(CustomerEntity customer) {
+        this.customer = customer;
     }
 
     public void setIssueId(Long issueId) {

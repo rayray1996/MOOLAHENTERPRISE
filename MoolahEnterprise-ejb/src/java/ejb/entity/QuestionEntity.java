@@ -15,6 +15,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import util.enumeration.CategoryEnum;
 
@@ -35,7 +36,7 @@ public class QuestionEntity implements Serializable {
     private CategoryEnum categoryEnum;
     
     @OneToMany(cascade = {CascadeType.REMOVE})
-    @Column (nullable = false)
+    @JoinColumn (nullable = false)
     private List<OptionEntity> listOfOptions; 
 
     public QuestionEntity() {
