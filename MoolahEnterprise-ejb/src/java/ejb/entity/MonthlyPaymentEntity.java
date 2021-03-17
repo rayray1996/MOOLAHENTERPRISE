@@ -6,6 +6,9 @@
 package ejb.entity;
 
 import java.io.Serializable;
+import java.math.BigInteger;
+import java.util.GregorianCalendar;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,6 +20,13 @@ import javax.persistence.Id;
  */
 @Entity
 public class MonthlyPaymentEntity extends PaymentEntity implements Serializable {
+
+    public MonthlyPaymentEntity() {
+    }
+
+    public MonthlyPaymentEntity(Boolean paid, GregorianCalendar dateTransacted, String paymentNumber, BigInteger totalPayable, GregorianCalendar dateGenerated, CompanyEntity company, List<ProductLineItemEntity> listOfProductLineItems) {
+        super(paid, dateTransacted, paymentNumber, totalPayable, dateGenerated, company, listOfProductLineItems);
+    }
 
    
 }

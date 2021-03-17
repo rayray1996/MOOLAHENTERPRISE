@@ -68,25 +68,6 @@ public class PaymentEntity implements Serializable {
         this.listOfProductLineItems = new ArrayList<>();
     }
 
-    public PaymentEntity(BigInteger totalPayable, GregorianCalendar dateGenerated, CompanyEntity company, List<ProductLineItemEntity> listOfProductLineItems) {
-        this.totalPayable = totalPayable;
-        this.dateGenerated = dateGenerated;
-        this.company = company;
-        this.listOfProductLineItems = listOfProductLineItems;
-        this.paid = false;
-        this.paymentNumber = "";
-        this.dateTransacted = null;
-    }
-
-    public PaymentEntity(BigInteger totalPayable, GregorianCalendar dateGenerated, CompanyEntity company) {
-        this();
-        this.totalPayable = totalPayable;
-        this.dateGenerated = dateGenerated;
-        this.company = company;
-        this.paid = false;
-        this.paymentNumber = "";
-        this.dateTransacted = null;
-    }
 
     public PaymentEntity(Boolean paid, GregorianCalendar dateTransacted, String paymentNumber, BigInteger totalPayable, GregorianCalendar dateGenerated, CompanyEntity company, List<ProductLineItemEntity> listOfProductLineItems) {
         this.paid = paid;
