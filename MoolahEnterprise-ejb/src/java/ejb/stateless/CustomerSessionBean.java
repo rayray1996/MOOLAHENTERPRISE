@@ -79,7 +79,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         }
     }
 
-    //will retrieve all the way till product only
+    //will retrieve all the way till ProductEntity only
     @Override
     public CustomerEntity login(String email, String password) throws IncorrectLoginParticularsException {
         try {

@@ -6,6 +6,7 @@
 package ejb.stateless;
 
 import ejb.entity.CompanyEntity;
+import ejb.entity.MonthlyPaymentEntity;
 import java.util.concurrent.Future;
 import javax.ejb.Local;
 
@@ -21,5 +22,7 @@ public interface EmailSessionBeanLocal {
     public Boolean emailCreditTopupNotificationSync(CompanyEntity company, String toEmailAddress);
 
     public Boolean emailReminderAccountDeactivatedSync(CompanyEntity company, String toEmailAddress);
+
+    public Boolean emailMonthlyPaymentInvoice(MonthlyPaymentEntity monthlyPaymentEntity, String toEmailAddress);
 
 }

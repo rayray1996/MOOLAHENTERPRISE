@@ -43,6 +43,12 @@ public class MonthlyPaymentEntity extends PaymentEntity implements Serializable 
         this.listOfProductLineItems = listOfProductLineItems;
         this.totalPayable = totalPayable;
     }
+    
+     public MonthlyPaymentEntity(Calendar dateGenerated, CompanyEntity company) {
+        super(false, null, "", dateGenerated, company);
+        this.listOfProductLineItems = new ArrayList<>();
+        this.totalPayable = BigInteger.ZERO;
+    }
 
     public List<ProductLineItemEntity> getListOfProductLineItems() {
         return listOfProductLineItems;

@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -25,7 +27,9 @@ public class ProductLineItemEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long prodcutLineItemId;
     @NotNull
-    private Long productId;
+    @OneToOne(optional = false)
+    @JoinColumn(nullable = false)
+    private ProductEntity product;
     @NotNull
     private BigInteger monthlyClicks;
     @NotNull
@@ -36,8 +40,8 @@ public class ProductLineItemEntity implements Serializable {
     public ProductLineItemEntity() {
     }
 
-    public ProductLineItemEntity(Long productId, BigInteger monthlyClicks, BigInteger monthlySubtotalCredit, BigInteger fixedSubscriptionCredit) {
-        this.productId = productId;
+    public ProductLineItemEntity(ProductEntity product, BigInteger monthlyClicks, BigInteger monthlySubtotalCredit, BigInteger fixedSubscriptionCredit) {
+        this.product = product;
         this.monthlyClicks = monthlyClicks;
         this.monthlySubtotalCredit = monthlySubtotalCredit;
         this.fixedSubscriptionCredit = fixedSubscriptionCredit;
@@ -49,6 +53,14 @@ public class ProductLineItemEntity implements Serializable {
 
     public void setProdcutLineItemId(Long prodcutLineItemId) {
         this.prodcutLineItemId = prodcutLineItemId;
+    }
+
+    public ProductEntity getProduct() {
+        return product;
+    }
+
+    public void setProduct(ProductEntity product) {
+        this.product = product;
     }
 
     @Override
@@ -76,13 +88,6 @@ public class ProductLineItemEntity implements Serializable {
         return "ejb.entity.ProductLineItemEntity[ id=" + prodcutLineItemId + " ]";
     }
 
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
 
     public BigInteger getMonthlyClicks() {
         return monthlyClicks;

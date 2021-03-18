@@ -38,6 +38,7 @@ public class ClickthroughSessionBean implements ClickthroughSessionBeanLocal {
         }
     }
 
+    @Override
     public BigInteger calculateMonthlyProductPrice(Long productId) throws ProductNotFoundException {
         ProductEntity product = em.find(ProductEntity.class, productId);
         if (product == null) {

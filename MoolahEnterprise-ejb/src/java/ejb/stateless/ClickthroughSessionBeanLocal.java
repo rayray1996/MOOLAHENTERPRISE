@@ -5,6 +5,7 @@
  */
 package ejb.stateless;
 
+import java.math.BigInteger;
 import javax.ejb.Local;
 import util.exception.ProductNotFoundException;
 
@@ -16,5 +17,7 @@ import util.exception.ProductNotFoundException;
 public interface ClickthroughSessionBeanLocal {
 
     public void addClickToProduct(Long productId) throws ProductNotFoundException;
+
+    public BigInteger calculateMonthlyProductPrice(Long productId) throws ProductNotFoundException;
     
 }

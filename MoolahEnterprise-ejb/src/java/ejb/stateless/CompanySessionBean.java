@@ -6,6 +6,7 @@
 package ejb.stateless;
 
 import com.sun.org.apache.bcel.internal.generic.DADD;
+import ejb.Singleton.MoolahCreditConverterLocal;
 import ejb.entity.CompanyEntity;
 import ejb.entity.MonthlyPaymentEntity;
 import ejb.entity.PaymentEntity;
@@ -60,6 +61,9 @@ import util.security.CryptographicHelper;
  */
 @Stateless
 public class CompanySessionBean implements CompanySessionBeanLocal {
+
+    @EJB
+    private MoolahCreditConverterLocal moolahCreditConverter;
 
     @EJB
     private EmailSessionBeanLocal emailSessionBean;
@@ -133,7 +137,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
 
             company.getListOfPointOfContacts().size();
             for (PaymentEntity monthlyPayment : company.getListOfPayments()) {
-                if(monthlyPayment instanceof  MonthlyPaymentEntity) {
+                if (monthlyPayment instanceof MonthlyPaymentEntity) {
                     ((MonthlyPaymentEntity) monthlyPayment).getListOfProductLineItems().size();
                 }
             }
@@ -149,6 +153,16 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
         }
     }
 
+    @Override
+    public List<CompanyEntity> retrieveAllActiveCompanies(){
+        List<CompanyEntity> listOfCompanies = em.createQuery("SELECT c FROM CompanyEntity c WHERE c.isDeleted = FALSE").getResultList();
+        for(CompanyEntity coy : listOfCompanies){
+            coy.getListOfProducts().size();
+        }
+        
+        return listOfCompanies;
+    }
+    
     @Override
     public void updateCompanyInformation(CompanyEntity company) throws UnknownPersistenceException, CompanyDoesNotExistException {
         try {
@@ -230,8 +244,8 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
             //COMPANY CURRENTLY DEACTIVATED, transitioning to DELETED:  initiate refund, set all products to isDeleted, set company to isDeleted
             if (company.isIsDeactivated()) {
 
-                //need to change this magic 0.10 to use singleton meth
-                RefundEntity refundEntity = new RefundEntity(new GregorianCalendar(), new BigDecimal(company.getCreditOwned().intValueExact() * 0.10), company);
+                BigDecimal creditinSGD = moolahCreditConverter.convertCreditToSgd(company.getCreditOwned());
+                RefundEntity refundEntity = new RefundEntity(new GregorianCalendar(), creditinSGD, company);
                 refundEntity = refundSessionBean.createNewRefund(refundEntity);
                 company.setRefund(refundEntity);
                 for (ProductEntity coyProd : company.getListOfProducts()) {

@@ -6,6 +6,8 @@
 package util.email;
 
 import ejb.entity.CompanyEntity;
+import ejb.entity.MonthlyPaymentEntity;
+import ejb.entity.ProductLineItemEntity;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -147,4 +149,75 @@ public class EmailManager {
             return false;
         }
     }
+    
+    public Boolean emailMonthlyPaymentInvoice(MonthlyPaymentEntity monthlyPaymentEntity, String fromEmailAddress, String toEmailAddress)
+    {
+        String emailBody = "";
+        
+        SimpleDateFormat format = new SimpleDateFormat("MMMMMM");
+        String currentMonth = format.format(monthlyPaymentEntity.getDateGenerated());
+        
+        
+        emailBody += "Dear " + monthlyPaymentEntity.getCompany().getCompanyName() +  "\n\n";
+        emailBody += "Here is the monthly invoice for the Month of " + currentMonth + ". \n\n\n\n" ;
+        emailBody += "S/N     Product Name      Monthly Clicks     Sub-Total (Credits)\n\n";
+            
+        int count =0;
+        for(ProductLineItemEntity prodLineItem : monthlyPaymentEntity.getListOfProductLineItems())
+        {
+            count++;
+            emailBody += count
+                + "     " + prodLineItem.getProduct().getProductName()
+                + "     " + prodLineItem.getMonthlyClicks()
+                + "     " + prodLineItem.getMonthlySubtotalCredit() + "\n";
+        }
+            
+        emailBody += "\nTotal Line Item: " + monthlyPaymentEntity.getListOfProductLineItems().size() + ", Total Amount: " + NumberFormat.getCurrencyInstance().format(monthlyPaymentEntity.getTotalPayable()) + "\n\n\n";
+        emailBody += "Please do make payment at your nearest convenience.\n\n\nYours Sincerely, \nMoolah Enterprise";
+        
+        
+        
+        try 
+        {
+            Properties props = new Properties();
+            props.put("mail.transport.protocol", "smtp");
+            props.put("mail.smtp.host", emailServerName);
+            props.put("mail.smtp.port", "587");
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.starttls.enable", "true");            
+            props.put("mail.smtp.debug", "true"); 
+            props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+            javax.mail.Authenticator auth = new SMTPAuthenticator(smtpAuthUser, smtpAuthPassword);
+            Session session = Session.getInstance(props, auth);
+            session.setDebug(true);            
+            Message msg = new MimeMessage(session);
+                                    
+            if (msg != null)
+            {
+                msg.setFrom(InternetAddress.parse(fromEmailAddress, false)[0]);
+                msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmailAddress, false));
+                msg.setSubject("Monthly Payment Invoice from Moolah Enterprise");
+                msg.setText(emailBody);
+                msg.setHeader("X-Mailer", mailer);
+                
+                Date timeStamp = new Date();
+                msg.setSentDate(timeStamp);
+                
+                Transport.send(msg);
+                
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        catch (Exception e) 
+        {
+            e.printStackTrace();
+            
+            return false;
+        }
+    }
+    
 }

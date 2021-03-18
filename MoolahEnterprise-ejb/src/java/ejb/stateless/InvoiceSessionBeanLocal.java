@@ -5,7 +5,14 @@
  */
 package ejb.stateless;
 
+import ejb.entity.MonthlyPaymentEntity;
+import util.exception.ProductLineItemException;
+import ejb.entity.ProductLineItemEntity;
 import javax.ejb.Local;
+import util.exception.MonthlyPaymentAlreadyExistsException;
+import util.exception.MonthlyPaymentException;
+import util.exception.ProductLineItemAlreadyExistException;
+import util.exception.UnknownPersistenceException;
 
 /**
  *
@@ -13,5 +20,11 @@ import javax.ejb.Local;
  */
 @Local
 public interface InvoiceSessionBeanLocal {
+
+    public ProductLineItemEntity createProductLineItem(ProductLineItemEntity newProductLineItem) throws ProductLineItemAlreadyExistException, UnknownPersistenceException, ProductLineItemException;
+
+    public MonthlyPaymentEntity createMonthlyPayment(MonthlyPaymentEntity newMonthlyPayment) throws MonthlyPaymentAlreadyExistsException, UnknownPersistenceException, MonthlyPaymentException;
+
+    public void automatedMonthlyInvoice();
     
 }

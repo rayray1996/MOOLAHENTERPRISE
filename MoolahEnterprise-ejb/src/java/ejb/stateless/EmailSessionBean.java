@@ -6,6 +6,7 @@
 package ejb.stateless;
 
 import ejb.entity.CompanyEntity;
+import ejb.entity.MonthlyPaymentEntity;
 
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
@@ -49,4 +50,11 @@ public class EmailSessionBean implements EmailSessionBeanLocal {
         return new AsyncResult<>(result);
     }
 
+   
+    @Override
+    public Boolean emailMonthlyPaymentInvoice(MonthlyPaymentEntity monthlyPaymentEntity, String toEmailAddress){
+        EmailManager emailManager = new EmailManager(GMAIL_USERNAME, GMAIL_PASSWORD);
+        Boolean result = emailManager.emailMonthlyPaymentInvoice(monthlyPaymentEntity, FROM_EMAIL_ADDRESS, toEmailAddress);
+        return result;
+    }
 }

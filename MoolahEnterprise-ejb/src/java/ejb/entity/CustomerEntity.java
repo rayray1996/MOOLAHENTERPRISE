@@ -34,7 +34,7 @@ import util.security.CryptographicHelper;
  * @author nickg
  */
 @Entity
-@NamedQuery(name="findCustWithEmail", query="SELECT c FROM CustomerEntity c WHERE c.email =:custEmail")
+@NamedQuery(name = "findCustWithEmail", query = "SELECT c FROM CustomerEntity c WHERE c.email =:custEmail")
 public class CustomerEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -75,17 +75,9 @@ public class CustomerEntity implements Serializable {
 
     @NotNull
     private Boolean smoker;
-    
+
     @NotNull
     private Boolean isMarried;
-
-    public Boolean getIsMarried() {
-        return isMarried;
-    }
-
-    public void setIsMarried(Boolean isMarried) {
-        this.isMarried = isMarried;
-    }
 
     //bidirectional
     @OneToMany(mappedBy = "customer")
@@ -241,6 +233,14 @@ public class CustomerEntity implements Serializable {
 
     public void setListOfLikeProducts(List<ProductEntity> listOfLikeProducts) {
         this.listOfLikeProducts = listOfLikeProducts;
+    }
+
+    public Boolean getIsMarried() {
+        return isMarried;
+    }
+
+    public void setIsMarried(Boolean isMarried) {
+        this.isMarried = isMarried;
     }
 
     @Override
