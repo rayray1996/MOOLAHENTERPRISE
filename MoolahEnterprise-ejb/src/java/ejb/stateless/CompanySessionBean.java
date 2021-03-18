@@ -8,12 +8,14 @@ package ejb.stateless;
 import com.sun.org.apache.bcel.internal.generic.DADD;
 import ejb.entity.CompanyEntity;
 import ejb.entity.MonthlyPaymentEntity;
+import ejb.entity.PaymentEntity;
 import ejb.entity.ProductEntity;
 import ejb.entity.RefundEntity;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -31,6 +33,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -39,6 +42,7 @@ import util.exception.CompanyAlreadyExistException;
 import util.exception.CompanyCreationException;
 import util.exception.CompanyDoesNotExistException;
 import util.exception.IncorrectLoginParticularsException;
+import util.exception.MonthlyPaymentNotFoundException;
 import util.exception.UnknownPersistenceException;
 import util.security.CryptographicHelper;
 
@@ -115,8 +119,10 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
             CompanyEntity company = (CompanyEntity) em.createQuery("SELECT c FROM CompanyEntity c WHERE c.companyEmail =:coyEmail").setParameter("coyEmail", email).getSingleResult();
 
             company.getListOfPointOfContacts().size();
-            for (MonthlyPaymentEntity monthlyPayment : company.getListOfMonthlyPayments()) {
-                monthlyPayment.getListOfProductLineItems().size();
+            for (PaymentEntity monthlyPayment : company.getListOfPayments()) {
+                if (monthlyPayment instanceof MonthlyPaymentEntity) {
+                    ((MonthlyPaymentEntity) monthlyPayment).getListOfProductLineItems().size();
+                }
             }
 
             for (ProductEntity prod : company.getListOfProducts()) {
@@ -167,7 +173,6 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
         Date expiration = Date.from(expirationDate.atZone(ZoneId.systemDefault()).toInstant());
 
 //        timerService.createSingleActionTimer(300000, timerConfig);
-        
         //correct timerservice
         timerService.createSingleActionTimer(expiration, timerConfig);
     }
@@ -200,7 +205,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
             LocalDateTime expirationDate = LocalDateTime.now();
             expirationDate.plusMonths(6);
             Date expiration = Date.from(expirationDate.atZone(ZoneId.systemDefault()).toInstant());
-            
+
             //send email informing them of the deactivation of their account!!
             Boolean result = emailSessionBean.emailReminderAccountDeactivatedSync(company, company.getCompanyEmail());
             timerService.createSingleActionTimer(expiration, timerConfig);
@@ -232,6 +237,77 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
                 }
             }
         }
+    }
+
+    public List<PaymentEntity> retrieveAllHistoricalTransactions() {
+        Query query = em.createQuery("SELECT p FROM PaymentEntity p");
+        List<PaymentEntity> results = query.getResultList();
+
+        for (PaymentEntity p : results) {
+            if (p instanceof MonthlyPaymentEntity) {
+                ((MonthlyPaymentEntity) p).getListOfProductLineItems().size();
+            }
+        }
+
+        return results;
+    }
+
+    public List<PaymentEntity> retrieveSpecificHistoricalTransactions(Calendar startDate, Calendar endDate) {
+        Query query = em.createQuery("SELECT p FROM PaymentEntity p WHERE p.dateTransacted >= :startDate AND p.dateTransacted <= :endDate");
+        query.setParameter("startDate", startDate);
+        query.setParameter("endDate", endDate);
+        List<PaymentEntity> results = query.getResultList();
+
+        for (PaymentEntity p : results) {
+            if (p instanceof MonthlyPaymentEntity) {
+                ((MonthlyPaymentEntity) p).getListOfProductLineItems().size();
+            }
+        }
+        return results;
+    }
+
+    public MonthlyPaymentEntity retrieveCurrentMonthlyPaymentEntity(Calendar month) throws MonthlyPaymentNotFoundException {
+        Calendar start = (Calendar) month.clone();
+        Calendar end = (Calendar) month.clone();
+        start.add(Calendar.DATE, 30);
+        end.add(Calendar.DATE, -30);
+        Query query = em.createQuery("SELECT mp FROM MonthlyPaymentEntity mp WHERE mp.dateGenerated >= :start AND mp.dateGenerated <= :end");
+        query.setParameter("start", start);
+        query.setParameter("end", end);
+        List<MonthlyPaymentEntity> results = query.getResultList();
+
+        for (MonthlyPaymentEntity mp : results) {
+            if (mp.getDateGenerated().get(Calendar.MONTH) == month.get(Calendar.MONTH)) {
+                return mp;
+            }
+        }
+
+        throw new MonthlyPaymentNotFoundException("Monthly Payment Invoice not found");
+    }
+
+    public List<MonthlyPaymentEntity> retrieveCurrentYearMonthlyPaymentEntity(Calendar year) throws MonthlyPaymentNotFoundException {
+        int yearInt = year.get(Calendar.YEAR);
+        Calendar start = new GregorianCalendar();
+        start.set(yearInt, 1, 1);
+        Calendar end = (Calendar) start.clone();
+        end.add(Calendar.MONTH, 12);
+
+        Query query = em.createQuery("SELECT mp FROM MonthlyPaymentEntity mp WHERE mp.dateGenerated >= :start AND mp.dateGenerated <= :end");
+        query.setParameter("start", start);
+        query.setParameter("end", end);
+        List<MonthlyPaymentEntity> results = query.getResultList();
+
+        if (results.isEmpty()) {
+            throw new MonthlyPaymentNotFoundException("No Monthly Payment Invoice(s) are found");
+        }
+        
+        for (int i = 0; i < results.size(); i++) {
+            if (results.get(i).getDateGenerated().get(Calendar.YEAR) != yearInt) {
+                results.remove(i);
+            }
+        }
+
+        return results;
     }
 
 //    public void trackDeactivationAndDeletion()
