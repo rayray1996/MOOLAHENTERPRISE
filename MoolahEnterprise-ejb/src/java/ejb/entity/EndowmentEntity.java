@@ -8,9 +8,12 @@ package ejb.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 import util.enumeration.EndowmentProductEnum;
 
 /**
@@ -21,7 +24,9 @@ import util.enumeration.EndowmentProductEnum;
 public class EndowmentEntity extends ProductEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
     private EndowmentProductEnum productEnum;
 
     public EndowmentEntity() {
@@ -44,6 +49,5 @@ public class EndowmentEntity extends ProductEntity implements Serializable {
     public String toString() {
         return "EndowmentEntity{" + "productEnum=" + productEnum + '}';
     }
-    
-    
+
 }

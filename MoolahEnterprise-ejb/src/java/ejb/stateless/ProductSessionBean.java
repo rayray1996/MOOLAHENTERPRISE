@@ -24,6 +24,9 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import util.enumeration.CategoryEnum;
+import util.enumeration.EndowmentProductEnum;
+import util.enumeration.TermLifeProductEnum;
+import util.enumeration.WholeLifeProductEnum;
 import util.exception.CompanyCreationException;
 import util.exception.CompanyDoesNotExistException;
 import util.exception.InvalidFilterCriteriaException;
@@ -55,66 +58,53 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 
     @Override
     public List<ProductEntity> retrieveAllFinancialProducts() {
-        Query query = em.createQuery("SELECT p FROM ProductEntity p WHERE p.isDeleted = FALSE");
+        Query query = em.createQuery("SELECT p FROM ProductEntity p WHERE p.isDeleted = FALSE AND p.company.isDeleted = false AND p.company.isDeactivated = false");
         List<ProductEntity> results = query.getResultList();
 
         for (ProductEntity e : results) {
             e.getListOfAdditionalFeatures().size();
             e.getListOfPremium().size();
-            e.getListOfAdditionalFeatures().size();
+            e.getListOfRiders().size();
         }
         return results;
     }
 
     @Override
     public List<EndowmentEntity> retrieveAllEndowmentProducts() {
-        Query query = em.createQuery("SELECT e FROM EndowmentEntity e WHERE e.isDeleted = FALSE");
+        Query query = em.createQuery("SELECT e FROM EndowmentEntity e WHERE e.isDeleted = FALSE AND e.company.isDeleted = false AND e.company.isDeactivated = false");
         List<EndowmentEntity> results = query.getResultList();
 
         for (EndowmentEntity e : results) {
             e.getListOfAdditionalFeatures().size();
             e.getListOfPremium().size();
-            e.getListOfAdditionalFeatures().size();
+            e.getListOfRiders().size();
         }
 
         return results;
     }
 
-//    @Override
-//    public List<InvestmentLinkedEntity> retrieveAllInvestmentLinkedProducts() {
-//        Query query = em.createQuery("SELECT i FROM InvestmentLinkedEntity i WHERE i.isDeleted = FALSE");
-//        List<InvestmentLinkedEntity> results = query.getResultList();
-//
-//        for (InvestmentLinkedEntity e : results) {
-//            e.getListOfAdditionalFeatures().size();
-//            e.getListOfPremium().size();
-//            e.getListOfAdditionalFeatures().size();
-//        }
-//        return results;
-//    }
-
     @Override
     public List<TermLifeProductEntity> retrieveAllTermLifeProducts() {
-        Query query = em.createQuery("SELECT t FROM TermLifeProductEntity t WHERE t.isDeleted = FALSE");
+        Query query = em.createQuery("SELECT t FROM TermLifeProductEntity t WHERE t.isDeleted = FALSE AND t.company.isDeleted = false AND t.company.isDeactivated = false");
         List<TermLifeProductEntity> results = query.getResultList();
 
         for (TermLifeProductEntity e : results) {
             e.getListOfAdditionalFeatures().size();
             e.getListOfPremium().size();
-            e.getListOfAdditionalFeatures().size();
+            e.getListOfRiders().size();
         }
         return results;
     }
 
     @Override
     public List<WholeLifeProductEntity> retrieveAllWholeLifeProducts() {
-        Query query = em.createQuery("SELECT w FROM WholeLifeProductEntity w WHERE w.isDeleted = FALSE");
+        Query query = em.createQuery("SELECT w FROM WholeLifeProductEntity w WHERE w.isDeleted = FALSE AND w.company.isDeleted = false AND w.company.isDeactivated = false");
         List<WholeLifeProductEntity> results = query.getResultList();
 
         for (WholeLifeProductEntity e : results) {
             e.getListOfAdditionalFeatures().size();
             e.getListOfPremium().size();
-            e.getListOfAdditionalFeatures().size();
+            e.getListOfRiders().size();
         }
         return results;
     }
@@ -127,33 +117,61 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         } else {
             product.getListOfAdditionalFeatures().size();
             product.getListOfPremium().size();
-            product.getListOfAdditionalFeatures().size();
+            product.getListOfRiders().size();
             return product;
         }
     }
 
     @Override
     public List<ProductEntity> searchForProductsByName(String name) {
-        Query query = em.createQuery("SELECT p FROM ProductEntity p WHERE p.productName LIKE :name AND  WHERE p.isDeleted = FALSE");
+        Query query = em.createQuery("SELECT p FROM ProductEntity p WHERE p.isDeleted = FALSE AND p.company.isDeleted = false AND p.company.isDeactivated = false AND p.productName LIKE :name");
         query.setParameter("name", "%" + name + "%");
         List<ProductEntity> results = query.getResultList();
 
         for (ProductEntity p : results) {
             p.getListOfAdditionalFeatures().size();
             p.getListOfPremium().size();
-            p.getListOfAdditionalFeatures().size();
+            p.getListOfRiders().size();
         }
 
         return results;
     }
 
     @Override
-    public List<ProductEntity> filterProductsByCriteria(CategoryEnum category, boolean wantsRider, boolean isSmoker, BigDecimal sumAssured, Integer coverageTerm, Integer premiumTerm) throws InvalidFilterCriteriaException {
+    public List<ProductEntity> filterProductsByCriteria(CategoryEnum category, boolean wantsRider, boolean isSmoker, BigDecimal sumAssured, Integer coverageTerm, Integer premiumTerm, EndowmentProductEnum endowmentProductEnum, TermLifeProductEnum termLifeProductEnum, WholeLifeProductEnum wholeLifeProductEnum) throws InvalidFilterCriteriaException {
         if (category == null) {
             throw new InvalidFilterCriteriaException("Category is empty");
         }
 
         String categoryType = getCategoryEnumAsStringClass(category) + " p";
+        String endowmentType = getEndowmentEnumAsString(endowmentProductEnum);
+        String termLifeType = getTermLifeEnumAsString(termLifeProductEnum);
+        String wholeLifeType = getWholeLifeEnumAsString(wholeLifeProductEnum);
+
+        String enumStrings = "";
+
+        switch (category) {
+            case ENDOWMENT:
+                if (!(endowmentType.equals(""))) {
+                    enumStrings = "AND p.productEnum = " + endowmentType;
+                }
+                break;
+
+            case TERMLIFE:
+                if (!(termLifeType.equals(""))) {
+                    enumStrings = "AND p.productEnum = " + termLifeType;
+                }
+                break;
+
+            case WHOLELIFE:
+                if (!(wholeLifeType.equals(""))) {
+                    enumStrings = "AND p.productEnum = " + wholeLifeType;
+                }
+                break;
+
+            default:
+                throw new InvalidFilterCriteriaException("Category is empty");
+        }
 
         String riderString = "";
 
@@ -165,14 +183,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
             riderString = "";
         }
 
-        String smokerString = "";
-        if (isSmoker) {
-            smokerString = "AND s.isSmoker = true";
-        } else {
-            smokerString = "AND s.isSmoker = false";
-        }
-
-        Query query = em.createQuery("SELECT p FROM " + categoryType + " JOIN p.listOfPremium s WHERE " + riderString + "p.assuredSum >= :sumAssured AND p.isDeleted = FALSE AND p.coverageTerm >= :coverageTerm AND p.premiumTerm >= :premiumTerm " + smokerString);
+        Query query = em.createQuery("SELECT p FROM " + categoryType + " JOIN p.listOfPremium s WHERE " + riderString + "p.assuredSum >= :sumAssured AND p.isDeleted = FALSE AND p.company.isDeleted = false AND p.company.isDeactivated = false AND p.coverageTerm >= :coverageTerm AND p.premiumTerm >= :premiumTerm AND p.isSmoker = true AND " + enumStrings);
         query.setParameter("sumAssured", sumAssured);
         query.setParameter("coverageTerm", coverageTerm);
         query.setParameter("premiumTerm", premiumTerm);
@@ -182,10 +193,75 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         for (ProductEntity e : results) {
             e.getListOfAdditionalFeatures().size();
             e.getListOfPremium().size();
-            e.getListOfAdditionalFeatures().size();
+            e.getListOfRiders().size();
         }
 
         return results;
+    }
+
+    private String getEndowmentEnumAsString(EndowmentProductEnum prodEnum) {
+        String result = "";
+
+        switch (prodEnum) {
+            case ENDOWMENT:
+                result = "ENDOWMENT";
+                break;
+
+            default:
+                break;
+        }
+
+        return result;
+    }
+
+    private String getTermLifeEnumAsString(TermLifeProductEnum prodEnum) {
+        String result = "";
+
+        switch (prodEnum) {
+            case ACCIDENT:
+                result = "ACCIDENT";
+                break;
+
+            case CRITICALILLNESS:
+                result = "CRITICALILLNESS";
+                break;
+
+            case HOSPITAL:
+                result = "HOSPITAL";
+                break;
+
+            default:
+                break;
+        }
+
+        return result;
+    }
+
+    private String getWholeLifeEnumAsString(WholeLifeProductEnum prodEnum) {
+        String result = "";
+
+        switch (prodEnum) {
+            case ACCIDENT:
+                result = "ACCIDENT";
+                break;
+
+            case CRITICALILLNESS:
+                result = "CRITICALILLNESS";
+                break;
+
+            case HOSPITAL:
+                result = "HOSPITAL";
+                break;
+
+            case LIFEINSURANCE:
+                result = "LIFEINSURANCE";
+                break;
+
+            default:
+                break;
+        }
+
+        return result;
     }
 
     private String getCategoryEnumAsStringClass(CategoryEnum category) {
@@ -195,10 +271,6 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
             case ENDOWMENT:
                 categoryType = "EndowmentEntity";
                 break;
-
-//            case INVESTMENTLINKED:
-//                categoryType = "InvestmentLinkedEntity";
-//                break;
 
             case TERMLIFE:
                 categoryType = "TermLifeProductEntity";
@@ -275,13 +347,12 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
             product.setIsDeleted(Boolean.TRUE);
         }
     }
-    
-    
+
     @Override
-    public List<ProductEntity> retrieveListOfProductByCompany(String email) throws CompanyDoesNotExistException{
+    public List<ProductEntity> retrieveListOfProductByCompany(String email) throws CompanyDoesNotExistException {
         CompanyEntity company = companySessionBean.retrieveCompanyByEmail(email);
         List<ProductEntity> listOfProducts = company.getListOfProducts();
-        for(ProductEntity prod : listOfProducts){
+        for (ProductEntity prod : listOfProducts) {
             prod.getListOfAdditionalFeatures().size();
             prod.getListOfPremium().size();
             prod.getListOfAdditionalFeatures().size();
@@ -298,4 +369,5 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 
         return msg;
     }
+
 }

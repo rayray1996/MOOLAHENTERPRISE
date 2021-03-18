@@ -8,7 +8,11 @@ package ejb.stateless;
 import ejb.entity.AssetEntity;
 import ejb.entity.ComparisonEntity;
 import ejb.entity.CustomerEntity;
+import ejb.entity.PremiumEntity;
 import ejb.entity.ProductEntity;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.EJB;
@@ -17,6 +21,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -194,6 +199,109 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         CustomerEntity cust = retrieveCustomerById(custId);
         cust.getListOfLikeProducts().size();
         return cust.getListOfLikeProducts();
+    }
+
+    @Override
+    public List<ProductEntity> retrieveRecommendedProducts(Long customerId) throws CustomerDoesNotExistsException, ProductNotFoundException {
+        CustomerEntity customer = em.find(CustomerEntity.class, customerId);
+
+        if (customer == null) {
+            throw new CustomerDoesNotExistsException("Customer is not found");
+        }
+
+        // get isMarried and age of customer
+        // Customer's basic information
+        boolean isMarried = customer.getIsMarried();
+        int age = getAgeOfCustomer(customer);
+        List<BigDecimal> nextThreeYearsOfCapital = getThreeYearsOfCapital(customerId);
+        BigDecimal yearOneCapital = nextThreeYearsOfCapital.get(0);
+        BigDecimal yearTwoCapital = nextThreeYearsOfCapital.get(1);
+        BigDecimal yearThreeCapital = nextThreeYearsOfCapital.get(2);
+        
+        /*
+        Recommend products based on 3 years affordability
+         */
+        Query query = em.createQuery("SELECT p FROM ProductEntity p WHERE p.isDeleted = false AND p.company.isDeleted = false AND p.company.isDeactivated = false");
+        List<ProductEntity> allProducts = query.getResultList();
+
+        for (int i = 0; i < allProducts.size(); i++) {
+            ProductEntity currProductEntity = allProducts.get(i);
+            if (!canAffordProduct(customer, currProductEntity, nextThreeYearsOfCapital)) {
+                allProducts.remove(i);
+            }
+        }
+
+        for (ProductEntity p : allProducts) {
+            p.getListOfAdditionalFeatures().size();
+            p.getListOfPremium().size();
+            p.getListOfRiders().size();
+        }
+        
+        return allProducts;
+
+    }
+
+    @Override
+    public boolean canAffordProduct(CustomerEntity customer, ProductEntity product, List<BigDecimal> nextThreeYearsOfCapital) throws ProductNotFoundException, CustomerDoesNotExistsException {
+        if (product == null) {
+            throw new ProductNotFoundException("No product is selected");
+        }
+
+        if (customer == null) {
+            throw new CustomerDoesNotExistsException("No customer is selected");
+        }
+
+        // get the age premium
+        PremiumEntity currPremium = null;
+        Integer age = getAgeOfCustomer(customer);
+
+        for (PremiumEntity premium : product.getListOfPremium()) {
+            if (age >= premium.getMinAgeGroup() && age <= premium.getMaxAgeGroup()) {
+                currPremium = premium;
+                break;
+            }
+        }
+
+        if (currPremium == null) {
+            throw new ProductNotFoundException("Selected producted does not contain the premium for customer's age");
+        }
+
+        for (BigDecimal capital : nextThreeYearsOfCapital) {
+            if (capital.compareTo(currPremium.getValue()) < 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public List<BigDecimal> getThreeYearsOfCapital(Long customerId) throws CustomerDoesNotExistsException {
+        CustomerEntity customer = em.find(CustomerEntity.class, customerId);
+
+        if (customer == null) {
+            throw new CustomerDoesNotExistsException("Customer is not found");
+        }
+
+        BigDecimal yearlyIncrement = (customer.getAsset().getMonthlyIncome().subtract(customer.getAsset().getMonthlyExpense())).multiply(BigDecimal.valueOf(12));
+        BigDecimal yearOneCapital = customer.getAsset().getCashInHand();
+        BigDecimal yearTwoCapital = yearOneCapital.add(yearlyIncrement);
+        BigDecimal yearThreeCapital = yearTwoCapital.add(yearlyIncrement);
+
+        List<BigDecimal> results = new ArrayList<>();
+        results.add(yearOneCapital);
+        results.add(yearTwoCapital);
+        results.add(yearThreeCapital);
+
+        return results;
+    }
+
+    @Override
+    public Integer getAgeOfCustomer(CustomerEntity customer) {
+        int currentYear = new GregorianCalendar().get(GregorianCalendar.YEAR);
+        int birthYear = customer.getDateOfBirth().get(GregorianCalendar.YEAR);
+
+        return currentYear - birthYear;
     }
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<CustomerEntity>> constraintViolations) {

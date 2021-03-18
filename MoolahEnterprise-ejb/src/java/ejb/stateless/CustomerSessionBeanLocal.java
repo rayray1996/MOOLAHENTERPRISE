@@ -8,6 +8,7 @@ package ejb.stateless;
 import ejb.entity.AssetEntity;
 import ejb.entity.CustomerEntity;
 import ejb.entity.ProductEntity;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.ejb.Local;
 import util.exception.CustomerAlreadyExistException;
@@ -43,5 +44,13 @@ public interface CustomerSessionBeanLocal {
     public List<ProductEntity> viewLikedProductList(Long custId) throws CustomerDoesNotExistsException;
 
     public AssetEntity retrieveMyAsset(Long custId) throws CustomerDoesNotExistsException;
+
+    public Integer getAgeOfCustomer(CustomerEntity customer);
+
+    public List<BigDecimal> getThreeYearsOfCapital(Long customerId) throws CustomerDoesNotExistsException;
+
+    public boolean canAffordProduct(CustomerEntity customer, ProductEntity product, List<BigDecimal> nextThreeYearsOfCapital) throws ProductNotFoundException, CustomerDoesNotExistsException;
+
+    public List<ProductEntity> retrieveRecommendedProducts(Long customerId) throws CustomerDoesNotExistsException, ProductNotFoundException;
 
 }
