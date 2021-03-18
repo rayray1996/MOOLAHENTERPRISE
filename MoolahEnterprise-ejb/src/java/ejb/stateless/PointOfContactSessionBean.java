@@ -41,6 +41,7 @@ public class PointOfContactSessionBean implements PointOfContactSessionBeanLocal
         validator = validatorFactory.getValidator();
     }
 
+    @Override
     public Long createNewPointOfContact(PointOfContactEntity poc) throws PointOfContactAlreadyExistsException, UnknownPersistenceException, InvalidPointOfContactCreationException {
         Set<ConstraintViolation<PointOfContactEntity>> pocError = validator.validate(poc);
         if (pocError.isEmpty()) {

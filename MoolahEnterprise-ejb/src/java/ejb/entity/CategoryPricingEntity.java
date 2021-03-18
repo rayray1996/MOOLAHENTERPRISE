@@ -38,6 +38,15 @@ public class CategoryPricingEntity implements Serializable {
     @NotNull
     private BigInteger creditPerClick;
 
+    public CategoryPricingEntity() {
+    }
+
+    public CategoryPricingEntity(CategoryEnum categoryType, BigInteger fixedSubscriptionCredit, BigInteger creditPerClick) {
+        this.categoryType = categoryType;
+        this.fixedSubscriptionCredit = fixedSubscriptionCredit;
+        this.creditPerClick = creditPerClick;
+    }
+
     public CategoryEnum getCategoryType() {
         return categoryType;
     }
@@ -61,9 +70,7 @@ public class CategoryPricingEntity implements Serializable {
     public void setCreditPerClick(BigInteger creditPerClick) {
         this.creditPerClick = creditPerClick;
     }
-    
-    
-    
+
     public Long getCategoryPricingId() {
         return categoryPricingId;
     }
@@ -96,5 +103,5 @@ public class CategoryPricingEntity implements Serializable {
     public String toString() {
         return "ejb.entity.CategoryPricingEntity[ id=" + categoryPricingId + " ]";
     }
-    
+
 }

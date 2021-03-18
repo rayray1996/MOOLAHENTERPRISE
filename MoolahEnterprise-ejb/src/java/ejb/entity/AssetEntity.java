@@ -48,12 +48,14 @@ public class AssetEntity implements Serializable {
     public AssetEntity() {
     }
 
-    public AssetEntity(BigDecimal cashInHand, BigDecimal monthlyExpense, BigDecimal investments) {
+    public AssetEntity(BigDecimal cashInHand, BigDecimal monthlyExpense, BigDecimal investments, BigDecimal monthlyIncome) {
         this.cashInHand = cashInHand;
         this.monthlyExpense = monthlyExpense;
         this.investments = investments;
+        this.monthlyIncome = monthlyIncome;
     }
 
+ 
     public Long getAssetId() {
         return assetId;
     }

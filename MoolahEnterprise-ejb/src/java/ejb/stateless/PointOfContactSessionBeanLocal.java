@@ -5,7 +5,11 @@
  */
 package ejb.stateless;
 
+import ejb.entity.PointOfContactEntity;
 import javax.ejb.Local;
+import util.exception.InvalidPointOfContactCreationException;
+import util.exception.PointOfContactAlreadyExistsException;
+import util.exception.UnknownPersistenceException;
 
 /**
  *
@@ -13,5 +17,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface PointOfContactSessionBeanLocal {
+
+    public Long createNewPointOfContact(PointOfContactEntity poc) throws PointOfContactAlreadyExistsException, UnknownPersistenceException, InvalidPointOfContactCreationException;
     
 }
