@@ -76,18 +76,18 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         return results;
     }
 
-    @Override
-    public List<InvestmentLinkedEntity> retrieveAllInvestmentLinkedProducts() {
-        Query query = em.createQuery("SELECT i FROM InvestmentLinkedEntity i WHERE i.isDeleted = FALSE");
-        List<InvestmentLinkedEntity> results = query.getResultList();
-
-        for (InvestmentLinkedEntity e : results) {
-            e.getListOfAdditionalFeatures().size();
-            e.getListOfPremium().size();
-            e.getListOfAdditionalFeatures().size();
-        }
-        return results;
-    }
+//    @Override
+//    public List<InvestmentLinkedEntity> retrieveAllInvestmentLinkedProducts() {
+//        Query query = em.createQuery("SELECT i FROM InvestmentLinkedEntity i WHERE i.isDeleted = FALSE");
+//        List<InvestmentLinkedEntity> results = query.getResultList();
+//
+//        for (InvestmentLinkedEntity e : results) {
+//            e.getListOfAdditionalFeatures().size();
+//            e.getListOfPremium().size();
+//            e.getListOfAdditionalFeatures().size();
+//        }
+//        return results;
+//    }
 
     @Override
     public List<TermLifeProductEntity> retrieveAllTermLifeProducts() {
@@ -192,9 +192,9 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
                 categoryType = "EndowmentEntity";
                 break;
 
-            case INVESTMENTLINKED:
-                categoryType = "InvestmentLinkedEntity";
-                break;
+//            case INVESTMENTLINKED:
+//                categoryType = "InvestmentLinkedEntity";
+//                break;
 
             case TERMLIFE:
                 categoryType = "TermLifeProductEntity";

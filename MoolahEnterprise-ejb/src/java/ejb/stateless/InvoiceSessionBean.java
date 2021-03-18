@@ -10,6 +10,7 @@ import ejb.entity.CompanyEntity;
 import ejb.entity.CreditPaymentEntity;
 import ejb.entity.MonthlyPaymentEntity;
 import ejb.entity.PaymentEntity;
+import ejb.entity.PointOfContactEntity;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Calendar;
@@ -20,13 +21,18 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import util.exception.CompanyDoesNotExistException;
+import util.exception.InvalidPaymentEntityCreationException;
+import util.exception.InvalidPointOfContactCreationException;
 import util.exception.MonthlyPaymentNotFoundException;
+import util.exception.PaymentEntityAlreadyExistsException;
+import util.exception.UnknownPersistenceException;
 
 /**
  *
@@ -61,20 +67,41 @@ public class InvoiceSessionBean implements InvoiceSessionBeanLocal {
         }
     }
 
-    public Long purchaseMoolahCredits(Long companyId, BigInteger creditToBuy) throws CompanyDoesNotExistException {
+    public Long purchaseMoolahCredits(Long companyId, BigInteger creditToBuy) throws CompanyDoesNotExistException, InvalidPaymentEntityCreationException, InvalidPaymentEntityCreationException, UnknownPersistenceException, PaymentEntityAlreadyExistsException {
         CompanyEntity company = em.find(CompanyEntity.class, companyId);
 
+        if(company == null) {
+            throw new CompanyDoesNotExistException("Company is not found");
+        }
+        
         // create a transaction
         CreditPaymentEntity payment = new CreditPaymentEntity(creditToBuy, Boolean.TRUE, Calendar.getInstance(), generatePaymentNumber(), moolahCreditConverter.convertCreditToSgd(creditToBuy), Calendar.getInstance(), company);
-        
-        em.persist(payment);
-        em.flush();
-        company.getListOfPayments().add(payment);
+        Set<ConstraintViolation<CreditPaymentEntity>> paymentError = validator.validate(payment);
+        if (paymentError.isEmpty()) {
+            try {
+                em.persist(payment);
+                em.flush();
+                company.getListOfPayments().add(payment);
 
-        // add credit to company
-        companySessionBean.topupCredit(company, creditToBuy);
+                // add credit to company
+                companySessionBean.topupCredit(company, creditToBuy);
 
-        return payment.getPaymentId();
+                return payment.getPaymentId();
+                
+            } catch (PersistenceException ex) {
+                if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
+                    if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
+                        throw new PaymentEntityAlreadyExistsException("Credit payment already exists!");
+                    } else {
+                        throw new UnknownPersistenceException(ex.getMessage());
+                    }
+                } else {
+                    throw new UnknownPersistenceException(ex.getMessage());
+                }
+            }
+        } else {
+            throw new InvalidPaymentEntityCreationException(prepareInputDataValidationErrorsMessage(paymentError));
+        }
 
     }
 
@@ -108,7 +135,7 @@ public class InvoiceSessionBean implements InvoiceSessionBeanLocal {
         }
     }
 
-    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<CompanyEntity>> constraintViolations) {
+    private <T> String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<T>> constraintViolations) {
         String msg = "Input data validation error!:";
 
         for (ConstraintViolation constraintViolation : constraintViolations) {

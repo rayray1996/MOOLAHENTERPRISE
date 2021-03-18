@@ -75,6 +75,17 @@ public class CustomerEntity implements Serializable {
 
     @NotNull
     private Boolean smoker;
+    
+    @NotNull
+    private Boolean isMarried;
+
+    public Boolean getIsMarried() {
+        return isMarried;
+    }
+
+    public void setIsMarried(Boolean isMarried) {
+        this.isMarried = isMarried;
+    }
 
     //bidirectional
     @OneToMany(mappedBy = "customer")

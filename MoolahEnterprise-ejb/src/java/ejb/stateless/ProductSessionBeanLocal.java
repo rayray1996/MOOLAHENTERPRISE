@@ -43,7 +43,7 @@ public interface ProductSessionBeanLocal {
 
     public List<TermLifeProductEntity> retrieveAllTermLifeProducts();
 
-    public List<InvestmentLinkedEntity> retrieveAllInvestmentLinkedProducts();
+//    public List<InvestmentLinkedEntity> retrieveAllInvestmentLinkedProducts();
 
     public List<EndowmentEntity> retrieveAllEndowmentProducts();
 
