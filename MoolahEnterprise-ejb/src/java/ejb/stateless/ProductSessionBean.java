@@ -7,7 +7,6 @@ package ejb.stateless;
 
 import ejb.entity.CompanyEntity;
 import ejb.entity.EndowmentEntity;
-import ejb.entity.InvestmentLinkedEntity;
 import ejb.entity.ProductEntity;
 import ejb.entity.TermLifeProductEntity;
 import ejb.entity.WholeLifeProductEntity;

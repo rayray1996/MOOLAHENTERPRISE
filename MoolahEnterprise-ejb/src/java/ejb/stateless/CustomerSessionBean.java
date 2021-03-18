@@ -9,8 +9,6 @@ import ejb.entity.AssetEntity;
 import ejb.entity.ComparisonEntity;
 import ejb.entity.CustomerEntity;
 import ejb.entity.ProductEntity;
-import ejb.entity.QuestionEntity;
-import ejb.entity.QuestionnaireEntity;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.EJB;
@@ -88,7 +86,6 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
             if (passwordHash.equals(cust.getPassword())) {
                 cust.getListOfIssues().size();
                 cust.getListOfLikeProducts().size();
-                cust.getListOfQuestionnaires().size();
                 cust.getSavedComparisons().size();
                 for (ComparisonEntity compareEntity : cust.getSavedComparisons()) {
                     compareEntity.getProductsToCompare().size();
@@ -154,12 +151,6 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
             CustomerEntity cust = (CustomerEntity) em.createQuery("SELECT c FROM CustomerEntity c WHERE c.customerId =:cid").setParameter("cid", id).getSingleResult();
             cust.getListOfIssues().size();
             cust.getListOfLikeProducts().size();
-            cust.getListOfQuestionnaires();
-            for (QuestionnaireEntity qn : cust.getListOfQuestionnaires()) {
-                for (QuestionEntity questionEntity : qn.getListOfQuestions()) {
-                    questionEntity.getListOfOptions().size();
-                }
-            }
 
             for (ComparisonEntity comp : cust.getSavedComparisons()) {
                 comp.getProductsToCompare().size();

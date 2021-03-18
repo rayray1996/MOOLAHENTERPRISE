@@ -91,10 +91,6 @@ public class CustomerEntity implements Serializable {
     @OneToOne(optional = false, cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, orphanRemoval = true)
     private AssetEntity asset;
 
-    //unidirectional    
-    @OneToMany
-    private List<QuestionnaireEntity> listOfQuestionnaires;
-
     //unidirectional
     @OneToMany
     private List<ProductEntity> listOfLikeProducts;
@@ -217,14 +213,6 @@ public class CustomerEntity implements Serializable {
 
     public void setAsset(AssetEntity asset) {
         this.asset = asset;
-    }
-
-    public List<QuestionnaireEntity> getListOfQuestionnaires() {
-        return listOfQuestionnaires;
-    }
-
-    public void setListOfQuestionnaires(List<QuestionnaireEntity> listOfQuestionnaires) {
-        this.listOfQuestionnaires = listOfQuestionnaires;
     }
 
     public List<ProductEntity> getListOfLikeProducts() {
