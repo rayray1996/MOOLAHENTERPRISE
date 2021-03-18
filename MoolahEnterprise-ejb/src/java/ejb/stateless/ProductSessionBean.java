@@ -14,6 +14,7 @@ import ejb.entity.WholeLifeProductEntity;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -25,6 +26,7 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import util.enumeration.CategoryEnum;
 import util.exception.CompanyCreationException;
+import util.exception.CompanyDoesNotExistException;
 import util.exception.InvalidFilterCriteriaException;
 import util.exception.InvalidProductCreationException;
 import util.exception.ProductAlreadyExistsException;
@@ -37,6 +39,9 @@ import util.exception.UnknownPersistenceException;
  */
 @Stateless
 public class ProductSessionBean implements ProductSessionBeanLocal {
+
+    @EJB
+    private CompanySessionBeanLocal companySessionBean;
 
     @PersistenceContext(unitName = "MoolahEnterprise-ejbPU")
     private EntityManager em;
@@ -270,6 +275,19 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         } else {
             product.setIsDeleted(Boolean.TRUE);
         }
+    }
+    
+    
+    @Override
+    public List<ProductEntity> retrieveListOfProductByCompany(String email) throws CompanyDoesNotExistException{
+        CompanyEntity company = companySessionBean.retrieveCompanyByEmail(email);
+        List<ProductEntity> listOfProducts = company.getListOfProducts();
+        for(ProductEntity prod : listOfProducts){
+            prod.getListOfAdditionalFeatures().size();
+            prod.getListOfPremium().size();
+            prod.getListOfAdditionalFeatures().size();
+        }
+        return listOfProducts;
     }
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<ProductEntity>> constraintViolations) {

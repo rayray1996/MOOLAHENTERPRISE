@@ -7,6 +7,7 @@ package ejb.stateless;
 
 import ejb.entity.CompanyEntity;
 import java.math.BigInteger;
+import java.util.List;
 import javax.ejb.Local;
 import javax.ejb.Timer;
 import util.exception.CompanyAlreadyExistException;
@@ -35,5 +36,7 @@ public interface CompanySessionBeanLocal {
     public void timeoutCleanUp(Timer timer);
 
     public void topupCredit(CompanyEntity company, BigInteger creditAmount) throws CompanyDoesNotExistException;
+
+    public List<CompanyEntity> retrieveAllActiveCompanies();
     
 }

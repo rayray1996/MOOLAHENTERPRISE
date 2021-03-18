@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import javax.ejb.Local;
 import util.enumeration.CategoryEnum;
+import util.exception.CompanyDoesNotExistException;
 import util.exception.InvalidFilterCriteriaException;
 import util.exception.InvalidProductCreationException;
 import util.exception.ProductAlreadyExistsException;
@@ -48,6 +49,8 @@ public interface ProductSessionBeanLocal {
     public List<EndowmentEntity> retrieveAllEndowmentProducts();
 
     public List<ProductEntity> retrieveAllFinancialProducts();
+
+    public List<ProductEntity> retrieveListOfProductByCompany(String email) throws CompanyDoesNotExistException;
 
    
 }
