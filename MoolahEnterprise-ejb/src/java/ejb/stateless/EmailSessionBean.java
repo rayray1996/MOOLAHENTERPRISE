@@ -28,7 +28,7 @@ public class EmailSessionBean implements EmailSessionBeanLocal {
     public Boolean emailCreditTopupNotificationSync(CompanyEntity company, String toEmailAddress) {
         EmailManager emailManager = new EmailManager(GMAIL_USERNAME, GMAIL_PASSWORD);
         Boolean result = emailManager.emailCreditTopupNotification(company, FROM_EMAIL_ADDRESS, toEmailAddress);
-        System.out.println("Sending email!");
+        System.out.println("Email Session Bean : Sending email!");
         
         return result;
     }

@@ -74,7 +74,7 @@ public class EmailManager {
             if (msg != null) {
                 msg.setFrom(InternetAddress.parse(fromEmailAddress, false)[0]);
                 msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmailAddress, false));
-                msg.setSubject("Insufficient Credit for Moolah Enterprise!");
+                msg.setSubject("Insufficient Credit for Moolah Enterprise");
                 msg.setText(emailBody);
                 msg.setHeader("X-Mailer", mailer);
 

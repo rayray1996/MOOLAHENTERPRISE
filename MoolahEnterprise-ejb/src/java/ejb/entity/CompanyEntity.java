@@ -62,7 +62,6 @@ public class CompanyEntity implements Serializable {
     private String companyContactNumber;
 
     @NotNull
-//    @Size(min = 1)
     private String warningMessage;
 
     @NotNull
