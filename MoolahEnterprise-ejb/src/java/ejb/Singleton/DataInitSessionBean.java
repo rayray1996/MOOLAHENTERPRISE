@@ -7,6 +7,7 @@ package ejb.Singleton;
 
 import ejb.entity.CompanyEntity;
 import ejb.stateless.CompanySessionBeanLocal;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,7 +36,7 @@ public class DataInitSessionBean {
 
     @EJB
     private CompanySessionBeanLocal companySessionBean;
-
+    
     @PostConstruct
     public void dataInit() {
         if (em.find(CompanyEntity.class, 1L) == null) {
