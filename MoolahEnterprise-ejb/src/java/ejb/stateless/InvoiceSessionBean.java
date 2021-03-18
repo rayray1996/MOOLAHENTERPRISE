@@ -66,6 +66,7 @@ public class InvoiceSessionBean implements InvoiceSessionBeanLocal {
 
         // create a transaction
         CreditPaymentEntity payment = new CreditPaymentEntity(creditToBuy, Boolean.TRUE, Calendar.getInstance(), generatePaymentNumber(), moolahCreditConverter.convertCreditToSgd(creditToBuy), Calendar.getInstance(), company);
+        
         em.persist(payment);
         em.flush();
         company.getListOfPayments().add(payment);

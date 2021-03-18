@@ -53,7 +53,7 @@ public class CustomerEntity implements Serializable {
 
     @NotNull
     @Column(unique = true)
-    @Size(min = 6, max = 50)
+//    @Size(min = 6, max = 100)
     private String password;
 
     @Column(columnDefinition = "CHAR(32) NOT NULL")

@@ -13,15 +13,21 @@ import ejb.entity.ProductEntity;
 import ejb.entity.RefundEntity;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
+import javax.ejb.NoSuchObjectLocalException;
 import javax.ejb.Schedule;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
@@ -43,6 +49,8 @@ import util.exception.CompanyCreationException;
 import util.exception.CompanyDoesNotExistException;
 import util.exception.IncorrectLoginParticularsException;
 import util.exception.MonthlyPaymentNotFoundException;
+import util.exception.RefundCreationException;
+import util.exception.RefundHasBeenTransactedException;
 import util.exception.UnknownPersistenceException;
 import util.security.CryptographicHelper;
 
@@ -73,6 +81,11 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
     public CompanySessionBean() {
         validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
+
+    }
+
+    @PostConstruct
+    public void init() {
         timerService = sessionContext.getTimerService();
 
     }
@@ -120,7 +133,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
 
             company.getListOfPointOfContacts().size();
             for (PaymentEntity monthlyPayment : company.getListOfPayments()) {
-                if (monthlyPayment instanceof MonthlyPaymentEntity) {
+                if(monthlyPayment instanceof  MonthlyPaymentEntity) {
                     ((MonthlyPaymentEntity) monthlyPayment).getListOfProductLineItems().size();
                 }
             }
@@ -159,7 +172,24 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
         CompanyEntity companyToUpdate = retrieveCompanyByEmail(company.getCompanyEmail());
         companyToUpdate.setCreditOwned(companyToUpdate.getCreditOwned().add(creditAmount));
         companyToUpdate.setIsWarned(Boolean.FALSE);
-        companyToUpdate.setIsDeactivated(true);
+        companyToUpdate.setIsDeactivated(false);
+
+        Collection<Timer> timers = timerService.getTimers();
+
+        try {
+            for (Timer timer : timers) {
+                if (timer.getInfo() != null) {
+                    CompanyEntity companyInTimer = (CompanyEntity) timer.getInfo();
+                    if (companyInTimer.getCompanyId().equals(companyToUpdate.getCompanyId())) {
+                        timer.cancel();
+                    }
+                }
+            }
+        } catch (NoSuchObjectLocalException ex) {
+            System.out.println("Timer has been cancelled or does not exists! Msg: " + ex.getMessage());
+        }
+
+//        Timer timerToStop = timerService.
     }
 
     @Override
@@ -169,7 +199,12 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
         company.setIsDeactivated(true);
         TimerConfig timerConfig = new TimerConfig(company, true);
         LocalDateTime expirationDate = LocalDateTime.now();
-        expirationDate.plusMonths(6);
+
+        //Testing code - For showcase
+        expirationDate = expirationDate.plusMinutes(5);
+
+        //Deployment code - Business Logic
+//        expirationDate = expirationDate.plusMonths(6);
         Date expiration = Date.from(expirationDate.atZone(ZoneId.systemDefault()).toInstant());
 
 //        timerService.createSingleActionTimer(300000, timerConfig);
@@ -187,50 +222,79 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
     @Timeout
     @Override
     public void timeoutCleanUp(Timer timer) {
-        CompanyEntity company = (CompanyEntity) timer.getInfo();
-        System.out.println("TImeout method triggered! Company: " + company.getCompanyId());
+        try {
+            CompanyEntity company = (CompanyEntity) timer.getInfo();
+            company = retrieveCompanyByEmail(company.getCompanyEmail());
+            System.err.println("TImeout method triggered! Company: " + company.getCompanyId());
 
-        //COMPANY CURRENTLY DEACTIVATED, transitioning to DELETED:  initiate refund, set all products to isDeleted, set company to isDeleted
-        if (company.isIsDeactivated()) {
-            RefundEntity refundEntity = new RefundEntity(new GregorianCalendar(), new BigDecimal(company.getCreditOwned().intValueExact() * 0.10), company);
-            company.setRefund(refundEntity);
-            for (ProductEntity coyProd : company.getListOfProducts()) {
-                coyProd.setIsDeleted(Boolean.TRUE);
+            //COMPANY CURRENTLY DEACTIVATED, transitioning to DELETED:  initiate refund, set all products to isDeleted, set company to isDeleted
+            if (company.isIsDeactivated()) {
+
+                //need to change this magic 0.10 to use singleton meth
+                RefundEntity refundEntity = new RefundEntity(new GregorianCalendar(), new BigDecimal(company.getCreditOwned().intValueExact() * 0.10), company);
+                refundEntity = refundSessionBean.createNewRefund(refundEntity);
+                company.setRefund(refundEntity);
+                for (ProductEntity coyProd : company.getListOfProducts()) {
+                    coyProd.setIsDeleted(true);
+                }
+                System.err.println("Company: " + company.getCompanyName() + " is deleted!");
+                company.setIsDeleted(true);
+
+            } else if (company.getIsWarned()) {
+
+                // deactivate account, set timer to 6 months - call deactivateAccount()
+                company.setIsDeactivated(Boolean.TRUE);
+                TimerConfig timerConfig = new TimerConfig(company, true);
+                LocalDateTime expirationDate = LocalDateTime.now();
+
+                //Testing code - For showcase
+                expirationDate = expirationDate.plusMinutes(5);
+                Date expiration = Date.from(expirationDate.atZone(ZoneId.systemDefault()).toInstant());
+
+                //Deployment code - Business logic
+//                expirationDate = expirationDate.plusMonths(6);
+//                Date expiration = Date.from(expirationDate.atZone(ZoneId.systemDefault()).toInstant());
+                System.err.println("Company: " + company.getCompanyName() + " is deactivated!");
+
+                //send email informing them of the deactivation of their account!!
+                Boolean result = emailSessionBean.emailReminderAccountDeactivatedSync(company, company.getCompanyEmail());
+                timerService.createSingleActionTimer(expiration, timerConfig);
             }
-            company.setIsDeleted(true);
-        } else if (company.getIsWarned()) {
-            // deactivate account, set timer to 6 months - call deactivateAccount()
-            company.setIsDeactivated(true);
-            TimerConfig timerConfig = new TimerConfig(company, true);
-            LocalDateTime expirationDate = LocalDateTime.now();
-            expirationDate.plusMonths(6);
-            Date expiration = Date.from(expirationDate.atZone(ZoneId.systemDefault()).toInstant());
-
-            //send email informing them of the deactivation of their account!!
-            Boolean result = emailSessionBean.emailReminderAccountDeactivatedSync(company, company.getCompanyEmail());
-            timerService.createSingleActionTimer(expiration, timerConfig);
+        } catch (CompanyDoesNotExistException | RefundCreationException | RefundHasBeenTransactedException | UnknownPersistenceException ex) {
+            System.err.println(ex.getMessage());
         }
-
     }
 
     /**
      * This method carries out automated checks on the each company's credit
      * balance to ensure that there is no negative amount
      */
-//    @Schedule(hour = "7", minute = "0", second = "0", dayOfMonth = "20", month = "*", year = "*", persistent = true)
-    @Schedule(hour = "0", minute = "*/5", second = "0", dayOfMonth = "17", month = "*", year = "*", persistent = true)
+//    @Schedule(hour = "7", minute = "0", second = "0", dayOfMonth = "20", month = "*", year = "*", persistent = false)
+    @Schedule(hour = "*", minute = "*/2", second = "0", dayOfMonth = "*", month = "*", year = "*", persistent = false)
     public void automatedCheckCreditBalance() {
+        System.out.println("Timer service triggered!");
         List<CompanyEntity> listOfCompanies = em.createQuery("SELECT coy FROM CompanyEntity coy WHERE coy.isDeleted = false").getResultList();
         for (CompanyEntity company : listOfCompanies) {
-            if (company.getCreditOwned().intValueExact() <= 100 && !company.getIsWarned()) {
+            System.err.println("Company Name: " + company.getCompanyName());
+            if (company.getCreditOwned().intValueExact() <= 1000 && !company.getIsWarned()) {
+                System.err.println("Timer Entry into condition <= 1000");
+
                 Boolean result = emailSessionBean.emailCreditTopupNotificationSync(company, company.getCompanyEmail());
                 company.setIsWarned(Boolean.TRUE);
 
                 TimerConfig timerConfig = new TimerConfig(company, true);
                 LocalDateTime expirationDate = LocalDateTime.now();
-                expirationDate.plusWeeks(1);
+
+                //Testing code - For showcase
+                expirationDate = expirationDate.plusMinutes(2);
                 Date expiration = Date.from(expirationDate.atZone(ZoneId.systemDefault()).toInstant());
+
+                //Deployment Code - business logic
+//                expirationDate = expirationDate.plusWeeks(1);
+//                Date expiration = Date.from(expirationDate.atZone(ZoneId.systemDefault()).toInstant());
+                System.err.println("Expiry Period: " + expiration.toString());
                 timerService.createSingleActionTimer(expiration, timerConfig);
+                System.err.println("Email sent! Company: " + company.getCompanyName());
 
                 if (!result) {
                     company.setWarningMessage("We have failed to contact you via email. Please top up your credit by end of the month! ");
@@ -300,7 +364,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
         if (results.isEmpty()) {
             throw new MonthlyPaymentNotFoundException("No Monthly Payment Invoice(s) are found");
         }
-        
+
         for (int i = 0; i < results.size(); i++) {
             if (results.get(i).getDateGenerated().get(Calendar.YEAR) != yearInt) {
                 results.remove(i);

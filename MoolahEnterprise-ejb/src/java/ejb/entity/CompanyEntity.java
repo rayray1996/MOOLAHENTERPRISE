@@ -62,14 +62,13 @@ public class CompanyEntity implements Serializable {
     private String companyContactNumber;
 
     @NotNull
-    @Size(min = 1)
     private String warningMessage;
 
     @NotNull
     private Boolean isVerified;
 
     @NotNull
-    @Size(min = 8, max = 20)
+//    @Size(min = 8, max = 100)
     private String password;
 
     @Temporal(TemporalType.DATE)
