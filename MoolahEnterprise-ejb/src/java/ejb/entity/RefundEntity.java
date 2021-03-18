@@ -7,7 +7,7 @@ package ejb.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.GregorianCalendar;
+import java.util.Calendar;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,7 +35,7 @@ public class RefundEntity implements Serializable {
     
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
-    private GregorianCalendar refundDate;
+    private Calendar refundDate;
     
     @NotNull
     @DecimalMin(value = "0")
@@ -48,7 +48,7 @@ public class RefundEntity implements Serializable {
     public RefundEntity() {
     }
     
-    public RefundEntity(GregorianCalendar refundDate, BigDecimal totalAmount, CompanyEntity company) {
+    public RefundEntity(Calendar refundDate, BigDecimal totalAmount, CompanyEntity company) {
         this.refundDate = refundDate;
         this.totalAmount = totalAmount;
         this.company = company;
@@ -62,11 +62,11 @@ public class RefundEntity implements Serializable {
         this.refundId = refundId;
     }
 
-    public GregorianCalendar getRefundDate() {
+    public Calendar getRefundDate() {
         return refundDate;
     }
 
-    public void setRefundDate(GregorianCalendar refundDate) {
+    public void setRefundDate(Calendar refundDate) {
         this.refundDate = refundDate;
     }
 

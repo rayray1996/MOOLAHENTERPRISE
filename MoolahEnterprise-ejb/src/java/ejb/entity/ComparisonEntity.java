@@ -7,7 +7,7 @@ package ejb.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
+import java.util.Calendar;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,7 +39,7 @@ public class ComparisonEntity implements Serializable {
     @NotNull
     @Temporal(TemporalType.DATE)
     @PastOrPresent
-    private GregorianCalendar dateOfCompletion;
+    private Calendar dateOfCompletion;
     
     //unidirectional
     @OneToMany
@@ -49,7 +49,7 @@ public class ComparisonEntity implements Serializable {
         productsToCompare = new ArrayList<>();
     }
 
-    public ComparisonEntity(String comparisonName, GregorianCalendar dateOfCompletion, List<ProductEntity> productsToCompare) {
+    public ComparisonEntity(String comparisonName, Calendar dateOfCompletion, List<ProductEntity> productsToCompare) {
         this.comparisonName = comparisonName;
         this.dateOfCompletion = dateOfCompletion;
         this.productsToCompare = productsToCompare;
@@ -72,11 +72,11 @@ public class ComparisonEntity implements Serializable {
         this.comparisonName = comparisonName;
     }
 
-    public GregorianCalendar getDateOfCompletion() {
+    public Calendar getDateOfCompletion() {
         return dateOfCompletion;
     }
 
-    public void setDateOfCompletion(GregorianCalendar dateOfCompletion) {
+    public void setDateOfCompletion(Calendar dateOfCompletion) {
         this.dateOfCompletion = dateOfCompletion;
     }
 

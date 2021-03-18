@@ -6,7 +6,7 @@
 package ejb.entity;
 
 import java.io.Serializable;
-import java.util.GregorianCalendar;
+import java.util.Calendar;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -41,17 +41,17 @@ public class IssueEntity implements Serializable {
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
-    private GregorianCalendar dateOfIssue;
+    private Calendar dateOfIssue;
     
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private CustomerEntity customer;
 
-    public GregorianCalendar getDateOfIssue() {
+    public Calendar getDateOfIssue() {
         return dateOfIssue;
     }
 
-    public void setDateOfIssue(GregorianCalendar dateOfIssue) {
+    public void setDateOfIssue(Calendar dateOfIssue) {
         this.dateOfIssue = dateOfIssue;
     }
 

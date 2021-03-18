@@ -6,7 +6,7 @@
 package ejb.entity;
 
 import java.io.Serializable;
-import java.util.GregorianCalendar;
+import java.util.Calendar;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -37,7 +37,7 @@ public class QuestionnaireEntity implements Serializable {
     @NotNull
     @PastOrPresent
     @Temporal(TemporalType.DATE)
-    private GregorianCalendar dateCompleted;
+    private Calendar dateCompleted;
    
     @OneToMany
     @JoinColumn(nullable = true)
@@ -46,7 +46,7 @@ public class QuestionnaireEntity implements Serializable {
     public QuestionnaireEntity() {
     }
 
-    public QuestionnaireEntity(GregorianCalendar dateCompleted, List<QuestionEntity> listOfQuestions) {
+    public QuestionnaireEntity(Calendar dateCompleted, List<QuestionEntity> listOfQuestions) {
         this.dateCompleted = dateCompleted;
         this.listOfQuestions = listOfQuestions;
     }
@@ -85,11 +85,11 @@ public class QuestionnaireEntity implements Serializable {
         return "ejb.entity.QuestionnaireEntity[ id=" + questionnaireId + " ]";
     }
 
-    public GregorianCalendar getDateCompleted() {
+    public Calendar getDateCompleted() {
         return dateCompleted;
     }
 
-    public void setDateCompleted(GregorianCalendar dateCompleted) {
+    public void setDateCompleted(Calendar dateCompleted) {
         this.dateCompleted = dateCompleted;
     }
 
