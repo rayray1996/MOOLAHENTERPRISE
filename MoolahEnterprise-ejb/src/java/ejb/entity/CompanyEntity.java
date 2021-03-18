@@ -8,7 +8,7 @@ package ejb.entity;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -73,7 +73,7 @@ public class CompanyEntity implements Serializable {
     private String password;
 
     @Temporal(TemporalType.DATE)
-    private GregorianCalendar verificationDate;
+    private Calendar verificationDate;
 
     @NotNull
     private BigInteger creditOwned;
@@ -99,7 +99,7 @@ public class CompanyEntity implements Serializable {
 
     @OneToMany(mappedBy = "company", cascade = {CascadeType.MERGE})
     @JoinColumn(nullable = true)
-    private List<PaymentEntity> listOfMonthlyPayments;
+    private List<PaymentEntity> listOfPayments;
 
     @OneToMany(mappedBy = "company", cascade = {CascadeType.MERGE})
     private List<ProductEntity> listOfProducts;
@@ -107,7 +107,7 @@ public class CompanyEntity implements Serializable {
     public CompanyEntity() {
         this.refund = null;
         this.listOfPointOfContacts = new ArrayList<>();
-        this.listOfMonthlyPayments = new ArrayList<>();
+        this.listOfPayments = new ArrayList<>();
         this.listOfProducts = new ArrayList<>();
         this.isVerified = false;
         this.isDeleted = false;
@@ -119,7 +119,7 @@ public class CompanyEntity implements Serializable {
         this.isWarned = false;
     }
 
-    public CompanyEntity(String companyName, String companyEmail, String businessRegNumber ,String companyContactNumber, String password, BigInteger creditOwned) {
+    public CompanyEntity(String companyName, String companyEmail, String businessRegNumber, String companyContactNumber, String password, BigInteger creditOwned) {
         this();
         this.companyName = companyName;
         this.companyEmail = companyEmail;
@@ -145,6 +145,10 @@ public class CompanyEntity implements Serializable {
         } else {
             this.password = null;
         }
+    }
+
+    public String getPassword() {
+        return this.password;
     }
 
     public Long getCompanyId() {
@@ -187,23 +191,27 @@ public class CompanyEntity implements Serializable {
         this.companyContactNumber = companyContactNumber;
     }
 
-    public Boolean isIsVerified() {
+    public String getWarningMessage() {
+        return warningMessage;
+    }
+
+    public void setWarningMessage(String warningMessage) {
+        this.warningMessage = warningMessage;
+    }
+
+    public Boolean getIsVerified() {
         return isVerified;
     }
 
-    public void setIsVerified(boolean isVerified) {
+    public void setIsVerified(Boolean isVerified) {
         this.isVerified = isVerified;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public GregorianCalendar getVerificationDate() {
+    public Calendar getVerificationDate() {
         return verificationDate;
     }
 
-    public void setVerificationDate(GregorianCalendar verificationDate) {
+    public void setVerificationDate(Calendar verificationDate) {
         this.verificationDate = verificationDate;
     }
 
@@ -219,7 +227,7 @@ public class CompanyEntity implements Serializable {
         return isDeactivated;
     }
 
-    public void setIsDeactivated(boolean isDeactivated) {
+    public void setIsDeactivated(Boolean isDeactivated) {
         this.isDeactivated = isDeactivated;
     }
 
@@ -227,7 +235,7 @@ public class CompanyEntity implements Serializable {
         return isDeleted;
     }
 
-    public void setIsDeleted(boolean isDeleted) {
+    public void setIsDeleted(Boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
 
@@ -263,12 +271,12 @@ public class CompanyEntity implements Serializable {
         this.listOfPointOfContacts = listOfPointOfContacts;
     }
 
-    public List<PaymentEntity> getListOfMonthlyPayments() {
-        return listOfMonthlyPayments;
+    public List<PaymentEntity> getListOfPayments() {
+        return listOfPayments;
     }
 
-    public void setListOfMonthlyPayments(List<PaymentEntity> listOfMonthlyPayments) {
-        this.listOfMonthlyPayments = listOfMonthlyPayments;
+    public void setListOfPayments(List<PaymentEntity> listOfPayments) {
+        this.listOfPayments = listOfPayments;
     }
 
     public List<ProductEntity> getListOfProducts() {
@@ -279,12 +287,10 @@ public class CompanyEntity implements Serializable {
         this.listOfProducts = listOfProducts;
     }
 
-    public String getWarningMessage() {
-        return warningMessage;
-    }
-
-    public void setWarningMessage(String warningMessage) {
-        this.warningMessage = warningMessage;
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        return hash;
     }
 
     @Override
@@ -307,7 +313,8 @@ public class CompanyEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "CompanyEntity{" + "companyId=" + companyId + ", companyName=" + companyName + ", companyEmail=" + companyEmail + ", businessRegNumber=" + businessRegNumber + ", companyContactNumber=" + companyContactNumber + ", isVerified=" + isVerified + ", password=" + password + ", verificationDate=" + verificationDate + ", creditOwned=" + creditOwned + ", isDeactivated=" + isDeactivated + ", isDeleted=" + isDeleted + ", salt=" + salt + ", refund=" + refund + ", listOfPointOfContacts=" + listOfPointOfContacts + ", listOfMonthlyPayments=" + listOfMonthlyPayments + ", listOfProducts=" + listOfProducts + '}';
+        return "CompanyEntity{" + "companyId=" + companyId + ", profilePic=" + profilePic + ", companyName=" + companyName + ", companyEmail=" + companyEmail + ", businessRegNumber=" + businessRegNumber + ", companyContactNumber=" + companyContactNumber + ", warningMessage=" + warningMessage + ", isVerified=" + isVerified + ", password=" + password + ", verificationDate=" + verificationDate + ", creditOwned=" + creditOwned + ", isDeactivated=" + isDeactivated + ", isDeleted=" + isDeleted + ", isWarned=" + isWarned + ", salt=" + salt + ", refund=" + refund + ", listOfPointOfContacts=" + listOfPointOfContacts + ", listOfPayments=" + listOfPayments + ", listOfProducts=" + listOfProducts + '}';
     }
-
+    
+    
 }
