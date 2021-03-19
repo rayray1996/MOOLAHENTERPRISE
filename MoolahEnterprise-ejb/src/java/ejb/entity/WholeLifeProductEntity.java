@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+import util.enumeration.PolicyCurrencyEnum;
 import util.enumeration.WholeLifeProductEnum;
 
 /**
@@ -32,8 +33,8 @@ public class WholeLifeProductEntity extends ProductEntity implements Serializabl
     public WholeLifeProductEntity() {
     }
 
-    public WholeLifeProductEntity(WholeLifeProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm) {
-        super(productName, coverageTerm, assuredSum, description, isDeleted, premiumTerm);
+    public WholeLifeProductEntity(WholeLifeProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm, PolicyCurrencyEnum currency) {
+        super(productName, coverageTerm, assuredSum, description, isDeleted, premiumTerm, currency);
         this.productEnum = productEnum;
     }
 

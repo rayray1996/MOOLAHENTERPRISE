@@ -8,8 +8,11 @@ package ejb.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -17,9 +20,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -38,6 +44,11 @@ public class ProductEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
+    @Lob
+    @Column(name = "product_Image")
+    private byte[] productImage;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar productDateCreated;
     @NotNull
     @Size(min=1)
     private String productName;
@@ -77,9 +88,10 @@ public class ProductEntity implements Serializable {
         productCategoryPricing = new CategoryPricingEntity ();
         company = new CompanyEntity();
         listOfPremium  = new ArrayList<PremiumEntity>();
+        productImage = null;
     }
 
-    public ProductEntity(String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm) {
+    public ProductEntity(String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm, PolicyCurrencyEnum currency) {
         this();
         this.productName = productName;
         this.coverageTerm = coverageTerm;
@@ -87,6 +99,8 @@ public class ProductEntity implements Serializable {
         this.description = description;
         this.isDeleted = isDeleted;
         this.premiumTerm = premiumTerm;
+        this.productDateCreated = new GregorianCalendar();
+        this.policyCurrency = currency;
     }
 
     public String getProductName() {
@@ -202,6 +216,22 @@ public class ProductEntity implements Serializable {
 
     public void setProductId(Long productId) {
         this.productId = productId;
+    }
+
+    public byte[] getProductImage() {
+        return productImage;
+    }
+
+    public void setProductImage(byte[] productImage) {
+        this.productImage = productImage;
+    }
+
+    public Calendar getProductDateCreated() {
+        return productDateCreated;
+    }
+
+    public void setProductDateCreated(Calendar productDateCreated) {
+        this.productDateCreated = productDateCreated;
     }
     
     

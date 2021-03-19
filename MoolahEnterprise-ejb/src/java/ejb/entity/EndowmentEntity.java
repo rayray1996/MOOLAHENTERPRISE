@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import util.enumeration.EndowmentProductEnum;
+import util.enumeration.PolicyCurrencyEnum;
 
 /**
  *
@@ -32,8 +33,8 @@ public class EndowmentEntity extends ProductEntity implements Serializable {
     public EndowmentEntity() {
     }
 
-    public EndowmentEntity(EndowmentProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm) {
-        super(productName, coverageTerm, assuredSum, description, isDeleted, premiumTerm);
+    public EndowmentEntity(EndowmentProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm, PolicyCurrencyEnum currency) {
+        super(productName, coverageTerm, assuredSum, description, isDeleted, premiumTerm, currency);
         this.productEnum = productEnum;
     }
 
