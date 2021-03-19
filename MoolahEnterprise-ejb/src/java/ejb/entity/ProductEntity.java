@@ -14,6 +14,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -66,11 +67,11 @@ public class ProductEntity implements Serializable {
     @NotNull
     private Integer premiumTerm;
     @NotNull
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private PolicyCurrencyEnum policyCurrency;
-    @OneToMany (cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
+    @OneToMany (cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
     private List<FeatureEntity> listOfAdditionalFeatures;
-    @OneToMany (cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
+    @OneToMany (cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
     private List<RiderEntity> listOfRiders;
     @OneToOne
     private ClickThroughEntity clickThroughInfo;
@@ -78,7 +79,7 @@ public class ProductEntity implements Serializable {
     private CategoryPricingEntity productCategoryPricing;
     @ManyToOne
     private CompanyEntity company;
-    @OneToMany (cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
+    @OneToMany (cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
     private List<PremiumEntity> listOfPremium;
 
     public ProductEntity() {

@@ -6,6 +6,7 @@
 package util.email;
 
 import ejb.entity.CompanyEntity;
+import ejb.entity.CustomerEntity;
 import ejb.entity.MonthlyPaymentEntity;
 import ejb.entity.ProductLineItemEntity;
 import java.text.NumberFormat;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.FormatStyle;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Properties;
@@ -149,75 +151,163 @@ public class EmailManager {
             return false;
         }
     }
-    
-    public Boolean emailMonthlyPaymentInvoice(MonthlyPaymentEntity monthlyPaymentEntity, String fromEmailAddress, String toEmailAddress)
-    {
+
+    public Boolean emailMonthlyPaymentInvoice(MonthlyPaymentEntity monthlyPaymentEntity, String fromEmailAddress, String toEmailAddress) {
         String emailBody = "";
-        
+
         SimpleDateFormat format = new SimpleDateFormat("MMMMMM");
         String currentMonth = format.format(monthlyPaymentEntity.getDateGenerated());
-        
-        
-        emailBody += "Dear " + monthlyPaymentEntity.getCompany().getCompanyName() +  "\n\n";
-        emailBody += "Here is the monthly invoice for the Month of " + currentMonth + ". \n\n\n\n" ;
+
+        emailBody += "Dear " + monthlyPaymentEntity.getCompany().getCompanyName() + "\n\n";
+        emailBody += "Here is the monthly invoice for the Month of " + currentMonth + ". \n\n\n\n";
         emailBody += "S/N     Product Name      Monthly Clicks     Sub-Total (Credits)\n\n";
-            
-        int count =0;
-        for(ProductLineItemEntity prodLineItem : monthlyPaymentEntity.getListOfProductLineItems())
-        {
+
+        int count = 0;
+        for (ProductLineItemEntity prodLineItem : monthlyPaymentEntity.getListOfProductLineItems()) {
             count++;
             emailBody += count
-                + "     " + prodLineItem.getProduct().getProductName()
-                + "     " + prodLineItem.getMonthlyClicks()
-                + "     " + prodLineItem.getMonthlySubtotalCredit() + "\n";
+                    + "     " + prodLineItem.getProduct().getProductName()
+                    + "     " + prodLineItem.getMonthlyClicks()
+                    + "     " + prodLineItem.getMonthlySubtotalCredit() + "\n";
         }
-            
+
         emailBody += "\nTotal Line Item: " + monthlyPaymentEntity.getListOfProductLineItems().size() + ", Total Amount: " + NumberFormat.getCurrencyInstance().format(monthlyPaymentEntity.getTotalPayable()) + "\n\n\n";
         emailBody += "Please do make payment at your nearest convenience.\n\n\nYours Sincerely, \nMoolah Enterprise";
-        
-        
-        
-        try 
-        {
+
+        try {
             Properties props = new Properties();
             props.put("mail.transport.protocol", "smtp");
             props.put("mail.smtp.host", emailServerName);
             props.put("mail.smtp.port", "587");
             props.put("mail.smtp.auth", "true");
-            props.put("mail.smtp.starttls.enable", "true");            
-            props.put("mail.smtp.debug", "true"); 
+            props.put("mail.smtp.starttls.enable", "true");
+            props.put("mail.smtp.debug", "true");
             props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
             javax.mail.Authenticator auth = new SMTPAuthenticator(smtpAuthUser, smtpAuthPassword);
             Session session = Session.getInstance(props, auth);
-            session.setDebug(true);            
+            session.setDebug(true);
             Message msg = new MimeMessage(session);
-                                    
-            if (msg != null)
-            {
+
+            if (msg != null) {
                 msg.setFrom(InternetAddress.parse(fromEmailAddress, false)[0]);
                 msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmailAddress, false));
                 msg.setSubject("Monthly Payment Invoice from Moolah Enterprise");
                 msg.setText(emailBody);
                 msg.setHeader("X-Mailer", mailer);
-                
+
                 Date timeStamp = new Date();
                 msg.setSentDate(timeStamp);
-                
+
                 Transport.send(msg);
-                
+
                 return true;
-            }
-            else
-            {
+            } else {
                 return false;
             }
-        }
-        catch (Exception e) 
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-            
+
             return false;
         }
     }
-    
+
+    public Boolean emailResetPassword(CustomerEntity customer, String fromEmailAddress, String toEmailAddress, Calendar requestedDate, String pathParam) {
+        String emailBody = "";
+
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+
+        String dateRequested = format.format(requestedDate);
+
+        emailBody += "Dear " + customer.getFullName() + "\n\n";
+        emailBody += "You have requested to reset your password on " + dateRequested + "\n\n";
+        emailBody += "Please click the following link: " + ".../?param=" + pathParam + "\n\n";
+
+        emailBody += "Yours Sincerely, \nMoolah Enterprise";
+
+        try {
+            Properties props = new Properties();
+            props.put("mail.transport.protocol", "smtp");
+            props.put("mail.smtp.host", emailServerName);
+            props.put("mail.smtp.port", "587");
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.starttls.enable", "true");
+            props.put("mail.smtp.debug", "true");
+            props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+            javax.mail.Authenticator auth = new SMTPAuthenticator(smtpAuthUser, smtpAuthPassword);
+            Session session = Session.getInstance(props, auth);
+            session.setDebug(true);
+            Message msg = new MimeMessage(session);
+
+            if (msg != null) {
+                msg.setFrom(InternetAddress.parse(fromEmailAddress, false)[0]);
+                msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmailAddress, false));
+                msg.setSubject("Reset Password from Moolah Enterprise");
+                msg.setText(emailBody);
+                msg.setHeader("X-Mailer", mailer);
+
+                Date timeStamp = new Date();
+                msg.setSentDate(timeStamp);
+
+                Transport.send(msg);
+
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return false;
+        }
+    }
+
+    public Boolean emailResetPassword(CompanyEntity company, String fromEmailAddress, String toEmailAddress, Calendar requestedDate, String pathParam) {
+        String emailBody = "";
+
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+
+        String dateRequested = format.format(requestedDate);
+
+        emailBody += "Dear " + company.getCompanyName()+ "\n\n";
+        emailBody += "You have requested to reset your password on " + dateRequested + "\n\n";
+        emailBody += "Please click the following link: " + ".../?param=" + pathParam + "\n\n";
+
+        emailBody += "Yours Sincerely, \nMoolah Enterprise";
+
+        try {
+            Properties props = new Properties();
+            props.put("mail.transport.protocol", "smtp");
+            props.put("mail.smtp.host", emailServerName);
+            props.put("mail.smtp.port", "587");
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.starttls.enable", "true");
+            props.put("mail.smtp.debug", "true");
+            props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+            javax.mail.Authenticator auth = new SMTPAuthenticator(smtpAuthUser, smtpAuthPassword);
+            Session session = Session.getInstance(props, auth);
+            session.setDebug(true);
+            Message msg = new MimeMessage(session);
+
+            if (msg != null) {
+                msg.setFrom(InternetAddress.parse(fromEmailAddress, false)[0]);
+                msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmailAddress, false));
+                msg.setSubject("Reset Password from Moolah Enterprise");
+                msg.setText(emailBody);
+                msg.setHeader("X-Mailer", mailer);
+
+                Date timeStamp = new Date();
+                msg.setSentDate(timeStamp);
+
+                Transport.send(msg);
+
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return false;
+        }
+    }
 }

@@ -7,6 +7,7 @@ package ejb.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -95,14 +96,21 @@ public class CustomerEntity implements Serializable {
     @OneToMany
     private List<ProductEntity> listOfLikeProducts;
 
+    private String resetPasswordPathParam;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar expiryDateOfPathParam;
+
     public CustomerEntity() {
         this.listOfIssues = new ArrayList<>();
         this.savedComparisons = new ArrayList<>();
         this.listOfLikeProducts = new ArrayList<>();
         this.salt = CryptographicHelper.getInstance().generateRandomString(32);
+        this.resetPasswordPathParam = null;
+        this.expiryDateOfPathParam = null;
     }
 
-    public CustomerEntity(String fullName, String email, String password, GregorianCalendar dateOfBirth, String phoneNumber, GenderEnum gender, Boolean smoker, AssetEntity asset) {
+    public CustomerEntity(String fullName, String email, String password, GregorianCalendar dateOfBirth, String phoneNumber, GenderEnum gender, Boolean smoker, AssetEntity asset, Boolean isMarried) {
         this();
         this.fullName = fullName;
         this.email = email;
@@ -112,7 +120,9 @@ public class CustomerEntity implements Serializable {
         this.gender = gender;
         this.smoker = smoker;
         this.asset = asset;
-
+        this.resetPasswordPathParam = null;
+        this.expiryDateOfPathParam = null;
+        this.isMarried = isMarried;
     }
 
     public Long getCustomerId() {
@@ -229,6 +239,22 @@ public class CustomerEntity implements Serializable {
 
     public void setIsMarried(Boolean isMarried) {
         this.isMarried = isMarried;
+    }
+
+    public String getResetPasswordPathParam() {
+        return resetPasswordPathParam;
+    }
+
+    public void setResetPasswordPathParam(String resetPasswordPathParam) {
+        this.resetPasswordPathParam = resetPasswordPathParam;
+    }
+
+    public Calendar getExpiryDateOfPathParam() {
+        return expiryDateOfPathParam;
+    }
+
+    public void setExpiryDateOfPathParam(Calendar expiryDateOfPathParam) {
+        this.expiryDateOfPathParam = expiryDateOfPathParam;
     }
 
     @Override

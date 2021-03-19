@@ -31,8 +31,6 @@ public interface CustomerSessionBeanLocal {
 
     public CustomerEntity login(String email, String password) throws IncorrectLoginParticularsException;
 
-    public void resetPassword(String email, String password) throws CustomerPasswordExistsException, CustomerDoesNotExistsException;
-
     public void updateCustomer(CustomerEntity newCust) throws CustomerDoesNotExistsException, UnknownPersistenceException, CustomerUpdateException;
 
     public CustomerEntity retrieveCustomerById(Long id) throws CustomerDoesNotExistsException;
@@ -52,5 +50,7 @@ public interface CustomerSessionBeanLocal {
     public boolean canAffordProduct(CustomerEntity customer, ProductEntity product, List<BigDecimal> nextThreeYearsOfCapital) throws ProductNotFoundException, CustomerDoesNotExistsException;
 
     public List<ProductEntity> retrieveRecommendedProducts(Long customerId) throws CustomerDoesNotExistsException, ProductNotFoundException;
+
+    public void resetPassword(String email) throws CustomerPasswordExistsException, CustomerDoesNotExistsException;
 
 }

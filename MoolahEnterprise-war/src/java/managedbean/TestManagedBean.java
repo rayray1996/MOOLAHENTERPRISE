@@ -5,21 +5,22 @@
  */
 package managedbean;
 
+import java.io.Serializable;
 import javax.inject.Named;
-import javax.enterprise.context.Dependent;
+import javax.faces.view.ViewScoped;
 
 /**
  *
  * @author rayta
  */
-@Named(value = "newJSFManagedBean")
-@Dependent
-public class NewJSFManagedBean {
+@Named(value = "testManagedBean")
+@ViewScoped
+public class TestManagedBean implements Serializable {
 
     /**
-     * Creates a new instance of NewJSFManagedBean
+     * Creates a new instance of TestManagedBean
      */
-    public NewJSFManagedBean() {
+    public TestManagedBean() {
     }
     
 }

@@ -47,52 +47,6 @@ public class RiderSessionBean implements RiderSessionBeanLocal {
     }
 
     @Override
-    public RiderEntity createRider(RiderEntity newRider, Long productId) throws RiderAlreadyExistException, UnknownPersistenceException, RiderCreationException, ProductNotFoundException {
-        Set<ConstraintViolation<RiderEntity>> riderError = validator.validate(newRider);
-        if (riderError.isEmpty()) {
-            try {
-                em.persist(newRider);
-                em.flush();
-                
-                ProductEntity product = productSessionBean.retrieveProductEntityById(productId);
-                product.getListOfRiders().add(newRider);
-
-                return newRider;
-            } catch (PersistenceException ex) {
-                if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
-                    if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
-                        throw new RiderAlreadyExistException(ex.getMessage());
-                    } else {
-                        throw new UnknownPersistenceException(ex.getMessage());
-                    }
-                } else {
-                    throw new UnknownPersistenceException(ex.getMessage());
-                }
-            }
-        } else {
-            throw new RiderCreationException(prepareInputDataValidationErrorsMessage(riderError));
-        }
-    }
-
-    @Override
-    public void updateRider(RiderEntity updateRider) throws RiderAlreadyExistException, UnknownPersistenceException {
-        try {
-            em.merge(updateRider);
-            em.flush();
-        } catch (PersistenceException ex) {
-            if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
-                if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
-                    throw new RiderAlreadyExistException("Rider already exists!");
-                } else {
-                    throw new UnknownPersistenceException(ex.getMessage());
-                }
-            } else {
-                throw new UnknownPersistenceException(ex.getMessage());
-            }
-        }
-    }
-
-    @Override
     public RiderEntity retrieveRiderByRiderID(Long riderId) throws RiderDoesNotExistException {
         RiderEntity rider = em.find(RiderEntity.class, riderId);
         if (rider == null) {

@@ -156,15 +156,15 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
     }
 
     @Override
-    public List<CompanyEntity> retrieveAllActiveCompanies(){
+    public List<CompanyEntity> retrieveAllActiveCompanies() {
         List<CompanyEntity> listOfCompanies = em.createQuery("SELECT c FROM CompanyEntity c WHERE c.isDeleted = FALSE").getResultList();
-        for(CompanyEntity coy : listOfCompanies){
+        for (CompanyEntity coy : listOfCompanies) {
             coy.getListOfProducts().size();
         }
-        
+
         return listOfCompanies;
     }
-    
+
     @Override
     public void updateCompanyInformation(CompanyEntity company) throws UnknownPersistenceException, CompanySQLConstraintException {
         try {
@@ -388,6 +388,30 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
         }
 
         return results;
+    }
+
+    @Override
+    public void resetPassword(String email) throws CompanyDoesNotExistException {
+        try {
+            CompanyEntity company = (CompanyEntity) em.createNamedQuery("findCustWithEmail").setParameter("custEmail", email).getSingleResult();
+
+            int min = 0;
+            int max = 999999999;
+
+            int value = (int) (Math.random() * (max - min + 1) + min);
+            String pathParam = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(String.valueOf(value)));
+
+            company.setResetPasswordPathParam(pathParam);
+            Calendar expiryDate = new GregorianCalendar();
+            Calendar requestedDate = (Calendar) expiryDate.clone();
+            expiryDate.add(GregorianCalendar.MINUTE, 30);
+            company.setExpiryDateOfPathParam(expiryDate);
+
+            // send email 
+            emailSessionBean.emailResetPassword(company, pathParam, email, requestedDate);
+        } catch (NoResultException ex) {
+            throw new CompanyDoesNotExistException("Customer does not exists!");
+        }
     }
 
 //    public void trackDeactivationAndDeletion()

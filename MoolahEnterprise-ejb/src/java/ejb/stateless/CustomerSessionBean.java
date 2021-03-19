@@ -12,8 +12,10 @@ import ejb.entity.PremiumEntity;
 import ejb.entity.ProductEntity;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -44,6 +46,9 @@ import util.security.CryptographicHelper;
 public class CustomerSessionBean implements CustomerSessionBeanLocal {
 
     @EJB
+    private EmailSessionBeanLocal emailSessionBean;
+
+    @EJB
     private ProductSessionBeanLocal productSessionBean;
 
     @PersistenceContext(unitName = "MoolahEnterprise-ejbPU")
@@ -59,6 +64,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 
     @Override
     public CustomerEntity createCustomer(CustomerEntity newCust) throws CustomerAlreadyExistException, UnknownPersistenceException, CustomerCreationException {
+        System.out.println("CreateCustomer");
         Set<ConstraintViolation<CustomerEntity>> custError = validator.validate(newCust);
         if (custError.isEmpty()) {
             try {
@@ -69,7 +75,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
                     if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
-                        throw new CustomerAlreadyExistException(ex.getMessage());
+                        throw new CustomerAlreadyExistException("Customer already exists!");
                     } else {
                         throw new UnknownPersistenceException(ex.getMessage());
                     }
@@ -107,17 +113,24 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     }
 
     @Override
-    public void resetPassword(String email, String password) throws CustomerPasswordExistsException, CustomerDoesNotExistsException {
+    public void resetPassword(String email) throws CustomerPasswordExistsException, CustomerDoesNotExistsException {
         try {
             CustomerEntity cust = (CustomerEntity) em.createNamedQuery("findCustWithEmail").setParameter("custEmail", email).getSingleResult();
-            String passwordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + cust.getSalt()));
 
-            if (passwordHash.equals(cust.getPassword())) {
-                throw new CustomerPasswordExistsException("Password cannot be the same!");
-            } else {
-                cust.setPassword(password);
-            }
+            int min = 0;
+            int max = 999999999;
 
+            int value = (int) (Math.random() * (max - min + 1) + min);
+            String pathParam = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(String.valueOf(value)));
+            
+            cust.setResetPasswordPathParam(pathParam);
+            Calendar expiryDate = new GregorianCalendar();
+            Calendar requestedDate = (Calendar) expiryDate.clone();
+            expiryDate.add(GregorianCalendar.MINUTE, 30);
+            cust.setExpiryDateOfPathParam(expiryDate);
+            
+            // send email 
+            emailSessionBean.emailResetPassword(cust, pathParam, email, requestedDate);
         } catch (NoResultException ex) {
             throw new CustomerDoesNotExistsException("Customer does not exists!");
         }
@@ -217,26 +230,31 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         BigDecimal yearOneCapital = nextThreeYearsOfCapital.get(0);
         BigDecimal yearTwoCapital = nextThreeYearsOfCapital.get(1);
         BigDecimal yearThreeCapital = nextThreeYearsOfCapital.get(2);
-        
+
         /*
         Recommend products based on 3 years affordability
          */
-        Query query = em.createQuery("SELECT p FROM ProductEntity p WHERE p.isDeleted = false AND p.company.isDeleted = false AND p.company.isDeactivated = false");
+//        Query query = em.createQuery("SELECT p FROM ProductEntity p WHERE p.isDeleted = false AND p.company.isDeleted = false AND p.company.isDeactivated = false");
+        Query query = em.createQuery("SELECT p FROM ProductEntity p, IN (p.listOfPremium) premium WHERE p.isDeleted = false AND p.company.isDeleted = false AND p.company.isDeactivated = false AND :age >= premium.minAgeGroup AND :age <= premium.maxAgeGroup AND :yearOne >= premium.value AND :yearTwo >= premium.value AND :yearThree >= premium.value");
+        query.setParameter("age", age);
+        query.setParameter("yearOne", yearOneCapital);
+        query.setParameter("yearTwo", yearOneCapital);
+        query.setParameter("yearThree", yearOneCapital);
+
         List<ProductEntity> allProducts = query.getResultList();
 
-        for (int i = 0; i < allProducts.size(); i++) {
-            ProductEntity currProductEntity = allProducts.get(i);
-            if (!canAffordProduct(customer, currProductEntity, nextThreeYearsOfCapital)) {
-                allProducts.remove(i);
-            }
-        }
-
+//        for (int i = 0; i < allProducts.size(); i++) {
+//            ProductEntity currProductEntity = allProducts.get(i);
+//            if (!canAffordProduct(customer, currProductEntity, nextThreeYearsOfCapital)) {
+//                allProducts.remove(i);
+//            }
+//        }
         for (ProductEntity p : allProducts) {
             p.getListOfAdditionalFeatures().size();
             p.getListOfPremium().size();
             p.getListOfRiders().size();
         }
-        
+
         return allProducts;
 
     }

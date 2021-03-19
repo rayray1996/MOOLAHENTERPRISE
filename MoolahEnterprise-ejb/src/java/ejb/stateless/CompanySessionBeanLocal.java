@@ -39,5 +39,7 @@ public interface CompanySessionBeanLocal {
     public void topupCredit(CompanyEntity company, BigInteger creditAmount) throws CompanyDoesNotExistException;
 
     public List<CompanyEntity> retrieveAllActiveCompanies();
+
+    public void resetPassword(String email) throws CompanyDoesNotExistException;
     
 }

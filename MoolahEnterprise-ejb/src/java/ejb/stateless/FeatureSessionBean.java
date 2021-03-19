@@ -47,52 +47,6 @@ public class FeatureSessionBean implements FeatureSessionBeanLocal {
     }
 
     @Override
-    public FeatureEntity createNewFeature(FeatureEntity newFeature, Long productId) throws ProductNotFoundException, UnknownPersistenceException, FeatureAlreadyExistsException, FeatureCreationException {
-        Set<ConstraintViolation<FeatureEntity>> featureError = validator.validate(newFeature);
-        if (featureError.isEmpty()) {
-            try {
-                em.persist(newFeature);
-                em.flush();
-
-                ProductEntity product = productSessionBean.retrieveProductEntityById(productId);
-                product.getListOfAdditionalFeatures().add(newFeature);
-
-                return newFeature;
-            } catch (PersistenceException ex) {
-                if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
-                    if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
-                        throw new FeatureAlreadyExistsException(ex.getMessage());
-                    } else {
-                        throw new UnknownPersistenceException(ex.getMessage());
-                    }
-                } else {
-                    throw new UnknownPersistenceException(ex.getMessage());
-                }
-            }
-        } else {
-            throw new FeatureCreationException(prepareInputDataValidationErrorsMessage(featureError));
-        }
-    }
-
-    @Override
-    public void updateFeature(FeatureEntity featureToUpdate) throws UnknownPersistenceException, FeatureAlreadyExistsException {
-        try {
-            em.merge(featureToUpdate);
-            em.flush();
-        } catch (PersistenceException ex) {
-            if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
-                if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
-                    throw new FeatureAlreadyExistsException("Feature already exists!");
-                } else {
-                    throw new UnknownPersistenceException(ex.getMessage());
-                }
-            } else {
-                throw new UnknownPersistenceException(ex.getMessage());
-            }
-        }
-    }
-
-    @Override
     public List<FeatureEntity> retrieveListOfFeatures(Long productId) throws ProductNotFoundException {
         ProductEntity product = productSessionBean.retrieveProductEntityById(productId);
         List<FeatureEntity> listOfFeatures = product.getListOfAdditionalFeatures();

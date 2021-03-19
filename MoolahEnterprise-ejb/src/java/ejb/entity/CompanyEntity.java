@@ -103,6 +103,11 @@ public class CompanyEntity implements Serializable {
     @OneToMany(mappedBy = "company", cascade = {CascadeType.MERGE})
     private List<ProductEntity> listOfProducts;
 
+    private String resetPasswordPathParam;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar expiryDateOfPathParam;
+
     public CompanyEntity() {
         this.refund = null;
         this.listOfPointOfContacts = new ArrayList<>();
@@ -286,6 +291,24 @@ public class CompanyEntity implements Serializable {
         this.listOfProducts = listOfProducts;
     }
 
+    public String getResetPasswordPathParam() {
+        return resetPasswordPathParam;
+    }
+
+    public void setResetPasswordPathParam(String resetPasswordPathParam) {
+        this.resetPasswordPathParam = resetPasswordPathParam;
+    }
+
+    public Calendar getExpiryDateOfPathParam() {
+        return expiryDateOfPathParam;
+    }
+
+    public void setExpiryDateOfPathParam(Calendar expiryDateOfPathParam) {
+        this.expiryDateOfPathParam = expiryDateOfPathParam;
+    }
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 3;
@@ -314,6 +337,5 @@ public class CompanyEntity implements Serializable {
     public String toString() {
         return "CompanyEntity{" + "companyId=" + companyId + ", profilePic=" + profilePic + ", companyName=" + companyName + ", companyEmail=" + companyEmail + ", businessRegNumber=" + businessRegNumber + ", companyContactNumber=" + companyContactNumber + ", warningMessage=" + warningMessage + ", isVerified=" + isVerified + ", password=" + password + ", verificationDate=" + verificationDate + ", creditOwned=" + creditOwned + ", isDeactivated=" + isDeactivated + ", isDeleted=" + isDeleted + ", isWarned=" + isWarned + ", salt=" + salt + ", refund=" + refund + ", listOfPointOfContacts=" + listOfPointOfContacts + ", listOfPayments=" + listOfPayments + ", listOfProducts=" + listOfProducts + '}';
     }
-    
-    
+
 }
