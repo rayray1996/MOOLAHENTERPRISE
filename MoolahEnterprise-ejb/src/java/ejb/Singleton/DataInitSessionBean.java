@@ -502,7 +502,7 @@ public class DataInitSessionBean {
 
                 coy2WholeLifeProduct03 = productSessionBean.createProductListing(coy2WholeLifeProduct03, tencentCompany.getCompanyId(), listOfcoy2Riders06, listOfcoy2Premium06, listOfcoy2Features06);
 
-                //-------------------------
+                // --------------------------
                 ProductEntity coy2WholeLifeProduct04 = new WholeLifeProductEntity(WholeLifeProductEnum.ACCIDENT, "Tencent Whole Life Insurance Product 04", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
                         + "whilst providing you with insurance protection.\n"
                         + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
@@ -542,6 +542,7 @@ public class DataInitSessionBean {
 
                 coy2WholeLifeProduct04 = productSessionBean.createProductListing(coy2WholeLifeProduct04, tencentCompany.getCompanyId(), listOfcoy2Riders07, listOfcoy2Premium07, listOfcoy2Features07);
 
+                // --------------------------
                 // Term Life
                 ProductEntity coy2TermLifeProduct01 = new TermLifeProductEntity(TermLifeProductEnum.ACCIDENT, "Tencent Term Life Insurance Product 01", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
                         + "whilst providing you with insurance protection.\n"
@@ -582,8 +583,8 @@ public class DataInitSessionBean {
 
                 coy2TermLifeProduct01 = productSessionBean.createProductListing(coy2TermLifeProduct01, tencentCompany.getCompanyId(), listOfcoy2Riders08, listOfcoy2Premium08, listOfcoy2Features08);
 
-                // ----------------------
-                ProductEntity coy2TermLifeProduct02 = new TermLifeProductEntity(TermLifeProductEnum.ACCIDENT, "Tencent Term Life Insurance Product 01", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
+                // --------------------------
+                ProductEntity coy2TermLifeProduct02 = new TermLifeProductEntity(TermLifeProductEnum.CRITICALILLNESS, "Tencent Term Life Insurance Product 02", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
                         + "whilst providing you with insurance protection.\n"
                         + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
                         + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD);
@@ -593,11 +594,11 @@ public class DataInitSessionBean {
                 List<FeatureEntity> listOfcoy2Features09 = new ArrayList<>();
 
 //              BigDecimal riderPremiumValue, String riderDescription
-                RiderEntity coy2rider09 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Tencent Whole Life Insurance Product 01");
+                RiderEntity coy2rider09 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Tencent Whole Life Insurance Product 02");
                 listOfcoy2Riders09.add(coy2rider09);
 
                 //Description
-                FeatureEntity coy2feature09 = new FeatureEntity("This additional feature is for Tencent Whole Life Insurance Product 01");
+                FeatureEntity coy2feature09 = new FeatureEntity("This additional feature is for Tencent Whole Life Insurance Product 02");
                 listOfcoy2Features09.add(coy2feature09);
 
                 //Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum
@@ -623,7 +624,7 @@ public class DataInitSessionBean {
                 coy2TermLifeProduct02 = productSessionBean.createProductListing(coy2TermLifeProduct02, tencentCompany.getCompanyId(), listOfcoy2Riders09, listOfcoy2Premium09, listOfcoy2Features09);
 
                 //-----------------------
-                ProductEntity coy2TermLifeProduct03 = new TermLifeProductEntity(TermLifeProductEnum.ACCIDENT, "Tencent Term Life Insurance Product 01", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
+                ProductEntity coy2TermLifeProduct03 = new TermLifeProductEntity(TermLifeProductEnum.HOSPITAL, "Tencent Term Life Insurance Product 03", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
                         + "whilst providing you with insurance protection.\n"
                         + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
                         + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD);
@@ -633,11 +634,11 @@ public class DataInitSessionBean {
                 List<FeatureEntity> listOfcoy2Features10 = new ArrayList<>();
 
 //              BigDecimal riderPremiumValue, String riderDescription
-                RiderEntity coy2rider10 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Tencent Whole Life Insurance Product 01");
+                RiderEntity coy2rider10 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Tencent Whole Life Insurance Product 03");
                 listOfcoy2Riders10.add(coy2rider10);
 
                 //Description
-                FeatureEntity coy2feature10 = new FeatureEntity("This additional feature is for Tencent Whole Life Insurance Product 01");
+                FeatureEntity coy2feature10 = new FeatureEntity("This additional feature is for Tencent Whole Life Insurance Product 03");
                 listOfcoy2Features10.add(coy2feature10);
 
                 //Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum
