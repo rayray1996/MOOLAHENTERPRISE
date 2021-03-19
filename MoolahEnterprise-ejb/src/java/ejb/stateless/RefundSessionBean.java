@@ -22,6 +22,7 @@ import javax.validation.ValidatorFactory;
 import util.exception.CustomerAlreadyExistException;
 import util.exception.RefundCreationException;
 import util.exception.RefundDoesNotExistException;
+import util.exception.RefundErrorException;
 import util.exception.RefundHasBeenTransactedException;
 import util.exception.UnknownPersistenceException;
 
@@ -44,7 +45,7 @@ public class RefundSessionBean implements RefundSessionBeanLocal {
     }
 
     @Override
-    public RefundEntity createNewRefund(RefundEntity newRefund) throws UnknownPersistenceException, RefundCreationException, RefundHasBeenTransactedException {
+    public RefundEntity createNewRefund(RefundEntity newRefund) throws UnknownPersistenceException, RefundCreationException, RefundErrorException {
 
         Set<ConstraintViolation<RefundEntity>> custError = validator.validate(newRefund);
         if (custError.isEmpty()) {
@@ -56,7 +57,7 @@ public class RefundSessionBean implements RefundSessionBeanLocal {
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
                     if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
-                        throw new RefundHasBeenTransactedException(ex.getMessage());
+                        throw new RefundErrorException(ex.getMessage());
                     } else {
                         throw new UnknownPersistenceException(ex.getMessage());
                     }

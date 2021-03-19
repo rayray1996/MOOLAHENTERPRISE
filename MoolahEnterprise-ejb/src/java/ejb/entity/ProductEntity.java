@@ -57,9 +57,9 @@ public class ProductEntity implements Serializable {
     @NotNull
     @Enumerated
     private PolicyCurrencyEnum policyCurrency;
-    @OneToMany (cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @OneToMany (cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
     private List<FeatureEntity> listOfAdditionalFeatures;
-    @OneToMany (cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @OneToMany (cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
     private List<RiderEntity> listOfRiders;
     @OneToOne
     private ClickThroughEntity clickThroughInfo;
@@ -67,7 +67,7 @@ public class ProductEntity implements Serializable {
     private CategoryPricingEntity productCategoryPricing;
     @ManyToOne
     private CompanyEntity company;
-    @OneToMany (cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @OneToMany (cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
     private List<PremiumEntity> listOfPremium;
 
     public ProductEntity() {
