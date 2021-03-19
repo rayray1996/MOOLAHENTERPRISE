@@ -6,7 +6,9 @@
 package ejb.stateless;
 
 import ejb.entity.CompanyEntity;
+import ejb.entity.CustomerEntity;
 import ejb.entity.MonthlyPaymentEntity;
+import java.util.Calendar;
 import java.util.concurrent.Future;
 import javax.ejb.Local;
 
@@ -24,5 +26,9 @@ public interface EmailSessionBeanLocal {
     public Boolean emailReminderAccountDeactivatedSync(CompanyEntity company, String toEmailAddress);
 
     public Boolean emailMonthlyPaymentInvoice(MonthlyPaymentEntity monthlyPaymentEntity, String toEmailAddress);
+
+    public Boolean emailResetPassword(CustomerEntity customer, String pathParam, String toEmailAddress, Calendar requestedDate);
+
+    public Boolean emailResetPassword(CompanyEntity company, String pathParam, String toEmailAddress, Calendar requestedDate);
 
 }

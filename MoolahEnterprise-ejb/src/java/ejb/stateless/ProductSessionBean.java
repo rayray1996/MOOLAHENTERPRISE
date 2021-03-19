@@ -153,19 +153,19 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         switch (category) {
             case ENDOWMENT:
                 if (!(endowmentType.equals(""))) {
-                    enumStrings = "AND p.productEnum = " + endowmentType;
+                    enumStrings = "p.productEnum = " + endowmentType;
                 }
                 break;
 
             case TERMLIFE:
                 if (!(termLifeType.equals(""))) {
-                    enumStrings = "AND p.productEnum = " + termLifeType;
+                    enumStrings = "p.productEnum = " + termLifeType;
                 }
                 break;
 
             case WHOLELIFE:
                 if (!(wholeLifeType.equals(""))) {
-                    enumStrings = "AND p.productEnum = " + wholeLifeType;
+                    enumStrings = "p.productEnum = " + wholeLifeType;
                 }
                 break;
 
@@ -176,17 +176,47 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         String riderString = "";
 
         if (wantsRider) {
-            riderString = "p.listOfRiders IS NOT EMPTY AND";
+            riderString = "p.listOfRiders IS NOT EMPTY";
         } else if (!wantsRider) {
-            riderString = "p.listOfRiders IS EMPTY AND";
+            riderString = "p.listOfRiders IS EMPTY";
         } else {
-            riderString = "";
+            riderString = "p.listOfRiders IS EMPTY OR p.listOfRiders IS NOT EMPTY";
         }
 
-        Query query = em.createQuery("SELECT p FROM " + categoryType + " JOIN p.listOfPremium s WHERE " + riderString + "p.assuredSum >= :sumAssured AND p.isDeleted = FALSE AND p.company.isDeleted = false AND p.company.isDeactivated = false AND p.coverageTerm >= :coverageTerm AND p.premiumTerm >= :premiumTerm AND p.isSmoker = true AND " + enumStrings);
-        query.setParameter("sumAssured", sumAssured);
-        query.setParameter("coverageTerm", coverageTerm);
-        query.setParameter("premiumTerm", premiumTerm);
+        // smoker default to no
+        String smokerString = "";
+        if (isSmoker) {
+            smokerString = "s.isSmoker = true";
+        } else {
+            smokerString = "s.isSmoker = false";
+        }
+
+        // coverage term default to -1 (no preference)
+        String coverageTermString = "";
+        if (coverageTerm < 0) {
+            coverageTermString = "p.coverageTerm >= 0";
+        } else {
+            coverageTermString = ":coverageTerm >= p.coverageTerm AND :coverageTerm <= p.coverageTerm";
+        }
+
+        // premium term default to -1 (no prefernce)
+        String premiumTermString = "";
+        if (premiumTerm < 0) {
+            premiumTermString = "p.premiumTerm >= 0";
+        } else {
+            premiumTermString = ":premiumTerm >= p.premiumTerm AND :premiumTerm <= p.premiumTerm";
+        }
+
+        // sumAssured is greater than or equal
+        String sumAssuredString = "";
+        if (sumAssured.compareTo(BigDecimal.ZERO) < 0) {
+            sumAssuredString = "p.assuredSum >= 0";
+        } else {
+            sumAssuredString = ":sumAssured >= p.assuredSum";
+        }
+
+        Query query = em.createQuery("SELECT p FROM " + categoryType + " JOIN p.listOfPremium s WHERE p.isDeleted = FALSE AND p.company.isDeleted = false AND p.company.isDeactivated = false" + " AND " + 
+                riderString + " AND " + smokerString + " AND " + coverageTermString + " AND " + premiumTermString + " AND " + sumAssuredString + " AND " + enumStrings);
 
         List<ProductEntity> results = query.getResultList();
 

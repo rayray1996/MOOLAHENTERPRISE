@@ -6,7 +6,10 @@
 package ejb.stateless;
 
 import ejb.entity.CompanyEntity;
+import ejb.entity.CustomerEntity;
 import ejb.entity.MonthlyPaymentEntity;
+import static ejb.entity.ProductEntity_.company;
+import java.util.Calendar;
 
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
@@ -30,7 +33,7 @@ public class EmailSessionBean implements EmailSessionBeanLocal {
         EmailManager emailManager = new EmailManager(GMAIL_USERNAME, GMAIL_PASSWORD);
         Boolean result = emailManager.emailCreditTopupNotification(company, FROM_EMAIL_ADDRESS, toEmailAddress);
         System.out.println("Email Session Bean : Sending email!");
-        
+
         return result;
     }
 
@@ -50,11 +53,24 @@ public class EmailSessionBean implements EmailSessionBeanLocal {
         return new AsyncResult<>(result);
     }
 
-   
     @Override
-    public Boolean emailMonthlyPaymentInvoice(MonthlyPaymentEntity monthlyPaymentEntity, String toEmailAddress){
+    public Boolean emailMonthlyPaymentInvoice(MonthlyPaymentEntity monthlyPaymentEntity, String toEmailAddress) {
         EmailManager emailManager = new EmailManager(GMAIL_USERNAME, GMAIL_PASSWORD);
         Boolean result = emailManager.emailMonthlyPaymentInvoice(monthlyPaymentEntity, FROM_EMAIL_ADDRESS, toEmailAddress);
+        return result;
+    }
+
+    @Override
+    public Boolean emailResetPassword(CustomerEntity customer, String pathParam, String toEmailAddress, Calendar requestedDate) {
+        EmailManager emailManager = new EmailManager(GMAIL_USERNAME, GMAIL_PASSWORD);
+        Boolean result = emailManager.emailResetPassword(customer, FROM_EMAIL_ADDRESS, toEmailAddress, requestedDate, pathParam);
+        return result;
+    }
+
+    @Override
+    public Boolean emailResetPassword(CompanyEntity company, String pathParam, String toEmailAddress, Calendar requestedDate) {
+        EmailManager emailManager = new EmailManager(GMAIL_USERNAME, GMAIL_PASSWORD);
+        Boolean result = emailManager.emailResetPassword(company, FROM_EMAIL_ADDRESS, toEmailAddress, requestedDate, pathParam);
         return result;
     }
 }
