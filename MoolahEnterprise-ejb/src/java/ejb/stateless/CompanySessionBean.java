@@ -52,6 +52,7 @@ import util.exception.CompanySQLConstraintException;
 import util.exception.IncorrectLoginParticularsException;
 import util.exception.MonthlyPaymentNotFoundException;
 import util.exception.RefundCreationException;
+import util.exception.RefundErrorException;
 import util.exception.RefundHasBeenTransactedException;
 import util.exception.UnknownPersistenceException;
 import util.security.CryptographicHelper;
@@ -275,7 +276,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
                 Boolean result = emailSessionBean.emailReminderAccountDeactivatedSync(company, company.getCompanyEmail());
                 timerService.createSingleActionTimer(expiration, timerConfig);
             }
-        } catch (CompanyDoesNotExistException | RefundCreationException | RefundHasBeenTransactedException | UnknownPersistenceException ex) {
+        } catch (CompanyDoesNotExistException | RefundCreationException | UnknownPersistenceException | RefundErrorException ex) {
             System.err.println(ex.getMessage());
         }
     }

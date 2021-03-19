@@ -35,6 +35,17 @@ public class PremiumEntity implements Serializable {
     @NotNull
     private Boolean isSmoker;
 
+    public PremiumEntity() {
+    }
+
+    public PremiumEntity(Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum) {
+        this.minAgeGroup = minAgeGroup;
+        this.maxAgeGroup = maxAgeGroup;
+        this.value = value;
+        this.isSmoker = isSmoker;
+        this.guaranteeSum = guaranteeSum;
+    }
+    
     public Integer getMinAgeGroup() {
         return minAgeGroup;
     }

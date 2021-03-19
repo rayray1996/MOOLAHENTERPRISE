@@ -27,6 +27,14 @@ public class FeatureEntity implements Serializable {
     @Size(min=1)
     @NotNull
     private String featureDescription;
+
+    public FeatureEntity() {
+    }
+
+    public FeatureEntity(String featureDescription) {
+        this.featureDescription = featureDescription;
+    }
+    
     
     public String getFeatureDescription() {
         return featureDescription;
