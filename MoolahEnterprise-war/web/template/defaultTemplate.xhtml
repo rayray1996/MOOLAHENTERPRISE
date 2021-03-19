@@ -10,25 +10,49 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <h:outputStylesheet name="./css/default.css"/>
         <h:outputStylesheet name="./css/cssLayout.css"/>
-        <title>Facelets Template</title>
+        <title>Moolah Enterprise</title>
     </h:head>
 
     <h:body>
+        <p:layout fullPage="true">
 
-        <div id="top">
-            <ui:insert name="top">Top</ui:insert>
-        </div>
-        <div>
-            <div id="left">
-                <ui:insert name="left">Left</ui:insert>
-            </div>
-            <div id="content" class="left_content">
+            <p:layoutUnit position="north" size="145">
+                <h1 style="font-size: 50px;"> Ecommerce Point of Sale System</h1>
+                <ui:insert name="header">
+                    <ui:include src="/header.xhtml"/>
+                    <ui:include src="/mainmenu.xhtml"/>
+                </ui:insert>
+
+            </p:layoutUnit>
+
+
+            <p:layoutUnit position="west" size="180">
+                <ui:insert name="promotions">
+                    <!--<ui:include src="/mainmenu.xhtml"/>-->
+                </ui:insert>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center">
                 <ui:insert name="content">Content</ui:insert>
-            </div>
-        </div>
-        <div id="bottom">
-            <ui:insert name="bottom">Bottom</ui:insert>
-        </div>
+            </p:layoutUnit>
+
+
+            <p:layoutUnit minSize="200" position="east" header="Advertisements" collapsible="true" collapsed="true">
+
+                <ui:insert name="sidebar">
+                    <ui:include src="/sidebar.xhtml" />
+                </ui:insert>        
+
+            </p:layoutUnit>
+
+            <p:layoutUnit position="south" size="70" >
+
+                <ui:insert name="footer">
+                    <ui:include src="/footer.xhtml" />
+                </ui:insert>
+
+            </p:layoutUnit>   
+        </p:layout>
 
     </h:body>
 
