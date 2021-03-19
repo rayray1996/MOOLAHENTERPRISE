@@ -51,16 +51,17 @@ public class ProductEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar productDateCreated;
     @NotNull
-    @Size(min=1)
+    @Size(min = 1)
     private String productName;
     @NotNull
     @Min(1)
     private Integer coverageTerm;
     @NotNull
-    @Digits(integer=10, fraction=3)
+    @Digits(integer = 10, fraction = 3)
     private BigDecimal assuredSum;
     @NotNull
-    @Size(min=1)
+    @Size(min = 1, max = 20000000)
+    @Column(length = 3000)
     private String description;
     @NotNull
     private Boolean isDeleted;
@@ -69,30 +70,30 @@ public class ProductEntity implements Serializable {
     @NotNull
     @Enumerated(EnumType.STRING)
     private PolicyCurrencyEnum policyCurrency;
-    @OneToMany (cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
     private List<FeatureEntity> listOfAdditionalFeatures;
-    @OneToMany (cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
     private List<RiderEntity> listOfRiders;
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
     private ClickThroughEntity clickThroughInfo;
-    @ManyToOne 
+    @ManyToOne
     private CategoryPricingEntity productCategoryPricing;
     @ManyToOne
     private CompanyEntity company;
-    @OneToMany (cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
     private List<PremiumEntity> listOfPremium;
 
     public ProductEntity() {
         listOfAdditionalFeatures = new ArrayList<FeatureEntity>();
         listOfRiders = new ArrayList<RiderEntity>();
         clickThroughInfo = new ClickThroughEntity();
-        productCategoryPricing = new CategoryPricingEntity ();
+        productCategoryPricing = new CategoryPricingEntity();
         company = new CompanyEntity();
-        listOfPremium  = new ArrayList<PremiumEntity>();
+        listOfPremium = new ArrayList<PremiumEntity>();
         productImage = null;
     }
 
-    public ProductEntity(String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm, PolicyCurrencyEnum currency) {
+    public ProductEntity(String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm, PolicyCurrencyEnum currency, CategoryPricingEntity pricing) {
         this();
         this.productName = productName;
         this.coverageTerm = coverageTerm;
@@ -102,6 +103,7 @@ public class ProductEntity implements Serializable {
         this.premiumTerm = premiumTerm;
         this.productDateCreated = new GregorianCalendar();
         this.policyCurrency = currency;
+        this.productCategoryPricing = pricing;
     }
 
     public String getProductName() {
@@ -128,7 +130,6 @@ public class ProductEntity implements Serializable {
         this.premiumTerm = premiumTerm;
     }
 
-
     public BigDecimal getAssuredSum() {
         return assuredSum;
     }
@@ -152,7 +153,6 @@ public class ProductEntity implements Serializable {
     public void setIsDeleted(Boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
-
 
     public PolicyCurrencyEnum getPolicyCurrency() {
         return policyCurrency;
@@ -209,8 +209,7 @@ public class ProductEntity implements Serializable {
     public void setListOfPremium(List<PremiumEntity> listOfPremium) {
         this.listOfPremium = listOfPremium;
     }
-    
-    
+
     public Long getProductId() {
         return productId;
     }
@@ -234,8 +233,7 @@ public class ProductEntity implements Serializable {
     public void setProductDateCreated(Calendar productDateCreated) {
         this.productDateCreated = productDateCreated;
     }
-    
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -260,5 +258,5 @@ public class ProductEntity implements Serializable {
     public String toString() {
         return "ejb.entity.ProductEntity[ id=" + productId + " ]";
     }
-    
+
 }

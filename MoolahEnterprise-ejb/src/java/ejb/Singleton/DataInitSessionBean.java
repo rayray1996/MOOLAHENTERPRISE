@@ -140,11 +140,12 @@ public class DataInitSessionBean {
                 em.persist(endowmentPricing);
                 em.persist(termLifePricing);
                 em.persist(wholeLifePricing);
-
+                em.flush();
+                
                 //Create ProductEntity - using specific subclasses
                 //EndowmentProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm) {
                 ProductEntity endowmentEntity = new EndowmentEntity(EndowmentProductEnum.ENDOWMENT, "Alibaba Endowment Product 01", 103, BigDecimal.valueOf(100000.00), "This is an Endowment Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.\n This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 50, PolicyCurrencyEnum.SGD);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 50, PolicyCurrencyEnum.SGD, endowmentPricing);
 
                 List<FeatureEntity> listOfFeature = new ArrayList<>();
                 List<RiderEntity> listOfRiders = new ArrayList<>();
@@ -187,7 +188,7 @@ public class DataInitSessionBean {
                 //Create ProductEntity - using specific subclasses
                 //EndowmentProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm) {
                 ProductEntity endowmentEntity02 = new EndowmentEntity(EndowmentProductEnum.ENDOWMENT, "Alibaba Endowment Product 02", 80, BigDecimal.valueOf(1000000.00), "This is an Endowment Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.\n This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 50, PolicyCurrencyEnum.SGD);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 50, PolicyCurrencyEnum.SGD, endowmentPricing);
 
                 List<RiderEntity> listOfRiders02 = new ArrayList<>();
                 List<PremiumEntity> listOfPremium02 = new ArrayList<>();
@@ -222,7 +223,7 @@ public class DataInitSessionBean {
                 //Create ProductEntity - using specific subclasses
                 //EndowmentProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm) {
                 ProductEntity endowmentEntity03 = new EndowmentEntity(EndowmentProductEnum.ENDOWMENT, "Alibaba Endowment Product 03", 80, BigDecimal.valueOf(1000000.00), "This is an Endowment Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.\n This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 50, PolicyCurrencyEnum.SGD);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 50, PolicyCurrencyEnum.SGD, endowmentPricing);
 
                 List<RiderEntity> listOfRiders03 = new ArrayList<>();
                 List<PremiumEntity> listOfPremium03 = new ArrayList<>();
@@ -254,7 +255,7 @@ public class DataInitSessionBean {
                 //TermLifeProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, 
                 //Boolean isDeleted, Integer premiumTerm) {
                 ProductEntity termLifeEntity01 = new TermLifeProductEntity(TermLifeProductEnum.ACCIDENT, "Alibaba Term Life Product 01", 63, BigDecimal.valueOf(0),
-                        "This is an Term Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 63, PolicyCurrencyEnum.SGD);
+                        "This is an Term Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 63, PolicyCurrencyEnum.SGD, termLifePricing);
 
                 List<RiderEntity> listOfRiders04 = new ArrayList<>();
                 List<PremiumEntity> listOfPremium04 = new ArrayList<>();
@@ -293,7 +294,7 @@ public class DataInitSessionBean {
                 //TermLifeProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, 
                 //Boolean isDeleted, Integer premiumTerm) {
                 ProductEntity termLifeEntity02 = new TermLifeProductEntity(TermLifeProductEnum.HOSPITAL, "Alibaba Term Life Product 02", 63, BigDecimal.valueOf(0),
-                        "This is an Term Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 63, PolicyCurrencyEnum.SGD);
+                        "This is an Term Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 63, PolicyCurrencyEnum.SGD, termLifePricing);
 
                 List<RiderEntity> listOfRiders05 = new ArrayList<>();
                 List<PremiumEntity> listOfPremium05 = new ArrayList<>();
@@ -329,7 +330,7 @@ public class DataInitSessionBean {
                 //TermLifeProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, 
                 //Boolean isDeleted, Integer premiumTerm) {
                 ProductEntity termLifeEntity03 = new TermLifeProductEntity(TermLifeProductEnum.CRITICALILLNESS, "Alibaba Term Life Product 03", 63, BigDecimal.valueOf(0),
-                        "This is an Term Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 63, PolicyCurrencyEnum.SGD);
+                        "This is an Term Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 63, PolicyCurrencyEnum.SGD, termLifePricing);
 
                 List<RiderEntity> listOfRiders06 = new ArrayList<>();
                 List<PremiumEntity> listOfPremium06 = new ArrayList<>();
@@ -362,7 +363,7 @@ public class DataInitSessionBean {
                 //TermLifeProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, 
                 //Boolean isDeleted, Integer premiumTerm) {
                 ProductEntity wholeLifeEntity01 = new WholeLifeProductEntity(WholeLifeProductEnum.ACCIDENT, "Alibaba Whole Life Product 01", 78, BigDecimal.valueOf(50000),
-                        "This is an Whole Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 20, PolicyCurrencyEnum.SGD);
+                        "This is an Whole Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 20, PolicyCurrencyEnum.SGD, wholeLifePricing);
 
                 List<RiderEntity> listOfRiders07 = new ArrayList<>();
                 List<PremiumEntity> listOfPremium07 = new ArrayList<>();
@@ -402,7 +403,7 @@ public class DataInitSessionBean {
                 //TermLifeProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, 
                 //Boolean isDeleted, Integer premiumTerm) {
                 ProductEntity wholeLifeEntity02 = new WholeLifeProductEntity(WholeLifeProductEnum.CRITICALILLNESS, "Alibaba Whole Life Product 02", 78, BigDecimal.valueOf(50000),
-                        "This is an Whole Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 20, PolicyCurrencyEnum.SGD);
+                        "This is an Whole Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 20, PolicyCurrencyEnum.SGD, wholeLifePricing);
 
                 List<RiderEntity> listOfRiders08 = new ArrayList<>();
                 List<PremiumEntity> listOfPremium08 = new ArrayList<>();
@@ -443,7 +444,7 @@ public class DataInitSessionBean {
                 //TermLifeProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, 
                 //Boolean isDeleted, Integer premiumTerm) {
                 ProductEntity wholeLifeEntity03 = new WholeLifeProductEntity(WholeLifeProductEnum.HOSPITAL, "Alibaba Whole Life Product 03", 78, BigDecimal.valueOf(50000),
-                        "This is an Whole Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 20, PolicyCurrencyEnum.SGD);
+                        "This is an Whole Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 20, PolicyCurrencyEnum.SGD, wholeLifePricing);
 
                 List<RiderEntity> listOfRiders09 = new ArrayList<>();
                 List<PremiumEntity> listOfPremium09 = new ArrayList<>();
@@ -480,7 +481,7 @@ public class DataInitSessionBean {
                 //TermLifeProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, 
                 //Boolean isDeleted, Integer premiumTerm) {
                 ProductEntity wholeLifeEntity04 = new WholeLifeProductEntity(WholeLifeProductEnum.LIFEINSURANCE, "Alibaba Whole Life Product 04", 78, BigDecimal.valueOf(50000),
-                        "This is an Whole Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 20, PolicyCurrencyEnum.SGD);
+                        "This is an Whole Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 20, PolicyCurrencyEnum.SGD, wholeLifePricing);
 
                 List<RiderEntity> listOfRiders10 = new ArrayList<>();
                 List<PremiumEntity> listOfPremium10 = new ArrayList<>();
@@ -517,7 +518,7 @@ public class DataInitSessionBean {
                 ProductEntity coy2EndowmentEntity01 = new EndowmentEntity(EndowmentProductEnum.ENDOWMENT, "Tencent Endowment Product 01", 103, BigDecimal.valueOf(100000.00), "This is an Endowment Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
                         + "whilst providing you with insurance protection.\n"
                         + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, endowmentPricing);
 
                 List<RiderEntity> listOfcoy2Riders01 = new ArrayList<>();
                 List<PremiumEntity> listOfcoy2Premium01 = new ArrayList<>();
@@ -557,7 +558,7 @@ public class DataInitSessionBean {
                 ProductEntity coy2EndowmentEntity02 = new EndowmentEntity(EndowmentProductEnum.ENDOWMENT, "Tencent Endowment Product 02", 103, BigDecimal.valueOf(100000.00), "This is an Endowment Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
                         + "whilst providing you with insurance protection.\n"
                         + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, endowmentPricing);
 
                 List<RiderEntity> listOfcoy2Riders02 = new ArrayList<>();
                 List<PremiumEntity> listOfcoy2Premium02 = new ArrayList<>();
@@ -597,7 +598,7 @@ public class DataInitSessionBean {
                 ProductEntity coy2EndowmentEntity03 = new EndowmentEntity(EndowmentProductEnum.ENDOWMENT, "Tencent Endowment Product 03", 103, BigDecimal.valueOf(100000.00), "This is an Endowment Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
                         + "whilst providing you with insurance protection.\n"
                         + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, endowmentPricing);
 
                 List<RiderEntity> listOfcoy2Riders03 = new ArrayList<>();
                 List<PremiumEntity> listOfcoy2Premium03 = new ArrayList<>();
@@ -637,7 +638,7 @@ public class DataInitSessionBean {
                 ProductEntity coy2WholeLifeProduct01 = new WholeLifeProductEntity(WholeLifeProductEnum.LIFEINSURANCE, "Tencent Whole Life Insurance Product 01", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
                         + "whilst providing you with insurance protection.\n"
                         + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, wholeLifePricing);
 
                 List<RiderEntity> listOfcoy2Riders04 = new ArrayList<>();
                 List<PremiumEntity> listOfcoy2Premium04 = new ArrayList<>();
@@ -677,7 +678,7 @@ public class DataInitSessionBean {
                 ProductEntity coy2WholeLifeProduct02 = new WholeLifeProductEntity(WholeLifeProductEnum.HOSPITAL, "Tencent Whole Life Insurance Product 02", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
                         + "whilst providing you with insurance protection.\n"
                         + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, wholeLifePricing);
 
                 List<RiderEntity> listOfcoy2Riders05 = new ArrayList<>();
                 List<PremiumEntity> listOfcoy2Premium05 = new ArrayList<>();
@@ -717,7 +718,7 @@ public class DataInitSessionBean {
                 ProductEntity coy2WholeLifeProduct03 = new WholeLifeProductEntity(WholeLifeProductEnum.CRITICALILLNESS, "Tencent Whole Life Insurance Product 03", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
                         + "whilst providing you with insurance protection.\n"
                         + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, wholeLifePricing);
 
                 List<RiderEntity> listOfcoy2Riders06 = new ArrayList<>();
                 List<PremiumEntity> listOfcoy2Premium06 = new ArrayList<>();
@@ -757,7 +758,7 @@ public class DataInitSessionBean {
                 ProductEntity coy2WholeLifeProduct04 = new WholeLifeProductEntity(WholeLifeProductEnum.ACCIDENT, "Tencent Whole Life Insurance Product 04", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
                         + "whilst providing you with insurance protection.\n"
                         + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, wholeLifePricing);
 
                 List<RiderEntity> listOfcoy2Riders07 = new ArrayList<>();
                 List<PremiumEntity> listOfcoy2Premium07 = new ArrayList<>();
@@ -798,7 +799,7 @@ public class DataInitSessionBean {
                 ProductEntity coy2TermLifeProduct01 = new TermLifeProductEntity(TermLifeProductEnum.ACCIDENT, "Tencent Term Life Insurance Product 01", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
                         + "whilst providing you with insurance protection.\n"
                         + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, termLifePricing);
 
                 List<RiderEntity> listOfcoy2Riders08 = new ArrayList<>();
                 List<PremiumEntity> listOfcoy2Premium08 = new ArrayList<>();
@@ -838,7 +839,7 @@ public class DataInitSessionBean {
                 ProductEntity coy2TermLifeProduct02 = new TermLifeProductEntity(TermLifeProductEnum.CRITICALILLNESS, "Tencent Term Life Insurance Product 02", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
                         + "whilst providing you with insurance protection.\n"
                         + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, termLifePricing);
 
                 List<RiderEntity> listOfcoy2Riders09 = new ArrayList<>();
                 List<PremiumEntity> listOfcoy2Premium09 = new ArrayList<>();
@@ -878,7 +879,7 @@ public class DataInitSessionBean {
                 ProductEntity coy2TermLifeProduct03 = new TermLifeProductEntity(TermLifeProductEnum.HOSPITAL, "Tencent Term Life Insurance Product 03", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
                         + "whilst providing you with insurance protection.\n"
                         + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, termLifePricing);
 
                 List<RiderEntity> listOfcoy2Riders10 = new ArrayList<>();
                 List<PremiumEntity> listOfcoy2Premium10 = new ArrayList<>();

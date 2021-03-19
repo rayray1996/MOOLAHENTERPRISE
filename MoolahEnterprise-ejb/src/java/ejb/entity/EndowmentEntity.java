@@ -33,8 +33,8 @@ public class EndowmentEntity extends ProductEntity implements Serializable {
     public EndowmentEntity() {
     }
 
-    public EndowmentEntity(EndowmentProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm, PolicyCurrencyEnum currency) {
-        super(productName, coverageTerm, assuredSum, description, isDeleted, premiumTerm, currency);
+    public EndowmentEntity(EndowmentProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm, PolicyCurrencyEnum currency, CategoryPricingEntity pricing) {
+        super(productName, coverageTerm, assuredSum, description, isDeleted, premiumTerm, currency, pricing);
         this.productEnum = productEnum;
     }
 

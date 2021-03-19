@@ -5,6 +5,7 @@
  */
 package ejb.stateless;
 
+import ejb.entity.ClickThroughEntity;
 import ejb.entity.CompanyEntity;
 import ejb.entity.EndowmentEntity;
 import ejb.entity.FeatureEntity;
@@ -361,6 +362,8 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
             try {
                 CompanyEntity company = em.find(CompanyEntity.class, companyId);
                 newProduct.setCompany(company);
+                ClickThroughEntity clickThrough = new ClickThroughEntity();
+                newProduct.setClickThroughInfo(clickThrough);
                 em.persist(newProduct);
                 em.flush();
 
