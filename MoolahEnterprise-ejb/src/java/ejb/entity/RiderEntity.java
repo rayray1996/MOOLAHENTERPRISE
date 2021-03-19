@@ -33,6 +33,15 @@ public class RiderEntity implements Serializable {
     @Size(min=1)
     private String riderDescription;
 
+    public RiderEntity() {
+    }
+
+    public RiderEntity(BigDecimal riderPremiumValue, String riderDescription) {
+        this.riderPremiumValue = riderPremiumValue;
+        this.riderDescription = riderDescription;
+    }
+
+    
     public BigDecimal getRiderPremiumValue() {
         return riderPremiumValue;
     }

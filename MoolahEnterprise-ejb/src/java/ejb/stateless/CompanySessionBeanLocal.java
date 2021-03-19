@@ -13,6 +13,7 @@ import javax.ejb.Timer;
 import util.exception.CompanyAlreadyExistException;
 import util.exception.CompanyCreationException;
 import util.exception.CompanyDoesNotExistException;
+import util.exception.CompanySQLConstraintException;
 import util.exception.IncorrectLoginParticularsException;
 import util.exception.UnknownPersistenceException;
 
@@ -29,7 +30,7 @@ public interface CompanySessionBeanLocal {
 
     public CompanyEntity retrieveCompanyByEmail(String email) throws CompanyDoesNotExistException;
 
-    public void updateCompanyInformation(CompanyEntity company) throws UnknownPersistenceException, CompanyDoesNotExistException;
+    public void updateCompanyInformation(CompanyEntity company) throws UnknownPersistenceException, CompanySQLConstraintException;
 
     public void deactivateAccount(String email) throws CompanyDoesNotExistException;
 

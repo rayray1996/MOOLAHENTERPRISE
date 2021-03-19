@@ -9,6 +9,7 @@ import ejb.entity.RefundEntity;
 import javax.ejb.Local;
 import util.exception.RefundCreationException;
 import util.exception.RefundDoesNotExistException;
+import util.exception.RefundErrorException;
 import util.exception.RefundHasBeenTransactedException;
 import util.exception.UnknownPersistenceException;
 
@@ -21,6 +22,6 @@ public interface RefundSessionBeanLocal {
 
     public RefundEntity getRefund(Long refundId) throws RefundDoesNotExistException;
 
-    public RefundEntity createNewRefund(RefundEntity newRefund) throws UnknownPersistenceException, RefundCreationException, RefundHasBeenTransactedException;
+    public RefundEntity createNewRefund(RefundEntity newRefund) throws UnknownPersistenceException, RefundCreationException, RefundErrorException;
     
 }

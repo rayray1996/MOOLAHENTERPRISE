@@ -14,15 +14,10 @@ import ejb.entity.MonthlyPaymentEntity;
 import ejb.entity.PaymentEntity;
 import ejb.entity.ProductEntity;
 import ejb.entity.ProductLineItemEntity;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
@@ -37,8 +32,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import util.exception.CompanyAlreadyExistException;
-import util.exception.CompanyCreationException;
 import util.exception.CompanyDoesNotExistException;
 import util.exception.InvalidPaymentEntityCreationException;
 import util.exception.MonthlyPaymentAlreadyExistsException;
@@ -223,7 +216,7 @@ public class InvoiceSessionBean implements InvoiceSessionBeanLocal {
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
                     if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
-                        throw new MonthlyPaymentAlreadyExistsException(ex.getMessage());
+                        throw new MonthlyPaymentAlreadyExistsException("Monthly Payment already exists!");
                     } else {
                         throw new UnknownPersistenceException(ex.getMessage());
                     }
@@ -248,7 +241,7 @@ public class InvoiceSessionBean implements InvoiceSessionBeanLocal {
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
                     if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
-                        throw new ProductLineItemAlreadyExistException(ex.getMessage());
+                        throw new ProductLineItemAlreadyExistException("Product Line Item already exists!");
                     } else {
                         throw new UnknownPersistenceException(ex.getMessage());
                     }

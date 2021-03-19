@@ -48,9 +48,11 @@ import javax.validation.ValidatorFactory;
 import util.exception.CompanyAlreadyExistException;
 import util.exception.CompanyCreationException;
 import util.exception.CompanyDoesNotExistException;
+import util.exception.CompanySQLConstraintException;
 import util.exception.IncorrectLoginParticularsException;
 import util.exception.MonthlyPaymentNotFoundException;
 import util.exception.RefundCreationException;
+import util.exception.RefundErrorException;
 import util.exception.RefundHasBeenTransactedException;
 import util.exception.UnknownPersistenceException;
 import util.security.CryptographicHelper;
@@ -106,7 +108,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
                     if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
-                        throw new CompanyAlreadyExistException(ex.getMessage());
+                        throw new CompanyAlreadyExistException("Company already exists!");
                     } else {
                         throw new UnknownPersistenceException(ex.getMessage());
                     }
@@ -164,14 +166,14 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
     }
 
     @Override
-    public void updateCompanyInformation(CompanyEntity company) throws UnknownPersistenceException, CompanyDoesNotExistException {
+    public void updateCompanyInformation(CompanyEntity company) throws UnknownPersistenceException, CompanySQLConstraintException {
         try {
             em.merge(company);
             em.flush();
         } catch (PersistenceException ex) {
             if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
                 if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
-                    throw new CompanyDoesNotExistException(ex.getMessage());
+                    throw new CompanySQLConstraintException(ex.getMessage());
                 } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
@@ -274,7 +276,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
                 Boolean result = emailSessionBean.emailReminderAccountDeactivatedSync(company, company.getCompanyEmail());
                 timerService.createSingleActionTimer(expiration, timerConfig);
             }
-        } catch (CompanyDoesNotExistException | RefundCreationException | RefundHasBeenTransactedException | UnknownPersistenceException ex) {
+        } catch (CompanyDoesNotExistException | RefundCreationException | UnknownPersistenceException | RefundErrorException ex) {
             System.err.println(ex.getMessage());
         }
     }
