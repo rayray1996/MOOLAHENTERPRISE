@@ -111,7 +111,7 @@ public class DataInitSessionBean {
                 dateOfBirth.set(GregorianCalendar.MONTH, 6);
                 dateOfBirth.set(GregorianCalendar.YEAR, 1996);
                 AssetEntity newAsset = new AssetEntity(BigDecimal.valueOf(1000), BigDecimal.valueOf(1000), BigDecimal.valueOf(3000), BigDecimal.valueOf(3000));
-                CustomerEntity newCust = new CustomerEntity("Ray Tan", "raytan96@gmail.com", "12345678", dateOfBirth, "90309419", GenderEnum.MALE, Boolean.TRUE, newAsset);
+                CustomerEntity newCust = new CustomerEntity("Ray Tan", "raytan96@gmail.com", "12345678", dateOfBirth, "90309419", GenderEnum.MALE, Boolean.TRUE, newAsset, false);
                 customerSessionBean.createCustomer(newCust);
 
                 GregorianCalendar dateOfBirth2 = new GregorianCalendar();
@@ -119,8 +119,8 @@ public class DataInitSessionBean {
                 dateOfBirth2.set(GregorianCalendar.MONTH, 3);
                 dateOfBirth2.set(GregorianCalendar.YEAR, 1996);
                 AssetEntity newAsset2 = new AssetEntity(BigDecimal.valueOf(300), BigDecimal.valueOf(1000), BigDecimal.valueOf(0), BigDecimal.valueOf(1500));
-                CustomerEntity newCust2 = new CustomerEntity("Soh Qing Cai", "soh.qing.cai@gmail.com", "12345678", dateOfBirth, "93726162", GenderEnum.MALE, Boolean.FALSE, newAsset);
-                customerSessionBean.createCustomer(newCust);
+                CustomerEntity newCust2 = new CustomerEntity("Soh Qing Cai", "soh.qing.cai@gmail.com", "12345678", dateOfBirth, "93726162", GenderEnum.MALE, Boolean.FALSE, newAsset2, false);
+                customerSessionBean.createCustomer(newCust2);
 
                 // Create CategoryPricingEntity
                 CategoryPricingEntity endowmentPricing = new CategoryPricingEntity(CategoryEnum.ENDOWMENT, BigInteger.valueOf(100), BigInteger.valueOf(1));
@@ -156,9 +156,9 @@ public class DataInitSessionBean {
 
 
             } catch (CompanyAlreadyExistException | UnknownPersistenceException | CompanyCreationException | PointOfContactAlreadyExistsException
-                    | InvalidPointOfContactCreationException | CustomerAlreadyExistException | CustomerCreationException | ProductAlreadyExistsException | RiderAlreadyExistException
-                    | RiderCreationException | ProductNotFoundException | FeatureAlreadyExistsException | FeatureCreationException | InvalidProductCreationException ex) {
+                    | InvalidPointOfContactCreationException | CustomerAlreadyExistException | CustomerCreationException ex) {
                 System.out.println(ex.getMessage());
+            
             } 
         }
 

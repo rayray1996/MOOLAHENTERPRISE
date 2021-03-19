@@ -21,14 +21,10 @@ import util.exception.UnknownPersistenceException;
 @Local
 public interface FeatureSessionBeanLocal {
 
-    public FeatureEntity createNewFeature(FeatureEntity newFeature, Long productId) throws ProductNotFoundException, UnknownPersistenceException, FeatureAlreadyExistsException, FeatureCreationException;
-
-    public void updateFeature(FeatureEntity featureToUpdate) throws UnknownPersistenceException, FeatureAlreadyExistsException;
-
     public List<FeatureEntity> retrieveListOfFeatures(Long productId) throws ProductNotFoundException;
 
     public FeatureEntity retrieveFeatureEntitybyId(Long featureId) throws FeatureDoesNotExistsException;
 
     public void deleteFeatureEntity(Long featureId) throws FeatureDoesNotExistsException, ProductNotFoundException;
-    
+
 }

@@ -23,12 +23,8 @@ public interface PremiumSessionBeanLocal {
 
     public List<PremiumEntity> retrieveListOfPremiumEntityForProduct(Long productId) throws ProductNotFoundException;
 
-    public PremiumEntity createNewPremiumEntity(PremiumEntity newPremiumEntity, Long productId) throws PremiumAlreadyExistException, UnknownPersistenceException, PremiumCreationException, ProductNotFoundException;
-
-    public void updatePremium(PremiumEntity updatedPremium) throws UnknownPersistenceException, PremiumCreationException, PremiumDoesNotExistException;
-
     public PremiumEntity retrievePremiumEntityById(Long premiumId) throws PremiumDoesNotExistException;
 
     public void deletePremium(Long premiumId) throws PremiumDoesNotExistException, ProductNotFoundException;
-    
+
 }

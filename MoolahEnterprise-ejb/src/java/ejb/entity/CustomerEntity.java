@@ -110,7 +110,7 @@ public class CustomerEntity implements Serializable {
         this.expiryDateOfPathParam = null;
     }
 
-    public CustomerEntity(String fullName, String email, String password, GregorianCalendar dateOfBirth, String phoneNumber, GenderEnum gender, Boolean smoker, AssetEntity asset) {
+    public CustomerEntity(String fullName, String email, String password, GregorianCalendar dateOfBirth, String phoneNumber, GenderEnum gender, Boolean smoker, AssetEntity asset, Boolean isMarried) {
         this();
         this.fullName = fullName;
         this.email = email;
@@ -122,6 +122,7 @@ public class CustomerEntity implements Serializable {
         this.asset = asset;
         this.resetPasswordPathParam = null;
         this.expiryDateOfPathParam = null;
+        this.isMarried = isMarried;
     }
 
     public Long getCustomerId() {

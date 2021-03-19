@@ -25,10 +25,6 @@ public interface RiderSessionBeanLocal {
 
     public RiderEntity retrieveRiderByRiderID(Long riderId) throws RiderDoesNotExistException;
 
-    public void updateRider(RiderEntity updateRider) throws RiderAlreadyExistException, UnknownPersistenceException;
-
-    public RiderEntity createRider(RiderEntity newRider, Long productId) throws RiderAlreadyExistException, UnknownPersistenceException, RiderCreationException, ProductNotFoundException;
-
     public List<RiderEntity> retrieveListOfRiderEntityForProduct(Long productId) throws ProductNotFoundException;
 
 }

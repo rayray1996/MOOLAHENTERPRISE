@@ -7,10 +7,14 @@ package ejb.stateless;
 
 import ejb.entity.CompanyEntity;
 import ejb.entity.EndowmentEntity;
+import ejb.entity.FeatureEntity;
+import ejb.entity.PremiumEntity;
 import ejb.entity.ProductEntity;
+import ejb.entity.RiderEntity;
 import ejb.entity.TermLifeProductEntity;
 import ejb.entity.WholeLifeProductEntity;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.EJB;
@@ -23,6 +27,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import jdk.nashorn.internal.ir.BreakableNode;
 import util.enumeration.CategoryEnum;
 import util.enumeration.EndowmentProductEnum;
 import util.enumeration.TermLifeProductEnum;
@@ -215,8 +220,8 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
             sumAssuredString = ":sumAssured >= p.assuredSum";
         }
 
-        Query query = em.createQuery("SELECT p FROM " + categoryType + " JOIN p.listOfPremium s WHERE p.isDeleted = FALSE AND p.company.isDeleted = false AND p.company.isDeactivated = false" + " AND " + 
-                riderString + " AND " + smokerString + " AND " + coverageTermString + " AND " + premiumTermString + " AND " + sumAssuredString + " AND " + enumStrings);
+        Query query = em.createQuery("SELECT p FROM " + categoryType + " JOIN p.listOfPremium s WHERE p.isDeleted = FALSE AND p.company.isDeleted = false AND p.company.isDeactivated = false" + " AND "
+                + riderString + " AND " + smokerString + " AND " + coverageTermString + " AND " + premiumTermString + " AND " + sumAssuredString + " AND " + enumStrings);
 
         List<ProductEntity> results = query.getResultList();
 
@@ -317,16 +322,49 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
     }
 
     @Override
-    public ProductEntity createProductListing(ProductEntity newProduct, Long companyId) throws ProductAlreadyExistsException, UnknownPersistenceException, InvalidProductCreationException {
+    public ProductEntity createProductListing(ProductEntity newProduct, Long companyId, List<RiderEntity> riders, List<PremiumEntity> premiums, List<FeatureEntity> features) throws ProductAlreadyExistsException, UnknownPersistenceException, InvalidProductCreationException {
         Set<ConstraintViolation<ProductEntity>> productError = validator.validate(newProduct);
-        if (productError.isEmpty()) {
+        Set<ConstraintViolation<RiderEntity>> riderError = new HashSet<>();
+        Set<ConstraintViolation<PremiumEntity>> premiumError = new HashSet<>();
+        Set<ConstraintViolation<FeatureEntity>> featureError = new HashSet<>();
+
+        // validate riders
+        for (RiderEntity r : riders) {
+            riderError = validator.validate(r);
+            if (!riderError.isEmpty()) {
+                break;
+            } else {
+                newProduct.getListOfRiders().add(r);
+            }
+        }
+
+        // validate premiums
+        for (PremiumEntity p : premiums) {
+            premiumError = validator.validate(p);
+            if (!premiumError.isEmpty()) {
+                break;
+            } else {
+                newProduct.getListOfPremium().add(p);
+            }
+        }
+
+        for (FeatureEntity f : features) {
+            featureError = validator.validate(f);
+            if (!featureError.isEmpty()) {
+                break;
+            } else {
+                newProduct.getListOfAdditionalFeatures().add(f);
+            }
+        }
+
+        if (productError.isEmpty() && riderError.isEmpty() && featureError.isEmpty() && premiumError.isEmpty()) {
             try {
                 CompanyEntity company = em.find(CompanyEntity.class, companyId);
                 newProduct.setCompany(company);
-                company.getListOfProducts().add(newProduct);
                 em.persist(newProduct);
                 em.flush();
 
+                company.getListOfProducts().add(newProduct);
                 newProduct.setCompany(company);
                 return newProduct;
             } catch (PersistenceException ex) {
@@ -341,14 +379,43 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
                 }
             }
         } else {
-            throw new InvalidProductCreationException(prepareInputDataValidationErrorsMessage(productError));
+            throw new InvalidProductCreationException(prepareInputDataValidationErrorsMessage(productError)
+                    + "\n" + prepareInputDataValidationErrorsMessage(riderError)
+                    + "\n" + prepareInputDataValidationErrorsMessage(premiumError)
+                    + "\n" + prepareInputDataValidationErrorsMessage(featureError));
         }
     }
 
     @Override
     public void updateProductListing(ProductEntity updateProduct) throws ProductAlreadyExistsException, UnknownPersistenceException, InvalidProductCreationException {
         Set<ConstraintViolation<ProductEntity>> productError = validator.validate(updateProduct);
-        if (productError.isEmpty()) {
+        Set<ConstraintViolation<RiderEntity>> riderError = new HashSet<>();
+        Set<ConstraintViolation<PremiumEntity>> premiumError = new HashSet<>();
+        Set<ConstraintViolation<FeatureEntity>> featureError = new HashSet<>();
+
+        for (RiderEntity r : updateProduct.getListOfRiders()) {
+            riderError = validator.validate(r);
+            if (!riderError.isEmpty()) {
+                break;
+            }
+        }
+
+        // validate premiums
+        for (PremiumEntity p : updateProduct.getListOfPremium()) {
+            premiumError = validator.validate(p);
+            if (!premiumError.isEmpty()) {
+                break;
+            }
+        }
+
+        for (FeatureEntity f : updateProduct.getListOfAdditionalFeatures()) {
+            featureError = validator.validate(f);
+            if (!featureError.isEmpty()) {
+                break;
+            }
+        }
+
+        if (productError.isEmpty() && riderError.isEmpty() && featureError.isEmpty() && premiumError.isEmpty()) {
             try {
                 em.merge(updateProduct);
                 em.flush();
@@ -364,7 +431,10 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
                 }
             }
         } else {
-            throw new InvalidProductCreationException(prepareInputDataValidationErrorsMessage(productError));
+            throw new InvalidProductCreationException(prepareInputDataValidationErrorsMessage(productError)
+                    + "\n" + prepareInputDataValidationErrorsMessage(riderError)
+                    + "\n" + prepareInputDataValidationErrorsMessage(premiumError)
+                    + "\n" + prepareInputDataValidationErrorsMessage(featureError));
         }
     }
 
@@ -390,7 +460,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         return listOfProducts;
     }
 
-    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<ProductEntity>> constraintViolations) {
+    private <T> String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<T>> constraintViolations) {
         String msg = "Input data validation error!:";
 
         for (ConstraintViolation constraintViolation : constraintViolations) {
