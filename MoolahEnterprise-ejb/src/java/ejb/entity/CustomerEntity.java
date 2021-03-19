@@ -34,7 +34,7 @@ import util.security.CryptographicHelper;
  * @author nickg
  */
 @Entity
-@NamedQuery(name="findCustWithEmail", query="SELECT c FROM CustomerEntity c WHERE c.email =:custEmail")
+@NamedQuery(name = "findCustWithEmail", query = "SELECT c FROM CustomerEntity c WHERE c.email =:custEmail")
 public class CustomerEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -76,6 +76,9 @@ public class CustomerEntity implements Serializable {
     @NotNull
     private Boolean smoker;
 
+    @NotNull
+    private Boolean isMarried;
+
     //bidirectional
     @OneToMany(mappedBy = "customer")
     private List<IssueEntity> listOfIssues;
@@ -87,10 +90,6 @@ public class CustomerEntity implements Serializable {
     //Unidirectional
     @OneToOne(optional = false, cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, orphanRemoval = true)
     private AssetEntity asset;
-
-    //unidirectional    
-    @OneToMany
-    private List<QuestionnaireEntity> listOfQuestionnaires;
 
     //unidirectional
     @OneToMany
@@ -216,20 +215,20 @@ public class CustomerEntity implements Serializable {
         this.asset = asset;
     }
 
-    public List<QuestionnaireEntity> getListOfQuestionnaires() {
-        return listOfQuestionnaires;
-    }
-
-    public void setListOfQuestionnaires(List<QuestionnaireEntity> listOfQuestionnaires) {
-        this.listOfQuestionnaires = listOfQuestionnaires;
-    }
-
     public List<ProductEntity> getListOfLikeProducts() {
         return listOfLikeProducts;
     }
 
     public void setListOfLikeProducts(List<ProductEntity> listOfLikeProducts) {
         this.listOfLikeProducts = listOfLikeProducts;
+    }
+
+    public Boolean getIsMarried() {
+        return isMarried;
+    }
+
+    public void setIsMarried(Boolean isMarried) {
+        this.isMarried = isMarried;
     }
 
     @Override
