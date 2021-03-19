@@ -16,6 +16,7 @@ import ejb.entity.PremiumEntity;
 import ejb.entity.ProductEntity;
 import ejb.entity.RiderEntity;
 import ejb.entity.TermLifeProductEntity;
+import ejb.entity.WholeLifeProductEntity;
 import ejb.stateless.CompanySessionBeanLocal;
 import ejb.stateless.CustomerSessionBeanLocal;
 import ejb.stateless.EmailSessionBeanLocal;
@@ -43,6 +44,7 @@ import util.enumeration.EndowmentProductEnum;
 import util.enumeration.GenderEnum;
 import util.enumeration.PolicyCurrencyEnum;
 import util.enumeration.TermLifeProductEnum;
+import util.enumeration.WholeLifeProductEnum;
 import util.exception.CompanyAlreadyExistException;
 import util.exception.CompanyCreationException;
 import util.exception.CompanyDoesNotExistException;
@@ -299,6 +301,366 @@ public class DataInitSessionBean {
                 listOfcoy2Premium01.add(new PremiumEntity(40, 40, BigDecimal.valueOf(43200), false, BigDecimal.valueOf(45360)));
 
                 coy2EndowmentEntity01 = productSessionBean.createProductListing(coy2EndowmentEntity01, tencentCompany.getCompanyId(), listOfcoy2Riders01, listOfcoy2Premium01, listOfcoy2Features01);
+
+                //---------------------------------
+                ProductEntity coy2EndowmentEntity02 = new EndowmentEntity(EndowmentProductEnum.ENDOWMENT, "Tencent Endowment Product 02", 103, BigDecimal.valueOf(100000.00), "This is an Endowment Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
+                        + "whilst providing you with insurance protection.\n"
+                        + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD);
+
+                List<RiderEntity> listOfcoy2Riders02 = new ArrayList<>();
+                List<PremiumEntity> listOfcoy2Premium02 = new ArrayList<>();
+                List<FeatureEntity> listOfcoy2Features02 = new ArrayList<>();
+
+//              BigDecimal riderPremiumValue, String riderDescription
+                RiderEntity coy2rider02 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Tencent Endowment Product 02");
+                listOfcoy2Riders02.add(coy2rider02);
+
+                //Description
+                FeatureEntity coy2feature02 = new FeatureEntity("This additional feature is for Tencent Endowment Product 02");
+                listOfcoy2Features02.add(coy2feature02);
+
+                //Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum
+                listOfcoy2Premium02.add(new PremiumEntity(23, 23, BigDecimal.valueOf(2400), false, BigDecimal.valueOf(2520)));
+                listOfcoy2Premium02.add(new PremiumEntity(24, 24, BigDecimal.valueOf(4800), false, BigDecimal.valueOf(5040)));
+                listOfcoy2Premium02.add(new PremiumEntity(25, 25, BigDecimal.valueOf(7200), false, BigDecimal.valueOf(7560)));
+                listOfcoy2Premium02.add(new PremiumEntity(26, 26, BigDecimal.valueOf(9600), false, BigDecimal.valueOf(10080)));
+                listOfcoy2Premium02.add(new PremiumEntity(27, 27, BigDecimal.valueOf(12000), false, BigDecimal.valueOf(12600)));
+                listOfcoy2Premium02.add(new PremiumEntity(28, 28, BigDecimal.valueOf(14400), false, BigDecimal.valueOf(15120)));
+                listOfcoy2Premium02.add(new PremiumEntity(29, 29, BigDecimal.valueOf(16800), false, BigDecimal.valueOf(17640)));
+                listOfcoy2Premium02.add(new PremiumEntity(30, 30, BigDecimal.valueOf(19200), false, BigDecimal.valueOf(20160)));
+                listOfcoy2Premium02.add(new PremiumEntity(31, 31, BigDecimal.valueOf(21600), false, BigDecimal.valueOf(22680)));
+                listOfcoy2Premium02.add(new PremiumEntity(32, 32, BigDecimal.valueOf(24000), false, BigDecimal.valueOf(25200)));
+                listOfcoy2Premium02.add(new PremiumEntity(33, 33, BigDecimal.valueOf(26400), false, BigDecimal.valueOf(27720)));
+                listOfcoy2Premium02.add(new PremiumEntity(34, 34, BigDecimal.valueOf(28800), false, BigDecimal.valueOf(30240)));
+                listOfcoy2Premium02.add(new PremiumEntity(35, 35, BigDecimal.valueOf(31200), false, BigDecimal.valueOf(32760)));
+                listOfcoy2Premium02.add(new PremiumEntity(36, 36, BigDecimal.valueOf(33600), false, BigDecimal.valueOf(35280)));
+                listOfcoy2Premium02.add(new PremiumEntity(37, 37, BigDecimal.valueOf(36000), false, BigDecimal.valueOf(37800)));
+                listOfcoy2Premium02.add(new PremiumEntity(38, 38, BigDecimal.valueOf(38400), false, BigDecimal.valueOf(40320)));
+                listOfcoy2Premium02.add(new PremiumEntity(39, 39, BigDecimal.valueOf(40800), false, BigDecimal.valueOf(42840)));
+                listOfcoy2Premium02.add(new PremiumEntity(40, 40, BigDecimal.valueOf(43200), false, BigDecimal.valueOf(45360)));
+
+                coy2EndowmentEntity02 = productSessionBean.createProductListing(coy2EndowmentEntity02, tencentCompany.getCompanyId(), listOfcoy2Riders02, listOfcoy2Premium02, listOfcoy2Features02);
+
+                // ----------------
+                ProductEntity coy2EndowmentEntity03 = new EndowmentEntity(EndowmentProductEnum.ENDOWMENT, "Tencent Endowment Product 03", 103, BigDecimal.valueOf(100000.00), "This is an Endowment Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
+                        + "whilst providing you with insurance protection.\n"
+                        + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD);
+
+                List<RiderEntity> listOfcoy2Riders03 = new ArrayList<>();
+                List<PremiumEntity> listOfcoy2Premium03 = new ArrayList<>();
+                List<FeatureEntity> listOfcoy2Features03 = new ArrayList<>();
+
+//              BigDecimal riderPremiumValue, String riderDescription
+                RiderEntity coy2rider03 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Tencent Endowment Product 03");
+                listOfcoy2Riders03.add(coy2rider03);
+
+                //Description
+                FeatureEntity coy2feature03 = new FeatureEntity("This additional feature is for Tencent Endowment Product 03");
+                listOfcoy2Features03.add(coy2feature03);
+
+                //Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum
+                listOfcoy2Premium03.add(new PremiumEntity(23, 23, BigDecimal.valueOf(2400), false, BigDecimal.valueOf(2520)));
+                listOfcoy2Premium03.add(new PremiumEntity(24, 24, BigDecimal.valueOf(4800), false, BigDecimal.valueOf(5040)));
+                listOfcoy2Premium03.add(new PremiumEntity(25, 25, BigDecimal.valueOf(7200), false, BigDecimal.valueOf(7560)));
+                listOfcoy2Premium03.add(new PremiumEntity(26, 26, BigDecimal.valueOf(9600), false, BigDecimal.valueOf(10080)));
+                listOfcoy2Premium03.add(new PremiumEntity(27, 27, BigDecimal.valueOf(12000), false, BigDecimal.valueOf(12600)));
+                listOfcoy2Premium03.add(new PremiumEntity(28, 28, BigDecimal.valueOf(14400), false, BigDecimal.valueOf(15120)));
+                listOfcoy2Premium03.add(new PremiumEntity(29, 29, BigDecimal.valueOf(16800), false, BigDecimal.valueOf(17640)));
+                listOfcoy2Premium03.add(new PremiumEntity(30, 30, BigDecimal.valueOf(19200), false, BigDecimal.valueOf(20160)));
+                listOfcoy2Premium03.add(new PremiumEntity(31, 31, BigDecimal.valueOf(21600), false, BigDecimal.valueOf(22680)));
+                listOfcoy2Premium03.add(new PremiumEntity(32, 32, BigDecimal.valueOf(24000), false, BigDecimal.valueOf(25200)));
+                listOfcoy2Premium03.add(new PremiumEntity(33, 33, BigDecimal.valueOf(26400), false, BigDecimal.valueOf(27720)));
+                listOfcoy2Premium03.add(new PremiumEntity(34, 34, BigDecimal.valueOf(28800), false, BigDecimal.valueOf(30240)));
+                listOfcoy2Premium03.add(new PremiumEntity(35, 35, BigDecimal.valueOf(31200), false, BigDecimal.valueOf(32760)));
+                listOfcoy2Premium03.add(new PremiumEntity(36, 36, BigDecimal.valueOf(33600), false, BigDecimal.valueOf(35280)));
+                listOfcoy2Premium03.add(new PremiumEntity(37, 37, BigDecimal.valueOf(36000), false, BigDecimal.valueOf(37800)));
+                listOfcoy2Premium03.add(new PremiumEntity(38, 38, BigDecimal.valueOf(38400), false, BigDecimal.valueOf(40320)));
+                listOfcoy2Premium03.add(new PremiumEntity(39, 39, BigDecimal.valueOf(40800), false, BigDecimal.valueOf(42840)));
+                listOfcoy2Premium03.add(new PremiumEntity(40, 40, BigDecimal.valueOf(43200), false, BigDecimal.valueOf(45360)));
+
+                coy2EndowmentEntity03 = productSessionBean.createProductListing(coy2EndowmentEntity03, tencentCompany.getCompanyId(), listOfcoy2Riders03, listOfcoy2Premium03, listOfcoy2Features03);
+
+                // WholeLife 
+                ProductEntity coy2WholeLifeProduct01 = new WholeLifeProductEntity(WholeLifeProductEnum.LIFEINSURANCE, "Tencent Whole Life Insurance Product 01", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
+                        + "whilst providing you with insurance protection.\n"
+                        + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD);
+
+                List<RiderEntity> listOfcoy2Riders04 = new ArrayList<>();
+                List<PremiumEntity> listOfcoy2Premium04 = new ArrayList<>();
+                List<FeatureEntity> listOfcoy2Features04 = new ArrayList<>();
+
+//              BigDecimal riderPremiumValue, String riderDescription
+                RiderEntity coy2rider04 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Tencent Whole Life Insurance Product 01");
+                listOfcoy2Riders04.add(coy2rider04);
+
+                //Description
+                FeatureEntity coy2feature04 = new FeatureEntity("This additional feature is for Tencent Whole Life Insurance Product 01");
+                listOfcoy2Features04.add(coy2feature04);
+
+                //Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum
+                listOfcoy2Premium04.add(new PremiumEntity(23, 23, BigDecimal.valueOf(2400), false, BigDecimal.valueOf(2520)));
+                listOfcoy2Premium04.add(new PremiumEntity(24, 24, BigDecimal.valueOf(4800), false, BigDecimal.valueOf(5040)));
+                listOfcoy2Premium04.add(new PremiumEntity(25, 25, BigDecimal.valueOf(7200), false, BigDecimal.valueOf(7560)));
+                listOfcoy2Premium04.add(new PremiumEntity(26, 26, BigDecimal.valueOf(9600), false, BigDecimal.valueOf(10080)));
+                listOfcoy2Premium04.add(new PremiumEntity(27, 27, BigDecimal.valueOf(12000), false, BigDecimal.valueOf(12600)));
+                listOfcoy2Premium04.add(new PremiumEntity(28, 28, BigDecimal.valueOf(14400), false, BigDecimal.valueOf(15120)));
+                listOfcoy2Premium04.add(new PremiumEntity(29, 29, BigDecimal.valueOf(16800), false, BigDecimal.valueOf(17640)));
+                listOfcoy2Premium04.add(new PremiumEntity(30, 30, BigDecimal.valueOf(19200), false, BigDecimal.valueOf(20160)));
+                listOfcoy2Premium04.add(new PremiumEntity(31, 31, BigDecimal.valueOf(21600), false, BigDecimal.valueOf(22680)));
+                listOfcoy2Premium04.add(new PremiumEntity(32, 32, BigDecimal.valueOf(24000), false, BigDecimal.valueOf(25200)));
+                listOfcoy2Premium04.add(new PremiumEntity(33, 33, BigDecimal.valueOf(26400), false, BigDecimal.valueOf(27720)));
+                listOfcoy2Premium04.add(new PremiumEntity(34, 34, BigDecimal.valueOf(28800), false, BigDecimal.valueOf(30240)));
+                listOfcoy2Premium04.add(new PremiumEntity(35, 35, BigDecimal.valueOf(31200), false, BigDecimal.valueOf(32760)));
+                listOfcoy2Premium04.add(new PremiumEntity(36, 36, BigDecimal.valueOf(33600), false, BigDecimal.valueOf(35280)));
+                listOfcoy2Premium04.add(new PremiumEntity(37, 37, BigDecimal.valueOf(36000), false, BigDecimal.valueOf(37800)));
+                listOfcoy2Premium04.add(new PremiumEntity(38, 38, BigDecimal.valueOf(38400), false, BigDecimal.valueOf(40320)));
+                listOfcoy2Premium04.add(new PremiumEntity(39, 39, BigDecimal.valueOf(40800), false, BigDecimal.valueOf(42840)));
+                listOfcoy2Premium04.add(new PremiumEntity(40, 40, BigDecimal.valueOf(43200), false, BigDecimal.valueOf(45360)));
+
+                coy2WholeLifeProduct01 = productSessionBean.createProductListing(coy2WholeLifeProduct01, tencentCompany.getCompanyId(), listOfcoy2Riders04, listOfcoy2Premium04, listOfcoy2Features04);
+
+                //----------------------------
+                ProductEntity coy2WholeLifeProduct02 = new WholeLifeProductEntity(WholeLifeProductEnum.HOSPITAL, "Tencent Whole Life Insurance Product 02", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
+                        + "whilst providing you with insurance protection.\n"
+                        + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD);
+
+                List<RiderEntity> listOfcoy2Riders05 = new ArrayList<>();
+                List<PremiumEntity> listOfcoy2Premium05 = new ArrayList<>();
+                List<FeatureEntity> listOfcoy2Features05 = new ArrayList<>();
+
+//              BigDecimal riderPremiumValue, String riderDescription
+                RiderEntity coy2rider05 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Tencent Whole Life Insurance Product 02");
+                listOfcoy2Riders05.add(coy2rider05);
+
+                //Description
+                FeatureEntity coy2feature05 = new FeatureEntity("This additional feature is for Tencent Whole Life Insurance Product 02");
+                listOfcoy2Features05.add(coy2feature05);
+
+                //Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum
+                listOfcoy2Premium05.add(new PremiumEntity(23, 23, BigDecimal.valueOf(2400), false, BigDecimal.valueOf(2520)));
+                listOfcoy2Premium05.add(new PremiumEntity(24, 24, BigDecimal.valueOf(4800), false, BigDecimal.valueOf(5040)));
+                listOfcoy2Premium05.add(new PremiumEntity(25, 25, BigDecimal.valueOf(7200), false, BigDecimal.valueOf(7560)));
+                listOfcoy2Premium05.add(new PremiumEntity(26, 26, BigDecimal.valueOf(9600), false, BigDecimal.valueOf(10080)));
+                listOfcoy2Premium05.add(new PremiumEntity(27, 27, BigDecimal.valueOf(12000), false, BigDecimal.valueOf(12600)));
+                listOfcoy2Premium05.add(new PremiumEntity(28, 28, BigDecimal.valueOf(14400), false, BigDecimal.valueOf(15120)));
+                listOfcoy2Premium05.add(new PremiumEntity(29, 29, BigDecimal.valueOf(16800), false, BigDecimal.valueOf(17640)));
+                listOfcoy2Premium05.add(new PremiumEntity(30, 30, BigDecimal.valueOf(19200), false, BigDecimal.valueOf(20160)));
+                listOfcoy2Premium05.add(new PremiumEntity(31, 31, BigDecimal.valueOf(21600), false, BigDecimal.valueOf(22680)));
+                listOfcoy2Premium05.add(new PremiumEntity(32, 32, BigDecimal.valueOf(24000), false, BigDecimal.valueOf(25200)));
+                listOfcoy2Premium05.add(new PremiumEntity(33, 33, BigDecimal.valueOf(26400), false, BigDecimal.valueOf(27720)));
+                listOfcoy2Premium05.add(new PremiumEntity(34, 34, BigDecimal.valueOf(28800), false, BigDecimal.valueOf(30240)));
+                listOfcoy2Premium05.add(new PremiumEntity(35, 35, BigDecimal.valueOf(31200), false, BigDecimal.valueOf(32760)));
+                listOfcoy2Premium05.add(new PremiumEntity(36, 36, BigDecimal.valueOf(33600), false, BigDecimal.valueOf(35280)));
+                listOfcoy2Premium05.add(new PremiumEntity(37, 37, BigDecimal.valueOf(36000), false, BigDecimal.valueOf(37800)));
+                listOfcoy2Premium05.add(new PremiumEntity(38, 38, BigDecimal.valueOf(38400), false, BigDecimal.valueOf(40320)));
+                listOfcoy2Premium05.add(new PremiumEntity(39, 39, BigDecimal.valueOf(40800), false, BigDecimal.valueOf(42840)));
+                listOfcoy2Premium05.add(new PremiumEntity(40, 40, BigDecimal.valueOf(43200), false, BigDecimal.valueOf(45360)));
+
+                coy2WholeLifeProduct02 = productSessionBean.createProductListing(coy2WholeLifeProduct02, tencentCompany.getCompanyId(), listOfcoy2Riders05, listOfcoy2Premium05, listOfcoy2Features05);
+
+                //---------------------
+                ProductEntity coy2WholeLifeProduct03 = new WholeLifeProductEntity(WholeLifeProductEnum.CRITICALILLNESS, "Tencent Whole Life Insurance Product 03", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
+                        + "whilst providing you with insurance protection.\n"
+                        + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD);
+
+                List<RiderEntity> listOfcoy2Riders06 = new ArrayList<>();
+                List<PremiumEntity> listOfcoy2Premium06 = new ArrayList<>();
+                List<FeatureEntity> listOfcoy2Features06 = new ArrayList<>();
+
+//              BigDecimal riderPremiumValue, String riderDescription
+                RiderEntity coy2rider06 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Tencent Whole Life Insurance Product 03");
+                listOfcoy2Riders06.add(coy2rider06);
+
+                //Description
+                FeatureEntity coy2feature06 = new FeatureEntity("This additional feature is for Tencent Whole Life Insurance Product 03");
+                listOfcoy2Features06.add(coy2feature06);
+
+                //Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum
+                listOfcoy2Premium06.add(new PremiumEntity(23, 23, BigDecimal.valueOf(2400), false, BigDecimal.valueOf(2520)));
+                listOfcoy2Premium06.add(new PremiumEntity(24, 24, BigDecimal.valueOf(4800), false, BigDecimal.valueOf(5040)));
+                listOfcoy2Premium06.add(new PremiumEntity(25, 25, BigDecimal.valueOf(7200), false, BigDecimal.valueOf(7560)));
+                listOfcoy2Premium06.add(new PremiumEntity(26, 26, BigDecimal.valueOf(9600), false, BigDecimal.valueOf(10080)));
+                listOfcoy2Premium06.add(new PremiumEntity(27, 27, BigDecimal.valueOf(12000), false, BigDecimal.valueOf(12600)));
+                listOfcoy2Premium06.add(new PremiumEntity(28, 28, BigDecimal.valueOf(14400), false, BigDecimal.valueOf(15120)));
+                listOfcoy2Premium06.add(new PremiumEntity(29, 29, BigDecimal.valueOf(16800), false, BigDecimal.valueOf(17640)));
+                listOfcoy2Premium06.add(new PremiumEntity(30, 30, BigDecimal.valueOf(19200), false, BigDecimal.valueOf(20160)));
+                listOfcoy2Premium06.add(new PremiumEntity(31, 31, BigDecimal.valueOf(21600), false, BigDecimal.valueOf(22680)));
+                listOfcoy2Premium06.add(new PremiumEntity(32, 32, BigDecimal.valueOf(24000), false, BigDecimal.valueOf(25200)));
+                listOfcoy2Premium06.add(new PremiumEntity(33, 33, BigDecimal.valueOf(26400), false, BigDecimal.valueOf(27720)));
+                listOfcoy2Premium06.add(new PremiumEntity(34, 34, BigDecimal.valueOf(28800), false, BigDecimal.valueOf(30240)));
+                listOfcoy2Premium06.add(new PremiumEntity(35, 35, BigDecimal.valueOf(31200), false, BigDecimal.valueOf(32760)));
+                listOfcoy2Premium06.add(new PremiumEntity(36, 36, BigDecimal.valueOf(33600), false, BigDecimal.valueOf(35280)));
+                listOfcoy2Premium06.add(new PremiumEntity(37, 37, BigDecimal.valueOf(36000), false, BigDecimal.valueOf(37800)));
+                listOfcoy2Premium06.add(new PremiumEntity(38, 38, BigDecimal.valueOf(38400), false, BigDecimal.valueOf(40320)));
+                listOfcoy2Premium06.add(new PremiumEntity(39, 39, BigDecimal.valueOf(40800), false, BigDecimal.valueOf(42840)));
+                listOfcoy2Premium06.add(new PremiumEntity(40, 40, BigDecimal.valueOf(43200), false, BigDecimal.valueOf(45360)));
+
+                coy2WholeLifeProduct03 = productSessionBean.createProductListing(coy2WholeLifeProduct03, tencentCompany.getCompanyId(), listOfcoy2Riders06, listOfcoy2Premium06, listOfcoy2Features06);
+
+                //-------------------------
+                ProductEntity coy2WholeLifeProduct04 = new WholeLifeProductEntity(WholeLifeProductEnum.ACCIDENT, "Tencent Whole Life Insurance Product 04", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
+                        + "whilst providing you with insurance protection.\n"
+                        + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD);
+
+                List<RiderEntity> listOfcoy2Riders07 = new ArrayList<>();
+                List<PremiumEntity> listOfcoy2Premium07 = new ArrayList<>();
+                List<FeatureEntity> listOfcoy2Features07 = new ArrayList<>();
+
+//              BigDecimal riderPremiumValue, String riderDescription
+                RiderEntity coy2rider07 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Tencent Whole Life Insurance Product 04");
+                listOfcoy2Riders07.add(coy2rider07);
+
+                //Description
+                FeatureEntity coy2feature07 = new FeatureEntity("This additional feature is for Tencent Whole Life Insurance Product 04");
+                listOfcoy2Features07.add(coy2feature07);
+
+                //Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum
+                listOfcoy2Premium07.add(new PremiumEntity(23, 23, BigDecimal.valueOf(2400), false, BigDecimal.valueOf(2520)));
+                listOfcoy2Premium07.add(new PremiumEntity(24, 24, BigDecimal.valueOf(4800), false, BigDecimal.valueOf(5040)));
+                listOfcoy2Premium07.add(new PremiumEntity(25, 25, BigDecimal.valueOf(7200), false, BigDecimal.valueOf(7560)));
+                listOfcoy2Premium07.add(new PremiumEntity(26, 26, BigDecimal.valueOf(9600), false, BigDecimal.valueOf(10080)));
+                listOfcoy2Premium07.add(new PremiumEntity(27, 27, BigDecimal.valueOf(12000), false, BigDecimal.valueOf(12600)));
+                listOfcoy2Premium07.add(new PremiumEntity(28, 28, BigDecimal.valueOf(14400), false, BigDecimal.valueOf(15120)));
+                listOfcoy2Premium07.add(new PremiumEntity(29, 29, BigDecimal.valueOf(16800), false, BigDecimal.valueOf(17640)));
+                listOfcoy2Premium07.add(new PremiumEntity(30, 30, BigDecimal.valueOf(19200), false, BigDecimal.valueOf(20160)));
+                listOfcoy2Premium07.add(new PremiumEntity(31, 31, BigDecimal.valueOf(21600), false, BigDecimal.valueOf(22680)));
+                listOfcoy2Premium07.add(new PremiumEntity(32, 32, BigDecimal.valueOf(24000), false, BigDecimal.valueOf(25200)));
+                listOfcoy2Premium07.add(new PremiumEntity(33, 33, BigDecimal.valueOf(26400), false, BigDecimal.valueOf(27720)));
+                listOfcoy2Premium07.add(new PremiumEntity(34, 34, BigDecimal.valueOf(28800), false, BigDecimal.valueOf(30240)));
+                listOfcoy2Premium07.add(new PremiumEntity(35, 35, BigDecimal.valueOf(31200), false, BigDecimal.valueOf(32760)));
+                listOfcoy2Premium07.add(new PremiumEntity(36, 36, BigDecimal.valueOf(33600), false, BigDecimal.valueOf(35280)));
+                listOfcoy2Premium07.add(new PremiumEntity(37, 37, BigDecimal.valueOf(36000), false, BigDecimal.valueOf(37800)));
+                listOfcoy2Premium07.add(new PremiumEntity(38, 38, BigDecimal.valueOf(38400), false, BigDecimal.valueOf(40320)));
+                listOfcoy2Premium07.add(new PremiumEntity(39, 39, BigDecimal.valueOf(40800), false, BigDecimal.valueOf(42840)));
+                listOfcoy2Premium07.add(new PremiumEntity(40, 40, BigDecimal.valueOf(43200), false, BigDecimal.valueOf(45360)));
+
+                coy2WholeLifeProduct04 = productSessionBean.createProductListing(coy2WholeLifeProduct04, tencentCompany.getCompanyId(), listOfcoy2Riders07, listOfcoy2Premium07, listOfcoy2Features07);
+
+                // Term Life
+                ProductEntity coy2TermLifeProduct01 = new TermLifeProductEntity(TermLifeProductEnum.ACCIDENT, "Tencent Term Life Insurance Product 01", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
+                        + "whilst providing you with insurance protection.\n"
+                        + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD);
+
+                List<RiderEntity> listOfcoy2Riders08 = new ArrayList<>();
+                List<PremiumEntity> listOfcoy2Premium08 = new ArrayList<>();
+                List<FeatureEntity> listOfcoy2Features08 = new ArrayList<>();
+
+//              BigDecimal riderPremiumValue, String riderDescription
+                RiderEntity coy2rider08 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Tencent Whole Life Insurance Product 01");
+                listOfcoy2Riders08.add(coy2rider08);
+
+                //Description
+                FeatureEntity coy2feature08 = new FeatureEntity("This additional feature is for Tencent Whole Life Insurance Product 01");
+                listOfcoy2Features08.add(coy2feature08);
+
+                //Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum
+                listOfcoy2Premium08.add(new PremiumEntity(23, 23, BigDecimal.valueOf(2400), false, BigDecimal.ZERO));
+                listOfcoy2Premium08.add(new PremiumEntity(24, 24, BigDecimal.valueOf(4800), false, BigDecimal.ZERO));
+                listOfcoy2Premium08.add(new PremiumEntity(25, 25, BigDecimal.valueOf(7200), false, BigDecimal.ZERO));
+                listOfcoy2Premium08.add(new PremiumEntity(26, 26, BigDecimal.valueOf(9600), false, BigDecimal.ZERO));
+                listOfcoy2Premium08.add(new PremiumEntity(27, 27, BigDecimal.valueOf(12000), false, BigDecimal.ZERO));
+                listOfcoy2Premium08.add(new PremiumEntity(28, 28, BigDecimal.valueOf(14400), false, BigDecimal.ZERO));
+                listOfcoy2Premium08.add(new PremiumEntity(29, 29, BigDecimal.valueOf(16800), false, BigDecimal.ZERO));
+                listOfcoy2Premium08.add(new PremiumEntity(30, 30, BigDecimal.valueOf(19200), false, BigDecimal.ZERO));
+                listOfcoy2Premium08.add(new PremiumEntity(31, 31, BigDecimal.valueOf(21600), false, BigDecimal.ZERO));
+                listOfcoy2Premium08.add(new PremiumEntity(32, 32, BigDecimal.valueOf(24000), false, BigDecimal.ZERO));
+                listOfcoy2Premium08.add(new PremiumEntity(33, 33, BigDecimal.valueOf(26400), false, BigDecimal.ZERO));
+                listOfcoy2Premium08.add(new PremiumEntity(34, 34, BigDecimal.valueOf(28800), false, BigDecimal.ZERO));
+                listOfcoy2Premium08.add(new PremiumEntity(35, 35, BigDecimal.valueOf(31200), false, BigDecimal.ZERO));
+                listOfcoy2Premium08.add(new PremiumEntity(36, 36, BigDecimal.valueOf(33600), false, BigDecimal.ZERO));
+                listOfcoy2Premium08.add(new PremiumEntity(37, 37, BigDecimal.valueOf(36000), false, BigDecimal.ZERO));
+                listOfcoy2Premium08.add(new PremiumEntity(38, 38, BigDecimal.valueOf(38400), false, BigDecimal.ZERO));
+                listOfcoy2Premium08.add(new PremiumEntity(39, 39, BigDecimal.valueOf(40800), false, BigDecimal.ZERO));
+                listOfcoy2Premium08.add(new PremiumEntity(40, 40, BigDecimal.valueOf(43200), false, BigDecimal.ZERO));
+
+                coy2TermLifeProduct01 = productSessionBean.createProductListing(coy2TermLifeProduct01, tencentCompany.getCompanyId(), listOfcoy2Riders08, listOfcoy2Premium08, listOfcoy2Features08);
+
+                // ----------------------
+                ProductEntity coy2TermLifeProduct02 = new TermLifeProductEntity(TermLifeProductEnum.ACCIDENT, "Tencent Term Life Insurance Product 01", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
+                        + "whilst providing you with insurance protection.\n"
+                        + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD);
+
+                List<RiderEntity> listOfcoy2Riders09 = new ArrayList<>();
+                List<PremiumEntity> listOfcoy2Premium09 = new ArrayList<>();
+                List<FeatureEntity> listOfcoy2Features09 = new ArrayList<>();
+
+//              BigDecimal riderPremiumValue, String riderDescription
+                RiderEntity coy2rider09 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Tencent Whole Life Insurance Product 01");
+                listOfcoy2Riders09.add(coy2rider09);
+
+                //Description
+                FeatureEntity coy2feature09 = new FeatureEntity("This additional feature is for Tencent Whole Life Insurance Product 01");
+                listOfcoy2Features09.add(coy2feature09);
+
+                //Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum
+                listOfcoy2Premium09.add(new PremiumEntity(23, 23, BigDecimal.valueOf(2400), false, BigDecimal.ZERO));
+                listOfcoy2Premium09.add(new PremiumEntity(24, 24, BigDecimal.valueOf(4800), false, BigDecimal.ZERO));
+                listOfcoy2Premium09.add(new PremiumEntity(25, 25, BigDecimal.valueOf(7200), false, BigDecimal.ZERO));
+                listOfcoy2Premium09.add(new PremiumEntity(26, 26, BigDecimal.valueOf(9600), false, BigDecimal.ZERO));
+                listOfcoy2Premium09.add(new PremiumEntity(27, 27, BigDecimal.valueOf(12000), false, BigDecimal.ZERO));
+                listOfcoy2Premium09.add(new PremiumEntity(28, 28, BigDecimal.valueOf(14400), false, BigDecimal.ZERO));
+                listOfcoy2Premium09.add(new PremiumEntity(29, 29, BigDecimal.valueOf(16800), false, BigDecimal.ZERO));
+                listOfcoy2Premium09.add(new PremiumEntity(30, 30, BigDecimal.valueOf(19200), false, BigDecimal.ZERO));
+                listOfcoy2Premium09.add(new PremiumEntity(31, 31, BigDecimal.valueOf(21600), false, BigDecimal.ZERO));
+                listOfcoy2Premium09.add(new PremiumEntity(32, 32, BigDecimal.valueOf(24000), false, BigDecimal.ZERO));
+                listOfcoy2Premium09.add(new PremiumEntity(33, 33, BigDecimal.valueOf(26400), false, BigDecimal.ZERO));
+                listOfcoy2Premium09.add(new PremiumEntity(34, 34, BigDecimal.valueOf(28800), false, BigDecimal.ZERO));
+                listOfcoy2Premium09.add(new PremiumEntity(35, 35, BigDecimal.valueOf(31200), false, BigDecimal.ZERO));
+                listOfcoy2Premium09.add(new PremiumEntity(36, 36, BigDecimal.valueOf(33600), false, BigDecimal.ZERO));
+                listOfcoy2Premium09.add(new PremiumEntity(37, 37, BigDecimal.valueOf(36000), false, BigDecimal.ZERO));
+                listOfcoy2Premium09.add(new PremiumEntity(38, 38, BigDecimal.valueOf(38400), false, BigDecimal.ZERO));
+                listOfcoy2Premium09.add(new PremiumEntity(39, 39, BigDecimal.valueOf(40800), false, BigDecimal.ZERO));
+                listOfcoy2Premium09.add(new PremiumEntity(40, 40, BigDecimal.valueOf(43200), false, BigDecimal.ZERO));
+
+                coy2TermLifeProduct02 = productSessionBean.createProductListing(coy2TermLifeProduct02, tencentCompany.getCompanyId(), listOfcoy2Riders09, listOfcoy2Premium09, listOfcoy2Features09);
+
+                //-----------------------
+                ProductEntity coy2TermLifeProduct03 = new TermLifeProductEntity(TermLifeProductEnum.ACCIDENT, "Tencent Term Life Insurance Product 01", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
+                        + "whilst providing you with insurance protection.\n"
+                        + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD);
+
+                List<RiderEntity> listOfcoy2Riders10 = new ArrayList<>();
+                List<PremiumEntity> listOfcoy2Premium10 = new ArrayList<>();
+                List<FeatureEntity> listOfcoy2Features10 = new ArrayList<>();
+
+//              BigDecimal riderPremiumValue, String riderDescription
+                RiderEntity coy2rider10 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Tencent Whole Life Insurance Product 01");
+                listOfcoy2Riders10.add(coy2rider10);
+
+                //Description
+                FeatureEntity coy2feature10 = new FeatureEntity("This additional feature is for Tencent Whole Life Insurance Product 01");
+                listOfcoy2Features10.add(coy2feature10);
+
+                //Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum
+                listOfcoy2Premium10.add(new PremiumEntity(23, 23, BigDecimal.valueOf(2400), false, BigDecimal.ZERO));
+                listOfcoy2Premium10.add(new PremiumEntity(24, 24, BigDecimal.valueOf(4800), false, BigDecimal.ZERO));
+                listOfcoy2Premium10.add(new PremiumEntity(25, 25, BigDecimal.valueOf(7200), false, BigDecimal.ZERO));
+                listOfcoy2Premium10.add(new PremiumEntity(26, 26, BigDecimal.valueOf(9600), false, BigDecimal.ZERO));
+                listOfcoy2Premium10.add(new PremiumEntity(27, 27, BigDecimal.valueOf(12000), false, BigDecimal.ZERO));
+                listOfcoy2Premium10.add(new PremiumEntity(28, 28, BigDecimal.valueOf(14400), false, BigDecimal.ZERO));
+                listOfcoy2Premium10.add(new PremiumEntity(29, 29, BigDecimal.valueOf(16800), false, BigDecimal.ZERO));
+                listOfcoy2Premium10.add(new PremiumEntity(30, 30, BigDecimal.valueOf(19200), false, BigDecimal.ZERO));
+                listOfcoy2Premium10.add(new PremiumEntity(31, 31, BigDecimal.valueOf(21600), false, BigDecimal.ZERO));
+                listOfcoy2Premium10.add(new PremiumEntity(32, 32, BigDecimal.valueOf(24000), false, BigDecimal.ZERO));
+                listOfcoy2Premium10.add(new PremiumEntity(33, 33, BigDecimal.valueOf(26400), false, BigDecimal.ZERO));
+                listOfcoy2Premium10.add(new PremiumEntity(34, 34, BigDecimal.valueOf(28800), false, BigDecimal.ZERO));
+                listOfcoy2Premium10.add(new PremiumEntity(35, 35, BigDecimal.valueOf(31200), false, BigDecimal.ZERO));
+                listOfcoy2Premium10.add(new PremiumEntity(36, 36, BigDecimal.valueOf(33600), false, BigDecimal.ZERO));
+                listOfcoy2Premium10.add(new PremiumEntity(37, 37, BigDecimal.valueOf(36000), false, BigDecimal.ZERO));
+                listOfcoy2Premium10.add(new PremiumEntity(38, 38, BigDecimal.valueOf(38400), false, BigDecimal.ZERO));
+                listOfcoy2Premium10.add(new PremiumEntity(39, 39, BigDecimal.valueOf(40800), false, BigDecimal.ZERO));
+                listOfcoy2Premium10.add(new PremiumEntity(40, 40, BigDecimal.valueOf(43200), false, BigDecimal.ZERO));
+
+                coy2TermLifeProduct03 = productSessionBean.createProductListing(coy2TermLifeProduct03, tencentCompany.getCompanyId(), listOfcoy2Riders10, listOfcoy2Premium10, listOfcoy2Features10);
 
             } catch (CompanyAlreadyExistException | UnknownPersistenceException | CompanyCreationException | PointOfContactAlreadyExistsException
                     | InvalidPointOfContactCreationException | CustomerAlreadyExistException | CustomerCreationException | ProductAlreadyExistsException | InvalidProductCreationException ex) {
