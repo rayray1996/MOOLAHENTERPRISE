@@ -163,11 +163,11 @@ public class InvoiceSessionBean implements InvoiceSessionBeanLocal {
      * requesting them to log in and complete payment
      */
     //    @Schedule(hour = "7", minute = "0", second = "0", dayOfMonth = "1", month = "*", year = "*", persistent = false)
-    @Schedule(hour = "*", minute = "*/30", second = "0", dayOfMonth = "*", month = "*", year = "*", persistent = false)
+    @Schedule(hour = "*", minute = "*/1", second = "0", dayOfMonth = "*", month = "*", year = "*", persistent = false)
     @Override
     public void automatedMonthlyInvoice() {
         try {
-
+            System.out.println("*****************************************Invoice triggered!");
             List<CompanyEntity> listOfCompanies = companySessionBean.retrieveAllActiveCompanies();
             for (CompanyEntity company : listOfCompanies) {
                 List<ProductEntity> listOfProducts = productSessionBean.retrieveListOfProductByCompany(company.getCompanyEmail());
@@ -193,8 +193,9 @@ public class InvoiceSessionBean implements InvoiceSessionBeanLocal {
                     monthlyPayment.setTotalPayable(newMonthlySubtotal);
 
                 }
-
+                System.out.println("Check prior to email sending");
                 emailSessionBean.emailMonthlyPaymentInvoice(monthlyPayment, company.getCompanyEmail());
+                System.out.println("Email sent for: " + company.getCompanyName());
             }
         } catch (CompanyDoesNotExistException | MonthlyPaymentAlreadyExistsException | UnknownPersistenceException | MonthlyPaymentException
                 | ProductNotFoundException | ProductLineItemAlreadyExistException | ProductLineItemException ex) {

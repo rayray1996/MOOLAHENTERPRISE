@@ -11,7 +11,9 @@ import ejb.entity.MonthlyPaymentEntity;
 import ejb.entity.ProductLineItemEntity;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.FormatStyle;
@@ -155,24 +157,43 @@ public class EmailManager {
     public Boolean emailMonthlyPaymentInvoice(MonthlyPaymentEntity monthlyPaymentEntity, String fromEmailAddress, String toEmailAddress) {
         String emailBody = "";
 
-        SimpleDateFormat format = new SimpleDateFormat("MMMMMM");
-        String currentMonth = format.format(monthlyPaymentEntity.getDateGenerated());
+        SimpleDateFormat format = new SimpleDateFormat("MMM-YYYY");
+        String currentMonth = format.format(monthlyPaymentEntity.getDateGenerated().getTime());
 
-        emailBody += "Dear " + monthlyPaymentEntity.getCompany().getCompanyName() + "\n\n";
-        emailBody += "Here is the monthly invoice for the Month of " + currentMonth + ". \n\n\n\n";
-        emailBody += "S/N     Product Name      Monthly Clicks     Sub-Total (Credits)\n\n";
+        emailBody += "Dear " + monthlyPaymentEntity.getCompany().getCompanyName() + ",<br/><br/>";
+        emailBody += "Here is the monthly invoice for the Month of " + currentMonth + ". <br/><br/><br/><br/>";
+
+        emailBody
+                = emailBody + "<html><body><table width='100%' border='1' align='center'>"
+                + "<tr align='center'>"
+                + "<td><b>S/N <b></td>"
+                + "<td><b>Product Name<b></td>"
+                + "<td><b>Monthly Clicks<b></td>"
+                + "<td><b>Sub-Total (Credits)<b></td>"
+                + "</tr>";
 
         int count = 0;
+
         for (ProductLineItemEntity prodLineItem : monthlyPaymentEntity.getListOfProductLineItems()) {
             count++;
-            emailBody += count
-                    + "     " + prodLineItem.getProduct().getProductName()
-                    + "     " + prodLineItem.getMonthlyClicks()
-                    + "     " + prodLineItem.getMonthlySubtotalCredit() + "\n";
+            emailBody = emailBody + "<tr align='center'>" + "<td>" + count + "</td>"
+                    + "<td>" + prodLineItem.getProduct().getProductName() + "</td>"
+                    + "<td>" + prodLineItem.getMonthlyClicks() + "</td>"
+                    + "<td>" + prodLineItem.getMonthlySubtotalCredit() + "</td>" + "</tr>";
+
         }
 
-        emailBody += "\nTotal Line Item: " + monthlyPaymentEntity.getListOfProductLineItems().size() + ", Total Amount: " + NumberFormat.getCurrencyInstance().format(monthlyPaymentEntity.getTotalPayable()) + "\n\n\n";
-        emailBody += "Please do make payment at your nearest convenience.\n\n\nYours Sincerely, \nMoolah Enterprise";
+        emailBody += "</table></body></html>";
+//        int count = 0;
+//        for (ProductLineItemEntity prodLineItem : monthlyPaymentEntity.getListOfProductLineItems()) {
+//            count++;
+//            emailBody += count
+//                    + "             " + prodLineItem.getProduct().getProductName()
+//                    + "             " + prodLineItem.getMonthlyClicks()
+//                    + "             " + prodLineItem.getMonthlySubtotalCredit() + "\n";
+//        }
+        emailBody += "<br/>Total Line Item: " + monthlyPaymentEntity.getListOfProductLineItems().size() + "<br/>Total Amount: " + NumberFormat.getCurrencyInstance().format(monthlyPaymentEntity.getTotalPayable()) + "<br/><br/><br/>";
+        emailBody += "Please do make payment at your nearest convenience.<br/><br/><br/>Yours Sincerely, <br/>Moolah Enterprise";
 
         try {
             Properties props = new Properties();
@@ -192,7 +213,7 @@ public class EmailManager {
                 msg.setFrom(InternetAddress.parse(fromEmailAddress, false)[0]);
                 msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmailAddress, false));
                 msg.setSubject("Monthly Payment Invoice from Moolah Enterprise");
-                msg.setText(emailBody);
+                msg.setContent(emailBody, "text/html");
                 msg.setHeader("X-Mailer", mailer);
 
                 Date timeStamp = new Date();
@@ -268,7 +289,7 @@ public class EmailManager {
 
         String dateRequested = format.format(requestedDate);
 
-        emailBody += "Dear " + company.getCompanyName()+ "\n\n";
+        emailBody += "Dear " + company.getCompanyName() + "\n\n";
         emailBody += "You have requested to reset your password on " + dateRequested + "\n\n";
         emailBody += "Please click the following link: " + ".../?param=" + pathParam + "\n\n";
 
