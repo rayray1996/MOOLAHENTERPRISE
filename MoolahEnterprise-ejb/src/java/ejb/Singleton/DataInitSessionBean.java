@@ -105,7 +105,7 @@ public class DataInitSessionBean {
         if (em.find(CompanyEntity.class, 1L) == null) {
             try {
                 // Create Company
-                CompanyEntity alibabaCompany = new CompanyEntity("Alibaba", "raytan96@gmail.com", "BZ8899202", "96968959", "password", BigInteger.valueOf(800L));
+                CompanyEntity alibabaCompany = new CompanyEntity("Alibaba", "MoolahTesting1233@gmail.com", "BZ8899202", "96968959", "password", BigInteger.valueOf(800L));
                 alibabaCompany = companySessionBean.createAccountForCompany(alibabaCompany);
                 CompanyEntity tencentCompany = new CompanyEntity("Tencent", "raynnic2020@gmail.com", "BA1828371", "12345678", "password", BigInteger.valueOf(500L));
                 tencentCompany = companySessionBean.createAccountForCompany(tencentCompany);
