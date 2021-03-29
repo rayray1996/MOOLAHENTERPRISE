@@ -8,28 +8,20 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content">
-        <h3>Creating a company</h3>
-
+        <f:facet name="header">
+            <h3>Creating a company</h3>
+        </f:facet>
+        <br/>
+        <br/>
         <h:form>
 
-            <p:panelGrid columns="4"
-                         columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
-                         layout="grid"
-                         styleClass="ui-panelgrid-blank ui-fluid"
-                         style="border:0px none; background-color:transparent;">
+            <p:messages globalOnly="true"/>
 
-                <p:row>
-                    <p:column>
-                        <h:outputLabel for="companyName" value="Company Name: "/>
-                    </p:column>    
-                    <p:column>
-                        <p:inputText id="companyName" required="true"/>
-                    </p:column>
-                </p:row>
+            <figure class="aia logo">
+                <p:graphicImage library="images" name="AIA Logo.jpg" height="120" width="90" alt="aia" />
 
+            </figure>
 
-
-            </p:panelGrid>
         </h:form>
     </ui:define>
 
