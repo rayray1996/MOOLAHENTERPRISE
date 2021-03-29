@@ -68,6 +68,9 @@ public class ProductEntity implements Serializable {
     @NotNull
     private Integer premiumTerm;
     @NotNull
+    @Min(0)
+    private BigDecimal averageInterestRate;
+    @NotNull
     @Enumerated(EnumType.STRING)
     private PolicyCurrencyEnum policyCurrency;
     @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
@@ -82,6 +85,8 @@ public class ProductEntity implements Serializable {
     private CompanyEntity company;
     @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
     private List<PremiumEntity> listOfPremium;
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
+    private List<PremiumEntity> listOfSmokerPremium;
 
     public ProductEntity() {
         listOfAdditionalFeatures = new ArrayList<FeatureEntity>();
@@ -90,10 +95,11 @@ public class ProductEntity implements Serializable {
         productCategoryPricing = new CategoryPricingEntity();
         company = new CompanyEntity();
         listOfPremium = new ArrayList<PremiumEntity>();
+        listOfSmokerPremium = new ArrayList<>();
         productImage = null;
     }
 
-    public ProductEntity(String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm, PolicyCurrencyEnum currency, CategoryPricingEntity pricing) {
+    public ProductEntity(String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm, PolicyCurrencyEnum currency, CategoryPricingEntity pricing, BigDecimal averageInterestRate) {
         this();
         this.productName = productName;
         this.coverageTerm = coverageTerm;
@@ -104,8 +110,25 @@ public class ProductEntity implements Serializable {
         this.productDateCreated = new GregorianCalendar();
         this.policyCurrency = currency;
         this.productCategoryPricing = pricing;
+        this.averageInterestRate = averageInterestRate;
     }
 
+    public List<PremiumEntity> getListOfSmokerPremium() {
+        return listOfSmokerPremium;
+    }
+
+    public void setListOfSmokerPremium(List<PremiumEntity> listOfSmokerPremium) {
+        this.listOfSmokerPremium = listOfSmokerPremium;
+    }
+
+    public BigDecimal getAverageInterestRate() {
+        return averageInterestRate;
+    }
+
+    public void setAverageInterestRate(BigDecimal averageInterestRate) {
+        this.averageInterestRate = averageInterestRate;
+    }
+    
     public String getProductName() {
         return productName;
     }
@@ -256,7 +279,8 @@ public class ProductEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "ejb.entity.ProductEntity[ id=" + productId + " ]";
+        return "ProductEntity{" + "productId=" + productId + ", productImage=" + productImage + ", productDateCreated=" + productDateCreated + ", productName=" + productName + ", coverageTerm=" + coverageTerm + ", assuredSum=" + assuredSum + ", description=" + description + ", isDeleted=" + isDeleted + ", premiumTerm=" + premiumTerm + ", policyCurrency=" + policyCurrency + ", listOfAdditionalFeatures=" + listOfAdditionalFeatures + ", listOfRiders=" + listOfRiders + ", clickThroughInfo=" + clickThroughInfo + ", productCategoryPricing=" + productCategoryPricing + ", company=" + company + ", listOfPremium=" + listOfPremium + ", listOfSmokerPremium=" + listOfSmokerPremium + '}';
     }
+
 
 }

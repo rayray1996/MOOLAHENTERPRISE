@@ -6,6 +6,7 @@
 package ejb.entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,6 +25,11 @@ public class FeatureEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long featureId;
+    
+    @Size(min = 1)
+    @NotNull
+    private String featureName;
+    
     @Size(min=1)
     @NotNull
     private String featureDescription;
@@ -31,9 +37,20 @@ public class FeatureEntity implements Serializable {
     public FeatureEntity() {
     }
 
-    public FeatureEntity(String featureDescription) {
+    public FeatureEntity(String featureName, String featureDescription) {
+        this.featureName = featureName;
         this.featureDescription = featureDescription;
     }
+    
+    public String getFeatureName() {
+        return featureName;
+    }
+
+    public void setFeatureName(String featureName) {
+        this.featureName = featureName;
+    }
+
+    
     
     
     public String getFeatureDescription() {
@@ -51,22 +68,26 @@ public class FeatureEntity implements Serializable {
     public void setFeatureId(Long featureId) {
         this.featureId = featureId;
     }
-    
+
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (featureId != null ? featureId.hashCode() : 0);
+        int hash = 5;
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the featureId fields are not set
-        if (!(object instanceof FeatureEntity)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        FeatureEntity other = (FeatureEntity) object;
-        if ((this.featureId == null && other.featureId != null) || (this.featureId != null && !this.featureId.equals(other.featureId))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final FeatureEntity other = (FeatureEntity) obj;
+        if (!Objects.equals(this.featureId, other.featureId)) {
             return false;
         }
         return true;
@@ -74,7 +95,9 @@ public class FeatureEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "ejb.entity.FeatureEntity[ id=" + featureId + " ]";
+        return "FeatureEntity{" + "featureId=" + featureId + ", featureName=" + featureName + ", featureDescription=" + featureDescription + '}';
     }
+    
+   
     
 }

@@ -33,8 +33,8 @@ public class WholeLifeProductEntity extends ProductEntity implements Serializabl
     public WholeLifeProductEntity() {
     }
 
-    public WholeLifeProductEntity(WholeLifeProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm, PolicyCurrencyEnum currency, CategoryPricingEntity pricing) {
-        super(productName, coverageTerm, assuredSum, description, isDeleted, premiumTerm, currency, pricing);
+    public WholeLifeProductEntity(WholeLifeProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm, PolicyCurrencyEnum currency, CategoryPricingEntity pricing, BigDecimal averageInterestRate) {
+        super(productName, coverageTerm, assuredSum, description, isDeleted, premiumTerm, currency, pricing, averageInterestRate);
         this.productEnum = productEnum;
     }
 

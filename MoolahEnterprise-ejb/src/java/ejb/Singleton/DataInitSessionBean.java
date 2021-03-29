@@ -141,779 +141,885 @@ public class DataInitSessionBean {
                 em.persist(termLifePricing);
                 em.persist(wholeLifePricing);
                 em.flush();
-                
+
                 //Create ProductEntity - using specific subclasses
                 //EndowmentProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm) {
                 ProductEntity endowmentEntity = new EndowmentEntity(EndowmentProductEnum.ENDOWMENT, "Alibaba Endowment Product 01", 103, BigDecimal.valueOf(100000.00), "This is an Endowment Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.\n This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 50, PolicyCurrencyEnum.SGD, endowmentPricing);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 50, PolicyCurrencyEnum.SGD, endowmentPricing, BigDecimal.valueOf(3));
 
                 List<FeatureEntity> listOfFeature = new ArrayList<>();
                 List<RiderEntity> listOfRiders = new ArrayList<>();
                 List<PremiumEntity> listOfPremium = new ArrayList<>();
 
 //              BigDecimal riderPremiumValue, String riderDescription
-                RiderEntity rider01 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Alibaba Endowment Product 01");
+                RiderEntity rider01 = new RiderEntity("95% Coverage with 5% Co-payment", BigDecimal.valueOf(1200), "This rider is for Alibaba Endowment Product 01");
                 listOfRiders.add(rider01);
 
                 //Description
-                FeatureEntity feature01 = new FeatureEntity("This additional feature is for Alibaba Endowment Product 01");
+                FeatureEntity feature01 = new FeatureEntity("Critical Illness", "This additional feature is for Alibaba Endowment Product 01");
                 listOfFeature.add(feature01);
 
                 //Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum
-                listOfPremium.add(new PremiumEntity(23, 23, BigDecimal.valueOf(2400), false, BigDecimal.valueOf(2520)));
-                listOfPremium.add(new PremiumEntity(24, 24, BigDecimal.valueOf(4800), false, BigDecimal.valueOf(5040)));
-                listOfPremium.add(new PremiumEntity(25, 25, BigDecimal.valueOf(7200), false, BigDecimal.valueOf(7560)));
-                listOfPremium.add(new PremiumEntity(26, 26, BigDecimal.valueOf(9600), false, BigDecimal.valueOf(10080)));
-                listOfPremium.add(new PremiumEntity(27, 27, BigDecimal.valueOf(12000), false, BigDecimal.valueOf(12600)));
-                listOfPremium.add(new PremiumEntity(28, 28, BigDecimal.valueOf(14400), false, BigDecimal.valueOf(15120)));
-                listOfPremium.add(new PremiumEntity(29, 29, BigDecimal.valueOf(16800), false, BigDecimal.valueOf(17640)));
-                listOfPremium.add(new PremiumEntity(30, 30, BigDecimal.valueOf(19200), false, BigDecimal.valueOf(20160)));
-                listOfPremium.add(new PremiumEntity(31, 31, BigDecimal.valueOf(21600), false, BigDecimal.valueOf(22680)));
-                listOfPremium.add(new PremiumEntity(32, 32, BigDecimal.valueOf(24000), false, BigDecimal.valueOf(25200)));
-                listOfPremium.add(new PremiumEntity(33, 33, BigDecimal.valueOf(26400), false, BigDecimal.valueOf(27720)));
-                listOfPremium.add(new PremiumEntity(34, 34, BigDecimal.valueOf(28800), false, BigDecimal.valueOf(30240)));
-                listOfPremium.add(new PremiumEntity(35, 35, BigDecimal.valueOf(31200), false, BigDecimal.valueOf(32760)));
-                listOfPremium.add(new PremiumEntity(36, 36, BigDecimal.valueOf(33600), false, BigDecimal.valueOf(35280)));
-                listOfPremium.add(new PremiumEntity(37, 37, BigDecimal.valueOf(36000), false, BigDecimal.valueOf(37800)));
-                listOfPremium.add(new PremiumEntity(38, 38, BigDecimal.valueOf(38400), false, BigDecimal.valueOf(40320)));
-                listOfPremium.add(new PremiumEntity(39, 39, BigDecimal.valueOf(40800), false, BigDecimal.valueOf(42840)));
-                listOfPremium.add(new PremiumEntity(40, 40, BigDecimal.valueOf(43200), false, BigDecimal.valueOf(45360)));
+                listOfPremium.add(new PremiumEntity(23, 23, BigDecimal.valueOf(323)));
+                listOfPremium.add(new PremiumEntity(24, 24, BigDecimal.valueOf(323)));
+                listOfPremium.add(new PremiumEntity(25, 25, BigDecimal.valueOf(323)));
+                listOfPremium.add(new PremiumEntity(26, 26, BigDecimal.valueOf(323)));
+                listOfPremium.add(new PremiumEntity(27, 27, BigDecimal.valueOf(323)));
+                listOfPremium.add(new PremiumEntity(28, 28, BigDecimal.valueOf(323)));
+                listOfPremium.add(new PremiumEntity(29, 29, BigDecimal.valueOf(323)));
+                listOfPremium.add(new PremiumEntity(30, 30, BigDecimal.valueOf(323)));
+                listOfPremium.add(new PremiumEntity(31, 31, BigDecimal.valueOf(323)));
+                listOfPremium.add(new PremiumEntity(32, 32, BigDecimal.valueOf(323)));
+                listOfPremium.add(new PremiumEntity(33, 33, BigDecimal.valueOf(323)));
+                listOfPremium.add(new PremiumEntity(34, 34, BigDecimal.valueOf(323)));
+                listOfPremium.add(new PremiumEntity(35, 35, BigDecimal.valueOf(323)));
+                listOfPremium.add(new PremiumEntity(36, 36, BigDecimal.valueOf(323)));
+                listOfPremium.add(new PremiumEntity(37, 37, BigDecimal.valueOf(323)));
+                listOfPremium.add(new PremiumEntity(38, 38, BigDecimal.valueOf(323)));
+                listOfPremium.add(new PremiumEntity(39, 39, BigDecimal.valueOf(323)));
+                listOfPremium.add(new PremiumEntity(40, 40, BigDecimal.valueOf(323)));
 
                 //ProductEntity newProduct, Long companyId, List<RiderEntity> riders, List<PremiumEntity> premiums, List<FeatureEntity> features
-                endowmentEntity = productSessionBean.createProductListing(endowmentEntity, alibabaCompany.getCompanyId(), listOfRiders, listOfPremium, listOfFeature);
-                
-                
+                endowmentEntity = productSessionBean.createProductListing(endowmentEntity, alibabaCompany.getCompanyId(), listOfRiders, listOfPremium, new ArrayList<PremiumEntity>(), listOfFeature);
+
 //*****************************************************************************************************************************************************************************************************************************************************
-                
                 //Create ProductEntity - using specific subclasses
                 //EndowmentProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm) {
                 ProductEntity endowmentEntity02 = new EndowmentEntity(EndowmentProductEnum.ENDOWMENT, "Alibaba Endowment Product 02", 80, BigDecimal.valueOf(1000000.00), "This is an Endowment Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.\n This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 50, PolicyCurrencyEnum.SGD, endowmentPricing);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 50, PolicyCurrencyEnum.SGD, endowmentPricing, BigDecimal.valueOf(3));
 
                 List<RiderEntity> listOfRiders02 = new ArrayList<>();
                 List<PremiumEntity> listOfPremium02 = new ArrayList<>();
                 List<FeatureEntity> listOfFeatures02 = new ArrayList<>();
 
 //              BigDecimal riderPremiumValue, String riderDescription
-                RiderEntity rider02 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Alibaba Endowment Product 02");
+                RiderEntity rider02 = new RiderEntity("95% Coverage with 5% Co-payment", BigDecimal.valueOf(1200), "This rider is for Alibaba Endowment Product 02");
                 listOfRiders02.add(rider02);
 
                 //Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum
-                listOfPremium02.add(new PremiumEntity(23, 23, BigDecimal.valueOf(2400), false, BigDecimal.valueOf(2520)));
-                listOfPremium02.add(new PremiumEntity(24, 24, BigDecimal.valueOf(4800), false, BigDecimal.valueOf(5040)));
-                listOfPremium02.add(new PremiumEntity(25, 25, BigDecimal.valueOf(7200), false, BigDecimal.valueOf(7560)));
-                listOfPremium02.add(new PremiumEntity(26, 26, BigDecimal.valueOf(9600), false, BigDecimal.valueOf(10080)));
-                listOfPremium02.add(new PremiumEntity(27, 27, BigDecimal.valueOf(12000), false, BigDecimal.valueOf(12600)));
-                listOfPremium02.add(new PremiumEntity(28, 28, BigDecimal.valueOf(14400), false, BigDecimal.valueOf(15120)));
-                listOfPremium02.add(new PremiumEntity(29, 29, BigDecimal.valueOf(16800), false, BigDecimal.valueOf(17640)));
-                listOfPremium02.add(new PremiumEntity(30, 30, BigDecimal.valueOf(19200), false, BigDecimal.valueOf(20160)));
-                listOfPremium02.add(new PremiumEntity(31, 31, BigDecimal.valueOf(21600), false, BigDecimal.valueOf(22680)));
-                listOfPremium02.add(new PremiumEntity(32, 32, BigDecimal.valueOf(24000), false, BigDecimal.valueOf(25200)));
-                listOfPremium02.add(new PremiumEntity(33, 33, BigDecimal.valueOf(26400), false, BigDecimal.valueOf(27720)));
-                listOfPremium02.add(new PremiumEntity(34, 34, BigDecimal.valueOf(28800), false, BigDecimal.valueOf(30240)));
-                listOfPremium02.add(new PremiumEntity(35, 35, BigDecimal.valueOf(31200), false, BigDecimal.valueOf(32760)));
-                listOfPremium02.add(new PremiumEntity(36, 36, BigDecimal.valueOf(33600), false, BigDecimal.valueOf(35280)));
-                listOfPremium02.add(new PremiumEntity(37, 37, BigDecimal.valueOf(36000), false, BigDecimal.valueOf(37800)));
-                listOfPremium02.add(new PremiumEntity(38, 38, BigDecimal.valueOf(38400), false, BigDecimal.valueOf(40320)));
-                listOfPremium02.add(new PremiumEntity(39, 39, BigDecimal.valueOf(40800), false, BigDecimal.valueOf(42840)));
-                listOfPremium02.add(new PremiumEntity(40, 40, BigDecimal.valueOf(43200), false, BigDecimal.valueOf(45360)));
+                listOfPremium02.add(new PremiumEntity(23, 23, BigDecimal.valueOf(323)));
+                listOfPremium02.add(new PremiumEntity(24, 24, BigDecimal.valueOf(323)));
+                listOfPremium02.add(new PremiumEntity(25, 25, BigDecimal.valueOf(323)));
+                listOfPremium02.add(new PremiumEntity(26, 26, BigDecimal.valueOf(323)));
+                listOfPremium02.add(new PremiumEntity(27, 27, BigDecimal.valueOf(323)));
+                listOfPremium02.add(new PremiumEntity(28, 28, BigDecimal.valueOf(323)));
+                listOfPremium02.add(new PremiumEntity(29, 29, BigDecimal.valueOf(323)));
+                listOfPremium02.add(new PremiumEntity(30, 30, BigDecimal.valueOf(323)));
+                listOfPremium02.add(new PremiumEntity(31, 31, BigDecimal.valueOf(323)));
+                listOfPremium02.add(new PremiumEntity(32, 32, BigDecimal.valueOf(323)));
+                listOfPremium02.add(new PremiumEntity(33, 33, BigDecimal.valueOf(323)));
+                listOfPremium02.add(new PremiumEntity(34, 34, BigDecimal.valueOf(323)));
+                listOfPremium02.add(new PremiumEntity(35, 35, BigDecimal.valueOf(323)));
+                listOfPremium02.add(new PremiumEntity(36, 36, BigDecimal.valueOf(323)));
+                listOfPremium02.add(new PremiumEntity(37, 37, BigDecimal.valueOf(323)));
+                listOfPremium02.add(new PremiumEntity(38, 38, BigDecimal.valueOf(323)));
+                listOfPremium02.add(new PremiumEntity(39, 39, BigDecimal.valueOf(323)));
+                listOfPremium02.add(new PremiumEntity(40, 40, BigDecimal.valueOf(323)));
 
-                endowmentEntity02 = productSessionBean.createProductListing(endowmentEntity02, alibabaCompany.getCompanyId(), listOfRiders02, listOfPremium02, listOfFeatures02);
+                endowmentEntity02 = productSessionBean.createProductListing(endowmentEntity02, alibabaCompany.getCompanyId(), listOfRiders02, listOfPremium02, new ArrayList<PremiumEntity>(), listOfFeatures02);
 
                 //Create ProductEntity - using specific subclasses
                 //EndowmentProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm) {
                 ProductEntity endowmentEntity03 = new EndowmentEntity(EndowmentProductEnum.ENDOWMENT, "Alibaba Endowment Product 03", 80, BigDecimal.valueOf(1000000.00), "This is an Endowment Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.\n This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 50, PolicyCurrencyEnum.SGD, endowmentPricing);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 50, PolicyCurrencyEnum.SGD, endowmentPricing, BigDecimal.valueOf(3));
 
                 List<RiderEntity> listOfRiders03 = new ArrayList<>();
                 List<PremiumEntity> listOfPremium03 = new ArrayList<>();
                 List<FeatureEntity> listOfFeatures03 = new ArrayList<>();
 
                 //Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum
-                listOfPremium03.add(new PremiumEntity(23, 23, BigDecimal.valueOf(2400), false, BigDecimal.valueOf(2520)));
-                listOfPremium03.add(new PremiumEntity(24, 24, BigDecimal.valueOf(4800), false, BigDecimal.valueOf(5040)));
-                listOfPremium03.add(new PremiumEntity(25, 25, BigDecimal.valueOf(7200), false, BigDecimal.valueOf(7560)));
-                listOfPremium03.add(new PremiumEntity(26, 26, BigDecimal.valueOf(9600), false, BigDecimal.valueOf(10080)));
-                listOfPremium03.add(new PremiumEntity(27, 27, BigDecimal.valueOf(12000), false, BigDecimal.valueOf(12600)));
-                listOfPremium03.add(new PremiumEntity(28, 28, BigDecimal.valueOf(14400), false, BigDecimal.valueOf(15120)));
-                listOfPremium03.add(new PremiumEntity(29, 29, BigDecimal.valueOf(16800), false, BigDecimal.valueOf(17640)));
-                listOfPremium03.add(new PremiumEntity(30, 30, BigDecimal.valueOf(19200), false, BigDecimal.valueOf(20160)));
-                listOfPremium03.add(new PremiumEntity(31, 31, BigDecimal.valueOf(21600), false, BigDecimal.valueOf(22680)));
-                listOfPremium03.add(new PremiumEntity(32, 32, BigDecimal.valueOf(24000), false, BigDecimal.valueOf(25200)));
-                listOfPremium03.add(new PremiumEntity(33, 33, BigDecimal.valueOf(26400), false, BigDecimal.valueOf(27720)));
-                listOfPremium03.add(new PremiumEntity(34, 34, BigDecimal.valueOf(28800), false, BigDecimal.valueOf(30240)));
-                listOfPremium03.add(new PremiumEntity(35, 35, BigDecimal.valueOf(31200), false, BigDecimal.valueOf(32760)));
-                listOfPremium03.add(new PremiumEntity(36, 36, BigDecimal.valueOf(33600), false, BigDecimal.valueOf(35280)));
-                listOfPremium03.add(new PremiumEntity(37, 37, BigDecimal.valueOf(36000), false, BigDecimal.valueOf(37800)));
-                listOfPremium03.add(new PremiumEntity(38, 38, BigDecimal.valueOf(38400), false, BigDecimal.valueOf(40320)));
-                listOfPremium03.add(new PremiumEntity(39, 39, BigDecimal.valueOf(40800), false, BigDecimal.valueOf(42840)));
-                listOfPremium03.add(new PremiumEntity(40, 40, BigDecimal.valueOf(43200), false, BigDecimal.valueOf(45360)));
+                listOfPremium03.add(new PremiumEntity(23, 23, BigDecimal.valueOf(323)));
+                listOfPremium03.add(new PremiumEntity(24, 24, BigDecimal.valueOf(323)));
+                listOfPremium03.add(new PremiumEntity(25, 25, BigDecimal.valueOf(323)));
+                listOfPremium03.add(new PremiumEntity(26, 26, BigDecimal.valueOf(323)));
+                listOfPremium03.add(new PremiumEntity(27, 27, BigDecimal.valueOf(323)));
+                listOfPremium03.add(new PremiumEntity(28, 28, BigDecimal.valueOf(323)));
+                listOfPremium03.add(new PremiumEntity(29, 29, BigDecimal.valueOf(323)));
+                listOfPremium03.add(new PremiumEntity(30, 30, BigDecimal.valueOf(323)));
+                listOfPremium03.add(new PremiumEntity(31, 31, BigDecimal.valueOf(323)));
+                listOfPremium03.add(new PremiumEntity(32, 32, BigDecimal.valueOf(323)));
+                listOfPremium03.add(new PremiumEntity(33, 33, BigDecimal.valueOf(323)));
+                listOfPremium03.add(new PremiumEntity(34, 34, BigDecimal.valueOf(323)));
+                listOfPremium03.add(new PremiumEntity(35, 35, BigDecimal.valueOf(323)));
+                listOfPremium03.add(new PremiumEntity(36, 36, BigDecimal.valueOf(323)));
+                listOfPremium03.add(new PremiumEntity(37, 37, BigDecimal.valueOf(323)));
+                listOfPremium03.add(new PremiumEntity(38, 38, BigDecimal.valueOf(323)));
+                listOfPremium03.add(new PremiumEntity(39, 39, BigDecimal.valueOf(323)));
+                listOfPremium03.add(new PremiumEntity(40, 40, BigDecimal.valueOf(323)));
 
-                endowmentEntity03 = productSessionBean.createProductListing(endowmentEntity03, alibabaCompany.getCompanyId(), listOfRiders03, listOfPremium03, listOfFeatures03);
-                
+                endowmentEntity03 = productSessionBean.createProductListing(endowmentEntity03, alibabaCompany.getCompanyId(), listOfRiders03, listOfPremium03, new ArrayList<PremiumEntity>(), listOfFeatures03);
+
 //*****************************************************************************************************************************************************************************************************************************************************
                 //TermLifeProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, 
                 //Boolean isDeleted, Integer premiumTerm) {
-                ProductEntity termLifeEntity01 = new TermLifeProductEntity(TermLifeProductEnum.ACCIDENT, "Alibaba Term Life Product 01", 63, BigDecimal.valueOf(0),
-                        "This is an Term Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 63, PolicyCurrencyEnum.SGD, termLifePricing);
+                ProductEntity termLifeEntity01 = new TermLifeProductEntity(TermLifeProductEnum.ACCIDENT, "Alibaba Term Life Product 01", 63, BigDecimal.valueOf(50000),
+                        "This is an Term Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 63, PolicyCurrencyEnum.SGD, termLifePricing, BigDecimal.valueOf(0));
 
                 List<RiderEntity> listOfRiders04 = new ArrayList<>();
                 List<PremiumEntity> listOfPremium04 = new ArrayList<>();
                 List<FeatureEntity> listOfFeatures04 = new ArrayList<>();
 
                 //              BigDecimal riderPremiumValue, String riderDescription
-                RiderEntity rider04 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Term Life Product 01");
+                RiderEntity rider04 = new RiderEntity("95% Coverage with 5% Co-payment", BigDecimal.valueOf(1200), "This rider is for Term Life Product 01");
                 listOfRiders04.add(rider04);
 
-                listOfPremium04.add(new PremiumEntity(23, 23, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium04.add(new PremiumEntity(24, 24, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium04.add(new PremiumEntity(25, 25, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium04.add(new PremiumEntity(26, 26, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium04.add(new PremiumEntity(27, 27, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium04.add(new PremiumEntity(28, 28, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium04.add(new PremiumEntity(29, 29, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium04.add(new PremiumEntity(30, 30, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium04.add(new PremiumEntity(31, 31, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium04.add(new PremiumEntity(32, 32, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium04.add(new PremiumEntity(33, 33, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium04.add(new PremiumEntity(34, 34, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium04.add(new PremiumEntity(35, 35, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium04.add(new PremiumEntity(36, 36, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium04.add(new PremiumEntity(37, 37, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium04.add(new PremiumEntity(38, 38, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium04.add(new PremiumEntity(39, 39, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium04.add(new PremiumEntity(40, 40, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
+                listOfPremium04.add(new PremiumEntity(23, 23, BigDecimal.valueOf(120)));
+                listOfPremium04.add(new PremiumEntity(24, 24, BigDecimal.valueOf(130)));
+                listOfPremium04.add(new PremiumEntity(25, 25, BigDecimal.valueOf(140)));
+                listOfPremium04.add(new PremiumEntity(26, 26, BigDecimal.valueOf(150)));
+                listOfPremium04.add(new PremiumEntity(27, 27, BigDecimal.valueOf(160)));
+                listOfPremium04.add(new PremiumEntity(28, 28, BigDecimal.valueOf(170)));
+                listOfPremium04.add(new PremiumEntity(29, 29, BigDecimal.valueOf(180)));
+                listOfPremium04.add(new PremiumEntity(30, 30, BigDecimal.valueOf(190)));
+                listOfPremium04.add(new PremiumEntity(31, 31, BigDecimal.valueOf(200)));
+                listOfPremium04.add(new PremiumEntity(32, 32, BigDecimal.valueOf(210)));
+                listOfPremium04.add(new PremiumEntity(33, 33, BigDecimal.valueOf(220)));
+                listOfPremium04.add(new PremiumEntity(34, 34, BigDecimal.valueOf(230)));
+                listOfPremium04.add(new PremiumEntity(35, 35, BigDecimal.valueOf(240)));
+                listOfPremium04.add(new PremiumEntity(36, 36, BigDecimal.valueOf(250)));
+                listOfPremium04.add(new PremiumEntity(37, 37, BigDecimal.valueOf(260)));
+                listOfPremium04.add(new PremiumEntity(38, 38, BigDecimal.valueOf(270)));
+                listOfPremium04.add(new PremiumEntity(39, 39, BigDecimal.valueOf(280)));
+                listOfPremium04.add(new PremiumEntity(40, 40, BigDecimal.valueOf(290)));
 
                 //Description
-                FeatureEntity feature04 = new FeatureEntity("This additional feature is for Term Life Product 01");
+                FeatureEntity feature04 = new FeatureEntity("Critical Illness", "This additional feature is for Term Life Product 01");
                 listOfFeatures04.add(feature04);
 
-                termLifeEntity01 = productSessionBean.createProductListing(termLifeEntity01, alibabaCompany.getCompanyId(), listOfRiders04, listOfPremium04, listOfFeatures04);
-                
+                termLifeEntity01 = productSessionBean.createProductListing(termLifeEntity01, alibabaCompany.getCompanyId(), listOfRiders04, listOfPremium04, new ArrayList<PremiumEntity>(), listOfFeatures04);
+
 //*****************************************************************************************************************************************************************************************************************************************************
                 //TermLifeProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, 
                 //Boolean isDeleted, Integer premiumTerm) {
-                ProductEntity termLifeEntity02 = new TermLifeProductEntity(TermLifeProductEnum.HOSPITAL, "Alibaba Term Life Product 02", 63, BigDecimal.valueOf(0),
-                        "This is an Term Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 63, PolicyCurrencyEnum.SGD, termLifePricing);
+                ProductEntity termLifeEntity02 = new TermLifeProductEntity(TermLifeProductEnum.HOSPITAL, "Alibaba Term Life Product 02", 63, BigDecimal.valueOf(50000),
+                        "This is an Term Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 63, PolicyCurrencyEnum.SGD, termLifePricing, BigDecimal.valueOf(0));
 
                 List<RiderEntity> listOfRiders05 = new ArrayList<>();
                 List<PremiumEntity> listOfPremium05 = new ArrayList<>();
                 List<FeatureEntity> listOfFeatures05 = new ArrayList<>();
 
                 //              BigDecimal riderPremiumValue, String riderDescription
-                RiderEntity rider05 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Term Life Product 02");
+                RiderEntity rider05 = new RiderEntity("95% Coverage with 5% Co-payment", BigDecimal.valueOf(1200), "This rider is for Term Life Product 02");
                 listOfRiders05.add(rider05);
 
-                listOfPremium05.add(new PremiumEntity(23, 23, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium05.add(new PremiumEntity(24, 24, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium05.add(new PremiumEntity(25, 25, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium05.add(new PremiumEntity(26, 26, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium05.add(new PremiumEntity(27, 27, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium05.add(new PremiumEntity(28, 28, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium05.add(new PremiumEntity(29, 29, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium05.add(new PremiumEntity(30, 30, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium05.add(new PremiumEntity(31, 31, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium05.add(new PremiumEntity(32, 32, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium05.add(new PremiumEntity(33, 33, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium05.add(new PremiumEntity(34, 34, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium05.add(new PremiumEntity(35, 35, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium05.add(new PremiumEntity(36, 36, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium05.add(new PremiumEntity(37, 37, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium05.add(new PremiumEntity(38, 38, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium05.add(new PremiumEntity(39, 39, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium05.add(new PremiumEntity(40, 40, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
+                listOfPremium05.add(new PremiumEntity(23, 23, BigDecimal.valueOf(300)));
+                listOfPremium05.add(new PremiumEntity(24, 24, BigDecimal.valueOf(310)));
+                listOfPremium05.add(new PremiumEntity(25, 25, BigDecimal.valueOf(320)));
+                listOfPremium05.add(new PremiumEntity(26, 26, BigDecimal.valueOf(330)));
+                listOfPremium05.add(new PremiumEntity(27, 27, BigDecimal.valueOf(340)));
+                listOfPremium05.add(new PremiumEntity(28, 28, BigDecimal.valueOf(350)));
+                listOfPremium05.add(new PremiumEntity(29, 29, BigDecimal.valueOf(360)));
+                listOfPremium05.add(new PremiumEntity(30, 30, BigDecimal.valueOf(370)));
+                listOfPremium05.add(new PremiumEntity(31, 31, BigDecimal.valueOf(380)));
+                listOfPremium05.add(new PremiumEntity(32, 32, BigDecimal.valueOf(390)));
+                listOfPremium05.add(new PremiumEntity(33, 33, BigDecimal.valueOf(400)));
+                listOfPremium05.add(new PremiumEntity(34, 34, BigDecimal.valueOf(410)));
+                listOfPremium05.add(new PremiumEntity(35, 35, BigDecimal.valueOf(420)));
+                listOfPremium05.add(new PremiumEntity(36, 36, BigDecimal.valueOf(430)));
+                listOfPremium05.add(new PremiumEntity(37, 37, BigDecimal.valueOf(440)));
+                listOfPremium05.add(new PremiumEntity(38, 38, BigDecimal.valueOf(450)));
+                listOfPremium05.add(new PremiumEntity(39, 39, BigDecimal.valueOf(460)));
+                listOfPremium05.add(new PremiumEntity(40, 40, BigDecimal.valueOf(470)));
 
-                termLifeEntity02 = productSessionBean.createProductListing(termLifeEntity02, alibabaCompany.getCompanyId(), listOfRiders05, listOfPremium05, listOfFeatures05);
-                
+                termLifeEntity02 = productSessionBean.createProductListing(termLifeEntity02, alibabaCompany.getCompanyId(), listOfRiders05, listOfPremium05, new ArrayList<PremiumEntity>(), listOfFeatures05);
+
 //*****************************************************************************************************************************************************************************************************************************************************
-           
                 //TermLifeProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, 
                 //Boolean isDeleted, Integer premiumTerm) {
-                ProductEntity termLifeEntity03 = new TermLifeProductEntity(TermLifeProductEnum.CRITICALILLNESS, "Alibaba Term Life Product 03", 63, BigDecimal.valueOf(0),
-                        "This is an Term Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 63, PolicyCurrencyEnum.SGD, termLifePricing);
+                ProductEntity termLifeEntity03 = new TermLifeProductEntity(TermLifeProductEnum.CRITICALILLNESS, "Alibaba Term Life Product 03", 63, BigDecimal.valueOf(50000),
+                        "This is an Term Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 63, PolicyCurrencyEnum.SGD, termLifePricing, BigDecimal.valueOf(0));
 
                 List<RiderEntity> listOfRiders06 = new ArrayList<>();
                 List<PremiumEntity> listOfPremium06 = new ArrayList<>();
                 List<FeatureEntity> listOfFeatures06 = new ArrayList<>();
 
-                listOfPremium06.add(new PremiumEntity(23, 23, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium06.add(new PremiumEntity(24, 24, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium06.add(new PremiumEntity(25, 25, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium06.add(new PremiumEntity(26, 26, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium06.add(new PremiumEntity(27, 27, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium06.add(new PremiumEntity(28, 28, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium06.add(new PremiumEntity(29, 29, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium06.add(new PremiumEntity(30, 30, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium06.add(new PremiumEntity(31, 31, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium06.add(new PremiumEntity(32, 32, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium06.add(new PremiumEntity(33, 33, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium06.add(new PremiumEntity(34, 34, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium06.add(new PremiumEntity(35, 35, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium06.add(new PremiumEntity(36, 36, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium06.add(new PremiumEntity(37, 37, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium06.add(new PremiumEntity(38, 38, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium06.add(new PremiumEntity(39, 39, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
-                listOfPremium06.add(new PremiumEntity(40, 40, BigDecimal.valueOf(323), false, BigDecimal.valueOf(0)));
+                listOfPremium06.add(new PremiumEntity(23, 23, BigDecimal.valueOf(996)));
+                listOfPremium06.add(new PremiumEntity(24, 24, BigDecimal.valueOf(1050)));
+                listOfPremium06.add(new PremiumEntity(25, 25, BigDecimal.valueOf(1100)));
+                listOfPremium06.add(new PremiumEntity(26, 26, BigDecimal.valueOf(1140)));
+                listOfPremium06.add(new PremiumEntity(27, 27, BigDecimal.valueOf(1190)));
+                listOfPremium06.add(new PremiumEntity(28, 28, BigDecimal.valueOf(1230)));
+                listOfPremium06.add(new PremiumEntity(29, 29, BigDecimal.valueOf(1260)));
+                listOfPremium06.add(new PremiumEntity(30, 30, BigDecimal.valueOf(1310)));
+                listOfPremium06.add(new PremiumEntity(31, 31, BigDecimal.valueOf(1360)));
+                listOfPremium06.add(new PremiumEntity(32, 32, BigDecimal.valueOf(1400)));
+                listOfPremium06.add(new PremiumEntity(33, 33, BigDecimal.valueOf(1500)));
+                listOfPremium06.add(new PremiumEntity(34, 34, BigDecimal.valueOf(1560)));
+                listOfPremium06.add(new PremiumEntity(35, 35, BigDecimal.valueOf(1630)));
+                listOfPremium06.add(new PremiumEntity(36, 36, BigDecimal.valueOf(1680)));
+                listOfPremium06.add(new PremiumEntity(37, 37, BigDecimal.valueOf(1800)));
+                listOfPremium06.add(new PremiumEntity(38, 38, BigDecimal.valueOf(1900)));
+                listOfPremium06.add(new PremiumEntity(39, 39, BigDecimal.valueOf(2000)));
+                listOfPremium06.add(new PremiumEntity(40, 40, BigDecimal.valueOf(2100)));
 
-                termLifeEntity03 = productSessionBean.createProductListing(termLifeEntity03, alibabaCompany.getCompanyId(), listOfRiders06, listOfPremium06, listOfFeatures06);
+                List<PremiumEntity> listOfSmokerPremium06 = new ArrayList<>();
+                listOfSmokerPremium06.add(new PremiumEntity(23, 23, BigDecimal.valueOf(1300)));
+                listOfSmokerPremium06.add(new PremiumEntity(24, 24, BigDecimal.valueOf(1350)));
+                listOfSmokerPremium06.add(new PremiumEntity(25, 25, BigDecimal.valueOf(1360)));
+                listOfSmokerPremium06.add(new PremiumEntity(26, 26, BigDecimal.valueOf(1400)));
+                listOfSmokerPremium06.add(new PremiumEntity(27, 27, BigDecimal.valueOf(1440)));
+                listOfSmokerPremium06.add(new PremiumEntity(28, 28, BigDecimal.valueOf(1480)));
+                listOfSmokerPremium06.add(new PremiumEntity(29, 29, BigDecimal.valueOf(1520)));
+                listOfSmokerPremium06.add(new PremiumEntity(30, 30, BigDecimal.valueOf(1600)));
+                listOfSmokerPremium06.add(new PremiumEntity(31, 31, BigDecimal.valueOf(1670)));
+                listOfSmokerPremium06.add(new PremiumEntity(32, 32, BigDecimal.valueOf(1750)));
+                listOfSmokerPremium06.add(new PremiumEntity(33, 33, BigDecimal.valueOf(1880)));
+                listOfSmokerPremium06.add(new PremiumEntity(34, 34, BigDecimal.valueOf(1930)));
+                listOfSmokerPremium06.add(new PremiumEntity(35, 35, BigDecimal.valueOf(2000)));
+                listOfSmokerPremium06.add(new PremiumEntity(36, 36, BigDecimal.valueOf(2100)));
+                listOfSmokerPremium06.add(new PremiumEntity(37, 37, BigDecimal.valueOf(2200)));
+                listOfSmokerPremium06.add(new PremiumEntity(38, 38, BigDecimal.valueOf(2300)));
+                listOfSmokerPremium06.add(new PremiumEntity(39, 39, BigDecimal.valueOf(2400)));
+                listOfSmokerPremium06.add(new PremiumEntity(40, 40, BigDecimal.valueOf(2500)));
+                termLifeEntity03 = productSessionBean.createProductListing(termLifeEntity03, alibabaCompany.getCompanyId(), listOfRiders06, listOfPremium06, listOfSmokerPremium06, listOfFeatures06);
 
-                
- //*****************************************************************************************************************************************************************************************************************************************************
-                
+                //*****************************************************************************************************************************************************************************************************************************************************
                 //TermLifeProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, 
                 //Boolean isDeleted, Integer premiumTerm) {
                 ProductEntity wholeLifeEntity01 = new WholeLifeProductEntity(WholeLifeProductEnum.ACCIDENT, "Alibaba Whole Life Product 01", 78, BigDecimal.valueOf(50000),
-                        "This is an Whole Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 20, PolicyCurrencyEnum.SGD, wholeLifePricing);
+                        "This is an Whole Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 20, PolicyCurrencyEnum.SGD, wholeLifePricing, BigDecimal.valueOf(2));
 
                 List<RiderEntity> listOfRiders07 = new ArrayList<>();
                 List<PremiumEntity> listOfPremium07 = new ArrayList<>();
                 List<FeatureEntity> listOfFeatures07 = new ArrayList<>();
 
                 // BigDecimal riderPremiumValue, String riderDescription
-                RiderEntity rider07 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Whole Life Product 01");
+                RiderEntity rider07 = new RiderEntity("95% Coverage with 5% Co-payment", BigDecimal.valueOf(1200), "This rider is for Whole Life Product 01");
                 listOfRiders07.add(rider07);
 
                 //Description
-                FeatureEntity feature07 = new FeatureEntity("This additional feature is for Whole Life Product 01");
+                FeatureEntity feature07 = new FeatureEntity("Critical Illness", "This additional feature is for Whole Life Product 01");
                 listOfFeatures07.add(feature07);
 
-                listOfPremium07.add(new PremiumEntity(23, 23, BigDecimal.valueOf(996), false, BigDecimal.valueOf(50000)));
-                listOfPremium07.add(new PremiumEntity(24, 24, BigDecimal.valueOf(1991), false, BigDecimal.valueOf(50000)));
-                listOfPremium07.add(new PremiumEntity(25, 25, BigDecimal.valueOf(2987), false, BigDecimal.valueOf(50000)));
-                listOfPremium07.add(new PremiumEntity(26, 26, BigDecimal.valueOf(3982), false, BigDecimal.valueOf(50000)));
-                listOfPremium07.add(new PremiumEntity(27, 27, BigDecimal.valueOf(4978), false, BigDecimal.valueOf(50000)));
-                listOfPremium07.add(new PremiumEntity(28, 28, BigDecimal.valueOf(5973), false, BigDecimal.valueOf(50000)));
-                listOfPremium07.add(new PremiumEntity(29, 29, BigDecimal.valueOf(6969), false, BigDecimal.valueOf(50000)));
-                listOfPremium07.add(new PremiumEntity(30, 30, BigDecimal.valueOf(7964), false, BigDecimal.valueOf(50000)));
-                listOfPremium07.add(new PremiumEntity(31, 31, BigDecimal.valueOf(8960), false, BigDecimal.valueOf(50000)));
-                listOfPremium07.add(new PremiumEntity(32, 32, BigDecimal.valueOf(9955), false, BigDecimal.valueOf(50000)));
-                listOfPremium07.add(new PremiumEntity(33, 33, BigDecimal.valueOf(14933), false, BigDecimal.valueOf(50000)));
-                listOfPremium07.add(new PremiumEntity(34, 34, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                listOfPremium07.add(new PremiumEntity(35, 35, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                listOfPremium07.add(new PremiumEntity(36, 36, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                listOfPremium07.add(new PremiumEntity(37, 37, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                listOfPremium07.add(new PremiumEntity(38, 38, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                listOfPremium07.add(new PremiumEntity(39, 39, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                listOfPremium07.add(new PremiumEntity(40, 40, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
+                listOfPremium07.add(new PremiumEntity(23, 23, BigDecimal.valueOf(120)));
+                listOfPremium07.add(new PremiumEntity(24, 24, BigDecimal.valueOf(130)));
+                listOfPremium07.add(new PremiumEntity(25, 25, BigDecimal.valueOf(140)));
+                listOfPremium07.add(new PremiumEntity(26, 26, BigDecimal.valueOf(150)));
+                listOfPremium07.add(new PremiumEntity(27, 27, BigDecimal.valueOf(160)));
+                listOfPremium07.add(new PremiumEntity(28, 28, BigDecimal.valueOf(170)));
+                listOfPremium07.add(new PremiumEntity(29, 29, BigDecimal.valueOf(180)));
+                listOfPremium07.add(new PremiumEntity(30, 30, BigDecimal.valueOf(190)));
+                listOfPremium07.add(new PremiumEntity(31, 31, BigDecimal.valueOf(200)));
+                listOfPremium07.add(new PremiumEntity(32, 32, BigDecimal.valueOf(210)));
+                listOfPremium07.add(new PremiumEntity(33, 33, BigDecimal.valueOf(220)));
+                listOfPremium07.add(new PremiumEntity(34, 34, BigDecimal.valueOf(230)));
+                listOfPremium07.add(new PremiumEntity(35, 35, BigDecimal.valueOf(240)));
+                listOfPremium07.add(new PremiumEntity(36, 36, BigDecimal.valueOf(250)));
+                listOfPremium07.add(new PremiumEntity(37, 37, BigDecimal.valueOf(260)));
+                listOfPremium07.add(new PremiumEntity(38, 38, BigDecimal.valueOf(270)));
+                listOfPremium07.add(new PremiumEntity(39, 39, BigDecimal.valueOf(280)));
+                listOfPremium07.add(new PremiumEntity(40, 40, BigDecimal.valueOf(290)));
 
-                wholeLifeEntity01 = productSessionBean.createProductListing(wholeLifeEntity01, alibabaCompany.getCompanyId(), listOfRiders07, listOfPremium07, listOfFeatures07);
+                wholeLifeEntity01 = productSessionBean.createProductListing(wholeLifeEntity01, alibabaCompany.getCompanyId(), listOfRiders07, listOfPremium07, new ArrayList<PremiumEntity>(), listOfFeatures07);
 
 //*****************************************************************************************************************************************************************************************************************************************************                
-                
                 //TermLifeProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, 
                 //Boolean isDeleted, Integer premiumTerm) {
                 ProductEntity wholeLifeEntity02 = new WholeLifeProductEntity(WholeLifeProductEnum.CRITICALILLNESS, "Alibaba Whole Life Product 02", 78, BigDecimal.valueOf(50000),
-                        "This is an Whole Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 20, PolicyCurrencyEnum.SGD, wholeLifePricing);
+                        "This is an Whole Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 20, PolicyCurrencyEnum.SGD, wholeLifePricing, BigDecimal.valueOf(2));
 
                 List<RiderEntity> listOfRiders08 = new ArrayList<>();
                 List<PremiumEntity> listOfPremium08 = new ArrayList<>();
                 List<FeatureEntity> listOfFeatures08 = new ArrayList<>();
 
                 // BigDecimal riderPremiumValue, String riderDescription
-                RiderEntity rider08 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Whole Life Product 02");
+                RiderEntity rider08 = new RiderEntity("95% Coverage with 5% Co-payment", BigDecimal.valueOf(1200), "This rider is for Whole Life Product 02");
                 listOfRiders08.add(rider08);
 
                 //Description
-                FeatureEntity feature08 = new FeatureEntity("This additional feature is for Whole Life Product 02");
+                FeatureEntity feature08 = new FeatureEntity("Critical Illness", "This additional feature is for Whole Life Product 02");
                 listOfFeatures08.add(feature08);
 
-                listOfPremium08.add(new PremiumEntity(23, 23, BigDecimal.valueOf(996), false, BigDecimal.valueOf(50000)));
-                listOfPremium08.add(new PremiumEntity(24, 24, BigDecimal.valueOf(1991), false, BigDecimal.valueOf(50000)));
-                listOfPremium08.add(new PremiumEntity(25, 25, BigDecimal.valueOf(2987), false, BigDecimal.valueOf(50000)));
-                listOfPremium08.add(new PremiumEntity(26, 26, BigDecimal.valueOf(3982), false, BigDecimal.valueOf(50000)));
-                listOfPremium08.add(new PremiumEntity(27, 27, BigDecimal.valueOf(4978), false, BigDecimal.valueOf(50000)));
-                listOfPremium08.add(new PremiumEntity(28, 28, BigDecimal.valueOf(5973), false, BigDecimal.valueOf(50000)));
-                listOfPremium08.add(new PremiumEntity(29, 29, BigDecimal.valueOf(6969), false, BigDecimal.valueOf(50000)));
-                listOfPremium08.add(new PremiumEntity(30, 30, BigDecimal.valueOf(7964), false, BigDecimal.valueOf(50000)));
-                listOfPremium08.add(new PremiumEntity(31, 31, BigDecimal.valueOf(8960), false, BigDecimal.valueOf(50000)));
-                listOfPremium08.add(new PremiumEntity(32, 32, BigDecimal.valueOf(9955), false, BigDecimal.valueOf(50000)));
-                listOfPremium08.add(new PremiumEntity(33, 33, BigDecimal.valueOf(14933), false, BigDecimal.valueOf(50000)));
-                listOfPremium08.add(new PremiumEntity(34, 34, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                listOfPremium08.add(new PremiumEntity(35, 35, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                listOfPremium08.add(new PremiumEntity(36, 36, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                listOfPremium08.add(new PremiumEntity(37, 37, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                listOfPremium08.add(new PremiumEntity(38, 38, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                listOfPremium08.add(new PremiumEntity(39, 39, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                listOfPremium08.add(new PremiumEntity(40, 40, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
+                listOfPremium08.add(new PremiumEntity(23, 23, BigDecimal.valueOf(996)));
+                listOfPremium08.add(new PremiumEntity(24, 24, BigDecimal.valueOf(1050)));
+                listOfPremium08.add(new PremiumEntity(25, 25, BigDecimal.valueOf(1100)));
+                listOfPremium08.add(new PremiumEntity(26, 26, BigDecimal.valueOf(1140)));
+                listOfPremium08.add(new PremiumEntity(27, 27, BigDecimal.valueOf(1190)));
+                listOfPremium08.add(new PremiumEntity(28, 28, BigDecimal.valueOf(1230)));
+                listOfPremium08.add(new PremiumEntity(29, 29, BigDecimal.valueOf(1260)));
+                listOfPremium08.add(new PremiumEntity(30, 30, BigDecimal.valueOf(1310)));
+                listOfPremium08.add(new PremiumEntity(31, 31, BigDecimal.valueOf(1360)));
+                listOfPremium08.add(new PremiumEntity(32, 32, BigDecimal.valueOf(1400)));
+                listOfPremium08.add(new PremiumEntity(33, 33, BigDecimal.valueOf(1500)));
+                listOfPremium08.add(new PremiumEntity(34, 34, BigDecimal.valueOf(1560)));
+                listOfPremium08.add(new PremiumEntity(35, 35, BigDecimal.valueOf(1630)));
+                listOfPremium08.add(new PremiumEntity(36, 36, BigDecimal.valueOf(1680)));
+                listOfPremium08.add(new PremiumEntity(37, 37, BigDecimal.valueOf(1800)));
+                listOfPremium08.add(new PremiumEntity(38, 38, BigDecimal.valueOf(1900)));
+                listOfPremium08.add(new PremiumEntity(39, 39, BigDecimal.valueOf(2000)));
+                listOfPremium08.add(new PremiumEntity(40, 40, BigDecimal.valueOf(2100)));
 
-                wholeLifeEntity02 = productSessionBean.createProductListing(wholeLifeEntity02, alibabaCompany.getCompanyId(), listOfRiders08, listOfPremium08, listOfFeatures08);
+                List<PremiumEntity> listOfSmokerPremium08 = new ArrayList<>();
+                listOfSmokerPremium08.add(new PremiumEntity(23, 23, BigDecimal.valueOf(1300)));
+                listOfSmokerPremium08.add(new PremiumEntity(24, 24, BigDecimal.valueOf(1350)));
+                listOfSmokerPremium08.add(new PremiumEntity(25, 25, BigDecimal.valueOf(1360)));
+                listOfSmokerPremium08.add(new PremiumEntity(26, 26, BigDecimal.valueOf(1400)));
+                listOfSmokerPremium08.add(new PremiumEntity(27, 27, BigDecimal.valueOf(1440)));
+                listOfSmokerPremium08.add(new PremiumEntity(28, 28, BigDecimal.valueOf(1480)));
+                listOfSmokerPremium08.add(new PremiumEntity(29, 29, BigDecimal.valueOf(1520)));
+                listOfSmokerPremium08.add(new PremiumEntity(30, 30, BigDecimal.valueOf(1600)));
+                listOfSmokerPremium08.add(new PremiumEntity(31, 31, BigDecimal.valueOf(1670)));
+                listOfSmokerPremium08.add(new PremiumEntity(32, 32, BigDecimal.valueOf(1750)));
+                listOfSmokerPremium08.add(new PremiumEntity(33, 33, BigDecimal.valueOf(1880)));
+                listOfSmokerPremium08.add(new PremiumEntity(34, 34, BigDecimal.valueOf(1930)));
+                listOfSmokerPremium08.add(new PremiumEntity(35, 35, BigDecimal.valueOf(2000)));
+                listOfSmokerPremium08.add(new PremiumEntity(36, 36, BigDecimal.valueOf(2100)));
+                listOfSmokerPremium08.add(new PremiumEntity(37, 37, BigDecimal.valueOf(2200)));
+                listOfSmokerPremium08.add(new PremiumEntity(38, 38, BigDecimal.valueOf(2300)));
+                listOfSmokerPremium08.add(new PremiumEntity(39, 39, BigDecimal.valueOf(2400)));
+                listOfSmokerPremium08.add(new PremiumEntity(40, 40, BigDecimal.valueOf(2500)));
+
+                wholeLifeEntity02 = productSessionBean.createProductListing(wholeLifeEntity02, alibabaCompany.getCompanyId(), listOfRiders08, listOfPremium08, listOfSmokerPremium08, listOfFeatures08);
 
 //*****************************************************************************************************************************************************************************************************************************************************            
-                
-                
                 //TermLifeProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, 
                 //Boolean isDeleted, Integer premiumTerm) {
                 ProductEntity wholeLifeEntity03 = new WholeLifeProductEntity(WholeLifeProductEnum.HOSPITAL, "Alibaba Whole Life Product 03", 78, BigDecimal.valueOf(50000),
-                        "This is an Whole Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 20, PolicyCurrencyEnum.SGD, wholeLifePricing);
+                        "This is an Whole Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 20, PolicyCurrencyEnum.SGD, wholeLifePricing, BigDecimal.valueOf(2));
 
                 List<RiderEntity> listOfRiders09 = new ArrayList<>();
                 List<PremiumEntity> listOfPremium09 = new ArrayList<>();
                 List<FeatureEntity> listOfFeatures09 = new ArrayList<>();
 
                 // BigDecimal riderPremiumValue, String riderDescription
-                RiderEntity rider09 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Whole Life Product 03");
+                RiderEntity rider09 = new RiderEntity("95% Coverage with 5% Co-payment", BigDecimal.valueOf(1200), "This rider is for Whole Life Product 03");
                 listOfRiders09.add(rider09);
-                
-                
-                listOfPremium09.add(new PremiumEntity(23, 23, BigDecimal.valueOf(996), false, BigDecimal.valueOf(50000)));
-                listOfPremium09.add(new PremiumEntity(24, 24, BigDecimal.valueOf(1991), false, BigDecimal.valueOf(50000)));
-                listOfPremium09.add(new PremiumEntity(25, 25, BigDecimal.valueOf(2987), false, BigDecimal.valueOf(50000)));
-                listOfPremium09.add(new PremiumEntity(26, 26, BigDecimal.valueOf(3982), false, BigDecimal.valueOf(50000)));
-                listOfPremium09.add(new PremiumEntity(27, 27, BigDecimal.valueOf(4978), false, BigDecimal.valueOf(50000)));
-                listOfPremium09.add(new PremiumEntity(28, 28, BigDecimal.valueOf(5973), false, BigDecimal.valueOf(50000)));
-                listOfPremium09.add(new PremiumEntity(29, 29, BigDecimal.valueOf(6969), false, BigDecimal.valueOf(50000)));
-                listOfPremium09.add(new PremiumEntity(30, 30, BigDecimal.valueOf(7964), false, BigDecimal.valueOf(50000)));
-                listOfPremium09.add(new PremiumEntity(31, 31, BigDecimal.valueOf(8960), false, BigDecimal.valueOf(50000)));
-                listOfPremium09.add(new PremiumEntity(32, 32, BigDecimal.valueOf(9955), false, BigDecimal.valueOf(50000)));
-                listOfPremium09.add(new PremiumEntity(33, 33, BigDecimal.valueOf(14933), false, BigDecimal.valueOf(50000)));
-                listOfPremium09.add(new PremiumEntity(34, 34, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                listOfPremium09.add(new PremiumEntity(35, 35, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                listOfPremium09.add(new PremiumEntity(36, 36, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                listOfPremium09.add(new PremiumEntity(37, 37, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                listOfPremium09.add(new PremiumEntity(38, 38, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                listOfPremium09.add(new PremiumEntity(39, 39, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                listOfPremium09.add(new PremiumEntity(40, 40, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                
-                wholeLifeEntity03 = productSessionBean.createProductListing(wholeLifeEntity03, alibabaCompany.getCompanyId(), listOfRiders09, listOfPremium09, listOfFeatures09);
-                
+
+                listOfPremium09.add(new PremiumEntity(23, 23, BigDecimal.valueOf(300)));
+                listOfPremium09.add(new PremiumEntity(24, 24, BigDecimal.valueOf(310)));
+                listOfPremium09.add(new PremiumEntity(25, 25, BigDecimal.valueOf(320)));
+                listOfPremium09.add(new PremiumEntity(26, 26, BigDecimal.valueOf(330)));
+                listOfPremium09.add(new PremiumEntity(27, 27, BigDecimal.valueOf(340)));
+                listOfPremium09.add(new PremiumEntity(28, 28, BigDecimal.valueOf(350)));
+                listOfPremium09.add(new PremiumEntity(29, 29, BigDecimal.valueOf(360)));
+                listOfPremium09.add(new PremiumEntity(30, 30, BigDecimal.valueOf(370)));
+                listOfPremium09.add(new PremiumEntity(31, 31, BigDecimal.valueOf(380)));
+                listOfPremium09.add(new PremiumEntity(32, 32, BigDecimal.valueOf(390)));
+                listOfPremium09.add(new PremiumEntity(33, 33, BigDecimal.valueOf(400)));
+                listOfPremium09.add(new PremiumEntity(34, 34, BigDecimal.valueOf(410)));
+                listOfPremium09.add(new PremiumEntity(35, 35, BigDecimal.valueOf(420)));
+                listOfPremium09.add(new PremiumEntity(36, 36, BigDecimal.valueOf(430)));
+                listOfPremium09.add(new PremiumEntity(37, 37, BigDecimal.valueOf(440)));
+                listOfPremium09.add(new PremiumEntity(38, 38, BigDecimal.valueOf(450)));
+                listOfPremium09.add(new PremiumEntity(39, 39, BigDecimal.valueOf(460)));
+                listOfPremium09.add(new PremiumEntity(40, 40, BigDecimal.valueOf(470)));
+
+                wholeLifeEntity03 = productSessionBean.createProductListing(wholeLifeEntity03, alibabaCompany.getCompanyId(), listOfRiders09, listOfPremium09, new ArrayList<PremiumEntity>(), listOfFeatures09);
+
 //*****************************************************************************************************************************************************************************************************************************************************                            
-                
                 //TermLifeProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, 
                 //Boolean isDeleted, Integer premiumTerm) {
                 ProductEntity wholeLifeEntity04 = new WholeLifeProductEntity(WholeLifeProductEnum.LIFEINSURANCE, "Alibaba Whole Life Product 04", 78, BigDecimal.valueOf(50000),
-                        "This is an Whole Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 20, PolicyCurrencyEnum.SGD, wholeLifePricing);
+                        "This is an Whole Life Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.", false, 20, PolicyCurrencyEnum.SGD, wholeLifePricing, BigDecimal.valueOf(2));
 
                 List<RiderEntity> listOfRiders10 = new ArrayList<>();
                 List<PremiumEntity> listOfPremium10 = new ArrayList<>();
                 List<FeatureEntity> listOfFeatures10 = new ArrayList<>();
-                
-                
-                listOfPremium10.add(new PremiumEntity(23, 23, BigDecimal.valueOf(996), false, BigDecimal.valueOf(50000)));
-                listOfPremium10.add(new PremiumEntity(24, 24, BigDecimal.valueOf(1991), false, BigDecimal.valueOf(50000)));
-                listOfPremium10.add(new PremiumEntity(25, 25, BigDecimal.valueOf(2987), false, BigDecimal.valueOf(50000)));
-                listOfPremium10.add(new PremiumEntity(26, 26, BigDecimal.valueOf(3982), false, BigDecimal.valueOf(50000)));
-                listOfPremium10.add(new PremiumEntity(27, 27, BigDecimal.valueOf(4978), false, BigDecimal.valueOf(50000)));
-                listOfPremium10.add(new PremiumEntity(28, 28, BigDecimal.valueOf(5973), false, BigDecimal.valueOf(50000)));
-                listOfPremium10.add(new PremiumEntity(29, 29, BigDecimal.valueOf(6969), false, BigDecimal.valueOf(50000)));
-                listOfPremium10.add(new PremiumEntity(30, 30, BigDecimal.valueOf(7964), false, BigDecimal.valueOf(50000)));
-                listOfPremium10.add(new PremiumEntity(31, 31, BigDecimal.valueOf(8960), false, BigDecimal.valueOf(50000)));
-                listOfPremium10.add(new PremiumEntity(32, 32, BigDecimal.valueOf(9955), false, BigDecimal.valueOf(50000)));
-                listOfPremium10.add(new PremiumEntity(33, 33, BigDecimal.valueOf(14933), false, BigDecimal.valueOf(50000)));
-                listOfPremium10.add(new PremiumEntity(34, 34, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                listOfPremium10.add(new PremiumEntity(35, 35, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                listOfPremium10.add(new PremiumEntity(36, 36, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                listOfPremium10.add(new PremiumEntity(37, 37, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                listOfPremium10.add(new PremiumEntity(38, 38, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                listOfPremium10.add(new PremiumEntity(39, 39, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                listOfPremium10.add(new PremiumEntity(40, 40, BigDecimal.valueOf(19910), false, BigDecimal.valueOf(50000)));
-                
-                
-                wholeLifeEntity04 = productSessionBean.createProductListing(wholeLifeEntity04, alibabaCompany.getCompanyId(), listOfRiders10, listOfPremium10, listOfFeatures10);
-                
+
+                listOfPremium10.add(new PremiumEntity(23, 23, BigDecimal.valueOf(996)));
+                listOfPremium10.add(new PremiumEntity(24, 24, BigDecimal.valueOf(1050)));
+                listOfPremium10.add(new PremiumEntity(25, 25, BigDecimal.valueOf(1100)));
+                listOfPremium10.add(new PremiumEntity(26, 26, BigDecimal.valueOf(1140)));
+                listOfPremium10.add(new PremiumEntity(27, 27, BigDecimal.valueOf(1190)));
+                listOfPremium10.add(new PremiumEntity(28, 28, BigDecimal.valueOf(1230)));
+                listOfPremium10.add(new PremiumEntity(29, 29, BigDecimal.valueOf(1260)));
+                listOfPremium10.add(new PremiumEntity(30, 30, BigDecimal.valueOf(1310)));
+                listOfPremium10.add(new PremiumEntity(31, 31, BigDecimal.valueOf(1360)));
+                listOfPremium10.add(new PremiumEntity(32, 32, BigDecimal.valueOf(1400)));
+                listOfPremium10.add(new PremiumEntity(33, 33, BigDecimal.valueOf(1500)));
+                listOfPremium10.add(new PremiumEntity(34, 34, BigDecimal.valueOf(1560)));
+                listOfPremium10.add(new PremiumEntity(35, 35, BigDecimal.valueOf(1630)));
+                listOfPremium10.add(new PremiumEntity(36, 36, BigDecimal.valueOf(1680)));
+                listOfPremium10.add(new PremiumEntity(37, 37, BigDecimal.valueOf(1800)));
+                listOfPremium10.add(new PremiumEntity(38, 38, BigDecimal.valueOf(1900)));
+                listOfPremium10.add(new PremiumEntity(39, 39, BigDecimal.valueOf(2000)));
+                listOfPremium10.add(new PremiumEntity(40, 40, BigDecimal.valueOf(2100)));
+
+                List<PremiumEntity> listOfSmokerPremium10 = new ArrayList<>();
+                listOfSmokerPremium10.add(new PremiumEntity(23, 23, BigDecimal.valueOf(1300)));
+                listOfSmokerPremium10.add(new PremiumEntity(24, 24, BigDecimal.valueOf(1350)));
+                listOfSmokerPremium10.add(new PremiumEntity(25, 25, BigDecimal.valueOf(1360)));
+                listOfSmokerPremium10.add(new PremiumEntity(26, 26, BigDecimal.valueOf(1400)));
+                listOfSmokerPremium10.add(new PremiumEntity(27, 27, BigDecimal.valueOf(1440)));
+                listOfSmokerPremium10.add(new PremiumEntity(28, 28, BigDecimal.valueOf(1480)));
+                listOfSmokerPremium10.add(new PremiumEntity(29, 29, BigDecimal.valueOf(1520)));
+                listOfSmokerPremium10.add(new PremiumEntity(30, 30, BigDecimal.valueOf(1600)));
+                listOfSmokerPremium10.add(new PremiumEntity(31, 31, BigDecimal.valueOf(1670)));
+                listOfSmokerPremium10.add(new PremiumEntity(32, 32, BigDecimal.valueOf(1750)));
+                listOfSmokerPremium10.add(new PremiumEntity(33, 33, BigDecimal.valueOf(1880)));
+                listOfSmokerPremium10.add(new PremiumEntity(34, 34, BigDecimal.valueOf(1930)));
+                listOfSmokerPremium10.add(new PremiumEntity(35, 35, BigDecimal.valueOf(2000)));
+                listOfSmokerPremium10.add(new PremiumEntity(36, 36, BigDecimal.valueOf(2100)));
+                listOfSmokerPremium10.add(new PremiumEntity(37, 37, BigDecimal.valueOf(2200)));
+                listOfSmokerPremium10.add(new PremiumEntity(38, 38, BigDecimal.valueOf(2300)));
+                listOfSmokerPremium10.add(new PremiumEntity(39, 39, BigDecimal.valueOf(2400)));
+                listOfSmokerPremium10.add(new PremiumEntity(40, 40, BigDecimal.valueOf(2500)));
+
+                wholeLifeEntity04 = productSessionBean.createProductListing(wholeLifeEntity04, alibabaCompany.getCompanyId(), listOfRiders10, listOfPremium10, listOfSmokerPremium10, listOfFeatures10);
+
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
                 /*
                  * For Company 2
                  */
                 //EndowmentProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm) {
-                ProductEntity coy2EndowmentEntity01 = new EndowmentEntity(EndowmentProductEnum.ENDOWMENT, "Tencent Endowment Product 01", 103, BigDecimal.valueOf(100000.00), "This is an Endowment Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
+                ProductEntity coy2EndowmentEntity01 = new EndowmentEntity(EndowmentProductEnum.ENDOWMENT, "Tencent Endowment Product 01", 103, BigDecimal.valueOf(50000), "This is an Endowment Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
                         + "whilst providing you with insurance protection.\n"
                         + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, endowmentPricing);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, endowmentPricing, BigDecimal.valueOf(3.5));
 
                 List<RiderEntity> listOfcoy2Riders01 = new ArrayList<>();
                 List<PremiumEntity> listOfcoy2Premium01 = new ArrayList<>();
                 List<FeatureEntity> listOfcoy2Features01 = new ArrayList<>();
 
 //              BigDecimal riderPremiumValue, String riderDescription
-                RiderEntity coy2rider01 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Tencent Endowment Product 01");
+                RiderEntity coy2rider01 = new RiderEntity("95% Coverage with 5% Co-payment", BigDecimal.valueOf(1200), "This rider is for Tencent Endowment Product 01");
                 listOfcoy2Riders01.add(coy2rider01);
 
                 //Description
-                FeatureEntity coy2feature01 = new FeatureEntity("This additional feature is for Tencent Endowment Product 01");
+                FeatureEntity coy2feature01 = new FeatureEntity("Critical Illness", "This additional feature is for Tencent Endowment Product 01");
                 listOfcoy2Features01.add(coy2feature01);
 
                 //Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum
-                listOfcoy2Premium01.add(new PremiumEntity(23, 23, BigDecimal.valueOf(2400), false, BigDecimal.valueOf(2520)));
-                listOfcoy2Premium01.add(new PremiumEntity(24, 24, BigDecimal.valueOf(4800), false, BigDecimal.valueOf(5040)));
-                listOfcoy2Premium01.add(new PremiumEntity(25, 25, BigDecimal.valueOf(7200), false, BigDecimal.valueOf(7560)));
-                listOfcoy2Premium01.add(new PremiumEntity(26, 26, BigDecimal.valueOf(9600), false, BigDecimal.valueOf(10080)));
-                listOfcoy2Premium01.add(new PremiumEntity(27, 27, BigDecimal.valueOf(12000), false, BigDecimal.valueOf(12600)));
-                listOfcoy2Premium01.add(new PremiumEntity(28, 28, BigDecimal.valueOf(14400), false, BigDecimal.valueOf(15120)));
-                listOfcoy2Premium01.add(new PremiumEntity(29, 29, BigDecimal.valueOf(16800), false, BigDecimal.valueOf(17640)));
-                listOfcoy2Premium01.add(new PremiumEntity(30, 30, BigDecimal.valueOf(19200), false, BigDecimal.valueOf(20160)));
-                listOfcoy2Premium01.add(new PremiumEntity(31, 31, BigDecimal.valueOf(21600), false, BigDecimal.valueOf(22680)));
-                listOfcoy2Premium01.add(new PremiumEntity(32, 32, BigDecimal.valueOf(24000), false, BigDecimal.valueOf(25200)));
-                listOfcoy2Premium01.add(new PremiumEntity(33, 33, BigDecimal.valueOf(26400), false, BigDecimal.valueOf(27720)));
-                listOfcoy2Premium01.add(new PremiumEntity(34, 34, BigDecimal.valueOf(28800), false, BigDecimal.valueOf(30240)));
-                listOfcoy2Premium01.add(new PremiumEntity(35, 35, BigDecimal.valueOf(31200), false, BigDecimal.valueOf(32760)));
-                listOfcoy2Premium01.add(new PremiumEntity(36, 36, BigDecimal.valueOf(33600), false, BigDecimal.valueOf(35280)));
-                listOfcoy2Premium01.add(new PremiumEntity(37, 37, BigDecimal.valueOf(36000), false, BigDecimal.valueOf(37800)));
-                listOfcoy2Premium01.add(new PremiumEntity(38, 38, BigDecimal.valueOf(38400), false, BigDecimal.valueOf(40320)));
-                listOfcoy2Premium01.add(new PremiumEntity(39, 39, BigDecimal.valueOf(40800), false, BigDecimal.valueOf(42840)));
-                listOfcoy2Premium01.add(new PremiumEntity(40, 40, BigDecimal.valueOf(43200), false, BigDecimal.valueOf(45360)));
+                listOfcoy2Premium01.add(new PremiumEntity(23, 23, BigDecimal.valueOf(323)));
+                listOfcoy2Premium01.add(new PremiumEntity(24, 24, BigDecimal.valueOf(323)));
+                listOfcoy2Premium01.add(new PremiumEntity(25, 25, BigDecimal.valueOf(323)));
+                listOfcoy2Premium01.add(new PremiumEntity(26, 26, BigDecimal.valueOf(323)));
+                listOfcoy2Premium01.add(new PremiumEntity(27, 27, BigDecimal.valueOf(323)));
+                listOfcoy2Premium01.add(new PremiumEntity(28, 28, BigDecimal.valueOf(323)));
+                listOfcoy2Premium01.add(new PremiumEntity(29, 29, BigDecimal.valueOf(323)));
+                listOfcoy2Premium01.add(new PremiumEntity(30, 30, BigDecimal.valueOf(323)));
+                listOfcoy2Premium01.add(new PremiumEntity(31, 31, BigDecimal.valueOf(323)));
+                listOfcoy2Premium01.add(new PremiumEntity(32, 32, BigDecimal.valueOf(323)));
+                listOfcoy2Premium01.add(new PremiumEntity(33, 33, BigDecimal.valueOf(323)));
+                listOfcoy2Premium01.add(new PremiumEntity(34, 34, BigDecimal.valueOf(323)));
+                listOfcoy2Premium01.add(new PremiumEntity(35, 35, BigDecimal.valueOf(323)));
+                listOfcoy2Premium01.add(new PremiumEntity(36, 36, BigDecimal.valueOf(323)));
+                listOfcoy2Premium01.add(new PremiumEntity(37, 37, BigDecimal.valueOf(323)));
+                listOfcoy2Premium01.add(new PremiumEntity(38, 38, BigDecimal.valueOf(323)));
+                listOfcoy2Premium01.add(new PremiumEntity(39, 39, BigDecimal.valueOf(323)));
+                listOfcoy2Premium01.add(new PremiumEntity(40, 40, BigDecimal.valueOf(323)));
 
-                coy2EndowmentEntity01 = productSessionBean.createProductListing(coy2EndowmentEntity01, tencentCompany.getCompanyId(), listOfcoy2Riders01, listOfcoy2Premium01, listOfcoy2Features01);
+                List<PremiumEntity> listOfcoy2SmokerPremium01 = new ArrayList<>();
+                listOfcoy2SmokerPremium01.add(new PremiumEntity(23, 23, BigDecimal.valueOf(646)));
+                listOfcoy2SmokerPremium01.add(new PremiumEntity(24, 24, BigDecimal.valueOf(646)));
+                listOfcoy2SmokerPremium01.add(new PremiumEntity(25, 25, BigDecimal.valueOf(646)));
+                listOfcoy2SmokerPremium01.add(new PremiumEntity(26, 26, BigDecimal.valueOf(646)));
+                listOfcoy2SmokerPremium01.add(new PremiumEntity(27, 27, BigDecimal.valueOf(646)));
+                listOfcoy2SmokerPremium01.add(new PremiumEntity(28, 28, BigDecimal.valueOf(646)));
+                listOfcoy2SmokerPremium01.add(new PremiumEntity(29, 29, BigDecimal.valueOf(646)));
+                listOfcoy2SmokerPremium01.add(new PremiumEntity(30, 30, BigDecimal.valueOf(646)));
+                listOfcoy2SmokerPremium01.add(new PremiumEntity(31, 31, BigDecimal.valueOf(646)));
+                listOfcoy2SmokerPremium01.add(new PremiumEntity(32, 32, BigDecimal.valueOf(646)));
+                listOfcoy2SmokerPremium01.add(new PremiumEntity(33, 33, BigDecimal.valueOf(646)));
+                listOfcoy2SmokerPremium01.add(new PremiumEntity(34, 34, BigDecimal.valueOf(646)));
+                listOfcoy2SmokerPremium01.add(new PremiumEntity(35, 35, BigDecimal.valueOf(646)));
+                listOfcoy2SmokerPremium01.add(new PremiumEntity(36, 36, BigDecimal.valueOf(646)));
+                listOfcoy2SmokerPremium01.add(new PremiumEntity(37, 37, BigDecimal.valueOf(646)));
+                listOfcoy2SmokerPremium01.add(new PremiumEntity(38, 38, BigDecimal.valueOf(646)));
+                listOfcoy2SmokerPremium01.add(new PremiumEntity(39, 39, BigDecimal.valueOf(646)));
+                listOfcoy2SmokerPremium01.add(new PremiumEntity(40, 40, BigDecimal.valueOf(646)));
+
+                coy2EndowmentEntity01 = productSessionBean.createProductListing(coy2EndowmentEntity01, tencentCompany.getCompanyId(), listOfcoy2Riders01, listOfcoy2Premium01, listOfcoy2SmokerPremium01, listOfcoy2Features01);
 
                 //---------------------------------
-                ProductEntity coy2EndowmentEntity02 = new EndowmentEntity(EndowmentProductEnum.ENDOWMENT, "Tencent Endowment Product 02", 103, BigDecimal.valueOf(100000.00), "This is an Endowment Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
+                ProductEntity coy2EndowmentEntity02 = new EndowmentEntity(EndowmentProductEnum.ENDOWMENT, "Tencent Endowment Product 02", 103, BigDecimal.valueOf(50000), "This is an Endowment Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
                         + "whilst providing you with insurance protection.\n"
                         + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, endowmentPricing);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, endowmentPricing, BigDecimal.valueOf(3.5));
 
                 List<RiderEntity> listOfcoy2Riders02 = new ArrayList<>();
                 List<PremiumEntity> listOfcoy2Premium02 = new ArrayList<>();
                 List<FeatureEntity> listOfcoy2Features02 = new ArrayList<>();
 
 //              BigDecimal riderPremiumValue, String riderDescription
-                RiderEntity coy2rider02 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Tencent Endowment Product 02");
+                RiderEntity coy2rider02 = new RiderEntity("95% Coverage with 5% Co-payment", BigDecimal.valueOf(1200), "This rider is for Tencent Endowment Product 02");
                 listOfcoy2Riders02.add(coy2rider02);
 
                 //Description
-                FeatureEntity coy2feature02 = new FeatureEntity("This additional feature is for Tencent Endowment Product 02");
+                FeatureEntity coy2feature02 = new FeatureEntity("Critical Illness", "This additional feature is for Tencent Endowment Product 02");
                 listOfcoy2Features02.add(coy2feature02);
 
                 //Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum
-                listOfcoy2Premium02.add(new PremiumEntity(23, 23, BigDecimal.valueOf(2400), false, BigDecimal.valueOf(2520)));
-                listOfcoy2Premium02.add(new PremiumEntity(24, 24, BigDecimal.valueOf(4800), false, BigDecimal.valueOf(5040)));
-                listOfcoy2Premium02.add(new PremiumEntity(25, 25, BigDecimal.valueOf(7200), false, BigDecimal.valueOf(7560)));
-                listOfcoy2Premium02.add(new PremiumEntity(26, 26, BigDecimal.valueOf(9600), false, BigDecimal.valueOf(10080)));
-                listOfcoy2Premium02.add(new PremiumEntity(27, 27, BigDecimal.valueOf(12000), false, BigDecimal.valueOf(12600)));
-                listOfcoy2Premium02.add(new PremiumEntity(28, 28, BigDecimal.valueOf(14400), false, BigDecimal.valueOf(15120)));
-                listOfcoy2Premium02.add(new PremiumEntity(29, 29, BigDecimal.valueOf(16800), false, BigDecimal.valueOf(17640)));
-                listOfcoy2Premium02.add(new PremiumEntity(30, 30, BigDecimal.valueOf(19200), false, BigDecimal.valueOf(20160)));
-                listOfcoy2Premium02.add(new PremiumEntity(31, 31, BigDecimal.valueOf(21600), false, BigDecimal.valueOf(22680)));
-                listOfcoy2Premium02.add(new PremiumEntity(32, 32, BigDecimal.valueOf(24000), false, BigDecimal.valueOf(25200)));
-                listOfcoy2Premium02.add(new PremiumEntity(33, 33, BigDecimal.valueOf(26400), false, BigDecimal.valueOf(27720)));
-                listOfcoy2Premium02.add(new PremiumEntity(34, 34, BigDecimal.valueOf(28800), false, BigDecimal.valueOf(30240)));
-                listOfcoy2Premium02.add(new PremiumEntity(35, 35, BigDecimal.valueOf(31200), false, BigDecimal.valueOf(32760)));
-                listOfcoy2Premium02.add(new PremiumEntity(36, 36, BigDecimal.valueOf(33600), false, BigDecimal.valueOf(35280)));
-                listOfcoy2Premium02.add(new PremiumEntity(37, 37, BigDecimal.valueOf(36000), false, BigDecimal.valueOf(37800)));
-                listOfcoy2Premium02.add(new PremiumEntity(38, 38, BigDecimal.valueOf(38400), false, BigDecimal.valueOf(40320)));
-                listOfcoy2Premium02.add(new PremiumEntity(39, 39, BigDecimal.valueOf(40800), false, BigDecimal.valueOf(42840)));
-                listOfcoy2Premium02.add(new PremiumEntity(40, 40, BigDecimal.valueOf(43200), false, BigDecimal.valueOf(45360)));
+                listOfcoy2Premium02.add(new PremiumEntity(23, 23, BigDecimal.valueOf(400)));
+                listOfcoy2Premium02.add(new PremiumEntity(24, 24, BigDecimal.valueOf(400)));
+                listOfcoy2Premium02.add(new PremiumEntity(25, 25, BigDecimal.valueOf(400)));
+                listOfcoy2Premium02.add(new PremiumEntity(26, 26, BigDecimal.valueOf(400)));
+                listOfcoy2Premium02.add(new PremiumEntity(27, 27, BigDecimal.valueOf(400)));
+                listOfcoy2Premium02.add(new PremiumEntity(28, 28, BigDecimal.valueOf(400)));
+                listOfcoy2Premium02.add(new PremiumEntity(29, 29, BigDecimal.valueOf(400)));
+                listOfcoy2Premium02.add(new PremiumEntity(30, 30, BigDecimal.valueOf(400)));
+                listOfcoy2Premium02.add(new PremiumEntity(31, 31, BigDecimal.valueOf(400)));
+                listOfcoy2Premium02.add(new PremiumEntity(32, 32, BigDecimal.valueOf(400)));
+                listOfcoy2Premium02.add(new PremiumEntity(33, 33, BigDecimal.valueOf(400)));
+                listOfcoy2Premium02.add(new PremiumEntity(34, 34, BigDecimal.valueOf(400)));
+                listOfcoy2Premium02.add(new PremiumEntity(35, 35, BigDecimal.valueOf(400)));
+                listOfcoy2Premium02.add(new PremiumEntity(36, 36, BigDecimal.valueOf(400)));
+                listOfcoy2Premium02.add(new PremiumEntity(37, 37, BigDecimal.valueOf(400)));
+                listOfcoy2Premium02.add(new PremiumEntity(38, 38, BigDecimal.valueOf(400)));
+                listOfcoy2Premium02.add(new PremiumEntity(39, 39, BigDecimal.valueOf(400)));
+                listOfcoy2Premium02.add(new PremiumEntity(40, 40, BigDecimal.valueOf(400)));
 
-                coy2EndowmentEntity02 = productSessionBean.createProductListing(coy2EndowmentEntity02, tencentCompany.getCompanyId(), listOfcoy2Riders02, listOfcoy2Premium02, listOfcoy2Features02);
+                coy2EndowmentEntity02 = productSessionBean.createProductListing(coy2EndowmentEntity02, tencentCompany.getCompanyId(), listOfcoy2Riders02, listOfcoy2Premium02, new ArrayList<PremiumEntity>(), listOfcoy2Features02);
 
                 // ----------------
-                ProductEntity coy2EndowmentEntity03 = new EndowmentEntity(EndowmentProductEnum.ENDOWMENT, "Tencent Endowment Product 03", 103, BigDecimal.valueOf(100000.00), "This is an Endowment Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
+                ProductEntity coy2EndowmentEntity03 = new EndowmentEntity(EndowmentProductEnum.ENDOWMENT, "Tencent Endowment Product 03", 103, BigDecimal.valueOf(50000), "This is an Endowment Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
                         + "whilst providing you with insurance protection.\n"
                         + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, endowmentPricing);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, endowmentPricing, BigDecimal.valueOf(3.5));
 
                 List<RiderEntity> listOfcoy2Riders03 = new ArrayList<>();
                 List<PremiumEntity> listOfcoy2Premium03 = new ArrayList<>();
                 List<FeatureEntity> listOfcoy2Features03 = new ArrayList<>();
 
 //              BigDecimal riderPremiumValue, String riderDescription
-                RiderEntity coy2rider03 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Tencent Endowment Product 03");
+                RiderEntity coy2rider03 = new RiderEntity("95% Coverage with 5% Co-payment", BigDecimal.valueOf(1200), "This rider is for Tencent Endowment Product 03");
                 listOfcoy2Riders03.add(coy2rider03);
 
                 //Description
-                FeatureEntity coy2feature03 = new FeatureEntity("This additional feature is for Tencent Endowment Product 03");
+                FeatureEntity coy2feature03 = new FeatureEntity("Critical Illness", "This additional feature is for Tencent Endowment Product 03");
                 listOfcoy2Features03.add(coy2feature03);
 
                 //Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum
-                listOfcoy2Premium03.add(new PremiumEntity(23, 23, BigDecimal.valueOf(2400), false, BigDecimal.valueOf(2520)));
-                listOfcoy2Premium03.add(new PremiumEntity(24, 24, BigDecimal.valueOf(4800), false, BigDecimal.valueOf(5040)));
-                listOfcoy2Premium03.add(new PremiumEntity(25, 25, BigDecimal.valueOf(7200), false, BigDecimal.valueOf(7560)));
-                listOfcoy2Premium03.add(new PremiumEntity(26, 26, BigDecimal.valueOf(9600), false, BigDecimal.valueOf(10080)));
-                listOfcoy2Premium03.add(new PremiumEntity(27, 27, BigDecimal.valueOf(12000), false, BigDecimal.valueOf(12600)));
-                listOfcoy2Premium03.add(new PremiumEntity(28, 28, BigDecimal.valueOf(14400), false, BigDecimal.valueOf(15120)));
-                listOfcoy2Premium03.add(new PremiumEntity(29, 29, BigDecimal.valueOf(16800), false, BigDecimal.valueOf(17640)));
-                listOfcoy2Premium03.add(new PremiumEntity(30, 30, BigDecimal.valueOf(19200), false, BigDecimal.valueOf(20160)));
-                listOfcoy2Premium03.add(new PremiumEntity(31, 31, BigDecimal.valueOf(21600), false, BigDecimal.valueOf(22680)));
-                listOfcoy2Premium03.add(new PremiumEntity(32, 32, BigDecimal.valueOf(24000), false, BigDecimal.valueOf(25200)));
-                listOfcoy2Premium03.add(new PremiumEntity(33, 33, BigDecimal.valueOf(26400), false, BigDecimal.valueOf(27720)));
-                listOfcoy2Premium03.add(new PremiumEntity(34, 34, BigDecimal.valueOf(28800), false, BigDecimal.valueOf(30240)));
-                listOfcoy2Premium03.add(new PremiumEntity(35, 35, BigDecimal.valueOf(31200), false, BigDecimal.valueOf(32760)));
-                listOfcoy2Premium03.add(new PremiumEntity(36, 36, BigDecimal.valueOf(33600), false, BigDecimal.valueOf(35280)));
-                listOfcoy2Premium03.add(new PremiumEntity(37, 37, BigDecimal.valueOf(36000), false, BigDecimal.valueOf(37800)));
-                listOfcoy2Premium03.add(new PremiumEntity(38, 38, BigDecimal.valueOf(38400), false, BigDecimal.valueOf(40320)));
-                listOfcoy2Premium03.add(new PremiumEntity(39, 39, BigDecimal.valueOf(40800), false, BigDecimal.valueOf(42840)));
-                listOfcoy2Premium03.add(new PremiumEntity(40, 40, BigDecimal.valueOf(43200), false, BigDecimal.valueOf(45360)));
+                listOfcoy2Premium03.add(new PremiumEntity(23, 23, BigDecimal.valueOf(400)));
+                listOfcoy2Premium03.add(new PremiumEntity(24, 24, BigDecimal.valueOf(400)));
+                listOfcoy2Premium03.add(new PremiumEntity(25, 25, BigDecimal.valueOf(400)));
+                listOfcoy2Premium03.add(new PremiumEntity(26, 26, BigDecimal.valueOf(400)));
+                listOfcoy2Premium03.add(new PremiumEntity(27, 27, BigDecimal.valueOf(400)));
+                listOfcoy2Premium03.add(new PremiumEntity(28, 28, BigDecimal.valueOf(400)));
+                listOfcoy2Premium03.add(new PremiumEntity(29, 29, BigDecimal.valueOf(400)));
+                listOfcoy2Premium03.add(new PremiumEntity(30, 30, BigDecimal.valueOf(400)));
+                listOfcoy2Premium03.add(new PremiumEntity(31, 31, BigDecimal.valueOf(400)));
+                listOfcoy2Premium03.add(new PremiumEntity(32, 32, BigDecimal.valueOf(400)));
+                listOfcoy2Premium03.add(new PremiumEntity(33, 33, BigDecimal.valueOf(400)));
+                listOfcoy2Premium03.add(new PremiumEntity(34, 34, BigDecimal.valueOf(400)));
+                listOfcoy2Premium03.add(new PremiumEntity(35, 35, BigDecimal.valueOf(400)));
+                listOfcoy2Premium03.add(new PremiumEntity(36, 36, BigDecimal.valueOf(400)));
+                listOfcoy2Premium03.add(new PremiumEntity(37, 37, BigDecimal.valueOf(400)));
+                listOfcoy2Premium03.add(new PremiumEntity(38, 38, BigDecimal.valueOf(400)));
+                listOfcoy2Premium03.add(new PremiumEntity(39, 39, BigDecimal.valueOf(400)));
+                listOfcoy2Premium03.add(new PremiumEntity(40, 40, BigDecimal.valueOf(400)));
 
-                coy2EndowmentEntity03 = productSessionBean.createProductListing(coy2EndowmentEntity03, tencentCompany.getCompanyId(), listOfcoy2Riders03, listOfcoy2Premium03, listOfcoy2Features03);
+                coy2EndowmentEntity03 = productSessionBean.createProductListing(coy2EndowmentEntity03, tencentCompany.getCompanyId(), listOfcoy2Riders03, listOfcoy2Premium03, new ArrayList<PremiumEntity>(), listOfcoy2Features03);
 
                 // WholeLife 
-                ProductEntity coy2WholeLifeProduct01 = new WholeLifeProductEntity(WholeLifeProductEnum.LIFEINSURANCE, "Tencent Whole Life Insurance Product 01", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
+                ProductEntity coy2WholeLifeProduct01 = new WholeLifeProductEntity(WholeLifeProductEnum.LIFEINSURANCE, "Tencent Whole Life Insurance Product 01", 103, BigDecimal.valueOf(50000), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
                         + "whilst providing you with insurance protection.\n"
                         + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, wholeLifePricing);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, wholeLifePricing, BigDecimal.valueOf(2));
 
                 List<RiderEntity> listOfcoy2Riders04 = new ArrayList<>();
                 List<PremiumEntity> listOfcoy2Premium04 = new ArrayList<>();
                 List<FeatureEntity> listOfcoy2Features04 = new ArrayList<>();
 
 //              BigDecimal riderPremiumValue, String riderDescription
-                RiderEntity coy2rider04 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Tencent Whole Life Insurance Product 01");
+                RiderEntity coy2rider04 = new RiderEntity("95% Coverage with 5% Co-payment", BigDecimal.valueOf(1200), "This rider is for Tencent Whole Life Insurance Product 01");
                 listOfcoy2Riders04.add(coy2rider04);
 
                 //Description
-                FeatureEntity coy2feature04 = new FeatureEntity("This additional feature is for Tencent Whole Life Insurance Product 01");
+                FeatureEntity coy2feature04 = new FeatureEntity("Critical Illness", "This additional feature is for Tencent Whole Life Insurance Product 01");
                 listOfcoy2Features04.add(coy2feature04);
 
                 //Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum
-                listOfcoy2Premium04.add(new PremiumEntity(23, 23, BigDecimal.valueOf(2400), false, BigDecimal.valueOf(2520)));
-                listOfcoy2Premium04.add(new PremiumEntity(24, 24, BigDecimal.valueOf(4800), false, BigDecimal.valueOf(5040)));
-                listOfcoy2Premium04.add(new PremiumEntity(25, 25, BigDecimal.valueOf(7200), false, BigDecimal.valueOf(7560)));
-                listOfcoy2Premium04.add(new PremiumEntity(26, 26, BigDecimal.valueOf(9600), false, BigDecimal.valueOf(10080)));
-                listOfcoy2Premium04.add(new PremiumEntity(27, 27, BigDecimal.valueOf(12000), false, BigDecimal.valueOf(12600)));
-                listOfcoy2Premium04.add(new PremiumEntity(28, 28, BigDecimal.valueOf(14400), false, BigDecimal.valueOf(15120)));
-                listOfcoy2Premium04.add(new PremiumEntity(29, 29, BigDecimal.valueOf(16800), false, BigDecimal.valueOf(17640)));
-                listOfcoy2Premium04.add(new PremiumEntity(30, 30, BigDecimal.valueOf(19200), false, BigDecimal.valueOf(20160)));
-                listOfcoy2Premium04.add(new PremiumEntity(31, 31, BigDecimal.valueOf(21600), false, BigDecimal.valueOf(22680)));
-                listOfcoy2Premium04.add(new PremiumEntity(32, 32, BigDecimal.valueOf(24000), false, BigDecimal.valueOf(25200)));
-                listOfcoy2Premium04.add(new PremiumEntity(33, 33, BigDecimal.valueOf(26400), false, BigDecimal.valueOf(27720)));
-                listOfcoy2Premium04.add(new PremiumEntity(34, 34, BigDecimal.valueOf(28800), false, BigDecimal.valueOf(30240)));
-                listOfcoy2Premium04.add(new PremiumEntity(35, 35, BigDecimal.valueOf(31200), false, BigDecimal.valueOf(32760)));
-                listOfcoy2Premium04.add(new PremiumEntity(36, 36, BigDecimal.valueOf(33600), false, BigDecimal.valueOf(35280)));
-                listOfcoy2Premium04.add(new PremiumEntity(37, 37, BigDecimal.valueOf(36000), false, BigDecimal.valueOf(37800)));
-                listOfcoy2Premium04.add(new PremiumEntity(38, 38, BigDecimal.valueOf(38400), false, BigDecimal.valueOf(40320)));
-                listOfcoy2Premium04.add(new PremiumEntity(39, 39, BigDecimal.valueOf(40800), false, BigDecimal.valueOf(42840)));
-                listOfcoy2Premium04.add(new PremiumEntity(40, 40, BigDecimal.valueOf(43200), false, BigDecimal.valueOf(45360)));
+                listOfcoy2Premium04.add(new PremiumEntity(23, 23, BigDecimal.valueOf(996)));
+                listOfcoy2Premium04.add(new PremiumEntity(24, 24, BigDecimal.valueOf(1050)));
+                listOfcoy2Premium04.add(new PremiumEntity(25, 25, BigDecimal.valueOf(1100)));
+                listOfcoy2Premium04.add(new PremiumEntity(26, 26, BigDecimal.valueOf(1140)));
+                listOfcoy2Premium04.add(new PremiumEntity(27, 27, BigDecimal.valueOf(1190)));
+                listOfcoy2Premium04.add(new PremiumEntity(28, 28, BigDecimal.valueOf(1230)));
+                listOfcoy2Premium04.add(new PremiumEntity(29, 29, BigDecimal.valueOf(1260)));
+                listOfcoy2Premium04.add(new PremiumEntity(30, 30, BigDecimal.valueOf(1310)));
+                listOfcoy2Premium04.add(new PremiumEntity(31, 31, BigDecimal.valueOf(1360)));
+                listOfcoy2Premium04.add(new PremiumEntity(32, 32, BigDecimal.valueOf(1400)));
+                listOfcoy2Premium04.add(new PremiumEntity(33, 33, BigDecimal.valueOf(1500)));
+                listOfcoy2Premium04.add(new PremiumEntity(34, 34, BigDecimal.valueOf(1560)));
+                listOfcoy2Premium04.add(new PremiumEntity(35, 35, BigDecimal.valueOf(1630)));
+                listOfcoy2Premium04.add(new PremiumEntity(36, 36, BigDecimal.valueOf(1680)));
+                listOfcoy2Premium04.add(new PremiumEntity(37, 37, BigDecimal.valueOf(1800)));
+                listOfcoy2Premium04.add(new PremiumEntity(38, 38, BigDecimal.valueOf(1900)));
+                listOfcoy2Premium04.add(new PremiumEntity(39, 39, BigDecimal.valueOf(2000)));
+                listOfcoy2Premium04.add(new PremiumEntity(40, 40, BigDecimal.valueOf(2100)));
 
-                coy2WholeLifeProduct01 = productSessionBean.createProductListing(coy2WholeLifeProduct01, tencentCompany.getCompanyId(), listOfcoy2Riders04, listOfcoy2Premium04, listOfcoy2Features04);
+                List<PremiumEntity> listOfcoy2SmokerPremium04 = new ArrayList<>();
+                listOfcoy2SmokerPremium04.add(new PremiumEntity(23, 23, BigDecimal.valueOf(1300)));
+                listOfcoy2SmokerPremium04.add(new PremiumEntity(24, 24, BigDecimal.valueOf(1350)));
+                listOfcoy2SmokerPremium04.add(new PremiumEntity(25, 25, BigDecimal.valueOf(1360)));
+                listOfcoy2SmokerPremium04.add(new PremiumEntity(26, 26, BigDecimal.valueOf(1400)));
+                listOfcoy2SmokerPremium04.add(new PremiumEntity(27, 27, BigDecimal.valueOf(1440)));
+                listOfcoy2SmokerPremium04.add(new PremiumEntity(28, 28, BigDecimal.valueOf(1480)));
+                listOfcoy2SmokerPremium04.add(new PremiumEntity(29, 29, BigDecimal.valueOf(1520)));
+                listOfcoy2SmokerPremium04.add(new PremiumEntity(30, 30, BigDecimal.valueOf(1600)));
+                listOfcoy2SmokerPremium04.add(new PremiumEntity(31, 31, BigDecimal.valueOf(1670)));
+                listOfcoy2SmokerPremium04.add(new PremiumEntity(32, 32, BigDecimal.valueOf(1750)));
+                listOfcoy2SmokerPremium04.add(new PremiumEntity(33, 33, BigDecimal.valueOf(1880)));
+                listOfcoy2SmokerPremium04.add(new PremiumEntity(34, 34, BigDecimal.valueOf(1930)));
+                listOfcoy2SmokerPremium04.add(new PremiumEntity(35, 35, BigDecimal.valueOf(2000)));
+                listOfcoy2SmokerPremium04.add(new PremiumEntity(36, 36, BigDecimal.valueOf(2100)));
+                listOfcoy2SmokerPremium04.add(new PremiumEntity(37, 37, BigDecimal.valueOf(2200)));
+                listOfcoy2SmokerPremium04.add(new PremiumEntity(38, 38, BigDecimal.valueOf(2300)));
+                listOfcoy2SmokerPremium04.add(new PremiumEntity(39, 39, BigDecimal.valueOf(2400)));
+                listOfcoy2SmokerPremium04.add(new PremiumEntity(40, 40, BigDecimal.valueOf(2500)));
+
+                coy2WholeLifeProduct01 = productSessionBean.createProductListing(coy2WholeLifeProduct01, tencentCompany.getCompanyId(), listOfcoy2Riders04, listOfcoy2Premium04, listOfcoy2SmokerPremium04, listOfcoy2Features04);
 
                 //----------------------------
-                ProductEntity coy2WholeLifeProduct02 = new WholeLifeProductEntity(WholeLifeProductEnum.HOSPITAL, "Tencent Whole Life Insurance Product 02", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
+                ProductEntity coy2WholeLifeProduct02 = new WholeLifeProductEntity(WholeLifeProductEnum.HOSPITAL, "Tencent Whole Life Insurance Product 02", 103, BigDecimal.valueOf(50000), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
                         + "whilst providing you with insurance protection.\n"
                         + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, wholeLifePricing);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, wholeLifePricing, BigDecimal.valueOf(2));
 
                 List<RiderEntity> listOfcoy2Riders05 = new ArrayList<>();
                 List<PremiumEntity> listOfcoy2Premium05 = new ArrayList<>();
                 List<FeatureEntity> listOfcoy2Features05 = new ArrayList<>();
 
 //              BigDecimal riderPremiumValue, String riderDescription
-                RiderEntity coy2rider05 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Tencent Whole Life Insurance Product 02");
+                RiderEntity coy2rider05 = new RiderEntity("95% Coverage with 5% Co-payment", BigDecimal.valueOf(1200), "This rider is for Tencent Whole Life Insurance Product 02");
                 listOfcoy2Riders05.add(coy2rider05);
 
                 //Description
-                FeatureEntity coy2feature05 = new FeatureEntity("This additional feature is for Tencent Whole Life Insurance Product 02");
+                FeatureEntity coy2feature05 = new FeatureEntity("Critical Illness", "This additional feature is for Tencent Whole Life Insurance Product 02");
                 listOfcoy2Features05.add(coy2feature05);
 
                 //Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum
-                listOfcoy2Premium05.add(new PremiumEntity(23, 23, BigDecimal.valueOf(2400), false, BigDecimal.valueOf(2520)));
-                listOfcoy2Premium05.add(new PremiumEntity(24, 24, BigDecimal.valueOf(4800), false, BigDecimal.valueOf(5040)));
-                listOfcoy2Premium05.add(new PremiumEntity(25, 25, BigDecimal.valueOf(7200), false, BigDecimal.valueOf(7560)));
-                listOfcoy2Premium05.add(new PremiumEntity(26, 26, BigDecimal.valueOf(9600), false, BigDecimal.valueOf(10080)));
-                listOfcoy2Premium05.add(new PremiumEntity(27, 27, BigDecimal.valueOf(12000), false, BigDecimal.valueOf(12600)));
-                listOfcoy2Premium05.add(new PremiumEntity(28, 28, BigDecimal.valueOf(14400), false, BigDecimal.valueOf(15120)));
-                listOfcoy2Premium05.add(new PremiumEntity(29, 29, BigDecimal.valueOf(16800), false, BigDecimal.valueOf(17640)));
-                listOfcoy2Premium05.add(new PremiumEntity(30, 30, BigDecimal.valueOf(19200), false, BigDecimal.valueOf(20160)));
-                listOfcoy2Premium05.add(new PremiumEntity(31, 31, BigDecimal.valueOf(21600), false, BigDecimal.valueOf(22680)));
-                listOfcoy2Premium05.add(new PremiumEntity(32, 32, BigDecimal.valueOf(24000), false, BigDecimal.valueOf(25200)));
-                listOfcoy2Premium05.add(new PremiumEntity(33, 33, BigDecimal.valueOf(26400), false, BigDecimal.valueOf(27720)));
-                listOfcoy2Premium05.add(new PremiumEntity(34, 34, BigDecimal.valueOf(28800), false, BigDecimal.valueOf(30240)));
-                listOfcoy2Premium05.add(new PremiumEntity(35, 35, BigDecimal.valueOf(31200), false, BigDecimal.valueOf(32760)));
-                listOfcoy2Premium05.add(new PremiumEntity(36, 36, BigDecimal.valueOf(33600), false, BigDecimal.valueOf(35280)));
-                listOfcoy2Premium05.add(new PremiumEntity(37, 37, BigDecimal.valueOf(36000), false, BigDecimal.valueOf(37800)));
-                listOfcoy2Premium05.add(new PremiumEntity(38, 38, BigDecimal.valueOf(38400), false, BigDecimal.valueOf(40320)));
-                listOfcoy2Premium05.add(new PremiumEntity(39, 39, BigDecimal.valueOf(40800), false, BigDecimal.valueOf(42840)));
-                listOfcoy2Premium05.add(new PremiumEntity(40, 40, BigDecimal.valueOf(43200), false, BigDecimal.valueOf(45360)));
+                listOfcoy2Premium05.add(new PremiumEntity(23, 23, BigDecimal.valueOf(300)));
+                listOfcoy2Premium05.add(new PremiumEntity(24, 24, BigDecimal.valueOf(310)));
+                listOfcoy2Premium05.add(new PremiumEntity(25, 25, BigDecimal.valueOf(320)));
+                listOfcoy2Premium05.add(new PremiumEntity(26, 26, BigDecimal.valueOf(330)));
+                listOfcoy2Premium05.add(new PremiumEntity(27, 27, BigDecimal.valueOf(340)));
+                listOfcoy2Premium05.add(new PremiumEntity(28, 28, BigDecimal.valueOf(350)));
+                listOfcoy2Premium05.add(new PremiumEntity(29, 29, BigDecimal.valueOf(360)));
+                listOfcoy2Premium05.add(new PremiumEntity(30, 30, BigDecimal.valueOf(370)));
+                listOfcoy2Premium05.add(new PremiumEntity(31, 31, BigDecimal.valueOf(380)));
+                listOfcoy2Premium05.add(new PremiumEntity(32, 32, BigDecimal.valueOf(390)));
+                listOfcoy2Premium05.add(new PremiumEntity(33, 33, BigDecimal.valueOf(400)));
+                listOfcoy2Premium05.add(new PremiumEntity(34, 34, BigDecimal.valueOf(410)));
+                listOfcoy2Premium05.add(new PremiumEntity(35, 35, BigDecimal.valueOf(420)));
+                listOfcoy2Premium05.add(new PremiumEntity(36, 36, BigDecimal.valueOf(430)));
+                listOfcoy2Premium05.add(new PremiumEntity(37, 37, BigDecimal.valueOf(440)));
+                listOfcoy2Premium05.add(new PremiumEntity(38, 38, BigDecimal.valueOf(450)));
+                listOfcoy2Premium05.add(new PremiumEntity(39, 39, BigDecimal.valueOf(460)));
+                listOfcoy2Premium05.add(new PremiumEntity(40, 40, BigDecimal.valueOf(470)));
 
-                coy2WholeLifeProduct02 = productSessionBean.createProductListing(coy2WholeLifeProduct02, tencentCompany.getCompanyId(), listOfcoy2Riders05, listOfcoy2Premium05, listOfcoy2Features05);
+                coy2WholeLifeProduct02 = productSessionBean.createProductListing(coy2WholeLifeProduct02, tencentCompany.getCompanyId(), listOfcoy2Riders05, listOfcoy2Premium05, new ArrayList<PremiumEntity>(), listOfcoy2Features05);
 
                 //---------------------
-                ProductEntity coy2WholeLifeProduct03 = new WholeLifeProductEntity(WholeLifeProductEnum.CRITICALILLNESS, "Tencent Whole Life Insurance Product 03", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
+                ProductEntity coy2WholeLifeProduct03 = new WholeLifeProductEntity(WholeLifeProductEnum.CRITICALILLNESS, "Tencent Whole Life Insurance Product 03", 103, BigDecimal.valueOf(50000), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
                         + "whilst providing you with insurance protection.\n"
                         + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, wholeLifePricing);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, wholeLifePricing, BigDecimal.valueOf(2));
 
                 List<RiderEntity> listOfcoy2Riders06 = new ArrayList<>();
                 List<PremiumEntity> listOfcoy2Premium06 = new ArrayList<>();
                 List<FeatureEntity> listOfcoy2Features06 = new ArrayList<>();
 
 //              BigDecimal riderPremiumValue, String riderDescription
-                RiderEntity coy2rider06 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Tencent Whole Life Insurance Product 03");
+                RiderEntity coy2rider06 = new RiderEntity("95% Coverage with 5% Co-payment", BigDecimal.valueOf(1200), "This rider is for Tencent Whole Life Insurance Product 03");
                 listOfcoy2Riders06.add(coy2rider06);
 
                 //Description
-                FeatureEntity coy2feature06 = new FeatureEntity("This additional feature is for Tencent Whole Life Insurance Product 03");
+                FeatureEntity coy2feature06 = new FeatureEntity("Critical Illness", "This additional feature is for Tencent Whole Life Insurance Product 03");
                 listOfcoy2Features06.add(coy2feature06);
 
                 //Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum
-                listOfcoy2Premium06.add(new PremiumEntity(23, 23, BigDecimal.valueOf(2400), false, BigDecimal.valueOf(2520)));
-                listOfcoy2Premium06.add(new PremiumEntity(24, 24, BigDecimal.valueOf(4800), false, BigDecimal.valueOf(5040)));
-                listOfcoy2Premium06.add(new PremiumEntity(25, 25, BigDecimal.valueOf(7200), false, BigDecimal.valueOf(7560)));
-                listOfcoy2Premium06.add(new PremiumEntity(26, 26, BigDecimal.valueOf(9600), false, BigDecimal.valueOf(10080)));
-                listOfcoy2Premium06.add(new PremiumEntity(27, 27, BigDecimal.valueOf(12000), false, BigDecimal.valueOf(12600)));
-                listOfcoy2Premium06.add(new PremiumEntity(28, 28, BigDecimal.valueOf(14400), false, BigDecimal.valueOf(15120)));
-                listOfcoy2Premium06.add(new PremiumEntity(29, 29, BigDecimal.valueOf(16800), false, BigDecimal.valueOf(17640)));
-                listOfcoy2Premium06.add(new PremiumEntity(30, 30, BigDecimal.valueOf(19200), false, BigDecimal.valueOf(20160)));
-                listOfcoy2Premium06.add(new PremiumEntity(31, 31, BigDecimal.valueOf(21600), false, BigDecimal.valueOf(22680)));
-                listOfcoy2Premium06.add(new PremiumEntity(32, 32, BigDecimal.valueOf(24000), false, BigDecimal.valueOf(25200)));
-                listOfcoy2Premium06.add(new PremiumEntity(33, 33, BigDecimal.valueOf(26400), false, BigDecimal.valueOf(27720)));
-                listOfcoy2Premium06.add(new PremiumEntity(34, 34, BigDecimal.valueOf(28800), false, BigDecimal.valueOf(30240)));
-                listOfcoy2Premium06.add(new PremiumEntity(35, 35, BigDecimal.valueOf(31200), false, BigDecimal.valueOf(32760)));
-                listOfcoy2Premium06.add(new PremiumEntity(36, 36, BigDecimal.valueOf(33600), false, BigDecimal.valueOf(35280)));
-                listOfcoy2Premium06.add(new PremiumEntity(37, 37, BigDecimal.valueOf(36000), false, BigDecimal.valueOf(37800)));
-                listOfcoy2Premium06.add(new PremiumEntity(38, 38, BigDecimal.valueOf(38400), false, BigDecimal.valueOf(40320)));
-                listOfcoy2Premium06.add(new PremiumEntity(39, 39, BigDecimal.valueOf(40800), false, BigDecimal.valueOf(42840)));
-                listOfcoy2Premium06.add(new PremiumEntity(40, 40, BigDecimal.valueOf(43200), false, BigDecimal.valueOf(45360)));
+                listOfcoy2Premium06.add(new PremiumEntity(23, 23, BigDecimal.valueOf(996)));
+                listOfcoy2Premium06.add(new PremiumEntity(24, 24, BigDecimal.valueOf(1050)));
+                listOfcoy2Premium06.add(new PremiumEntity(25, 25, BigDecimal.valueOf(1100)));
+                listOfcoy2Premium06.add(new PremiumEntity(26, 26, BigDecimal.valueOf(1140)));
+                listOfcoy2Premium06.add(new PremiumEntity(27, 27, BigDecimal.valueOf(1190)));
+                listOfcoy2Premium06.add(new PremiumEntity(28, 28, BigDecimal.valueOf(1230)));
+                listOfcoy2Premium06.add(new PremiumEntity(29, 29, BigDecimal.valueOf(1260)));
+                listOfcoy2Premium06.add(new PremiumEntity(30, 30, BigDecimal.valueOf(1310)));
+                listOfcoy2Premium06.add(new PremiumEntity(31, 31, BigDecimal.valueOf(1360)));
+                listOfcoy2Premium06.add(new PremiumEntity(32, 32, BigDecimal.valueOf(1400)));
+                listOfcoy2Premium06.add(new PremiumEntity(33, 33, BigDecimal.valueOf(1500)));
+                listOfcoy2Premium06.add(new PremiumEntity(34, 34, BigDecimal.valueOf(1560)));
+                listOfcoy2Premium06.add(new PremiumEntity(35, 35, BigDecimal.valueOf(1630)));
+                listOfcoy2Premium06.add(new PremiumEntity(36, 36, BigDecimal.valueOf(1680)));
+                listOfcoy2Premium06.add(new PremiumEntity(37, 37, BigDecimal.valueOf(1800)));
+                listOfcoy2Premium06.add(new PremiumEntity(38, 38, BigDecimal.valueOf(1900)));
+                listOfcoy2Premium06.add(new PremiumEntity(39, 39, BigDecimal.valueOf(2000)));
+                listOfcoy2Premium06.add(new PremiumEntity(40, 40, BigDecimal.valueOf(2100)));
 
-                coy2WholeLifeProduct03 = productSessionBean.createProductListing(coy2WholeLifeProduct03, tencentCompany.getCompanyId(), listOfcoy2Riders06, listOfcoy2Premium06, listOfcoy2Features06);
+                coy2WholeLifeProduct03 = productSessionBean.createProductListing(coy2WholeLifeProduct03, tencentCompany.getCompanyId(), listOfcoy2Riders06, listOfcoy2Premium06, new ArrayList<PremiumEntity>(), listOfcoy2Features06);
 
                 // --------------------------
-                ProductEntity coy2WholeLifeProduct04 = new WholeLifeProductEntity(WholeLifeProductEnum.ACCIDENT, "Tencent Whole Life Insurance Product 04", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
+                ProductEntity coy2WholeLifeProduct04 = new WholeLifeProductEntity(WholeLifeProductEnum.ACCIDENT, "Tencent Whole Life Insurance Product 04", 103, BigDecimal.valueOf(50000), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
                         + "whilst providing you with insurance protection.\n"
                         + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, wholeLifePricing);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, wholeLifePricing, BigDecimal.valueOf(2));
 
                 List<RiderEntity> listOfcoy2Riders07 = new ArrayList<>();
                 List<PremiumEntity> listOfcoy2Premium07 = new ArrayList<>();
                 List<FeatureEntity> listOfcoy2Features07 = new ArrayList<>();
 
 //              BigDecimal riderPremiumValue, String riderDescription
-                RiderEntity coy2rider07 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Tencent Whole Life Insurance Product 04");
+                RiderEntity coy2rider07 = new RiderEntity("95% Coverage with 5% Co-payment", BigDecimal.valueOf(1200), "This rider is for Tencent Whole Life Insurance Product 04");
                 listOfcoy2Riders07.add(coy2rider07);
 
                 //Description
-                FeatureEntity coy2feature07 = new FeatureEntity("This additional feature is for Tencent Whole Life Insurance Product 04");
+                FeatureEntity coy2feature07 = new FeatureEntity("Critical Illness", "This additional feature is for Tencent Whole Life Insurance Product 04");
                 listOfcoy2Features07.add(coy2feature07);
 
                 //Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum
-                listOfcoy2Premium07.add(new PremiumEntity(23, 23, BigDecimal.valueOf(2400), false, BigDecimal.valueOf(2520)));
-                listOfcoy2Premium07.add(new PremiumEntity(24, 24, BigDecimal.valueOf(4800), false, BigDecimal.valueOf(5040)));
-                listOfcoy2Premium07.add(new PremiumEntity(25, 25, BigDecimal.valueOf(7200), false, BigDecimal.valueOf(7560)));
-                listOfcoy2Premium07.add(new PremiumEntity(26, 26, BigDecimal.valueOf(9600), false, BigDecimal.valueOf(10080)));
-                listOfcoy2Premium07.add(new PremiumEntity(27, 27, BigDecimal.valueOf(12000), false, BigDecimal.valueOf(12600)));
-                listOfcoy2Premium07.add(new PremiumEntity(28, 28, BigDecimal.valueOf(14400), false, BigDecimal.valueOf(15120)));
-                listOfcoy2Premium07.add(new PremiumEntity(29, 29, BigDecimal.valueOf(16800), false, BigDecimal.valueOf(17640)));
-                listOfcoy2Premium07.add(new PremiumEntity(30, 30, BigDecimal.valueOf(19200), false, BigDecimal.valueOf(20160)));
-                listOfcoy2Premium07.add(new PremiumEntity(31, 31, BigDecimal.valueOf(21600), false, BigDecimal.valueOf(22680)));
-                listOfcoy2Premium07.add(new PremiumEntity(32, 32, BigDecimal.valueOf(24000), false, BigDecimal.valueOf(25200)));
-                listOfcoy2Premium07.add(new PremiumEntity(33, 33, BigDecimal.valueOf(26400), false, BigDecimal.valueOf(27720)));
-                listOfcoy2Premium07.add(new PremiumEntity(34, 34, BigDecimal.valueOf(28800), false, BigDecimal.valueOf(30240)));
-                listOfcoy2Premium07.add(new PremiumEntity(35, 35, BigDecimal.valueOf(31200), false, BigDecimal.valueOf(32760)));
-                listOfcoy2Premium07.add(new PremiumEntity(36, 36, BigDecimal.valueOf(33600), false, BigDecimal.valueOf(35280)));
-                listOfcoy2Premium07.add(new PremiumEntity(37, 37, BigDecimal.valueOf(36000), false, BigDecimal.valueOf(37800)));
-                listOfcoy2Premium07.add(new PremiumEntity(38, 38, BigDecimal.valueOf(38400), false, BigDecimal.valueOf(40320)));
-                listOfcoy2Premium07.add(new PremiumEntity(39, 39, BigDecimal.valueOf(40800), false, BigDecimal.valueOf(42840)));
-                listOfcoy2Premium07.add(new PremiumEntity(40, 40, BigDecimal.valueOf(43200), false, BigDecimal.valueOf(45360)));
+                listOfcoy2Premium07.add(new PremiumEntity(23, 23, BigDecimal.valueOf(120)));
+                listOfcoy2Premium07.add(new PremiumEntity(24, 24, BigDecimal.valueOf(130)));
+                listOfcoy2Premium07.add(new PremiumEntity(25, 25, BigDecimal.valueOf(140)));
+                listOfcoy2Premium07.add(new PremiumEntity(26, 26, BigDecimal.valueOf(150)));
+                listOfcoy2Premium07.add(new PremiumEntity(27, 27, BigDecimal.valueOf(160)));
+                listOfcoy2Premium07.add(new PremiumEntity(28, 28, BigDecimal.valueOf(170)));
+                listOfcoy2Premium07.add(new PremiumEntity(29, 29, BigDecimal.valueOf(180)));
+                listOfcoy2Premium07.add(new PremiumEntity(30, 30, BigDecimal.valueOf(190)));
+                listOfcoy2Premium07.add(new PremiumEntity(31, 31, BigDecimal.valueOf(200)));
+                listOfcoy2Premium07.add(new PremiumEntity(32, 32, BigDecimal.valueOf(210)));
+                listOfcoy2Premium07.add(new PremiumEntity(33, 33, BigDecimal.valueOf(220)));
+                listOfcoy2Premium07.add(new PremiumEntity(34, 34, BigDecimal.valueOf(230)));
+                listOfcoy2Premium07.add(new PremiumEntity(35, 35, BigDecimal.valueOf(240)));
+                listOfcoy2Premium07.add(new PremiumEntity(36, 36, BigDecimal.valueOf(250)));
+                listOfcoy2Premium07.add(new PremiumEntity(37, 37, BigDecimal.valueOf(260)));
+                listOfcoy2Premium07.add(new PremiumEntity(38, 38, BigDecimal.valueOf(270)));
+                listOfcoy2Premium07.add(new PremiumEntity(39, 39, BigDecimal.valueOf(280)));
+                listOfcoy2Premium07.add(new PremiumEntity(40, 40, BigDecimal.valueOf(290)));
 
-                coy2WholeLifeProduct04 = productSessionBean.createProductListing(coy2WholeLifeProduct04, tencentCompany.getCompanyId(), listOfcoy2Riders07, listOfcoy2Premium07, listOfcoy2Features07);
+                coy2WholeLifeProduct04 = productSessionBean.createProductListing(coy2WholeLifeProduct04, tencentCompany.getCompanyId(), listOfcoy2Riders07, listOfcoy2Premium07, new ArrayList<PremiumEntity>(), listOfcoy2Features07);
 
                 // --------------------------
                 // Term Life
-                ProductEntity coy2TermLifeProduct01 = new TermLifeProductEntity(TermLifeProductEnum.ACCIDENT, "Tencent Term Life Insurance Product 01", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
+                ProductEntity coy2TermLifeProduct01 = new TermLifeProductEntity(TermLifeProductEnum.ACCIDENT, "Tencent Term Life Insurance Product 01", 103, BigDecimal.valueOf(50000), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
                         + "whilst providing you with insurance protection.\n"
                         + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, termLifePricing);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, termLifePricing, BigDecimal.valueOf(0));
 
                 List<RiderEntity> listOfcoy2Riders08 = new ArrayList<>();
                 List<PremiumEntity> listOfcoy2Premium08 = new ArrayList<>();
                 List<FeatureEntity> listOfcoy2Features08 = new ArrayList<>();
 
 //              BigDecimal riderPremiumValue, String riderDescription
-                RiderEntity coy2rider08 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Tencent Whole Life Insurance Product 01");
+                RiderEntity coy2rider08 = new RiderEntity("95% Coverage with 5% Co-payment", BigDecimal.valueOf(1200), "This rider is for Tencent Whole Life Insurance Product 01");
                 listOfcoy2Riders08.add(coy2rider08);
 
                 //Description
-                FeatureEntity coy2feature08 = new FeatureEntity("This additional feature is for Tencent Whole Life Insurance Product 01");
+                FeatureEntity coy2feature08 = new FeatureEntity("Critical Illness", "This additional feature is for Tencent Whole Life Insurance Product 01");
                 listOfcoy2Features08.add(coy2feature08);
 
                 //Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum
-                listOfcoy2Premium08.add(new PremiumEntity(23, 23, BigDecimal.valueOf(2400), false, BigDecimal.ZERO));
-                listOfcoy2Premium08.add(new PremiumEntity(24, 24, BigDecimal.valueOf(4800), false, BigDecimal.ZERO));
-                listOfcoy2Premium08.add(new PremiumEntity(25, 25, BigDecimal.valueOf(7200), false, BigDecimal.ZERO));
-                listOfcoy2Premium08.add(new PremiumEntity(26, 26, BigDecimal.valueOf(9600), false, BigDecimal.ZERO));
-                listOfcoy2Premium08.add(new PremiumEntity(27, 27, BigDecimal.valueOf(12000), false, BigDecimal.ZERO));
-                listOfcoy2Premium08.add(new PremiumEntity(28, 28, BigDecimal.valueOf(14400), false, BigDecimal.ZERO));
-                listOfcoy2Premium08.add(new PremiumEntity(29, 29, BigDecimal.valueOf(16800), false, BigDecimal.ZERO));
-                listOfcoy2Premium08.add(new PremiumEntity(30, 30, BigDecimal.valueOf(19200), false, BigDecimal.ZERO));
-                listOfcoy2Premium08.add(new PremiumEntity(31, 31, BigDecimal.valueOf(21600), false, BigDecimal.ZERO));
-                listOfcoy2Premium08.add(new PremiumEntity(32, 32, BigDecimal.valueOf(24000), false, BigDecimal.ZERO));
-                listOfcoy2Premium08.add(new PremiumEntity(33, 33, BigDecimal.valueOf(26400), false, BigDecimal.ZERO));
-                listOfcoy2Premium08.add(new PremiumEntity(34, 34, BigDecimal.valueOf(28800), false, BigDecimal.ZERO));
-                listOfcoy2Premium08.add(new PremiumEntity(35, 35, BigDecimal.valueOf(31200), false, BigDecimal.ZERO));
-                listOfcoy2Premium08.add(new PremiumEntity(36, 36, BigDecimal.valueOf(33600), false, BigDecimal.ZERO));
-                listOfcoy2Premium08.add(new PremiumEntity(37, 37, BigDecimal.valueOf(36000), false, BigDecimal.ZERO));
-                listOfcoy2Premium08.add(new PremiumEntity(38, 38, BigDecimal.valueOf(38400), false, BigDecimal.ZERO));
-                listOfcoy2Premium08.add(new PremiumEntity(39, 39, BigDecimal.valueOf(40800), false, BigDecimal.ZERO));
-                listOfcoy2Premium08.add(new PremiumEntity(40, 40, BigDecimal.valueOf(43200), false, BigDecimal.ZERO));
+                listOfcoy2Premium08.add(new PremiumEntity(23, 23, BigDecimal.valueOf(120)));
+                listOfcoy2Premium08.add(new PremiumEntity(24, 24, BigDecimal.valueOf(130)));
+                listOfcoy2Premium08.add(new PremiumEntity(25, 25, BigDecimal.valueOf(140)));
+                listOfcoy2Premium08.add(new PremiumEntity(26, 26, BigDecimal.valueOf(150)));
+                listOfcoy2Premium08.add(new PremiumEntity(27, 27, BigDecimal.valueOf(160)));
+                listOfcoy2Premium08.add(new PremiumEntity(28, 28, BigDecimal.valueOf(170)));
+                listOfcoy2Premium08.add(new PremiumEntity(29, 29, BigDecimal.valueOf(180)));
+                listOfcoy2Premium08.add(new PremiumEntity(30, 30, BigDecimal.valueOf(190)));
+                listOfcoy2Premium08.add(new PremiumEntity(31, 31, BigDecimal.valueOf(200)));
+                listOfcoy2Premium08.add(new PremiumEntity(32, 32, BigDecimal.valueOf(210)));
+                listOfcoy2Premium08.add(new PremiumEntity(33, 33, BigDecimal.valueOf(220)));
+                listOfcoy2Premium08.add(new PremiumEntity(34, 34, BigDecimal.valueOf(230)));
+                listOfcoy2Premium08.add(new PremiumEntity(35, 35, BigDecimal.valueOf(240)));
+                listOfcoy2Premium08.add(new PremiumEntity(36, 36, BigDecimal.valueOf(250)));
+                listOfcoy2Premium08.add(new PremiumEntity(37, 37, BigDecimal.valueOf(260)));
+                listOfcoy2Premium08.add(new PremiumEntity(38, 38, BigDecimal.valueOf(270)));
+                listOfcoy2Premium08.add(new PremiumEntity(39, 39, BigDecimal.valueOf(280)));
+                listOfcoy2Premium08.add(new PremiumEntity(40, 40, BigDecimal.valueOf(290)));
 
-                coy2TermLifeProduct01 = productSessionBean.createProductListing(coy2TermLifeProduct01, tencentCompany.getCompanyId(), listOfcoy2Riders08, listOfcoy2Premium08, listOfcoy2Features08);
+                coy2TermLifeProduct01 = productSessionBean.createProductListing(coy2TermLifeProduct01, tencentCompany.getCompanyId(), listOfcoy2Riders08, listOfcoy2Premium08, new ArrayList<PremiumEntity>(), listOfcoy2Features08);
 
                 // --------------------------
-                ProductEntity coy2TermLifeProduct02 = new TermLifeProductEntity(TermLifeProductEnum.CRITICALILLNESS, "Tencent Term Life Insurance Product 02", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
+                ProductEntity coy2TermLifeProduct02 = new TermLifeProductEntity(TermLifeProductEnum.CRITICALILLNESS, "Tencent Term Life Insurance Product 02", 103, BigDecimal.valueOf(50000), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
                         + "whilst providing you with insurance protection.\n"
                         + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, termLifePricing);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, termLifePricing, BigDecimal.valueOf(0));
 
                 List<RiderEntity> listOfcoy2Riders09 = new ArrayList<>();
                 List<PremiumEntity> listOfcoy2Premium09 = new ArrayList<>();
                 List<FeatureEntity> listOfcoy2Features09 = new ArrayList<>();
 
 //              BigDecimal riderPremiumValue, String riderDescription
-                RiderEntity coy2rider09 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Tencent Whole Life Insurance Product 02");
+                RiderEntity coy2rider09 = new RiderEntity("95% Coverage with 5% Co-payment", BigDecimal.valueOf(1200), "This rider is for Tencent Whole Life Insurance Product 02");
                 listOfcoy2Riders09.add(coy2rider09);
 
                 //Description
-                FeatureEntity coy2feature09 = new FeatureEntity("This additional feature is for Tencent Whole Life Insurance Product 02");
+                FeatureEntity coy2feature09 = new FeatureEntity("Critical Illness", "This additional feature is for Tencent Whole Life Insurance Product 02");
                 listOfcoy2Features09.add(coy2feature09);
 
                 //Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum
-                listOfcoy2Premium09.add(new PremiumEntity(23, 23, BigDecimal.valueOf(2400), false, BigDecimal.ZERO));
-                listOfcoy2Premium09.add(new PremiumEntity(24, 24, BigDecimal.valueOf(4800), false, BigDecimal.ZERO));
-                listOfcoy2Premium09.add(new PremiumEntity(25, 25, BigDecimal.valueOf(7200), false, BigDecimal.ZERO));
-                listOfcoy2Premium09.add(new PremiumEntity(26, 26, BigDecimal.valueOf(9600), false, BigDecimal.ZERO));
-                listOfcoy2Premium09.add(new PremiumEntity(27, 27, BigDecimal.valueOf(12000), false, BigDecimal.ZERO));
-                listOfcoy2Premium09.add(new PremiumEntity(28, 28, BigDecimal.valueOf(14400), false, BigDecimal.ZERO));
-                listOfcoy2Premium09.add(new PremiumEntity(29, 29, BigDecimal.valueOf(16800), false, BigDecimal.ZERO));
-                listOfcoy2Premium09.add(new PremiumEntity(30, 30, BigDecimal.valueOf(19200), false, BigDecimal.ZERO));
-                listOfcoy2Premium09.add(new PremiumEntity(31, 31, BigDecimal.valueOf(21600), false, BigDecimal.ZERO));
-                listOfcoy2Premium09.add(new PremiumEntity(32, 32, BigDecimal.valueOf(24000), false, BigDecimal.ZERO));
-                listOfcoy2Premium09.add(new PremiumEntity(33, 33, BigDecimal.valueOf(26400), false, BigDecimal.ZERO));
-                listOfcoy2Premium09.add(new PremiumEntity(34, 34, BigDecimal.valueOf(28800), false, BigDecimal.ZERO));
-                listOfcoy2Premium09.add(new PremiumEntity(35, 35, BigDecimal.valueOf(31200), false, BigDecimal.ZERO));
-                listOfcoy2Premium09.add(new PremiumEntity(36, 36, BigDecimal.valueOf(33600), false, BigDecimal.ZERO));
-                listOfcoy2Premium09.add(new PremiumEntity(37, 37, BigDecimal.valueOf(36000), false, BigDecimal.ZERO));
-                listOfcoy2Premium09.add(new PremiumEntity(38, 38, BigDecimal.valueOf(38400), false, BigDecimal.ZERO));
-                listOfcoy2Premium09.add(new PremiumEntity(39, 39, BigDecimal.valueOf(40800), false, BigDecimal.ZERO));
-                listOfcoy2Premium09.add(new PremiumEntity(40, 40, BigDecimal.valueOf(43200), false, BigDecimal.ZERO));
+                listOfcoy2Premium09.add(new PremiumEntity(23, 23, BigDecimal.valueOf(996)));
+                listOfcoy2Premium09.add(new PremiumEntity(24, 24, BigDecimal.valueOf(1050)));
+                listOfcoy2Premium09.add(new PremiumEntity(25, 25, BigDecimal.valueOf(1100)));
+                listOfcoy2Premium09.add(new PremiumEntity(26, 26, BigDecimal.valueOf(1140)));
+                listOfcoy2Premium09.add(new PremiumEntity(27, 27, BigDecimal.valueOf(1190)));
+                listOfcoy2Premium09.add(new PremiumEntity(28, 28, BigDecimal.valueOf(1230)));
+                listOfcoy2Premium09.add(new PremiumEntity(29, 29, BigDecimal.valueOf(1260)));
+                listOfcoy2Premium09.add(new PremiumEntity(30, 30, BigDecimal.valueOf(1310)));
+                listOfcoy2Premium09.add(new PremiumEntity(31, 31, BigDecimal.valueOf(1360)));
+                listOfcoy2Premium09.add(new PremiumEntity(32, 32, BigDecimal.valueOf(1400)));
+                listOfcoy2Premium09.add(new PremiumEntity(33, 33, BigDecimal.valueOf(1500)));
+                listOfcoy2Premium09.add(new PremiumEntity(34, 34, BigDecimal.valueOf(1560)));
+                listOfcoy2Premium09.add(new PremiumEntity(35, 35, BigDecimal.valueOf(1630)));
+                listOfcoy2Premium09.add(new PremiumEntity(36, 36, BigDecimal.valueOf(1680)));
+                listOfcoy2Premium09.add(new PremiumEntity(37, 37, BigDecimal.valueOf(1800)));
+                listOfcoy2Premium09.add(new PremiumEntity(38, 38, BigDecimal.valueOf(1900)));
+                listOfcoy2Premium09.add(new PremiumEntity(39, 39, BigDecimal.valueOf(2000)));
+                listOfcoy2Premium09.add(new PremiumEntity(40, 40, BigDecimal.valueOf(2100)));
 
-                coy2TermLifeProduct02 = productSessionBean.createProductListing(coy2TermLifeProduct02, tencentCompany.getCompanyId(), listOfcoy2Riders09, listOfcoy2Premium09, listOfcoy2Features09);
+                List<PremiumEntity> listOfcoy2SmokerPremium09 = new ArrayList<>();
+                listOfcoy2SmokerPremium09.add(new PremiumEntity(23, 23, BigDecimal.valueOf(1300)));
+                listOfcoy2SmokerPremium09.add(new PremiumEntity(24, 24, BigDecimal.valueOf(1350)));
+                listOfcoy2SmokerPremium09.add(new PremiumEntity(25, 25, BigDecimal.valueOf(1360)));
+                listOfcoy2SmokerPremium09.add(new PremiumEntity(26, 26, BigDecimal.valueOf(1400)));
+                listOfcoy2SmokerPremium09.add(new PremiumEntity(27, 27, BigDecimal.valueOf(1440)));
+                listOfcoy2SmokerPremium09.add(new PremiumEntity(28, 28, BigDecimal.valueOf(1480)));
+                listOfcoy2SmokerPremium09.add(new PremiumEntity(29, 29, BigDecimal.valueOf(1520)));
+                listOfcoy2SmokerPremium09.add(new PremiumEntity(30, 30, BigDecimal.valueOf(1600)));
+                listOfcoy2SmokerPremium09.add(new PremiumEntity(31, 31, BigDecimal.valueOf(1670)));
+                listOfcoy2SmokerPremium09.add(new PremiumEntity(32, 32, BigDecimal.valueOf(1750)));
+                listOfcoy2SmokerPremium09.add(new PremiumEntity(33, 33, BigDecimal.valueOf(1880)));
+                listOfcoy2SmokerPremium09.add(new PremiumEntity(34, 34, BigDecimal.valueOf(1930)));
+                listOfcoy2SmokerPremium09.add(new PremiumEntity(35, 35, BigDecimal.valueOf(2000)));
+                listOfcoy2SmokerPremium09.add(new PremiumEntity(36, 36, BigDecimal.valueOf(2100)));
+                listOfcoy2SmokerPremium09.add(new PremiumEntity(37, 37, BigDecimal.valueOf(2200)));
+                listOfcoy2SmokerPremium09.add(new PremiumEntity(38, 38, BigDecimal.valueOf(2300)));
+                listOfcoy2SmokerPremium09.add(new PremiumEntity(39, 39, BigDecimal.valueOf(2400)));
+                listOfcoy2SmokerPremium09.add(new PremiumEntity(40, 40, BigDecimal.valueOf(2500)));
+                coy2TermLifeProduct02 = productSessionBean.createProductListing(coy2TermLifeProduct02, tencentCompany.getCompanyId(), listOfcoy2Riders09, listOfcoy2Premium09, listOfcoy2SmokerPremium09, listOfcoy2Features09);
 
                 //-----------------------
-                ProductEntity coy2TermLifeProduct03 = new TermLifeProductEntity(TermLifeProductEnum.HOSPITAL, "Tencent Term Life Insurance Product 03", 103, BigDecimal.valueOf(100000.00), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
+                ProductEntity coy2TermLifeProduct03 = new TermLifeProductEntity(TermLifeProductEnum.HOSPITAL, "Tencent Term Life Insurance Product 03", 103, BigDecimal.valueOf(50000), "This is an WholeLife Product by Tencent.\nWe make the money work for you, with a 100% Guaranteed Capital, "
                         + "whilst providing you with insurance protection.\n"
                         + "This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
-                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, termLifePricing);
+                        + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 100, PolicyCurrencyEnum.SGD, termLifePricing, BigDecimal.valueOf(0));
 
                 List<RiderEntity> listOfcoy2Riders10 = new ArrayList<>();
                 List<PremiumEntity> listOfcoy2Premium10 = new ArrayList<>();
                 List<FeatureEntity> listOfcoy2Features10 = new ArrayList<>();
 
 //              BigDecimal riderPremiumValue, String riderDescription
-                RiderEntity coy2rider10 = new RiderEntity(BigDecimal.valueOf(1200), "This rider is for Tencent Whole Life Insurance Product 03");
+                RiderEntity coy2rider10 = new RiderEntity("95% Coverage with 5% Co-payment", BigDecimal.valueOf(1200), "This rider is for Tencent Whole Life Insurance Product 03");
                 listOfcoy2Riders10.add(coy2rider10);
 
                 //Description
-                FeatureEntity coy2feature10 = new FeatureEntity("This additional feature is for Tencent Whole Life Insurance Product 03");
+                FeatureEntity coy2feature10 = new FeatureEntity("Critical Illness", "This additional feature is for Tencent Whole Life Insurance Product 03");
                 listOfcoy2Features10.add(coy2feature10);
 
                 //Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum
-                listOfcoy2Premium10.add(new PremiumEntity(23, 23, BigDecimal.valueOf(2400), false, BigDecimal.ZERO));
-                listOfcoy2Premium10.add(new PremiumEntity(24, 24, BigDecimal.valueOf(4800), false, BigDecimal.ZERO));
-                listOfcoy2Premium10.add(new PremiumEntity(25, 25, BigDecimal.valueOf(7200), false, BigDecimal.ZERO));
-                listOfcoy2Premium10.add(new PremiumEntity(26, 26, BigDecimal.valueOf(9600), false, BigDecimal.ZERO));
-                listOfcoy2Premium10.add(new PremiumEntity(27, 27, BigDecimal.valueOf(12000), false, BigDecimal.ZERO));
-                listOfcoy2Premium10.add(new PremiumEntity(28, 28, BigDecimal.valueOf(14400), false, BigDecimal.ZERO));
-                listOfcoy2Premium10.add(new PremiumEntity(29, 29, BigDecimal.valueOf(16800), false, BigDecimal.ZERO));
-                listOfcoy2Premium10.add(new PremiumEntity(30, 30, BigDecimal.valueOf(19200), false, BigDecimal.ZERO));
-                listOfcoy2Premium10.add(new PremiumEntity(31, 31, BigDecimal.valueOf(21600), false, BigDecimal.ZERO));
-                listOfcoy2Premium10.add(new PremiumEntity(32, 32, BigDecimal.valueOf(24000), false, BigDecimal.ZERO));
-                listOfcoy2Premium10.add(new PremiumEntity(33, 33, BigDecimal.valueOf(26400), false, BigDecimal.ZERO));
-                listOfcoy2Premium10.add(new PremiumEntity(34, 34, BigDecimal.valueOf(28800), false, BigDecimal.ZERO));
-                listOfcoy2Premium10.add(new PremiumEntity(35, 35, BigDecimal.valueOf(31200), false, BigDecimal.ZERO));
-                listOfcoy2Premium10.add(new PremiumEntity(36, 36, BigDecimal.valueOf(33600), false, BigDecimal.ZERO));
-                listOfcoy2Premium10.add(new PremiumEntity(37, 37, BigDecimal.valueOf(36000), false, BigDecimal.ZERO));
-                listOfcoy2Premium10.add(new PremiumEntity(38, 38, BigDecimal.valueOf(38400), false, BigDecimal.ZERO));
-                listOfcoy2Premium10.add(new PremiumEntity(39, 39, BigDecimal.valueOf(40800), false, BigDecimal.ZERO));
-                listOfcoy2Premium10.add(new PremiumEntity(40, 40, BigDecimal.valueOf(43200), false, BigDecimal.ZERO));
+                listOfcoy2Premium10.add(new PremiumEntity(23, 23, BigDecimal.valueOf(300)));
+                listOfcoy2Premium10.add(new PremiumEntity(24, 24, BigDecimal.valueOf(310)));
+                listOfcoy2Premium10.add(new PremiumEntity(25, 25, BigDecimal.valueOf(320)));
+                listOfcoy2Premium10.add(new PremiumEntity(26, 26, BigDecimal.valueOf(330)));
+                listOfcoy2Premium10.add(new PremiumEntity(27, 27, BigDecimal.valueOf(340)));
+                listOfcoy2Premium10.add(new PremiumEntity(28, 28, BigDecimal.valueOf(350)));
+                listOfcoy2Premium10.add(new PremiumEntity(29, 29, BigDecimal.valueOf(360)));
+                listOfcoy2Premium10.add(new PremiumEntity(30, 30, BigDecimal.valueOf(370)));
+                listOfcoy2Premium10.add(new PremiumEntity(31, 31, BigDecimal.valueOf(380)));
+                listOfcoy2Premium10.add(new PremiumEntity(32, 32, BigDecimal.valueOf(390)));
+                listOfcoy2Premium10.add(new PremiumEntity(33, 33, BigDecimal.valueOf(400)));
+                listOfcoy2Premium10.add(new PremiumEntity(34, 34, BigDecimal.valueOf(410)));
+                listOfcoy2Premium10.add(new PremiumEntity(35, 35, BigDecimal.valueOf(420)));
+                listOfcoy2Premium10.add(new PremiumEntity(36, 36, BigDecimal.valueOf(430)));
+                listOfcoy2Premium10.add(new PremiumEntity(37, 37, BigDecimal.valueOf(440)));
+                listOfcoy2Premium10.add(new PremiumEntity(38, 38, BigDecimal.valueOf(450)));
+                listOfcoy2Premium10.add(new PremiumEntity(39, 39, BigDecimal.valueOf(460)));
+                listOfcoy2Premium10.add(new PremiumEntity(40, 40, BigDecimal.valueOf(470)));
 
-                coy2TermLifeProduct03 = productSessionBean.createProductListing(coy2TermLifeProduct03, tencentCompany.getCompanyId(), listOfcoy2Riders10, listOfcoy2Premium10, listOfcoy2Features10);
+                coy2TermLifeProduct03 = productSessionBean.createProductListing(coy2TermLifeProduct03, tencentCompany.getCompanyId(), listOfcoy2Riders10, listOfcoy2Premium10, new ArrayList<PremiumEntity>(), listOfcoy2Features10);
 
             } catch (CompanyAlreadyExistException | UnknownPersistenceException | CompanyCreationException | PointOfContactAlreadyExistsException
                     | InvalidPointOfContactCreationException | CustomerAlreadyExistException | CustomerCreationException | ProductAlreadyExistsException | InvalidProductCreationException ex) {
