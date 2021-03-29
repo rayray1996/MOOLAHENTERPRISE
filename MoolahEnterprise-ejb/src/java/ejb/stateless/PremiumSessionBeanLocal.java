@@ -27,4 +27,7 @@ public interface PremiumSessionBeanLocal {
 
     public void deletePremium(Long premiumId) throws PremiumDoesNotExistException, ProductNotFoundException;
 
+    public List<PremiumEntity> retrieveListOfSmokerPremiumEntityForProduct(Long productId) throws ProductNotFoundException;
+
+
 }

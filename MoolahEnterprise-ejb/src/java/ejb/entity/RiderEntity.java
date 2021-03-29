@@ -27,6 +27,9 @@ public class RiderEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long riderId;
     @NotNull
+    @Size(min=1)
+    private String riderName;
+    @NotNull
     @Digits(integer=10, fraction=3)
     private BigDecimal riderPremiumValue;
     @NotNull
@@ -36,10 +39,21 @@ public class RiderEntity implements Serializable {
     public RiderEntity() {
     }
 
-    public RiderEntity(BigDecimal riderPremiumValue, String riderDescription) {
+    public RiderEntity(String riderName, BigDecimal riderPremiumValue, String riderDescription) {
+        this.riderName = riderName;
         this.riderPremiumValue = riderPremiumValue;
         this.riderDescription = riderDescription;
     }
+
+    public String getRiderName() {
+        return riderName;
+    }
+
+    public void setRiderName(String riderName) {
+        this.riderName = riderName;
+    }
+    
+    
 
     
     public BigDecimal getRiderPremiumValue() {
@@ -88,7 +102,8 @@ public class RiderEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "ejb.entity.RiderEntity[ id=" + riderId + " ]";
+        return "RiderEntity{" + "riderId=" + riderId + ", riderName=" + riderName + ", riderPremiumValue=" + riderPremiumValue + ", riderDescription=" + riderDescription + '}';
     }
+
     
 }

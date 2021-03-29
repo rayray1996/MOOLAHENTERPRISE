@@ -64,6 +64,14 @@ public class PremiumSessionBean implements PremiumSessionBeanLocal {
         }
     }
 
+    //do retrieve method and 1 more for feature entity
+    @Override
+    public List<PremiumEntity> retrieveListOfSmokerPremiumEntityForProduct(Long productId) throws ProductNotFoundException {
+        ProductEntity product = productSessionBean.retrieveProductEntityById(productId);
+        List<PremiumEntity> listOfPremium = product.getListOfSmokerPremium();
+        return listOfPremium;
+    }
+    
     @Override
     public void deletePremium(Long premiumId) throws PremiumDoesNotExistException, ProductNotFoundException {
         PremiumEntity premiumToDelete = em.find(PremiumEntity.class, premiumId);
