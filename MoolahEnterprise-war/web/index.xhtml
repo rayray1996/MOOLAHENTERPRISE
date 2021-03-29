@@ -17,54 +17,11 @@
 
             <p:messages globalOnly="true"/>
 
-            <p:panelGrid columns="2" style="border:0px none; background-color:transparent; margin-left: auto; margin-right: auto;">
+            <figure class="aia logo">
+                <p:graphicImage library="images" name="AIA Logo.jpg" height="120" width="90" alt="aia" />
 
-                <f:facet name="header">
-                    <p:outputLabel value="Create Company Details"/>
-                </f:facet>
+            </figure>
 
-                <p:column colspan="1">
-                    <p:outputLabel for="companyName" value="Company Name: "/>
-                </p:column>
-                <p:column>
-                    <p:inputText id="companyName" required="true"/>
-                </p:column>
-
-                <p:column colspan="1">
-                    <p:outputLabel for="bizRegno" value="Business Registration Number "/>
-                </p:column>
-
-                <p:column>
-                    <p:inputText id="bizRegno" required="true"/>
-                </p:column>
-
-                <p:column colspan="1">
-                    <p:outputLabel for="companyEmail" value="Company Email: "/>
-                </p:column> 
-
-                <p:column>
-                    <p:inputText id="companyEmail" required="true"/>
-                </p:column>
-
-                <p:column>
-                    <p:outputLabel for="companyContact" value="Company Contact Number: "/>
-                </p:column>
-                <p:column>
-                    <p:inputText id="companyContact" required="true" placeholder="6123 4567"/>
-                </p:column>
-
-
-                <p:column colspan="1">
-                    <p:outputLabel for="password" value="Password: "/>
-                </p:column> 
-
-                <p:column>                  
-                    <p:password id="password" required="true"/>
-                </p:column>
-
-
-
-            </p:panelGrid>
         </h:form>
     </ui:define>
 

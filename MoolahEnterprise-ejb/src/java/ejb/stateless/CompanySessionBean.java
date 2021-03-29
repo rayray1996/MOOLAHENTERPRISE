@@ -286,7 +286,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
      * balance to ensure that there is no negative amount
      */
 //    @Schedule(hour = "7", minute = "0", second = "0", dayOfMonth = "20", month = "*", year = "*", persistent = false)
-    @Schedule(hour = "*", minute = "*/50", second = "0", dayOfMonth = "*", month = "*", year = "*", persistent = false)
+    @Schedule(hour = "*/5", minute = "0", second = "0", dayOfMonth = "*", month = "*", year = "*", persistent = false)
     public void automatedCheckCreditBalance() {
         System.out.println("Timer service triggered!");
         List<CompanyEntity> listOfCompanies = em.createQuery("SELECT coy FROM CompanyEntity coy WHERE coy.isDeleted = false").getResultList();
