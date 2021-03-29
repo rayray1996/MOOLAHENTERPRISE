@@ -71,6 +71,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
             e.getListOfAdditionalFeatures().size();
             e.getListOfPremium().size();
             e.getListOfRiders().size();
+            e.getListOfSmokerPremium().size();
         }
         return results;
     }
@@ -84,6 +85,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
             e.getListOfAdditionalFeatures().size();
             e.getListOfPremium().size();
             e.getListOfRiders().size();
+            e.getListOfSmokerPremium().size();
         }
 
         return results;
@@ -98,6 +100,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
             e.getListOfAdditionalFeatures().size();
             e.getListOfPremium().size();
             e.getListOfRiders().size();
+            e.getListOfSmokerPremium().size();
         }
         return results;
     }
@@ -111,6 +114,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
             e.getListOfAdditionalFeatures().size();
             e.getListOfPremium().size();
             e.getListOfRiders().size();
+            e.getListOfSmokerPremium().size();
         }
         return results;
     }
@@ -124,6 +128,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
             product.getListOfAdditionalFeatures().size();
             product.getListOfPremium().size();
             product.getListOfRiders().size();
+            product.getListOfSmokerPremium().size();
             return product;
         }
     }
@@ -138,6 +143,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
             p.getListOfAdditionalFeatures().size();
             p.getListOfPremium().size();
             p.getListOfRiders().size();
+            p.getListOfSmokerPremium().size();
         }
 
         return results;
@@ -192,9 +198,9 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         // smoker default to no
         String smokerString = "";
         if (isSmoker) {
-            smokerString = "s.isSmoker = true";
+            smokerString = "p.listOfSmokerPremium IS NOT EMPTY";
         } else {
-            smokerString = "s.isSmoker = false";
+            smokerString = "p.listOfSmokerPremium IS EMPTY OR p.listOfSmokerPremium IS NOT EMPTY";
         }
 
         // coverage term default to -1 (no preference)
@@ -230,6 +236,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
             e.getListOfAdditionalFeatures().size();
             e.getListOfPremium().size();
             e.getListOfRiders().size();
+            e.getListOfSmokerPremium().size();
         }
 
         return results;
@@ -323,7 +330,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
     }
 
     @Override
-    public ProductEntity createProductListing(ProductEntity newProduct, Long companyId, List<RiderEntity> riders, List<PremiumEntity> premiums, List<FeatureEntity> features) throws ProductAlreadyExistsException, UnknownPersistenceException, InvalidProductCreationException {
+    public ProductEntity createProductListing(ProductEntity newProduct, Long companyId, List<RiderEntity> riders, List<PremiumEntity> premiums, List<PremiumEntity> smokerPremiums, List<FeatureEntity> features) throws ProductAlreadyExistsException, UnknownPersistenceException, InvalidProductCreationException {
         Set<ConstraintViolation<ProductEntity>> productError = validator.validate(newProduct);
         Set<ConstraintViolation<RiderEntity>> riderError = new HashSet<>();
         Set<ConstraintViolation<PremiumEntity>> premiumError = new HashSet<>();
@@ -346,6 +353,15 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
                 break;
             } else {
                 newProduct.getListOfPremium().add(p);
+            }
+        }
+
+        for (PremiumEntity p : smokerPremiums) {
+            premiumError = validator.validate(p);
+            if (!premiumError.isEmpty()) {
+                break;
+            } else {
+                newProduct.getListOfSmokerPremium().add(p);
             }
         }
 
@@ -411,6 +427,13 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
             }
         }
 
+        for (PremiumEntity p : updateProduct.getListOfSmokerPremium()) {
+            premiumError = validator.validate(p);
+            if (!premiumError.isEmpty()) {
+                break;
+            }
+        }
+
         for (FeatureEntity f : updateProduct.getListOfAdditionalFeatures()) {
             featureError = validator.validate(f);
             if (!featureError.isEmpty()) {
@@ -459,6 +482,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
             prod.getListOfAdditionalFeatures().size();
             prod.getListOfPremium().size();
             prod.getListOfAdditionalFeatures().size();
+            prod.getListOfSmokerPremium().size();
         }
         return listOfProducts;
     }

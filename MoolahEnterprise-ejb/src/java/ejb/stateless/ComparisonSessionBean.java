@@ -104,6 +104,7 @@ public class ComparisonSessionBean implements ComparisonSessionBeanLocal {
                 prod.getListOfAdditionalFeatures().size();
                 prod.getListOfPremium().size();
                 prod.getListOfRiders().size();
+                prod.getListOfSmokerPremium().size();
             }
         }
         return listOfComparison;

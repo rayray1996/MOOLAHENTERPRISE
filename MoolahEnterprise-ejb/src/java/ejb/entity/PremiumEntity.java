@@ -32,18 +32,14 @@ public class PremiumEntity implements Serializable {
     private Integer maxAgeGroup;
     @Digits(integer=10, fraction=3)
     private BigDecimal value;
-    @NotNull
-    private Boolean isSmoker;
 
     public PremiumEntity() {
     }
 
-    public PremiumEntity(Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value, Boolean isSmoker, BigDecimal guaranteeSum) {
+    public PremiumEntity(Integer minAgeGroup, Integer maxAgeGroup, BigDecimal value) {
         this.minAgeGroup = minAgeGroup;
         this.maxAgeGroup = maxAgeGroup;
         this.value = value;
-        this.isSmoker = isSmoker;
-        this.guaranteeSum = guaranteeSum;
     }
     
     public Integer getMinAgeGroup() {
@@ -70,21 +66,6 @@ public class PremiumEntity implements Serializable {
         this.value = value;
     }
 
-    public Boolean getIsSmoker() {
-        return isSmoker;
-    }
-
-    public void setIsSmoker(Boolean isSmoker) {
-        this.isSmoker = isSmoker;
-    }
-
-    public BigDecimal getGuaranteeSum() {
-        return guaranteeSum;
-    }
-
-    public void setGuaranteeSum(BigDecimal guaranteeSum) {
-        this.guaranteeSum = guaranteeSum;
-    }
     @NotNull
     @Digits(integer=10, fraction=3)
     private BigDecimal guaranteeSum;
