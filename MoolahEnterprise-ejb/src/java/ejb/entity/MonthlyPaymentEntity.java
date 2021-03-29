@@ -31,7 +31,7 @@ public class MonthlyPaymentEntity extends PaymentEntity implements Serializable 
     private List<ProductLineItemEntity> listOfProductLineItems;
 
     @NotNull
-    @Min(value = 1)
+    @Min(value = 0)
     private BigInteger totalPayable;
 
     public MonthlyPaymentEntity() {
