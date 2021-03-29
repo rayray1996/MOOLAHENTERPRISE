@@ -24,6 +24,8 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class CreditPaymentEntity extends PaymentEntity implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    
     @NotNull
     @Min(0)
     private BigInteger creditPurchased;
