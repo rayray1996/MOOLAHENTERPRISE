@@ -5,13 +5,33 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <title>Moolah Enterprise</title>
-    </h:head>
-    <h:body>
-        <header>
-            
-        </header>
-    </h:body>
+
+        
+    <header style="text-align: left; margin-top:-2%;" >
+        <figure class="companyLogo">
+            <p:graphicImage library="images" name="Moolah_Enterprise_Logo.png" height="300" width="240" alt="Moolah" />
+
+        </figure>
+        <h:panelGroup class="panelgroup_loginCol" rendered="#{sessionScope.isLogin == false || sessionScope.isLogin == NULL}">
+           
+            <h:form id="loginForm"  style="margin-left:43%; margin-top:-5%" >
+
+                <p:growl>
+                    <p:autoUpdate />
+                </p:growl>
+
+            </h:form>
+        </h:panelGroup>
+
+        <h:panelGroup class="panelgroup_loginCol" rendered="#{sessionScope.isLogin == true}">
+            <h:form id="logoutForm">
+                <h:outputText value="You are login as #{sessionScope.currentStaffEntity.firstName} #{sessionScope.currentStaffEntity.lastName} (Access Right: #{sessionScope.currentStaffEntity.accessRightEnum})" />&nbsp;
+                <p:commandButton value="Logout" actionListener="#{loginManagedBean.logout}" icon="pi pi-sign-out" />
+            </h:form>
+        </h:panelGroup>
+
+    </header>
+    
+     
 </ui:composition>
 

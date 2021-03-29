@@ -16,23 +16,21 @@
     <h:body>
         <p:layout fullPage="true">
 
-            <p:layoutUnit position="north" size="120">
-                <h1 style="font: Zapf-Chancery; font-size: 50px;"> Moolah Enterprise</h1>
+            <p:layoutUnit position="north" size="145">
                 <ui:insert name="header">
-                    <!--<ui:include src="/header.xhtml"/>-->
+                    <ui:include src="/header.xhtml"/>
+                      <ui:include src="/topmenu.xhtml" />
                     <!--<ui:include src="/mainmenu.xhtml"/>-->
                 </ui:insert>
 
             </p:layoutUnit>
 
 
-            <p:layoutUnit position="west" size="180">
-                <ui:insert name="promotions">
-                    <!--<ui:include src="/mainmenu.xhtml"/>-->
-                </ui:insert>
-            </p:layoutUnit>
+         
 
-            <p:layoutUnit position="center">
+            <p:layoutUnit position="center" style="margin-top:2%;">
+                 
+                  
                 <ui:insert name="content">Content</ui:insert>
             </p:layoutUnit>
 
