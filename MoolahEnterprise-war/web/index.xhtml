@@ -7,7 +7,7 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
 
-    <ui:define name="content">
+    <ui:define name="content" rendered="sessionScope.isLogin == false">
 
 
         <p:messages globalOnly="true"/>
@@ -34,6 +34,14 @@
             <p:graphicImage library="images" name="GE.svg" height="200" width="200 " alt="ge" style=" margin-left: 5%" />
 
         </figure>
+
+        </div>
+
+    </ui:define>
+
+
+    <ui:define  name="content" rendered="sessionScope.isLogin == true">
+        
 
     </ui:define>
 
