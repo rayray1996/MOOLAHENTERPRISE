@@ -13,7 +13,7 @@ h1 {
     font-weight: bold;
     margin: 0px;
     padding: 0px;
-    color: black;
+    color: #000000;
 }
 
 a:link, a:visited {
@@ -30,20 +30,21 @@ a:link:hover, a:visited:hover  {
 .loginlbl{
     font-size:0.6em;
 }
-.ui-layout-unit .ui-layout-unit-content{
-    overflow:hidden;
-}
-.ui-layout-unit-content{
-    height:99%;
-} 
-body .ui-layout-unit-content{
-    overflow:auto;
-}
-body .ui-layout-unit-header, .ui-layout-unit-footer{
-    
-    height:7.7%;
 
+.panelGrid_col2_formInputBox {
+    width:80%;
 }
-.menu_style {
-    padding:0;
+
+.panelGrid_col2_colStyle {
+    width:30%;
+    height:100%;
+}
+
+.noBorders tr, .noBorders td {
+    background: none !important;
+    border: none !important;
+}
+
+.panelGrid_row_height_account_registration {
+    height:20%;
 }
