@@ -21,6 +21,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -86,6 +87,7 @@ public class ProductEntity implements Serializable {
     @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
     private List<PremiumEntity> listOfPremium;
     @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
+    @JoinColumn(nullable = true)
     private List<PremiumEntity> listOfSmokerPremium;
 
     public ProductEntity() {
@@ -95,7 +97,7 @@ public class ProductEntity implements Serializable {
         productCategoryPricing = new CategoryPricingEntity();
         company = new CompanyEntity();
         listOfPremium = new ArrayList<PremiumEntity>();
-        listOfSmokerPremium = new ArrayList<>();
+        listOfSmokerPremium = new ArrayList<PremiumEntity>();
         productImage = null;
     }
 

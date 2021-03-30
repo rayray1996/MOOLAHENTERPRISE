@@ -143,13 +143,14 @@ public class DataInitSessionBean {
                 em.flush();
 
                 //Create ProductEntity - using specific subclasses
-                //EndowmentProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm) {
+                //EndowmentProductEnum productEnum, String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm, PolicyCurrencyEnum currency, CategoryPricingEntity pricing, BigDecimal averageInterestRate
                 ProductEntity endowmentEntity = new EndowmentEntity(EndowmentProductEnum.ENDOWMENT, "Alibaba Endowment Product 01", 103, BigDecimal.valueOf(100000.00), "This is an Endowment Product by Alibaba.\n We make the money work for you, with a 100% Guaranteed Capital, whilst providing you with insurance protection.\n This comes with the option for Policy Continuity, allowing your spouse or child (below 16) as the secondary insured, "
                         + "allowing the endowment plan to carry forward in the evnet of unfortunate circumstances", false, 50, PolicyCurrencyEnum.SGD, endowmentPricing, BigDecimal.valueOf(3));
 
                 List<FeatureEntity> listOfFeature = new ArrayList<>();
                 List<RiderEntity> listOfRiders = new ArrayList<>();
                 List<PremiumEntity> listOfPremium = new ArrayList<>();
+                 List<PremiumEntity> listOfSmokerPremium = new ArrayList<>();
 
 //              BigDecimal riderPremiumValue, String riderDescription
                 RiderEntity rider01 = new RiderEntity("95% Coverage with 5% Co-payment", BigDecimal.valueOf(1200), "This rider is for Alibaba Endowment Product 01");
@@ -179,8 +180,8 @@ public class DataInitSessionBean {
                 listOfPremium.add(new PremiumEntity(39, 39, BigDecimal.valueOf(323)));
                 listOfPremium.add(new PremiumEntity(40, 40, BigDecimal.valueOf(323)));
 
-                //ProductEntity newProduct, Long companyId, List<RiderEntity> riders, List<PremiumEntity> premiums, List<FeatureEntity> features
-                endowmentEntity = productSessionBean.createProductListing(endowmentEntity, alibabaCompany.getCompanyId(), listOfRiders, listOfPremium, new ArrayList<PremiumEntity>(), listOfFeature);
+                //PProductEntity newProduct, Long companyId, List<RiderEntity> riders, List<PremiumEntity> premiums, List<PremiumEntity> smokerPremiums, List<FeatureEntity> features
+                endowmentEntity = productSessionBean.createProductListing(endowmentEntity, alibabaCompany.getCompanyId(), listOfRiders, listOfPremium, listOfSmokerPremium, listOfFeature);
 
 //*****************************************************************************************************************************************************************************************************************************************************
                 //Create ProductEntity - using specific subclasses
