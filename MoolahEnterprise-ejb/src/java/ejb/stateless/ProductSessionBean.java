@@ -208,7 +208,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         if (coverageTerm < 0) {
             coverageTermString = "p.coverageTerm >= 0";
         } else {
-            coverageTermString = ":coverageTerm >= p.coverageTerm AND :coverageTerm <= p.coverageTerm";
+            coverageTermString = ":coverageTerm <= p.coverageTerm";
         }
 
         // premium term default to -1 (no prefernce)
@@ -216,7 +216,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         if (premiumTerm < 0) {
             premiumTermString = "p.premiumTerm >= 0";
         } else {
-            premiumTermString = ":premiumTerm >= p.premiumTerm AND :premiumTerm <= p.premiumTerm";
+            premiumTermString = ":premiumTerm <= p.premiumTerm";
         }
 
         // sumAssured is greater than or equal
