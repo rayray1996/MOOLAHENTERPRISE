@@ -48,3 +48,8 @@ a:link:hover, a:visited:hover  {
 .panelGrid_row_height_account_registration {
     height:20%;
 }
+.facet2{
+    margin-left: auto; 
+    margin-right: auto; 
+    text-align: center;
+}
