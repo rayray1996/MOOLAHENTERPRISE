@@ -25,4 +25,10 @@
     <welcome-file-list>
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
+    <ejb-local-ref>
+        <ejb-ref-name>CustomerSessionBean</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.stateless.CustomerSessionBeanLocal</local>
+        <ejb-link>MoolahEnterprise-ejb.jar#CustomerSessionBean</ejb-link>
+    </ejb-local-ref>
 </web-app>
