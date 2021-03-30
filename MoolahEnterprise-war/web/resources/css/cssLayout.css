@@ -63,23 +63,6 @@
     margin-top:-5%;
 }
 
-.panelGrid_col2_formInputBox {
-    width:40%;
-}
-
-.panelGrid_col2_colStyle {
-    width:20%;
-}
-
-.panelGrid_row_height_account_registration {
-    height: 20px;
-}
-
-.noBorders tr, .noBorders td {
-    background: none !important;
-    border: none !important;
-}
-
 .index_font{
     font-family: Garamond,serif;
 }
