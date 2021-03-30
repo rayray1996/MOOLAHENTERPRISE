@@ -56,41 +56,7 @@ public class AssetEntity implements Serializable {
     }
 
  
-    public Long getAssetId() {
-        return assetId;
-    }
-
-    public void setAssetId(Long assetId) {
-        this.assetId = assetId;
-    }
-
-    public BigDecimal getCashInHand() {
-        return cashInHand;
-    }
-
-    public BigDecimal getMonthlyExpense() {
-        return monthlyExpense;
-    }
-
-    public void setMonthlyExpense(BigDecimal monthlyExpense) {
-        this.monthlyExpense = monthlyExpense;
-    }
-
-    public BigDecimal getInvestments() {
-        return investments;
-    }
-
-    public void setInvestments(BigDecimal investments) {
-        this.investments = investments;
-    }
-
-    public BigDecimal getMonthlyIncome() {
-        return monthlyIncome;
-    }
-
-    public void setMonthlyIncome(BigDecimal monthlyIncome) {
-        this.monthlyIncome = monthlyIncome;
-    }
+    
 
     @Override
     public int hashCode() {
@@ -115,6 +81,38 @@ public class AssetEntity implements Serializable {
     @Override
     public String toString() {
         return "ejb.entity.AssetEntity[ id=" + assetId + " ]";
+    }
+
+    public BigDecimal getCashInHand() {
+        return cashInHand;
+    }
+
+    public void setCashInHand(BigDecimal cashInHand) {
+        this.cashInHand = cashInHand;
+    }
+
+    public BigDecimal getMonthlyExpense() {
+        return monthlyExpense;
+    }
+
+    public void setMonthlyExpense(BigDecimal monthlyExpense) {
+        this.monthlyExpense = monthlyExpense;
+    }
+
+    public BigDecimal getInvestments() {
+        return investments;
+    }
+
+    public void setInvestments(BigDecimal investments) {
+        this.investments = investments;
+    }
+
+    public BigDecimal getMonthlyIncome() {
+        return monthlyIncome;
+    }
+
+    public void setMonthlyIncome(BigDecimal monthlyIncome) {
+        this.monthlyIncome = monthlyIncome;
     }
     
 }
