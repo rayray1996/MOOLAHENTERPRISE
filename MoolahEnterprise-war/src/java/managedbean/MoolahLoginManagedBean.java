@@ -5,9 +5,7 @@
  */
 package managedbean;
 
-import ejb.entity.CompanyEntity;
 import ejb.entity.CustomerEntity;
-import ejb.stateless.CompanySessionBeanLocal;
 import ejb.stateless.CustomerSessionBeanLocal;
 import java.io.IOException;
 import javax.ejb.EJB;
@@ -17,7 +15,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.servlet.http.HttpSession;
-import util.exception.CompanyDoesNotExistException;
 import util.exception.IncorrectLoginParticularsException;
 
 /**
