@@ -55,19 +55,13 @@ public class MoolahLoginManagedBean {
      */
     public MoolahLoginManagedBean() {
     }
-    
 
     public void login(ActionEvent event) throws IOException {
         try {
             CustomerEntity currentCustomer = customerSessionBean.login(email, password);
-
             FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("isLogin", true);
-
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("customerEntity", currentCustomer);
-
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("customerEntity", currentCustomer);
-
             FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.xhtml");
         } catch (IncorrectLoginParticularsException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid login credential: " + ex.getMessage(), null));
