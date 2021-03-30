@@ -349,6 +349,8 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         // validate premiums
         for (PremiumEntity p : premiums) {
             premiumError = validator.validate(p);
+            em.persist(p);
+            em.flush();
             if (!premiumError.isEmpty()) {
                 break;
             } else {
@@ -358,6 +360,8 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 
         for (PremiumEntity p : smokerPremiums) {
             premiumError = validator.validate(p);
+            em.persist(p);
+            em.flush();
             if (!premiumError.isEmpty()) {
                 break;
             } else {

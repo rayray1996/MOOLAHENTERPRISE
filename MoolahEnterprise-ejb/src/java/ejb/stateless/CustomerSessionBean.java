@@ -285,7 +285,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         }
 
         for (BigDecimal capital : nextThreeYearsOfCapital) {
-            if (capital.compareTo(currPremium.getValue()) < 0) {
+            if (capital.compareTo(currPremium.getPremiumValue()) < 0) {
                 return false;
             }
         }

@@ -238,6 +238,7 @@ public class EmailManager {
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
         String dateRequested = format.format(requestedDate);
+        
 
         emailBody += "Dear " + customer.getFullName() + "\n\n";
         emailBody += "You have requested to reset your password on " + dateRequested + "\n\n";
