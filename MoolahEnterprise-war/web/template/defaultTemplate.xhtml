@@ -16,8 +16,16 @@
             }
             .ui-layout-unit-content{
                 height:99%!important;
+            }  
+            body{
+                .ui-layout-unit .ui-layout-unit-content{
+                    overflow:auto;
+                }
+                .ui-layout-unit-content{
+                    height:99%!important;
+                }   
             }
-            
+
         </style>
         <title>Moolah Enterprise</title>
     </h:head>
@@ -27,7 +35,7 @@
 
             <p:layoutUnit position="north" size="123">
                 <ui:insert name="header" id="headerID" >
-                    
+
                     <ui:include src="/header.xhtml"/>
                     <!--<ui:include src="/mainmenu.xhtml"/>-->
                 </ui:insert>
@@ -35,12 +43,12 @@
             </p:layoutUnit>
 
 
-         
+
 
             <p:layoutUnit position="center" style="margin-top:2%;">
-                 
-                      <ui:include src="/topmenu.xhtml" />
-                  
+
+                <ui:include src="/topmenu.xhtml" />
+
                 <ui:insert name="content">Content</ui:insert>
             </p:layoutUnit>
 
