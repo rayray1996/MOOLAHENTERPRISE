@@ -6,32 +6,72 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
 
-        
-    <header style="text-align: left; margin-top:-2%;" >
-        <figure class="companyLogo">
-            <p:graphicImage library="images" name="Moolah_Enterprise_Logo.png" height="300" width="240" alt="Moolah" />
+    <figure class="companyLogo" style="float:left;" >
+        <p:graphicImage library="images" name="c1_logo.png" style="height:100%;width:135%; margin-top:-11%; " alt="Moolah" />
 
-        </figure>
-        <h:panelGroup class="panelgroup_loginCol" rendered="#{sessionScope.isLogin == false || sessionScope.isLogin == NULL}">
-           
-            <h:form id="loginForm"  style="margin-left:43%; margin-top:-5%" >
+    </figure>
+    <h:panelGroup rendered="#{sessionScope.isLogin == false || sessionScope.isLogin == NULL}">
+        <h:form style="margin-top:0%;">
 
-                <p:growl>
-                    <p:autoUpdate />
-                </p:growl>
+            <div style="float:right; width:21%;font-size:0.80em;" >
+                <p:outputLabel for="email" value="Email" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <p:inputText id="email" value="#{moolahLoginManagedBean.email}" size="16" required="true" requiredMessage="Email is required" maxlength="32">
+                    <f:validateLength minimum="4" />
+                </p:inputText>
+                <br/>
+                <br/>
+                <p:outputLabel for="password" value="Password" />&nbsp;
+                <p:password id="password" value="#{moolahLoginManagedBean.password}" size="16" required="true" requiredMessage="Password is required" maxlength="32">
+                    <f:validateLength minimum="4" />
+                </p:password>
+                <br/>
+                <br/>
+                <p:link type="reset" value="Forget Password"  />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <p:commandButton type="submit" value="Login" actionListener="#{moolahLoginManagedBean.login}"/>
 
-            </h:form>
-        </h:panelGroup>
+            </div>
+        </h:form>
+    </h:panelGroup>
+    &nbsp;
 
-        <h:panelGroup class="panelgroup_loginCol" rendered="#{sessionScope.isLogin == true}">
-            <h:form id="logoutForm">
-                <h:outputText value="You are login as #{sessionScope.currentStaffEntity.firstName} #{sessionScope.currentStaffEntity.lastName} (Access Right: #{sessionScope.currentStaffEntity.accessRightEnum})" />&nbsp;
-                <p:commandButton value="Logout" actionListener="#{loginManagedBean.logout}" icon="pi pi-sign-out" />
-            </h:form>
-        </h:panelGroup>
+    <h:panelGroup rendered="#{sessionScope.isLogin == true}">
 
-    </header>
-    
-     
+        <h:form id="logoutForm" >
+
+            <div class="card" style="margin-left:19%;width:42%;margin-top:5.2%; ">
+                <p:tabMenu activeIndex="#{param.i}">
+                    <p:menuitem value="Home" outcome="/index.xhtml">
+                        <f:param name="i" value="0"/>
+                    </p:menuitem>
+                    <p:menuitem value="About Us" >
+                        <f:param name="i" value="1"/>
+                    </p:menuitem>
+                    <p:menuitem value="About Us" >
+                        <p:menuitem value="Recommend For Me" outcome="/index.xhtml">
+                            <f:param name="i" value="0"/>
+                        </p:menuitem>
+                        <p:menuitem value="Search For Products" outcome="/index.xhtml">
+                            <f:param name="i" value="0"/>
+                        </p:menuitem>
+                    </p:menuitem>
+
+                    <p:menuitem value="Financial Calculator">
+                        <f:param name="i" value="3"/>
+                    </p:menuitem>
+                </p:tabMenu>
+            </div>
+            &nbsp;
+            <div id = "loggedinDisplay" style="width:19%; float:right;margin-top:-1.7%;font-size:0.75em;">
+                <h:outputText value="You are login as #{sessionScope.companyLogin.companyName}" />&nbsp;
+                <p:commandButton value="Logout" actionListener="#{moolahLoginManagedBean.logout}" />
+            </div>
+        </h:form>
+    </h:panelGroup>
+
+    <p:growl>
+        <p:autoUpdate />
+    </p:growl>
+
+
 </ui:composition>
 
