@@ -6,7 +6,9 @@
 package managedbean;
 
 import ejb.entity.CompanyEntity;
+import ejb.entity.CustomerEntity;
 import ejb.stateless.CompanySessionBeanLocal;
+import ejb.stateless.CustomerSessionBeanLocal;
 import java.io.IOException;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -27,25 +29,17 @@ import util.exception.IncorrectLoginParticularsException;
 public class MoolahLoginManagedBean {
 
     @EJB
-    private CompanySessionBeanLocal companySessionBeanLocal;
-    private String username;
+    private CustomerSessionBeanLocal customerSessionBean;
+
+    private String email;
     private String password;
-    private CompanyEntity companyEntity; 
 
-    public CompanyEntity getCompanyEntity() {
-        return companyEntity;
+    public String getEmail() {
+        return email;
     }
 
-    public void setCompanyEntity(CompanyEntity companyEntity) {
-        this.companyEntity = companyEntity;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -55,37 +49,33 @@ public class MoolahLoginManagedBean {
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    
+
     /**
      * Creates a new instance of MoolahLoginManagedBean
      */
     public MoolahLoginManagedBean() {
     }
     
-      public void login(ActionEvent event) throws IOException
-    {
-        try
-        {
-            companyEntity = companySessionBeanLocal.login(username, password);
+
+    public void login(ActionEvent event) throws IOException {
+        try {
+            CustomerEntity currentCustomer = customerSessionBean.login(email, password);
+
             FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("isLogin", true);
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("companyLogin", companyEntity);
+
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("customerEntity", currentCustomer);
+
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("customerEntity", currentCustomer);
+
             FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.xhtml");
-        }
-        catch(CompanyDoesNotExistException ex)
-        {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Company does not exist: " + ex.getMessage(), null));
-        }catch(IncorrectLoginParticularsException ex){
-             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid login credential: " + ex.getMessage(), null));
+        } catch (IncorrectLoginParticularsException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid login credential: " + ex.getMessage(), null));
         }
     }
-    
-    
-    
-    public void logout(ActionEvent event) throws IOException
-    {
-        ((HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true)).invalidate();
+
+    public void logout(ActionEvent event) throws IOException {
+        ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true)).invalidate();
         FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.xhtml");
     }
 }

@@ -8,19 +8,33 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content">
-   
+
+
+        <p:messages globalOnly="true"/>
+
         <br/>
         <br/>
-        <h:form>
+        <div style="width: 60%; margin-left: auto; margin-right: auto; text-align: center; line-height: 2.5">
+            <p:outputLabel style="font-family: Garamond,serif; "> Moolah aims to provide young adults a quick overview of the different financial products offered by financial institutions. 
+                On top of that, it allows users to compare the products offered by different institutions. 
+                For users who are unsure of what financial products are suitable for them, 
+                our application can also feature products which are more relevant to them based on the results of the questionnaire posed to them.
+                <br/>
+                <br/>
+                Currently our application displays products from these companies: 
+                <br/>
+            </p:outputLabel>
+        </div>
 
-            <p:messages globalOnly="true"/>
+        <br/>
+        <figure class="aia logo">
+            <p:graphicImage library="images" name="aia-group-limited-vector-logo.svg" height="180" width="200" alt="aia" style=" margin-left: 15%" />
+            <p:graphicImage library="images" name="aviva logo transparent.svg" height="180" width="200 " alt="aviva" style=" margin-left: 5%" />
+            <p:graphicImage library="images" name="prudential-2.svg" height="200" width="200 " alt="prudential" style=" margin-left: 5%" />
+            <p:graphicImage library="images" name="GE.svg" height="200" width="200 " alt="ge" style=" margin-left: 5%" />
 
-            <figure class="aia logo">
-                <p:graphicImage library="images" name="AIA Logo.jpg" height="120" width="90" alt="aia" />
+        </figure>
 
-            </figure>
-
-        </h:form>
     </ui:define>
 
 </ui:composition>
