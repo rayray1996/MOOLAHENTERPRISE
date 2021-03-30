@@ -78,4 +78,8 @@
 .noBorders tr, .noBorders td {
     background: none !important;
     border: none !important;
+    
+.index_font{
+    font-family: Garamond,serif;
+
 }
