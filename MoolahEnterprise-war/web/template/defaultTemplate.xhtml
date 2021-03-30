@@ -11,17 +11,9 @@
         <h:outputStylesheet name="./css/default.css"/>
         <h:outputStylesheet name="./css/cssLayout.css"/>
         <style>
-            .ui-layout-unit .ui-layout-unit-content{
-                overflow:hidden;
+            .ui-layout-unit-header, .ui-layout-unit-footer{
+                padding:0;
             }
-            .ui-layout-unit-content{
-                height:99%;
-            }  
-            body .ui-layout-unit-content{
-                    overflow:auto !important;
-                
-            }
-
         </style>
       
         <title>Moolah Enterprise</title>
@@ -30,7 +22,7 @@
     <h:body>
         <p:layout fullPage="true">
 
-            <p:layoutUnit position="north" size="123">
+            <p:layoutUnit position="north" size="125" style="">
                 <ui:insert name="header" id="headerID" >
 
                     <ui:include src="/header.xhtml"/>
@@ -43,8 +35,9 @@
 
 
             <p:layoutUnit position="center" style="margin-top:2%;">
-
-                <ui:include src="/topmenu.xhtml" />
+                <f:facet name="header" >
+                    <ui:include src="/topmenu.xhtml" class="menu_style" />
+                </f:facet>
 
                 <ui:insert name="content">Content</ui:insert>
             </p:layoutUnit>
