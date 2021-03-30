@@ -108,6 +108,7 @@ public class CustomerEntity implements Serializable {
         this.salt = CryptographicHelper.getInstance().generateRandomString(32);
         this.resetPasswordPathParam = null;
         this.expiryDateOfPathParam = null;
+        this.asset = new AssetEntity();
     }
 
     public CustomerEntity(String fullName, String email, String password, GregorianCalendar dateOfBirth, String phoneNumber, GenderEnum gender, Boolean smoker, AssetEntity asset, Boolean isMarried) {
