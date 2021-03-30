@@ -17,6 +17,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import managedbean.ViewProductDetailManagedBean;
 
 /**
  *
@@ -72,7 +73,10 @@ public class MoolahEnterpriseFilter implements Filter {
                 || path.equals("/accessRightError.xhtml")
                 || path.startsWith("/javax.faces.resource")
                 || path.startsWith("/aboutUs.xhtml")
-                || path.startsWith("/resetPassword.xhtml")) {
+                || path.startsWith("/resetPassword.xhtml")
+                || path.startsWith("/createAccount.xhtml")
+                || path.startsWith("/product/ViewRecommendedProduct.xhtml")
+                || path.startsWith("/product/viewProductDetail.xhtml")) {
             return true;
         } else {
             return false;

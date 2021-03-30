@@ -10,30 +10,13 @@
         header
     </ui:define>
 
-    <!--styleClass="noBorders"--> 
+    
     <ui:define name="content">
-        <style>
-            .panelGrid_col2_formInputBox {
-                width:80%;
-            }
-
-            .panelGrid_col2_colStyle {
-                width:30%;
-            }
-
-            .noBorders tr, .noBorders td {
-                background: none !important;
-                border: none !important;
-            }
-            td{
-                height:110%;
-            }
-        </style>
         <h:outputStylesheet library="css" name="default.css" />
 
         <h1>Create an Account</h1> 
 
-        <p:panelGrid style="margin: 0 auto;">
+        <p:panelGrid style="margin: 0 auto;" styleClass="noBorders" >
             <h:form id="accountForm">
 
                 <p:row styleClass="panelGrid_row_height_account_registration">

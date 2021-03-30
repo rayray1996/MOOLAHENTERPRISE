@@ -1,14 +1,56 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./../template/defaultTemplate.xhtml">
+                template="./../template/defaultTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="header">
         header
     </ui:define>
 
     <ui:define name="content">
-        
+        <p:dataTable id="dataTableAllProducts" widgetVar="dataTableAllProducts" value="#{viewRecommendedProductManagedBean.listOfProducts}" var="productEntity" rowKey="#{productEntity.productEntity.productId}" rowIndexVar="row"
+                     filteredValue="#{viewRecommendedProductManagedBean.filteredProducts}"
+                     rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50">
+
+            <f:facet name="header">
+                <p:outputPanel style="text-align: right;">
+                    <h:outputText value="Search all fields:" />
+                    <p:inputText id="globalFilter" onkeyup="PF('dataTableAllProducts').filter()" style="width:300px" placeholder="Enter keyword"/>
+                </p:outputPanel>
+            </f:facet>
+
+            <p:column headerText="Product Name" sortBy="#{productEntity.productEntity.productName}" filterBy="#{productEntity.productEntity.productName}" filterMatchMode="contains">
+                <h:outputText value="#{productEntity.productEntity.productName}" />
+            </p:column>
+
+            <p:column headerText="Coverage Term" sortBy="#{productEntity.productEntity.coverageTerm}" filterBy="#{productEntity.productEntity.coverageTerm}" filterMatchMode="contains">
+                <h:outputText value="#{productEntity.productEntity.coverageTerm}" />
+            </p:column>                            
+
+            <p:column headerText="Premium Term" sortBy="#{productEntity.productEntity.premiumTerm}" filterBy="#{productEntity.productEntity.premiumTerm}" filterMatchMode="contains">
+                <h:outputText value="#{productEntity.productEntity.premiumTerm}" />
+            </p:column>
+
+            <p:column headerText="Minimum Sum Assured" sortBy="#{productEntity.productEntity.assuredSum}" filterBy="#{productEntity.productEntity.assuredSum}" filterMatchMode="contains">
+                <h:outputText value="#{productEntity.productEntity.assuredSum}" />
+            </p:column>
+
+            <p:column headerText="Product Type" sortBy="#{productEntity.stringChildCategory}" filterBy="#{productEntity.stringChildCategory}" filterMatchMode="contains">
+                <h:outputText value="#{productEntity.stringChildCategory}" />
+            </p:column>
+            
+            <p:column headerText="Action" >
+                <p:commandButton icon="ui-icon-document" title="View" actionListener="#{viewRecommendedProductManagedBean.redirectToViewProductPage}">
+                    <f:setPropertyActionListener value="#{productEntity}" target="#{viewRecommendedProductManagedBean.viewProductDetailManagedBean.productToView}" />
+                </p:commandButton>
+                <p:commandButton icon="pi-star-o" >
+                </p:commandButton>
+            </p:column>
+
+        </p:dataTable>
     </ui:define>
 
     <ui:define name="sidebar">

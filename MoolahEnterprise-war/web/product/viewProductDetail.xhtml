@@ -1,0 +1,151 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/defaultTemplate.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="header">
+        header
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h1>
+            About the Product
+        </h1>
+        <p:panelGrid columns="2" columnClasses="">
+            <p:row>
+                <p:column>
+                    <p:outputLabel value="Company Name"/>
+                </p:column>
+                <p:column>
+                    <h:outputText value="#{viewProductDetailManagedBean.productToView.productEntity.company.companyName}"/>
+                </p:column>
+            </p:row>
+
+            <p:row>
+                <p:column>
+                    <p:outputLabel value="Product Name"/>
+                </p:column>
+                <p:column>
+                    <h:outputText value="#{viewProductDetailManagedBean.productToView.productEntity.productName}"/>
+                </p:column>
+            </p:row>
+
+            <p:row>
+                <p:column>
+                    <p:outputLabel value="Product Category"/>
+                </p:column>
+                <p:column>
+                    <h:outputText value="#{viewProductDetailManagedBean.productToView.stringParentCategory}"/>
+                </p:column>
+            </p:row>
+
+            <p:row>
+                <p:column>
+                    <p:outputLabel value="Product Type"/>
+                </p:column>
+                <p:column>
+                    <h:outputText value="#{viewProductDetailManagedBean.productToView.stringChildCategory}"/>
+                </p:column>
+            </p:row>
+
+            <p:row>
+                <p:column>
+                    <p:outputLabel value="Average Interest Rate"/>
+                </p:column>
+                <p:column>
+                    <h:outputText value="#{viewProductDetailManagedBean.productToView.productEntity.averageInterestRate}"/>
+                    <p:commandButton style="float: right;" icon="pi-question-circle" actionListener=""/>
+                </p:column>
+            </p:row>
+        </p:panelGrid>
+
+
+        <h1>
+            Coverage
+        </h1>
+        <p:panelGrid columns="2" columnClasses="">
+            <p:row>
+                <p:column>
+                    <p:outputLabel value="Coverage Term"/>
+                </p:column>
+                <p:column>
+                    <h:outputText value="#{viewProductDetailManagedBean.productToView.productEntity.coverageTerm}"/>
+                </p:column>
+            </p:row>
+
+            <p:row>
+                <p:column>
+                    <p:outputLabel value="Minimum Sum Assured:"/>
+                </p:column>
+                <p:column>
+                    <h:outputText value="#{viewProductDetailManagedBean.productToView.productEntity.assuredSum}"/>
+                </p:column>
+            </p:row>
+        </p:panelGrid>
+
+        <p:dataTable id="productPremiumTable" widgetVar="productPremiumTable" value="#{viewProductDetailManagedBean.productToView.productEntity.listOfPremium}" var="premium" rowKey="#{premium.premiumId}">
+            <p:column headerText="Min Age Group" sortBy="#{premium.minAgeGroup}" filterBy="#{premium.minAgeGroup}" filterMatchMode="contains">
+                <h:outputText value="#{premium.minAgeGroup}" />
+            </p:column>
+
+            <p:column headerText="Max Age Group" sortBy="#{premium.maxAgeGroup}" filterBy="#{premium.maxAgeGroup}" filterMatchMode="contains">
+                <h:outputText value="#{premium.maxAgeGroup}" />
+            </p:column>                            
+
+            <p:column headerText="Premium Price" sortBy="#{premium.premiumValue}" filterBy="#{premium.premiumValue}" filterMatchMode="contains">
+                <h:outputText value="#{premium.premiumValue}" />
+            </p:column>
+        </p:dataTable>
+
+        <p:dataTable id="productPremiumTable" widgetVar="productPremiumTable" value="#{viewProductDetailManagedBean.productToView.productEntity.listOfRiders}" var="rider" rowKey="#{rider.riderId}" rowIndexVar="rowIndex">
+            <p:column headerText="No" sortBy="#{rowIndex}" filterBy="#{rowIndex}" filterMatchMode="contains">
+                <h:outputText value="#{rowIndex+1}" />
+            </p:column>
+
+            <p:column headerText="Name" sortBy="#{rider.riderName}" filterBy="#{rider.riderName}" filterMatchMode="contains">
+                <h:outputText value="#{rider.riderName}" />
+            </p:column>                            
+
+            <p:column headerText="Description">
+                <h:outputText value="#{rider.riderDescription}" />
+            </p:column>
+
+            <p:column headerText="Addtional Premium per year">
+                <h:outputText value="#{rider.riderPremiumValue}" />
+            </p:column>
+        </p:dataTable>
+
+        <p:dataTable id="productPremiumTable" widgetVar="productPremiumTable" value="#{viewProductDetailManagedBean.productToView.productEntity.listOfAdditionalFeatures}" var="features" rowKey="#{features.featureId}" rowIndexVar="rowIndex">
+            <p:column headerText="No" sortBy="#{rowIndex}" filterBy="#{rowIndex}" filterMatchMode="contains">
+                <h:outputText value="#{rowIndex+1}" />
+            </p:column>
+
+            <p:column headerText="Name">
+                <h:outputText value="#{features.featureName}" />
+            </p:column>                            
+
+            <p:column headerText="Description">
+                <h:outputText value="#{features.featureDescription}" />
+            </p:column>
+
+        </p:dataTable>
+        
+        <h2>Affordability Table</h2>
+        <p:dataTable>
+            
+        </p:dataTable>
+    </ui:define>
+
+    <ui:define name="sidebar">
+        sidebar
+    </ui:define>
+
+    <ui:define name="footer">
+        footer
+    </ui:define>
+
+</ui:composition>
