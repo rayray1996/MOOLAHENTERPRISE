@@ -10,16 +10,25 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <h:outputStylesheet name="./css/default.css"/>
         <h:outputStylesheet name="./css/cssLayout.css"/>
+        <style>
+            .ui-layout-unit .ui-layout-unit-content{
+                overflow:hidden;
+            }
+            .ui-layout-unit-content{
+                height:99%!important;
+            }
+            
+        </style>
         <title>Moolah Enterprise</title>
     </h:head>
 
     <h:body>
         <p:layout fullPage="true">
 
-            <p:layoutUnit position="north" size="125">
-                <ui:insert name="header">
+            <p:layoutUnit position="north" size="123">
+                <ui:insert name="header" id="headerID" >
+                    
                     <ui:include src="/header.xhtml"/>
-                      <ui:include src="/topmenu.xhtml" />
                     <!--<ui:include src="/mainmenu.xhtml"/>-->
                 </ui:insert>
 
@@ -30,6 +39,7 @@
 
             <p:layoutUnit position="center" style="margin-top:2%;">
                  
+                      <ui:include src="/topmenu.xhtml" />
                   
                 <ui:insert name="content">Content</ui:insert>
             </p:layoutUnit>

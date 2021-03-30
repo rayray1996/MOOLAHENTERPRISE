@@ -30,6 +30,15 @@ public class MoolahLoginManagedBean {
     private CompanySessionBeanLocal companySessionBeanLocal;
     private String username;
     private String password;
+    private CompanyEntity companyEntity; 
+
+    public CompanyEntity getCompanyEntity() {
+        return companyEntity;
+    }
+
+    public void setCompanyEntity(CompanyEntity companyEntity) {
+        this.companyEntity = companyEntity;
+    }
 
     public String getUsername() {
         return username;
@@ -58,10 +67,10 @@ public class MoolahLoginManagedBean {
     {
         try
         {
-            CompanyEntity currentCompanyEntity = companySessionBeanLocal.login(username, password);
+            companyEntity = companySessionBeanLocal.login(username, password);
             FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("isLogin", true);
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("companyLogin", currentCompanyEntity);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("companyLogin", companyEntity);
             FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.xhtml");
         }
         catch(CompanyDoesNotExistException ex)
