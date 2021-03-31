@@ -38,6 +38,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import util.exception.AssetEntityDoesNotExistException;
 import util.exception.CustomerAlreadyExistException;
 import util.exception.CustomerCreationException;
 import util.exception.CustomerDoesNotExistsException;
@@ -219,10 +220,10 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
             throw new CustomerDoesNotExistsException("Customer with ID " + id + " does not exists!");
         }
     }
-    
+
     @Override
     public CustomerEntity retrieveCustomerByParaLink(String path) throws CustomerDoesNotExistsException {
-         try {
+        try {
             CustomerEntity cust = (CustomerEntity) em.createQuery("SELECT c FROM CustomerEntity c WHERE c.resetPasswordPathParam =:pathParam").setParameter("pathParam", path).getSingleResult();
             cust.getListOfIssues().size();
             cust.getListOfLikeProducts().size();
@@ -390,5 +391,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 
         return msg;
     }
+
+  
 
 }

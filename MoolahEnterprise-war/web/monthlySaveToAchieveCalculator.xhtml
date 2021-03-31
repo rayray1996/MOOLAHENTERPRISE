@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./template/defaultTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content" >
+        <style>
+            .financial_calculator_input{
+                width:40%
+            }
+            
+        </style>
+        <h:form id="financial_calculator_how_much">
+
+            <h3 style="color:#0070a3; text-align:center;">How much do I need to save every month to achieve my financial goal by a certain period of time</h3><br/>
+            <div class="monthlySaveToAchieve" style="margin-left:38%">
+                <p:outputLabel value="How much do I have currently?"/><br/><br/>
+                <p:inputText class="financial_calculator_input" value="#{monthlySaveCalculatorManagedBean.currentlyHave}" placeholder="Enter your currently have" required="true" requiredMessage="Currently have is required!"/><br/><br/>
+                <br/>
+                <p:outputLabel value="Inflation Rate:"/><br/>
+                <p:inputText class="financial_calculator_input" value="#{monthlySaveCalculatorManagedBean.inflationRate}" placeholder="Enter your interest rate/ leave blank if you dont know"/><br/><br/>
+                <p:outputLabel value="How much am I aiming for?"/><br/><br/>
+                <p:inputText class="financial_calculator_input" value="#{monthlySaveCalculatorManagedBean.aimingAmt}" placeholder="Enter your aiming amount" required="true" requiredMessage="Aiming amount is required!"/><br/><br/>
+                <p:outputLabel value="No of years time to achieve the stated amount?"/><br/><br/>
+                <p:inputText  class="financial_calculator_input" value="#{monthlySaveCalculatorManagedBean.noOfYear}" placeholder="Enter your no of year" required="true" requiredMessage="No of year is required!"/><br/><br/>
+                <h:commandButton type="submit" actionListener="#{monthlySaveCalculatorManagedBean.computeMonthlySave}" value ="Compute" /><br/><br/>
+               
+                <p:outputLabel value="Monthly required to save:"/>&nbsp;
+                <p:outputLabel value="#{monthlySaveCalculatorManagedBean.paymentAmt}"/>
+
+            </div>
+        </h:form>
+
+    </ui:define>
+
+
+
+</ui:composition>
