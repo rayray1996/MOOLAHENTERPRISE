@@ -23,7 +23,7 @@
                 <p:growl>
                     <p:autoUpdate />
                 </p:growl>
-                <p:megaMenu orientation="horizontal" autoDisplay="false" style="height:5%; width:60%; margin-left:18%; margin-top:3%;">
+                <p:megaMenu orientation="horizontal" autoDisplay="false" style="height:5%; width:60%; margin-left:18%; margin-top:3%;font-size:14px;">
 
                     <p:menuitem value="Home" outcome="/index.xhtml"/>
                     <p:menuitem value="About Us" outcome="/aboutUs.xhtml"/>
@@ -33,7 +33,7 @@
                 </p:megaMenu>
 
 
-                <div style="float:right; width:18%;font-size:0.64em;margin-top:-6%;margin-right:0%;" >
+                <div style="float:right; width:18%;font-size:14px;margin-top:-6%;margin-right:0%;" >
                     <p:outputLabel for="email" value="Email" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <p:inputText id="email" value="#{moolahLoginManagedBean.email}" size="16" required="true" requiredMessage="Email is required" maxlength="32">
                         <f:validateLength minimum="4" />
@@ -57,14 +57,14 @@
             <h:form id="logoutForm">
 
 
-                <p:megaMenu orientation="horizontal" autoDisplay="false" style="height:5%; width:60%; margin-left:18%; margin-top:3%;">
+                <p:megaMenu orientation="horizontal" autoDisplay="false" style="height:5%; width:60%; margin-left:18%; margin-top:3%;font-size:14px;">
 
                     <p:menuitem value="Home" outcome="/index.xhtml"/>
                     <p:menuitem value="About Us" outcome="/aboutUs.xhtml"/> 
                     <p:submenu label="Products">
                         <p:column>
                             <p:submenu label="Products">
-                                <p:menuitem value="Recommend For Me" url="#" />
+                                <p:menuitem value="Recommend For Me" outcome="/product/ViewRecommendedProduct.xhtml" />
                                 <p:menuitem value="Search for products " url="#" /></p:submenu>
                         </p:column>
                     </p:submenu>
@@ -74,7 +74,7 @@
                 </p:megaMenu>
 
 
-                <div id = "loggedinDisplay" style="width:19%; float:right;margin-top:-1.7%;font-size:0.75em;">
+                <div id = "loggedinDisplay" style="width:19%; float:right;margin-top:-1.7%;font-size:14px;;">
                     <h:outputText value="You are login as #{sessionScope.customerEntity.fullName}" />&nbsp;
                     <p:commandButton value="Logout" actionListener="#{moolahLoginManagedBean.logout}" />
                 </div>
