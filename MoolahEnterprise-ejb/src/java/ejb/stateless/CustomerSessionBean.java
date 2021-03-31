@@ -219,6 +219,23 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
             throw new CustomerDoesNotExistsException("Customer with ID " + id + " does not exists!");
         }
     }
+    
+    @Override
+    public CustomerEntity retrieveCustomerByParaLink(String path) throws CustomerDoesNotExistsException {
+         try {
+            CustomerEntity cust = (CustomerEntity) em.createQuery("SELECT c FROM CustomerEntity c WHERE c.resetPasswordPathParam =:pathParam").setParameter("pathParam", path).getSingleResult();
+            cust.getListOfIssues().size();
+            cust.getListOfLikeProducts().size();
+
+            for (ComparisonEntity comp : cust.getSavedComparisons()) {
+                comp.getProductsToCompare().size();
+            }
+
+            return cust;
+        } catch (NoResultException ex) {
+            throw new CustomerDoesNotExistsException("Customer with path paramater " + path + " does not exists!");
+        }
+    }
 
     @Override
     public void likeAProduct(Long custID, Long likedProdId) throws CustomerDoesNotExistsException, ProductNotFoundException {

@@ -53,6 +53,8 @@ public interface CustomerSessionBeanLocal {
     public List<ProductEntity> retrieveRecommendedProducts(Long customerId) throws CustomerDoesNotExistsException, ProductNotFoundException;
 
     public void resetPassword(String email) throws CustomerPasswordExistsException, CustomerDoesNotExistsException;
+    
+    public CustomerEntity retrieveCustomerByParaLink(String path) throws CustomerDoesNotExistsException;
 
     public void timeoutCleanUp(Timer timer);
 
