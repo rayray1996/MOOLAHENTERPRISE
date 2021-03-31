@@ -26,6 +26,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.view.ViewScoped;
 import org.primefaces.event.SelectEvent;
 import util.enumeration.CategoryEnum;
 import util.enumeration.EndowmentProductEnum;
@@ -40,7 +41,7 @@ import util.helper.ProductEntityWrapper;
  * @author rayta
  */
 @Named(value = "viewRecommendedProductManagedBean")
-@SessionScoped
+@ViewScoped
 public class ViewRecommendedProductManagedBean implements Serializable {
 
     @EJB
@@ -101,7 +102,10 @@ public class ViewRecommendedProductManagedBean implements Serializable {
         filterCoverageTerm = -1;
         filterPremiumTerm = -1;
         filterChildCategory = "";
-
+        if(filterParentCategory == null) {
+            dataInit();
+            return;
+        }
         switch (filterParentCategory) {
             case "Endowment":
                 stringChildCategory.add("Endowment");
@@ -211,8 +215,7 @@ public class ViewRecommendedProductManagedBean implements Serializable {
             Boolean isSmoker = false;
             
             List<ProductEntity> resultProducts = new ArrayList<>();
-            System.out.println("parentCategory = " + parentCategory.toString() + "\n"
-            + "");
+            System.out.println("filterSumAssured = " + filterSumAssured.toString());
             resultProducts = productSessionBean.filterProductsByCriteria(parentCategory, null, isSmoker, filterSumAssured, filterCoverageTerm, filterPremiumTerm, endowmentChildCategory, termLifeChildCategory, wholeLifeChildCategory);
             for (ProductEntity r : resultProducts) {
                 listOfProducts.add(new ProductEntityWrapper(r, getParentClassAsString(r), getChildEnumAsString(r)));

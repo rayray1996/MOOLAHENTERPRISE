@@ -166,19 +166,19 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         switch (category) {
             case ENDOWMENT:
                 if (!(endowmentType.equals(""))) {
-                    enumStrings = "AND p.productEnum = " + endowmentType;
+                    enumStrings = " AND (p.productEnum = util.enumeration.EndowmentProductEnum." + endowmentProductEnum + ")";
                 }
                 break;
 
             case TERMLIFE:
                 if (!(termLifeType.equals(""))) {
-                    enumStrings = "AND p.productEnum = " + termLifeType;
+                    enumStrings = " AND (p.productEnum = util.enumeration.TermLifeProductEnum." + termLifeProductEnum + ")";
                 }
                 break;
 
             case WHOLELIFE:
                 if (!(wholeLifeType.equals(""))) {
-                    enumStrings = "AND p.productEnum = " + wholeLifeType;
+                    enumStrings = " AND (p.productEnum = util.enumeration.WholeLifeProductEnum." + wholeLifeProductEnum + ")";
                 }
                 break;
 
@@ -224,27 +224,29 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         // sumAssured is greater than or equal
         // sumAssured default to -1
         String sumAssuredString = "";
-        if (sumAssured.compareTo(BigDecimal.ZERO) < 0) {
+        if (sumAssured.compareTo(BigDecimal.ZERO) <= 0) {
             sumAssuredString = "(p.assuredSum >= 0)";
+            System.out.println("sessionbean = " + sumAssuredString);
         } else {
-            sumAssuredString = "(:sumAssured >= p.assuredSum)";
+            sumAssuredString = "(:sumAssured <= p.assuredSum)";
+            System.out.println("sessionbean = " + sumAssuredString);
         }
 
         Query query = em.createQuery("SELECT DISTINCT p.productId FROM " + categoryType + " JOIN p.listOfPremium s WHERE p.isDeleted = FALSE AND p.company.isDeleted = false AND p.company.isDeactivated = false" + " AND "
-                + riderString + " AND " + smokerString + " AND " + coverageTermString + " AND " + premiumTermString + " AND " + sumAssuredString);
-        if(coverageTerm >= 0) {
-        query.setParameter("coverageTerm", coverageTerm);
+                + riderString + " AND " + smokerString + " AND " + coverageTermString + " AND " + sumAssuredString + " AND " + premiumTermString + enumStrings);
+        if (coverageTerm >= 0) {
+            query.setParameter("coverageTerm", coverageTerm);
         }
-        if(premiumTerm >= 0) {
-        query.setParameter("premiumTerm", premiumTerm);
+        if (premiumTerm >= 0) {
+            query.setParameter("premiumTerm", premiumTerm);
         }
-        if(sumAssured.compareTo(BigDecimal.ZERO) >= 0) {
-        query.setParameter("sumAssured", sumAssured);
+        if (sumAssured.compareTo(BigDecimal.ZERO) >= 0) {
+            query.setParameter("sumAssured", sumAssured);
         }
         List<Long> resultsId = query.getResultList();
-        
+
         List<ProductEntity> results = new ArrayList<>();
-        
+
         for (Long id : resultsId) {
             ProductEntity e = retrieveProductEntityById(id);
             results.add(e);
@@ -264,7 +266,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         }
         switch (prodEnum) {
             case ENDOWMENT:
-                result = "ENDOWMENT";
+                result = prodEnum.name();
                 break;
 
             default:
@@ -281,15 +283,15 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         }
         switch (prodEnum) {
             case ACCIDENT:
-                result = "ACCIDENT";
+                result = prodEnum.name();
                 break;
 
             case CRITICALILLNESS:
-                result = "CRITICALILLNESS";
+                result = prodEnum.name();
                 break;
 
             case HOSPITAL:
-                result = "HOSPITAL";
+                result = prodEnum.name();
                 break;
 
             default:
@@ -306,19 +308,19 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         }
         switch (prodEnum) {
             case ACCIDENT:
-                result = "ACCIDENT";
+                result = prodEnum.name();
                 break;
 
             case CRITICALILLNESS:
-                result = "CRITICALILLNESS";
+                result = prodEnum.name();
                 break;
 
             case HOSPITAL:
-                result = "HOSPITAL";
+                result = prodEnum.name();
                 break;
 
             case LIFEINSURANCE:
-                result = "LIFEINSURANCE";
+                result = prodEnum.name();
                 break;
 
             default:
