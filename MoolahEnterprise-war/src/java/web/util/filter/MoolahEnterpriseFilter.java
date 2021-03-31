@@ -5,6 +5,7 @@
  */
 package web.util.filter;
 
+import com.sun.xml.rpc.processor.modeler.j2ee.xml.pathType;
 import ejb.entity.CustomerEntity;
 import ejb.stateless.CustomerSessionBeanLocal;
 import java.io.IOException;
@@ -55,6 +56,9 @@ public class MoolahEnterpriseFilter implements Filter {
         HttpSession httpSession = httpServletRequest.getSession(true);
         String requestServletPath = httpServletRequest.getServletPath();
 
+        String requestServletPath2 = httpServletRequest.getRequestURI() + "?";
+        requestServletPath2 = requestServletPath2 + httpServletRequest.getQueryString();
+
         if (httpSession.getAttribute("isLogin") == null) {
             httpSession.setAttribute("isLogin", false);
         }
@@ -67,7 +71,12 @@ public class MoolahEnterpriseFilter implements Filter {
                 chain.doFilter(request, response);
 
             } else {
-                checkCustomerLink(requestServletPath, httpServletResponse, httpSession);
+                if (requestServletPath2.contains("/keyPassword.xhtml")) {
+                    checkCustomerLink(requestServletPath2, httpServletResponse, httpSession, request, response, httpServletRequest);
+                    chain.doFilter(request, response);
+                } else {
+                    chain.doFilter(request, response);
+                }
             }
         } else {
             chain.doFilter(request, response);
@@ -93,19 +102,16 @@ public class MoolahEnterpriseFilter implements Filter {
         }
     }
 
-    public void checkCustomerLink(String requestServletPath, HttpServletResponse httpServletResponse, HttpSession httpSession) throws IOException {
+    public void checkCustomerLink(String requestServletPath, HttpServletResponse httpServletResponse, HttpSession httpSession, ServletRequest request, ServletResponse response, HttpServletRequest httpServletRequest) throws IOException, ServletException {
 
         try {
-            if (requestServletPath.startsWith("?Param")) {
 
-                String[] requestServletPathElements = requestServletPath.split("?");
+            if (requestServletPath.contains("?param")) {
+
+                String[] requestServletPathElements = requestServletPath.split("\\?param=");
                 String path = requestServletPathElements[1];
                 CustomerEntity customer = customerSessionBean.retrieveCustomerByParaLink(path);
-                httpSession.setAttribute("changePwCust", customer);
-
-                httpServletResponse.sendRedirect(CONTEXT_ROOT + "/keyPassword.xhtml");
-            } else {
-                httpServletResponse.sendRedirect(CONTEXT_ROOT + "/accessRightError.xhtml");
+                httpServletRequest.getRequestDispatcher("/keyPassword.xhtml?customerId=" + customer.getCustomerId()).forward(request, response);
             }
         } catch (CustomerDoesNotExistsException ex) {
             httpServletResponse.sendRedirect(CONTEXT_ROOT + "/accessRightError.xhtml");

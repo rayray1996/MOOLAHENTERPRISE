@@ -241,7 +241,7 @@ public class EmailManager {
 
         emailBody += "Dear " + customer.getFullName() + "\n\n";
         emailBody += "You have requested to reset your password on " + dateRequested + "\n\n";
-        emailBody += "Please click the following link: " + ".../?param=" + pathParam + "\n\n";
+        emailBody += "Please click the following link: " + "http://localhost:8080/MoolahEnterprise-war/keyPassword.xhtml?param=" + pathParam + "\n\n";
 
         emailBody += "Yours Sincerely, \nMoolah Enterprise";
 
