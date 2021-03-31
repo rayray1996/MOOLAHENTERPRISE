@@ -38,7 +38,7 @@ public class MonthlySaveCalculatorManagedBean implements Serializable {
     private AssetEntity assetEntity;
     private CustomerEntity tempCE;
 
-    public static BigDecimal INFLATION_RATE = new BigDecimal("0.022");
+    public static BigDecimal INFLATION_RATE = new BigDecimal("2.2");
 
     public BigDecimal getCurrentlyHave() {
         return currentlyHave;
@@ -106,38 +106,36 @@ public class MonthlySaveCalculatorManagedBean implements Serializable {
     @PostConstruct
     public void postConstruct() {
         tempCE = (CustomerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("customerEntity");
-       assetEntity = tempCE.getAsset();
+        
+       assetEntity = tempCE.getAsset() ;
        currentlyHave = assetEntity.getCashInHand().add(assetEntity.getInvestments());
        inflationRate = INFLATION_RATE;
        
     }
 
     public void computeMonthlySave(ActionEvent event) {
-        currentlyHave = assetEntity.getCashInHand().add(assetEntity.getInvestments());
-        BigDecimal noOfMonth = BigDecimal.ZERO;
+        BigDecimal intRateInPercentage = BigDecimal.ZERO;
+        //If user did not enter inflation rate, we will use 2.2%, otherwise we will use user's entered interest rate
         if (inflationRate.compareTo(BigDecimal.ZERO) == 0 || inflationRate == null) {
-            noOfMonth = INFLATION_RATE;
-            inflationRate = INFLATION_RATE;
+            intRateInPercentage = INFLATION_RATE.divide(new BigDecimal("100"),7, RoundingMode.DOWN);
+            inflationRate = INFLATION_RATE.divide(new BigDecimal("100"),7, RoundingMode.DOWN);
         } else {
-            noOfMonth = inflationRate;
+            intRateInPercentage = inflationRate.divide(new BigDecimal("100"),7, RoundingMode.DOWN);
         }
-        BigDecimal interestRate = noOfMonth.add(new BigDecimal("1"));
+        //Get compound interest * principal 
+        BigDecimal interestRate = intRateInPercentage.add(new BigDecimal("1"));
         interestRate = new BigDecimal(Math.pow(interestRate.doubleValue(),  noOfYear));
         BigDecimal tempCurrentlyHave = currentlyHave.multiply(interestRate);
-        System.out.println("computed monthly :" + currentlyHave.toString());
 
-        // difference
+        // difference in sum at last year, see how much it lacks
         BigDecimal difference = aimingAmt.subtract(tempCurrentlyHave);
-        //BigDecimal onePlusR = BigDecimal.ONE.add(inflationRate);
-        //BigDecimal negativePowerN = new BigDecimal(Math.pow(onePlusR.doubleValue(), (-1) * noOfYear.doubleValue())) ;
-        //BigDecimal minusOne = negativePowerN.subtract(BigDecimal.ONE);
-        //BigDecimal fvifa = minusOne.divide(inflationRate);
-        BigDecimal onePlusR = BigDecimal.ONE.add(inflationRate);
+        //compute PVIFA formula
+        BigDecimal onePlusR = BigDecimal.ONE.add(intRateInPercentage);
         BigDecimal negativePowerN = new BigDecimal(Math.pow(onePlusR.doubleValue(), (-1) * noOfYear.doubleValue()));
         BigDecimal oneMinus = BigDecimal.ONE.subtract(negativePowerN);
-        BigDecimal pvifa = oneMinus.divide(inflationRate, 6, RoundingMode.HALF_UP);
-        paymentAmt = difference.divide(pvifa, 3, RoundingMode.HALF_UP);
-
+        BigDecimal pvifa = oneMinus.divide(intRateInPercentage, 6, RoundingMode.DOWN);
+        //get final amount
+        paymentAmt = difference.divide(pvifa, 3, RoundingMode.DOWN);
     }
 
 }

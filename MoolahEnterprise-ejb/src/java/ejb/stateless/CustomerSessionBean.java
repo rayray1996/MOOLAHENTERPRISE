@@ -130,7 +130,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
             }
 
         } catch (NoResultException ex) {
-            throw new IncorrectLoginParticularsException(ex.getMessage());
+            throw new IncorrectLoginParticularsException("Login particulars incorrect");
         }
     }
 

@@ -10,39 +10,29 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <h:outputStylesheet name="./css/default.css"/>
         <h:outputStylesheet name="./css/cssLayout.css"/>
-   
+
         <title>Moolah Enterprise</title>
-        
+
         <style>
-             footer{margin-top:-1%;}
+            footer{margin-top:-1%;}
         </style>
     </h:head>
 
     <h:body>
         <p:layout fullPage="true">
 
-            <p:layoutUnit position="north" size="125" style="">
-                <ui:insert name="header" id="headerID" >
-
-                    <ui:include src="/header.xhtml"/>
-                    <!--<ui:include src="/mainmenu.xhtml"/>-->
-                </ui:insert>
-
-            </p:layoutUnit>
-
-
-
 
             <p:layoutUnit position="center" style="margin-top:2%;">
-                <f:facet name="header" >
+               
                     <ui:include src="/topmenu.xhtml" class="menu_style" />
-                </f:facet>
+               
 
                 <ui:insert name="content">Content</ui:insert>
             </p:layoutUnit>
 
 
             <p:layoutUnit position="south"   maxSize="40" minSize="40" >
+
                 <ui:insert name="footer">
                     <ui:include src="/footer.xhtml" />
                 </ui:insert>
