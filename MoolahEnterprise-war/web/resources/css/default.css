@@ -56,9 +56,14 @@ a:link:hover, a:visited:hover  {
 
 }
 
+.bodyText{
+    font-size: 14px;
+    font-family: sans-serif;
+}
+
 .recommendedArea{
     width: 33%;
     float: left;
     padding:20px;
-    
+
 }

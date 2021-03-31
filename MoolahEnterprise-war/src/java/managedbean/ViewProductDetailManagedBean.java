@@ -5,7 +5,11 @@
  */
 package managedbean;
 
+import ejb.entity.ProductEntity;
 import java.io.Serializable;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import util.helper.ProductEntityWrapper;
@@ -26,6 +30,12 @@ public class ViewProductDetailManagedBean implements Serializable {
     public ViewProductDetailManagedBean() {
     }
 
+    
+    @PostConstruct
+    public void dataInit() {
+        productToView = (ProductEntityWrapper) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("productToView");
+    }
+    
     public ProductEntityWrapper getProductToView() {
         return productToView;
     }
