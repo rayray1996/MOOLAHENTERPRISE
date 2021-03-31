@@ -52,4 +52,13 @@ a:link:hover, a:visited:hover  {
     margin-left: auto; 
     margin-right: auto; 
     text-align: center;
+    padding-bottom: 0%;
+
+}
+
+.recommendedArea{
+    width: 33%;
+    float: left;
+    padding:20px;
+    
 }

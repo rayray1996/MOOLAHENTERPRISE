@@ -40,17 +40,17 @@
 
         </h:panelGroup>
 
-        <h:form id="productToView">
-            <p:panel rendered="#{(sessionScope.isLogin == true) and (!indexManagedBean.listOfProduct.isEmpty())}">
-                <f:facet name="header" class="facet2">
+        <h:form id="productToView" >
+            <p:panel rendered="#{(sessionScope.isLogin == true) and (!indexManagedBean.listOfProduct.isEmpty())}" style="text-align: center; margin: 0 auto" >
+                <f:facet name="header" class="facet2" >
                     <p:outputLabel>
-                        Recommended Products For You
+                        Some products you may be interested in  
                     </p:outputLabel>
                 </f:facet>
 
 
                 <div class="card1">
-                    <p:panelGrid columns="2">
+                    <p:panelGrid columns="2" style="height: 30%; width: 30%; float: left; padding-right: 10%; " >
 
                         <f:facet name="header">
                             <h5 style="margin-top:2 ; text-align: ce">View Product</h5>
@@ -66,15 +66,16 @@
 
                         <h:outputText value="Sum Assured: "/>
                         <h:outputText value="#{indexManagedBean.currProd1.assuredSum}"/>
+                        <p:column>
+                            <p:commandButton value="View Product" actionListener="#{indexManagedBean.viewProduct}">
+                                <f:attribute name="productId" value="#{indexManagedBean.currProd1.productId}"/>
+                            </p:commandButton>
+                        </p:column>
 
-                        <p:commandButton value="View Product" actionListener="#{indexManagedBean.viewProduct}">
-                            <f:attribute name="productId" value="#{indexManagedBean.currProd1.productId}"/>
-                        </p:commandButton>
                     </p:panelGrid>
                 </div>
-
-                <div class="card2">
-                    <p:panelGrid columns="2">
+                <div class="card1">
+                    <p:panelGrid columns="2" style="height: 30%; width: 30%; float: left; padding-right: 10%">
 
                         <f:facet name="header">
                             <h5 style="margin-top:2 ; text-align: ce">View Product</h5>
@@ -91,15 +92,22 @@
                         <h:outputText value="Sum Assured: "/>
                         <h:outputText value="#{indexManagedBean.currProd2.assuredSum}"/>
 
-                        <p:commandButton value="View Product" actionListener="#{indexManagedBean.viewProduct}">
-                            <f:attribute name="productId" value="#{indexManagedBean.currProd2.productId}"/>
-                        </p:commandButton>
+                        <p:column colspan="2">
+                            <p:commandButton value="View Product" actionListener="#{indexManagedBean.viewProduct}">
+                                <f:attribute name="productId" value="#{indexManagedBean.currProd2.productId}"/>
+                            </p:commandButton>
+                        </p:column>
+
                     </p:panelGrid>
                 </div>
-
-
-                <div class="card3">
-                    <p:panelGrid columns="2">
+                
+                <p:column>
+                    <p:outputLabel value=""/>
+                </p:column>
+                
+                
+                <div class="card1">
+                    <p:panelGrid columns="2" style="height: 30%; width: 30%; float: left; padding-right: 10%">
 
                         <f:facet name="header">
                             <h5 style="margin-top:2 ; text-align: ce">View Product</h5>
@@ -116,9 +124,12 @@
                         <h:outputText value="Sum Assured: "/>
                         <h:outputText value="#{indexManagedBean.currProd3.assuredSum}"/>
 
-                        <p:commandButton value="View Product" actionListener="#{indexManagedBean.viewProduct}">
-                            <f:attribute name="productId" value="#{indexManagedBean.currProd3.productId}"/>
-                        </p:commandButton>
+                        <p:column colspan="2">
+                            <p:commandButton value="View Product" actionListener="#{indexManagedBean.viewProduct}">
+                                <f:attribute name="productId" value="#{indexManagedBean.currProd3.productId}"/>
+                            </p:commandButton>
+                        </p:column>
+
                     </p:panelGrid>
                 </div>
 
