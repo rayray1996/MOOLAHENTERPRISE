@@ -156,7 +156,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 
             TimerConfig timerConfig = new TimerConfig(cust, true);
 
-            timerService.createSingleActionTimer(expiryDate.getTime(), timerConfig);
+//            timerService.createSingleActionTimer(expiryDate.getTime(), timerConfig);
 
         } catch (NoResultException ex) {
             throw new CustomerDoesNotExistsException("Customer does not exists!");
@@ -169,9 +169,9 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         try {
             CustomerEntity customer = (CustomerEntity) timer.getInfo();
             customer = retrieveCustomerById(customer.getCustomerId());
-            System.err.println("TImeout method triggered for Customer Reset Pw! Customer: " + customer.getEmail());
-            
-            //remove the param
+            customer.setResetPasswordPathParam(null);
+            System.err.println("TImeout method triggered for Customer Reset Pw! Parameter reset! Customer: " + customer.getEmail());
+
         } catch (CustomerDoesNotExistsException ex) {
             System.out.println("ERROR: CUSTOMER DOES NOT EXIST EX:" + ex.getMessage());
         }
@@ -391,7 +391,5 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 
         return msg;
     }
-
-  
 
 }

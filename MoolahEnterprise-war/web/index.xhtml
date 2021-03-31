@@ -8,8 +8,14 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content" >
-
-
+        <style>
+            .ui-carousel-item ui-widget-content ui-corner-all{
+                width:25%
+            }
+        </style>
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+       
         <h:panelGroup rendered="#{sessionScope.isLogin == false}">
 
             <p:messages globalOnly="true"/>
@@ -40,25 +46,30 @@
 
         </h:panelGroup>
 
-        <h:form id="productToView" >
+        <h:form id="productToView" rendered="#{sessionScope.isLogin == true}" >
             <div class="card">
-                <h5>Recommended Products For You</h5>
-                <p:carousel value="#{indexManagedBean.listOfProduct}" var="product" responsive="true" numVisible="3">
+                <h5 style="font-size: 16px; text-align: center; ">Recommended Products For You</h5>
+                <p:carousel value="#{indexManagedBean.listOfProduct}" var="product" responsive="true" numVisible="4" autoPlayInterval="10000" 
+                            style="width:80%; margin-left: auto; margin-right: auto; " itemStyle="width: 25%; height 25%">
                     <div class="product">  
                         <div class="product-grid-item p-p-5">
-                            
+
                             <div class="product-grid-item-content">
-                                <p:graphicImage name="resources/images/#{product.company.companyImage}"/>
+                                <p:graphicImage library="images" name="#{product.company.companyImage}" height="200" width="200 " alt="ge" style="margin:auto"/>
+                                <br/>
                                 <div class="product-name">#{product.productName}</div>
+                                <br/>
                                 <div class="product-description">#{product.description}</div>
                             </div>
-                            <div class="product-grid-item-bottom">
+                            <br/>
+                            <br/>
+                            <div class="product-grid-item-bottom" >
                                 <h:outputText value="#{product.assuredSum}" styleClass="product-price">
                                     <f:convertNumber currencySymbol="$" type="currency"/>
                                 </h:outputText>
-                                <p:commandButton type="button" value="View Product"
-                                                 icon="pi pi-shopping-cart"
-                                                >
+                                <br/>
+                                <br/>
+                                <p:commandButton type="button" value="View Product" icon="pi pi-shopping-cart" actionListener="#{indexManagedBean.viewProduct}">
                                 </p:commandButton>
                             </div>
                         </div>
@@ -70,7 +81,7 @@
                 </p:carousel>
             </div>
 
-           
+
 
 
 
