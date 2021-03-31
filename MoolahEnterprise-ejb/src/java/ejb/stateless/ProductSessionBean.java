@@ -150,7 +150,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
     }
 
     @Override
-    public List<ProductEntity> filterProductsByCriteria(CategoryEnum category, boolean wantsRider, boolean isSmoker, BigDecimal sumAssured, Integer coverageTerm, Integer premiumTerm, EndowmentProductEnum endowmentProductEnum, TermLifeProductEnum termLifeProductEnum, WholeLifeProductEnum wholeLifeProductEnum) throws InvalidFilterCriteriaException {
+    public List<ProductEntity> filterProductsByCriteria(CategoryEnum category, Boolean wantsRider, Boolean isSmoker, BigDecimal sumAssured, Integer coverageTerm, Integer premiumTerm, EndowmentProductEnum endowmentProductEnum, TermLifeProductEnum termLifeProductEnum, WholeLifeProductEnum wholeLifeProductEnum) throws InvalidFilterCriteriaException {
         if (category == null) {
             throw new InvalidFilterCriteriaException("Category is empty");
         }
@@ -165,19 +165,19 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         switch (category) {
             case ENDOWMENT:
                 if (!(endowmentType.equals(""))) {
-                    enumStrings = "p.productEnum = " + endowmentType;
+                    enumStrings = "AND p.productEnum = " + endowmentType;
                 }
                 break;
 
             case TERMLIFE:
                 if (!(termLifeType.equals(""))) {
-                    enumStrings = "p.productEnum = " + termLifeType;
+                    enumStrings = "AND p.productEnum = " + termLifeType;
                 }
                 break;
 
             case WHOLELIFE:
                 if (!(wholeLifeType.equals(""))) {
-                    enumStrings = "p.productEnum = " + wholeLifeType;
+                    enumStrings = "AND p.productEnum = " + wholeLifeType;
                 }
                 break;
 
@@ -187,12 +187,13 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 
         String riderString = "";
 
-        if (wantsRider) {
-            riderString = "p.listOfRiders IS NOT EMPTY";
+        if (wantsRider == null) {
+            riderString = "p.listOfRiders IS EMPTY OR p.listOfRiders IS NOT EMPTY";
         } else if (!wantsRider) {
             riderString = "p.listOfRiders IS EMPTY";
         } else {
-            riderString = "p.listOfRiders IS EMPTY OR p.listOfRiders IS NOT EMPTY";
+            riderString = "p.listOfRiders IS NOT EMPTY";
+
         }
 
         // smoker default to no
@@ -220,6 +221,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         }
 
         // sumAssured is greater than or equal
+        // sumAssured default to -1
         String sumAssuredString = "";
         if (sumAssured.compareTo(BigDecimal.ZERO) < 0) {
             sumAssuredString = "p.assuredSum >= 0";
@@ -227,9 +229,17 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
             sumAssuredString = ":sumAssured >= p.assuredSum";
         }
 
-        Query query = em.createQuery("SELECT p FROM " + categoryType + " JOIN p.listOfPremium s WHERE p.isDeleted = FALSE AND p.company.isDeleted = false AND p.company.isDeactivated = false" + " AND "
-                + riderString + " AND " + smokerString + " AND " + coverageTermString + " AND " + premiumTermString + " AND " + sumAssuredString + " AND " + enumStrings);
-
+        Query query = em.createQuery("SELECT p FROM " + categoryType + " JOIN p.listOfPremium s WHERE p.productId IS DISTINCT AND p.isDeleted = FALSE AND p.company.isDeleted = false AND p.company.isDeactivated = false" + " AND "
+                + riderString + " AND " + smokerString + " AND " + coverageTermString + " AND " + premiumTermString + " AND " + sumAssuredString);
+        if(coverageTerm >= 0) {
+        query.setParameter("coverageTerm", coverageTerm);
+        }
+        if(premiumTerm >= 0) {
+        query.setParameter("premiumTerm", premiumTerm);
+        }
+        if(sumAssured.compareTo(BigDecimal.ZERO) >= 0) {
+        query.setParameter("sumAssured", sumAssured);
+        }
         List<ProductEntity> results = query.getResultList();
 
         for (ProductEntity e : results) {
@@ -244,7 +254,9 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 
     private String getEndowmentEnumAsString(EndowmentProductEnum prodEnum) {
         String result = "";
-
+        if (prodEnum == null) {
+            return result;
+        }
         switch (prodEnum) {
             case ENDOWMENT:
                 result = "ENDOWMENT";
@@ -259,7 +271,9 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 
     private String getTermLifeEnumAsString(TermLifeProductEnum prodEnum) {
         String result = "";
-
+        if (prodEnum == null) {
+            return result;
+        }
         switch (prodEnum) {
             case ACCIDENT:
                 result = "ACCIDENT";
@@ -282,7 +296,9 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 
     private String getWholeLifeEnumAsString(WholeLifeProductEnum prodEnum) {
         String result = "";
-
+        if (prodEnum == null) {
+            return result;
+        }
         switch (prodEnum) {
             case ACCIDENT:
                 result = "ACCIDENT";
@@ -309,7 +325,9 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 
     private String getCategoryEnumAsStringClass(CategoryEnum category) {
         String categoryType = "";
-
+        if (category == null) {
+            return categoryType;
+        }
         switch (category) {
             case ENDOWMENT:
                 categoryType = "EndowmentEntity";

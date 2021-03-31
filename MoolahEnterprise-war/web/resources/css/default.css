@@ -53,4 +53,8 @@ a:link:hover, a:visited:hover  {
     margin-right: auto; 
     text-align: center;
 }
+
+.bodyText{
+    font-size: 14px;
+    font-family: sans-serif;
 }
