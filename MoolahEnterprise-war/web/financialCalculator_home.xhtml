@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./template/defaultTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content" >
+        <style>
+            .save_monthly{
+                width:25%;
+                border:1px solid grey;
+                border-radius:20px;
+                text-align: center;
+                padding:2%;
+                font-size:1.2em;
+            }
+
+        </style>
+        <br/>
+        <h1 style="text-align:center;">What do you wish to calculate</h1>
+        <h:form>
+            <div class="save_monthly" style="margin-top:3%; margin-left:3%;">
+                <p>
+                    How much do I need to save every month to achieve my financial goal by a certain period of time?
+                </p>
+                <br/>
+                <br/>
+                <br/>
+
+                <p:commandLink value="Calculate now!" actionListener="#{financialCalculator_HomeManagedBean.monthlySaveToAchieveGoals}"/>
+            </div>
+            <div class="save_monthly" style="margin-top:-14.7%; margin-left:36%;" >
+                <p>
+                    How long will it take for me to save a certain amount based on my current spending and saving habits?
+                </p> 
+                <br/>
+                <br/>
+                <br/>
+
+                <p:commandLink value="Calculate now!" actionListener="#{financialCalculator_HomeManagedBean.howLongToSaveAmt}" />
+            </div>
+            <div class="save_monthly" style="margin-top:-14.8%; margin-left:69%;padding-bottom:3%;">
+                <p>
+                    How much will I have after saving a certain amount every year over several year?
+                </p>
+                <br/>
+                <br/>
+                <br/>
+                <p:commandLink value="Calculate now!" actionListener="#{financialCalculator_HomeManagedBean.yearlyAmtAfterSaving}"/>
+
+            </div>
+
+        </h:form>
+
+
+    </ui:define>
+
+
+
+</ui:composition>

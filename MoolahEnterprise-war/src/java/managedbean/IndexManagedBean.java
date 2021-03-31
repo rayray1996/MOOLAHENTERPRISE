@@ -79,6 +79,7 @@ public class IndexManagedBean implements Serializable {
     public void viewProduct(ActionEvent event) throws IOException {
         Long productId = (Long) event.getComponent().getAttributes().get("productId");
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("productId", productId);
+        System.out.println("Product ID: " + productId);
         FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml"); // to replace
     }
 

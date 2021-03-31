@@ -5,8 +5,15 @@
  */
 package web.util.filter;
 
+import com.sun.xml.rpc.processor.modeler.j2ee.xml.pathType;
+import ejb.entity.CustomerEntity;
+import ejb.stateless.CustomerSessionBeanLocal;
 import java.io.IOException;
-import javax.faces.context.FacesContext;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -17,7 +24,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import managedbean.ViewProductDetailManagedBean;
+import util.exception.CustomerDoesNotExistsException;
 
 /**
  *
@@ -25,6 +32,8 @@ import managedbean.ViewProductDetailManagedBean;
  */
 @WebFilter(filterName = "MoolahEnterpriseFilter", urlPatterns = {"/*"})
 public class MoolahEnterpriseFilter implements Filter {
+
+    CustomerSessionBeanLocal customerSessionBean = lookupCustomerSessionBeanLocal();
 
     private static final boolean debug = true;
 
@@ -45,6 +54,9 @@ public class MoolahEnterpriseFilter implements Filter {
         HttpSession httpSession = httpServletRequest.getSession(true);
         String requestServletPath = httpServletRequest.getServletPath();
 
+        String requestServletPath2 = httpServletRequest.getRequestURI() + "?";
+        requestServletPath2 = requestServletPath2 + httpServletRequest.getQueryString();
+
         if (httpSession.getAttribute("isLogin") == null) {
             httpSession.setAttribute("isLogin", false);
         }
@@ -57,7 +69,12 @@ public class MoolahEnterpriseFilter implements Filter {
                 chain.doFilter(request, response);
 
             } else {
-                httpServletResponse.sendRedirect(CONTEXT_ROOT + "/accessRightError.xhtml");
+                if (requestServletPath2.contains("/keyPassword.xhtml")) {
+                    checkCustomerLink(requestServletPath2, httpServletResponse, httpSession, request, response, httpServletRequest);
+                    chain.doFilter(request, response);
+                } else {
+                    chain.doFilter(request, response);
+                }
             }
         } else {
             chain.doFilter(request, response);
@@ -72,14 +89,46 @@ public class MoolahEnterpriseFilter implements Filter {
         if (path.equals("/index.xhtml")
                 || path.equals("/accessRightError.xhtml")
                 || path.startsWith("/javax.faces.resource")
+                || path.equals("/aboutUs.xhtml")
+                || path.equals("/financialCalculator_home.xhtml")
+                || path.equals("/monthlySaveToAchieveCalculator.xhtml")
+                || path.equals("/howLongToSaveAmtCalculator.xhtml")
+                || path.equals("/yearlyAmtAfterSavingCalculator.xhtml")
                 || path.startsWith("/aboutUs.xhtml")
                 || path.startsWith("/resetPassword.xhtml")
                 || path.startsWith("/createAccount.xhtml")
                 || path.startsWith("/product/ViewRecommendedProduct.xhtml")
                 || path.startsWith("/product/viewProductDetail.xhtml")) {
+
             return true;
         } else {
             return false;
+        }
+    }
+
+    public void checkCustomerLink(String requestServletPath, HttpServletResponse httpServletResponse, HttpSession httpSession, ServletRequest request, ServletResponse response, HttpServletRequest httpServletRequest) throws IOException, ServletException {
+
+        try {
+
+            if (requestServletPath.contains("?param")) {
+
+                String[] requestServletPathElements = requestServletPath.split("\\?param=");
+                String path = requestServletPathElements[1];
+                CustomerEntity customer = customerSessionBean.retrieveCustomerByParaLink(path);
+                httpServletRequest.getRequestDispatcher("/keyPassword.xhtml?customerId=" + customer.getCustomerId()).forward(request, response);
+            }
+        } catch (CustomerDoesNotExistsException ex) {
+            httpServletResponse.sendRedirect(CONTEXT_ROOT + "/accessRightError.xhtml");
+        }
+    }
+
+    private CustomerSessionBeanLocal lookupCustomerSessionBeanLocal() {
+        try {
+            Context c = new InitialContext();
+            return (CustomerSessionBeanLocal) c.lookup("java:global/MoolahEnterprise/MoolahEnterprise-ejb/CustomerSessionBean!ejb.stateless.CustomerSessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
         }
     }
 }

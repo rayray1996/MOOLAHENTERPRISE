@@ -5,15 +5,123 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
-
+    <h:outputStylesheet name="css/default.css"/>
     <figure class="companyLogo" style="float:left;" >
         <p:graphicImage library="images" name="c1_logo.png" style="height:100%;width:135%; margin-top:-11%; " alt="Moolah" />
 
     </figure>
     <h:panelGroup rendered="#{sessionScope.isLogin == false || sessionScope.isLogin == NULL}">
         <h:form style="margin-top:0%;">
+            <p:megaMenu orientation="horizontal" autoDisplay="false">
+                <p:submenu label="Videos" icon="pi pi-fw pi-video">
+                    <p:column>
+                        <p:submenu label="Video 1">
+                            <p:menuitem value="about us" outcome="/aboutUs.xhtml"/>
+                            <p:menuitem value="Video 1.2" />
+                        </p:submenu>
+                        <p:submenu label="Video 2">
+                            <p:menuitem value="Video 2.1"/>
+                            <p:menuitem value="Video 2.2"/>
+                        </p:submenu>
+                    </p:column>
 
-            <div style="float:right; width:21%;font-size:0.80em;" >
+                    <p:column>
+                        <p:submenu label="Video 3">
+                            <p:menuitem value="FC" outcome="/financialCalculator_home.xhtml"/>
+                            <p:menuitem value="Video 3.2"/>
+                        </p:submenu>
+                        <p:submenu label="Video 4">
+                            <p:menuitem value="Video 4.1"/>
+                            <p:menuitem value="Video 4.2"/>
+                        </p:submenu>
+                    </p:column>
+                </p:submenu>
+
+                <p:submenu label="Users" icon="pi pi-fw pi-users">
+
+                    <p:column>
+                        <p:submenu label="User 1">
+                            <p:menuitem value="User 1.1"/>
+                            <p:menuitem value="User 1.2"/>
+                        </p:submenu>
+                        <p:submenu label="User 2">
+                            <p:menuitem value="User 2.1"/>
+                            <p:menuitem value="User 2.2"/>
+                        </p:submenu>
+                    </p:column>
+
+                    <p:column>
+                        <p:submenu label="User 3">
+                            <p:menuitem value="User 3.1"/>
+                            <p:menuitem value="User 3.2"/>
+                        </p:submenu>
+                        <p:submenu label="User 4">
+                            <p:menuitem value="User 4.1"/>
+                            <p:menuitem value="User 4.2"/>
+                        </p:submenu>
+                    </p:column>
+                    <p:column>
+                        <p:submenu label="User 5">
+                            <p:menuitem value="User 5.1"/>
+                            <p:menuitem value="User 5.2"/>
+                        </p:submenu>
+                        <p:submenu label="User 6">
+                            <p:menuitem value="User 6.1"/>
+                            <p:menuitem value="User 6.2"/>
+                        </p:submenu>
+                    </p:column>
+                </p:submenu>
+
+                <p:submenu label="Events" icon="pi pi-fw pi-calendar">
+                    <p:column>
+                        <p:submenu label="Event 1">
+                            <p:menuitem value="Event 1.1"/>
+                            <p:menuitem value="Event 1.2"/>
+                        </p:submenu>
+                        <p:submenu label="Event 2">
+                            <p:menuitem value="Event 2.1"/>
+                            <p:menuitem value="Event 2.2"/>
+                        </p:submenu>
+                    </p:column>
+
+                    <p:column>
+                        <p:submenu label="Event 3">
+                            <p:menuitem value="Event 3.1"/>
+                            <p:menuitem value="Event 3.2"/>
+                        </p:submenu>
+                        <p:submenu label="Event 4">
+                            <p:menuitem value="Event 4.1"/>
+                            <p:menuitem value="Event 4.2"/>
+                        </p:submenu>
+                    </p:column>
+                </p:submenu>
+
+                <p:submenu label="Settings" icon="pi pi-fw pi-cog">
+                    <p:column>
+                        <p:submenu label="Setting 1">
+                            <p:menuitem value="Setting 1.1"/>
+                            <p:menuitem value="Setting 1.2"/>
+                        </p:submenu>
+                        <p:submenu label="Setting 2">
+                            <p:menuitem value="Setting 2.1"/>
+                            <p:menuitem value="Setting 2.2"/>
+                        </p:submenu>
+                        <p:submenu label="Setting 3">
+                            <p:menuitem value="Setting 3.1"/>
+                            <p:menuitem value="Setting 3.2"/>
+                        </p:submenu>
+                    </p:column>
+
+                    <p:column>
+                        <p:submenu label="Setting 4">
+                            <p:menuitem value="Setting 4.1"/>
+                            <p:menuitem value="Setting 4.2"/>
+                        </p:submenu>
+                    </p:column>
+                </p:submenu>
+            </p:megaMenu>
+
+            <div style="float:right; width:21%;font-size:0.80em;margin-top:1%;" >
                 <p:outputLabel for="email" value="Email" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <p:inputText id="email" value="#{moolahLoginManagedBean.email}" size="16" required="true" requiredMessage="Email is required" maxlength="32">
                     <f:validateLength minimum="4" />
@@ -38,33 +146,118 @@
 
         <h:form id="logoutForm" >
 
-            <div class="card" style="margin-left:19%;width:42%;margin-top:5.2%; ">
-                <p:tabMenu activeIndex="#{param.i}">
-                    <p:menuitem value="Home" outcome="/index.xhtml">
-                        <f:param name="i" value="0"/>
-                    </p:menuitem>
-                    <p:menuitem value="About Us" >
-                        <f:param name="i" value="1"/>
-                    </p:menuitem>
-                    <p:menuitem value="About Us" >
-                        <p:menuitem value="Recommend For Me" outcome="/index.xhtml">
-                            <f:param name="i" value="0"/>
-                        </p:menuitem>
-                        <p:menuitem value="Search For Products" outcome="/index.xhtml">
-                            <f:param name="i" value="0"/>
-                        </p:menuitem>
-                    </p:menuitem>
-
-                    <p:menuitem value="Financial Calculator">
-                        <f:param name="i" value="3"/>
-                    </p:menuitem>
-                </p:tabMenu>
-            </div>
-            &nbsp;
             <div id = "loggedinDisplay" style="width:19%; float:right;margin-top:-1.7%;font-size:0.75em;">
                 <h:outputText value="You are login as #{sessionScope.companyLogin.companyName}" />&nbsp;
                 <p:commandButton value="Logout" actionListener="#{moolahLoginManagedBean.logout}" />
             </div>
+            <p:megaMenu orientation="horizontal" autoDisplay="true">
+                <p:submenu label="Videos" icon="pi pi-fw pi-video">
+                    <p:column>
+                        <p:submenu label="Video 1">
+                            <p:menuitem value="about us" outcome="/aboutUs.xhtml"/>
+                            <p:menuitem value="Video 1.2" />
+                        </p:submenu>
+                        <p:submenu label="Video 2">
+                            <p:menuitem value="Video 2.1"/>
+                            <p:menuitem value="Video 2.2"/>
+                        </p:submenu>
+                    </p:column>
+
+                    <p:column>
+                        <p:submenu label="Video 3">
+                            <p:menuitem value="FC" outcome="/financialCalculator_home.xhtml"/>
+                            <p:menuitem value="Video 3.2"/>
+                        </p:submenu>
+                        <p:submenu label="Video 4">
+                            <p:menuitem value="Video 4.1"/>
+                            <p:menuitem value="Video 4.2"/>
+                        </p:submenu>
+                    </p:column>
+                </p:submenu>
+
+                <p:submenu label="Users" icon="pi pi-fw pi-users">
+
+                    <p:column>
+                        <p:submenu label="User 1">
+                            <p:menuitem value="User 1.1"/>
+                            <p:menuitem value="User 1.2"/>
+                        </p:submenu>
+                        <p:submenu label="User 2">
+                            <p:menuitem value="User 2.1"/>
+                            <p:menuitem value="User 2.2"/>
+                        </p:submenu>
+                    </p:column>
+
+                    <p:column>
+                        <p:submenu label="User 3">
+                            <p:menuitem value="User 3.1"/>
+                            <p:menuitem value="User 3.2"/>
+                        </p:submenu>
+                        <p:submenu label="User 4">
+                            <p:menuitem value="User 4.1"/>
+                            <p:menuitem value="User 4.2"/>
+                        </p:submenu>
+                    </p:column>
+                    <p:column>
+                        <p:submenu label="User 5">
+                            <p:menuitem value="User 5.1"/>
+                            <p:menuitem value="User 5.2"/>
+                        </p:submenu>
+                        <p:submenu label="User 6">
+                            <p:menuitem value="User 6.1"/>
+                            <p:menuitem value="User 6.2"/>
+                        </p:submenu>
+                    </p:column>
+                </p:submenu>
+
+                <p:submenu label="Events" icon="pi pi-fw pi-calendar">
+                    <p:column>
+                        <p:submenu label="Event 1">
+                            <p:menuitem value="Event 1.1"/>
+                            <p:menuitem value="Event 1.2"/>
+                        </p:submenu>
+                        <p:submenu label="Event 2">
+                            <p:menuitem value="Event 2.1"/>
+                            <p:menuitem value="Event 2.2"/>
+                        </p:submenu>
+                    </p:column>
+
+                    <p:column>
+                        <p:submenu label="Event 3">
+                            <p:menuitem value="Event 3.1"/>
+                            <p:menuitem value="Event 3.2"/>
+                        </p:submenu>
+                        <p:submenu label="Event 4">
+                            <p:menuitem value="Event 4.1"/>
+                            <p:menuitem value="Event 4.2"/>
+                        </p:submenu>
+                    </p:column>
+                </p:submenu>
+
+                <p:submenu label="Settings" icon="pi pi-fw pi-cog">
+                    <p:column>
+                        <p:submenu label="Setting 1">
+                            <p:menuitem value="Setting 1.1"/>
+                            <p:menuitem value="Setting 1.2"/>
+                        </p:submenu>
+                        <p:submenu label="Setting 2">
+                            <p:menuitem value="Setting 2.1"/>
+                            <p:menuitem value="Setting 2.2"/>
+                        </p:submenu>
+                        <p:submenu label="Setting 3">
+                            <p:menuitem value="Setting 3.1"/>
+                            <p:menuitem value="Setting 3.2"/>
+                        </p:submenu>
+                    </p:column>
+
+                    <p:column>
+                        <p:submenu label="Setting 4">
+                            <p:menuitem value="Setting 4.1"/>
+                            <p:menuitem value="Setting 4.2"/>
+                        </p:submenu>
+                    </p:column>
+                </p:submenu>
+            </p:megaMenu>
         </h:form>
     </h:panelGroup>
 
