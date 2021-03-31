@@ -15,6 +15,7 @@ import ejb.entity.RiderEntity;
 import ejb.entity.TermLifeProductEntity;
 import ejb.entity.WholeLifeProductEntity;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -150,7 +151,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
     }
 
     @Override
-    public List<ProductEntity> filterProductsByCriteria(CategoryEnum category, Boolean wantsRider, Boolean isSmoker, BigDecimal sumAssured, Integer coverageTerm, Integer premiumTerm, EndowmentProductEnum endowmentProductEnum, TermLifeProductEnum termLifeProductEnum, WholeLifeProductEnum wholeLifeProductEnum) throws InvalidFilterCriteriaException {
+    public List<ProductEntity> filterProductsByCriteria(CategoryEnum category, Boolean wantsRider, Boolean isSmoker, BigDecimal sumAssured, Integer coverageTerm, Integer premiumTerm, EndowmentProductEnum endowmentProductEnum, TermLifeProductEnum termLifeProductEnum, WholeLifeProductEnum wholeLifeProductEnum) throws InvalidFilterCriteriaException, ProductNotFoundException {
         if (category == null) {
             throw new InvalidFilterCriteriaException("Category is empty");
         }
@@ -188,48 +189,48 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         String riderString = "";
 
         if (wantsRider == null) {
-            riderString = "p.listOfRiders IS EMPTY OR p.listOfRiders IS NOT EMPTY";
+            riderString = "(p.listOfRiders IS EMPTY OR p.listOfRiders IS NOT EMPTY)";
         } else if (!wantsRider) {
-            riderString = "p.listOfRiders IS EMPTY";
+            riderString = "(p.listOfRiders IS EMPTY)";
         } else {
-            riderString = "p.listOfRiders IS NOT EMPTY";
+            riderString = "(p.listOfRiders IS NOT EMPTY)";
 
         }
 
         // smoker default to no
         String smokerString = "";
         if (isSmoker) {
-            smokerString = "p.listOfSmokerPremium IS NOT EMPTY";
+            smokerString = "(p.listOfSmokerPremium IS NOT EMPTY)";
         } else {
-            smokerString = "p.listOfSmokerPremium IS EMPTY OR p.listOfSmokerPremium IS NOT EMPTY";
+            smokerString = "(p.listOfSmokerPremium IS EMPTY OR p.listOfSmokerPremium IS NOT EMPTY)";
         }
 
         // coverage term default to -1 (no preference)
         String coverageTermString = "";
         if (coverageTerm < 0) {
-            coverageTermString = "p.coverageTerm >= 0";
+            coverageTermString = "(p.coverageTerm >= 0)";
         } else {
-            coverageTermString = ":coverageTerm <= p.coverageTerm";
+            coverageTermString = "(:coverageTerm >= p.coverageTerm)";
         }
 
         // premium term default to -1 (no prefernce)
         String premiumTermString = "";
         if (premiumTerm < 0) {
-            premiumTermString = "p.premiumTerm >= 0";
+            premiumTermString = "(p.premiumTerm >= 0)";
         } else {
-            premiumTermString = ":premiumTerm <= p.premiumTerm";
+            premiumTermString = "(:premiumTerm >= p.premiumTerm)";
         }
 
         // sumAssured is greater than or equal
         // sumAssured default to -1
         String sumAssuredString = "";
         if (sumAssured.compareTo(BigDecimal.ZERO) < 0) {
-            sumAssuredString = "p.assuredSum >= 0";
+            sumAssuredString = "(p.assuredSum >= 0)";
         } else {
-            sumAssuredString = ":sumAssured >= p.assuredSum";
+            sumAssuredString = "(:sumAssured >= p.assuredSum)";
         }
 
-        Query query = em.createQuery("SELECT p FROM " + categoryType + " JOIN p.listOfPremium s WHERE p.productId IS DISTINCT AND p.isDeleted = FALSE AND p.company.isDeleted = false AND p.company.isDeactivated = false" + " AND "
+        Query query = em.createQuery("SELECT DISTINCT p.productId FROM " + categoryType + " JOIN p.listOfPremium s WHERE p.isDeleted = FALSE AND p.company.isDeleted = false AND p.company.isDeactivated = false" + " AND "
                 + riderString + " AND " + smokerString + " AND " + coverageTermString + " AND " + premiumTermString + " AND " + sumAssuredString);
         if(coverageTerm >= 0) {
         query.setParameter("coverageTerm", coverageTerm);
@@ -240,9 +241,13 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         if(sumAssured.compareTo(BigDecimal.ZERO) >= 0) {
         query.setParameter("sumAssured", sumAssured);
         }
-        List<ProductEntity> results = query.getResultList();
-
-        for (ProductEntity e : results) {
+        List<Long> resultsId = query.getResultList();
+        
+        List<ProductEntity> results = new ArrayList<>();
+        
+        for (Long id : resultsId) {
+            ProductEntity e = retrieveProductEntityById(id);
+            results.add(e);
             e.getListOfAdditionalFeatures().size();
             e.getListOfPremium().size();
             e.getListOfRiders().size();

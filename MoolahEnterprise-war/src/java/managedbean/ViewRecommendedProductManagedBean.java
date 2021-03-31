@@ -32,6 +32,7 @@ import util.enumeration.EndowmentProductEnum;
 import util.enumeration.TermLifeProductEnum;
 import util.enumeration.WholeLifeProductEnum;
 import util.exception.InvalidFilterCriteriaException;
+import util.exception.ProductNotFoundException;
 import util.helper.ProductEntityWrapper;
 
 /**
@@ -218,7 +219,7 @@ public class ViewRecommendedProductManagedBean implements Serializable {
                 filteredProducts.add(new ProductEntityWrapper(r, getParentClassAsString(r), getChildEnumAsString(r)));
                 
             }
-        } catch (InvalidFilterCriteriaException ex) {
+        } catch (InvalidFilterCriteriaException | ProductNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, ex.toString(), null));
         }
     }
