@@ -8,8 +8,14 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content" >
-
-
+        <style>
+            .ui-carousel-item ui-widget-content ui-corner-all{
+                width:25%
+            }
+        </style>
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+       
         <h:panelGroup rendered="#{sessionScope.isLogin == false}">
 
             <p:messages globalOnly="true"/>
@@ -40,101 +46,43 @@
 
         </h:panelGroup>
 
-        <h:form id="productToView" >
-            <p:panel rendered="#{(sessionScope.isLogin == true) and (!indexManagedBean.listOfProduct.isEmpty())}" style="text-align: center; margin: 0 auto" >
-                <f:facet name="header" class="facet2" >
-                    <p:outputLabel>
-                        Some products you may be interested in  
-                    </p:outputLabel>
-                </f:facet>
+        <h:form id="productToView" rendered="#{sessionScope.isLogin == true}" >
+            <div class="card">
+                <h5 style="font-size: 16px; text-align: center; ">Recommended Products For You</h5>
+                <p:carousel value="#{indexManagedBean.listOfProduct}" var="product" responsive="true" numVisible="4" autoPlayInterval="10000" 
+                            style="width:80%; margin-left: auto; margin-right: auto; " itemStyle="width: 25%; height 25%">
+                    <div class="product">  
+                        <div class="product-grid-item p-p-5">
+
+                            <div class="product-grid-item-content">
+                                <p:graphicImage library="images" name="#{product.company.companyImage}" height="200" width="200 " alt="ge" style="margin:auto"/>
+                                <br/>
+                                <div class="product-name">#{product.productName}</div>
+                                <br/>
+                                <div class="product-description">#{product.description}</div>
+                            </div>
+                            <br/>
+                            <br/>
+                            <div class="product-grid-item-bottom" >
+                                <h:outputText value="#{product.assuredSum}" styleClass="product-price">
+                                    <f:convertNumber currencySymbol="$" type="currency"/>
+                                </h:outputText>
+                                <br/>
+                                <br/>
+                                <p:commandButton type="button" value="View Product" icon="pi pi-shopping-cart" actionListener="#{indexManagedBean.viewProduct}">
+                                </p:commandButton>
+                            </div>
+                        </div>
+                    </div>
+
+                    <f:facet name="footer">
+                        In total there are #{indexManagedBean.listOfProduct.size()} products.
+                    </f:facet>
+                </p:carousel>
+            </div>
 
 
-                <div class="card1">
-                    <p:panelGrid columns="2" style="height: 30%; width: 30%; float: left; padding-right: 10%; " >
 
-                        <f:facet name="header">
-                            <h5 style="margin-top:2 ; text-align: ce">View Product</h5>
-
-                            <!--<p:graphicImage library="images" name="aia-group-limited-vector-logo.svg" width="100"/>-->
-                        </f:facet>
-
-                        <h:outputText value="Product Name"/>
-                        <h:outputText value="#{indexManagedBean.currProd1.productName}" id="productName"/>
-
-                        <h:outputText value="Company Name: "/>
-                        <h:outputText value="#{indexManagedBean.currProd1.company.companyName}"/>
-
-                        <h:outputText value="Sum Assured: "/>
-                        <h:outputText value="#{indexManagedBean.currProd1.assuredSum}"/>
-                        <p:column>
-                            <p:commandButton value="View Product" actionListener="#{indexManagedBean.viewProduct}">
-                                <f:attribute name="productId" value="#{indexManagedBean.currProd1.productId}"/>
-                            </p:commandButton>
-                        </p:column>
-
-                    </p:panelGrid>
-                </div>
-                <div class="card1">
-                    <p:panelGrid columns="2" style="height: 30%; width: 30%; float: left; padding-right: 10%">
-
-                        <f:facet name="header">
-                            <h5 style="margin-top:2 ; text-align: ce">View Product</h5>
-
-                            <!--<p:graphicImage library="images" name="aia-group-limited-vector-logo.svg" width="100"/>-->
-                        </f:facet>
-
-                        <h:outputText value="Product Name"/>
-                        <h:outputText value="#{indexManagedBean.currProd2.productName}"/>
-
-                        <h:outputText value="Company Name: "/>
-                        <h:outputText value="#{indexManagedBean.currProd2.company.companyName}"/>
-
-                        <h:outputText value="Sum Assured: "/>
-                        <h:outputText value="#{indexManagedBean.currProd2.assuredSum}"/>
-
-                        <p:column colspan="2">
-                            <p:commandButton value="View Product" actionListener="#{indexManagedBean.viewProduct}">
-                                <f:attribute name="productId" value="#{indexManagedBean.currProd2.productId}"/>
-                            </p:commandButton>
-                        </p:column>
-
-                    </p:panelGrid>
-                </div>
-                
-                <p:column>
-                    <p:outputLabel value=""/>
-                </p:column>
-                
-                
-                <div class="card1">
-                    <p:panelGrid columns="2" style="height: 30%; width: 30%; float: left; padding-right: 10%">
-
-                        <f:facet name="header">
-                            <h5 style="margin-top:2 ; text-align: ce">View Product</h5>
-
-                            <!--<p:graphicImage library="images" name="aia-group-limited-vector-logo.svg" width="100"/>-->
-                        </f:facet>
-
-                        <h:outputText value="Product Name"/>
-                        <h:outputText value="#{indexManagedBean.currProd3.productName}"/>
-
-                        <h:outputText value="Company Name: "/>
-                        <h:outputText value="#{indexManagedBean.currProd3.company.companyName}"/>
-
-                        <h:outputText value="Sum Assured: "/>
-                        <h:outputText value="#{indexManagedBean.currProd3.assuredSum}"/>
-
-                        <p:column colspan="2">
-                            <p:commandButton value="View Product" actionListener="#{indexManagedBean.viewProduct}">
-                                <f:attribute name="productId" value="#{indexManagedBean.currProd3.productId}"/>
-                            </p:commandButton>
-                        </p:column>
-
-                    </p:panelGrid>
-                </div>
-
-
-            </p:panel>
 
 
         </h:form>

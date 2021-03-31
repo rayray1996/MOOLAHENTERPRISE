@@ -58,7 +58,7 @@
                 </p:column>
                 <p:column>
                     <h:outputText value="#{viewProductDetailManagedBean.productToView.productEntity.averageInterestRate}"/>
-                    <p:commandButton style="float: right;" icon="pi-question-circle" actionListener=""/>
+                    <p:commandButton style="float: right;" icon="pi-question-circle"/>
                 </p:column>
             </p:row>
         </p:panelGrid>
@@ -101,7 +101,7 @@
             </p:column>
         </p:dataTable>
 
-        <p:dataTable id="productPremiumTable" widgetVar="productPremiumTable" value="#{viewProductDetailManagedBean.productToView.productEntity.listOfRiders}" var="rider" rowKey="#{rider.riderId}" rowIndexVar="rowIndex">
+        <p:dataTable id="productRider" widgetVar="productRider" value="#{viewProductDetailManagedBean.productToView.productEntity.listOfRiders}" var="rider" rowKey="#{rider.riderId}" rowIndexVar="rowIndex">
             <p:column headerText="No" sortBy="#{rowIndex}" filterBy="#{rowIndex}" filterMatchMode="contains">
                 <h:outputText value="#{rowIndex+1}" />
             </p:column>
@@ -119,7 +119,7 @@
             </p:column>
         </p:dataTable>
 
-        <p:dataTable id="productPremiumTable" widgetVar="productPremiumTable" value="#{viewProductDetailManagedBean.productToView.productEntity.listOfAdditionalFeatures}" var="features" rowKey="#{features.featureId}" rowIndexVar="rowIndex">
+        <p:dataTable id="productFeatures" widgetVar="productFeatures" value="#{viewProductDetailManagedBean.productToView.productEntity.listOfAdditionalFeatures}" var="features" rowKey="#{features.featureId}" rowIndexVar="rowIndex">
             <p:column headerText="No" sortBy="#{rowIndex}" filterBy="#{rowIndex}" filterMatchMode="contains">
                 <h:outputText value="#{rowIndex+1}" />
             </p:column>

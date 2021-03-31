@@ -6,59 +6,198 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
 
-    <ui:define name="header">
-        header
-    </ui:define>
+
 
     <ui:define name="content">
-        <p:dataTable id="dataTableAllProducts" widgetVar="dataTableAllProducts" value="#{viewRecommendedProductManagedBean.listOfProducts}" var="productEntity" rowKey="#{productEntity.productEntity.productId}" rowIndexVar="row"
-                     filteredValue="#{viewRecommendedProductManagedBean.filteredProducts}"
-                     rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50">
+        <style>
+            th {
+                height:50px;
+            }
 
-            <f:facet name="header">
-                <p:outputPanel style="text-align: right;">
-                    <h:outputText value="Search all fields:" />
-                    <p:inputText id="globalFilter" onkeyup="PF('dataTableAllProducts').filter()" style="width:300px" placeholder="Enter keyword"/>
-                </p:outputPanel>
-            </f:facet>
+            td {
+                height:40px;
+            }
 
-            <p:column headerText="Product Name" sortBy="#{productEntity.productEntity.productName}" filterBy="#{productEntity.productEntity.productName}" filterMatchMode="contains">
-                <h:outputText value="#{productEntity.productEntity.productName}" />
-            </p:column>
-
-            <p:column headerText="Coverage Term" sortBy="#{productEntity.productEntity.coverageTerm}" filterBy="#{productEntity.productEntity.coverageTerm}" filterMatchMode="contains">
-                <h:outputText value="#{productEntity.productEntity.coverageTerm}" />
-            </p:column>                            
-
-            <p:column headerText="Premium Term" sortBy="#{productEntity.productEntity.premiumTerm}" filterBy="#{productEntity.productEntity.premiumTerm}" filterMatchMode="contains">
-                <h:outputText value="#{productEntity.productEntity.premiumTerm}" />
-            </p:column>
-
-            <p:column headerText="Minimum Sum Assured" sortBy="#{productEntity.productEntity.assuredSum}" filterBy="#{productEntity.productEntity.assuredSum}" filterMatchMode="contains">
-                <h:outputText value="#{productEntity.productEntity.assuredSum}" />
-            </p:column>
-
-            <p:column headerText="Product Type" sortBy="#{productEntity.stringChildCategory}" filterBy="#{productEntity.stringChildCategory}" filterMatchMode="contains">
-                <h:outputText value="#{productEntity.stringChildCategory}" />
-            </p:column>
+            .dataTableNameCol {
+                width:20%!important;
+            }
             
-            <p:column headerText="Action" >
-                <p:commandButton icon="ui-icon-document" title="View" actionListener="#{viewRecommendedProductManagedBean.redirectToViewProductPage}">
-                    <f:setPropertyActionListener value="#{productEntity}" target="#{viewRecommendedProductManagedBean.viewProductDetailManagedBean.productToView}" />
-                </p:commandButton>
-                <p:commandButton icon="pi-star-o" >
-                </p:commandButton>
-            </p:column>
+            .dataTableCoverageCol {
+                width:5%!important;
+            }
+            
+            .dataTablePremiumCol {
+                width:5%!important;
+            }
+            
+            .dataTableSumAssured {
+                width:10%!important;
+            }
+            
+            .dataTableProductType {
+                width:10%!important;
+            }
+            
+            .dataTableAction {
+                width:10%!important;
+                text-align: center;
+            }
+            
+            .bodyText{
+                font-size: 14px;
+                font-family: sans-serif;
+            }
+            li, label {
+                font-size: 14px;
+                font-family: sans-serif;
+            }
+            .viewAllProductsPageTitle {
+                font-size: 18px;
+                font-family: sans-serif;
+                font-weight: bold;
+                text-align: center;
+            }
 
-        </p:dataTable>
+            .viewProductDetailsFilterCriteriaCategoryStyle {
+                width: 21%;
+            }
+
+            .ui-panelgrid .ui-panelgrid-cell  {
+                border: none;
+            }
+        </style>
+        <h:form id="viewProductForm">
+
+            <p:fieldset collapsed="true" id="filterFieldSet" class="bodyText" legend="Filter Criterias" toggleable="true" toggleSpeed="500">
+                <p:ajax event="toggle" />
+                <p:panelGrid id="filterToggle" columns="5" columnClasses="viewProductDetailsFilterCriteriaCategoryStyle,viewProductDetailsFilterCriteriaCategoryStyle,viewProductDetailsFilterCriteriaCategoryStyle,viewProductDetailsFilterCriteriaCategoryStyle,viewProductDetailsFilterCriteriaCategoryStyle">
+
+                    <p:column>
+                        <h:outputText class="bodyText" value="Category:*"/>
+                    </p:column>
+
+                    <p:column>
+                        <h:outputText rendered="#{viewRecommendedProductManagedBean.filterParentCategory != null}" class="bodyText" value="Coverage Term up till:"/>
+                    </p:column>
+
+                    <p:column>
+                        <h:outputText  rendered="#{viewRecommendedProductManagedBean.filterParentCategory != null}" class="bodyText" value="Premium Term:"/>
+                    </p:column>
+
+                    <p:column>
+                        <h:outputText  rendered="#{viewRecommendedProductManagedBean.filterParentCategory != null}" class="bodyText" value="Minimum Sum Assured:"/>
+                    </p:column>
+
+                    <p:column>
+                        <h:outputText  rendered="#{viewRecommendedProductManagedBean.filterParentCategory != null}" class="bodyText" value="Product Type:"/>
+                    </p:column>
+
+                    <p:column>
+                        <p:selectOneMenu value="#{viewRecommendedProductManagedBean.filterParentCategory}" id="selCategory">
+                            <p:ajax update="@form" event="itemSelect" listener="#{viewRecommendedProductManagedBean.updateProductTable}"/>
+                            <f:selectItem itemValue="#{null}" itemLabel="No preference" noSelectionOption="true" />
+                            <f:selectItems value="#{viewRecommendedProductManagedBean.stringParentCategory}" var="parentCategory" itemValue="#{parentCategory}" itemLabel="#{parentCategory}" />
+                        </p:selectOneMenu>
+                    </p:column>
+
+                    <p:column>
+                        <p:selectOneMenu  rendered="#{viewRecommendedProductManagedBean.filterParentCategory != null}" value="#{viewRecommendedProductManagedBean.filterCoverageTerm}" id="selCoverage">
+                            <p:ajax update="@form" event="itemSelect" listener="#{viewRecommendedProductManagedBean.retrieveFilteredProducts}"/>
+                            <f:selectItem itemValue="-1" itemLabel="No preference" noSelectionOption="true" />
+                            <f:selectItem itemValue="50" itemLabel="Up to 50 y.o." noSelectionOption="true" />
+                            <f:selectItem itemValue="60" itemLabel="Up to 60 y.o." noSelectionOption="true" />
+                            <f:selectItem itemValue="70" itemLabel="Up to 70 y.o." noSelectionOption="true" />
+                            <f:selectItem itemValue="80" itemLabel="Up to 80 y.o." noSelectionOption="true" />
+                            <f:selectItem itemValue="90" itemLabel="Up to 90 y.o." noSelectionOption="true" />
+                            <f:selectItem itemValue="100" itemLabel="Up to 100 y.o." noSelectionOption="true" />
+                        </p:selectOneMenu>
+                    </p:column>
+
+                    <p:column>
+                        <p:selectOneMenu  rendered="#{viewRecommendedProductManagedBean.filterParentCategory != null}" value="#{viewRecommendedProductManagedBean.filterPremiumTerm}" id="selPremiumTerm">
+                            <p:ajax update="@form" event="itemSelect" listener="#{viewRecommendedProductManagedBean.retrieveFilteredProducts}"/>
+                            <f:selectItem itemValue="-1" itemLabel="No preference" noSelectionOption="true" />
+                            <f:selectItem itemValue="0" itemLabel="No term" noSelectionOption="true" />
+                            <f:selectItem itemValue="5" itemLabel="Up to 5 years" noSelectionOption="true" />
+                            <f:selectItem itemValue="10" itemLabel="Up to 10 years" noSelectionOption="true" />
+                            <f:selectItem itemValue="15" itemLabel="Up to 15 years" noSelectionOption="true" />
+                            <f:selectItem itemValue="20" itemLabel="Up to 20 years" noSelectionOption="true" />
+                            <f:selectItem itemValue="25" itemLabel="Up to 25 years" noSelectionOption="true" />
+                        </p:selectOneMenu>
+                    </p:column>
+
+                    <p:column>
+                        <p:selectOneMenu  rendered="#{viewRecommendedProductManagedBean.filterParentCategory != null}" value="#{viewRecommendedProductManagedBean.filterSumAssured}" id="selSumAssured">
+                            <p:ajax update="@form" event="itemSelect" listener="#{viewRecommendedProductManagedBean.retrieveFilteredProducts}"/>
+                            <f:selectItem itemValue="-1" itemLabel="No preference" noSelectionOption="true" />
+                            <f:selectItem itemValue="50000" itemLabel="50000 SGD" noSelectionOption="true" />
+                            <f:selectItem itemValue="100000" itemLabel="100000 SGD" noSelectionOption="true" />
+                            <f:selectItem itemValue="150000" itemLabel="150000 SGD" noSelectionOption="true" />
+                            <f:selectItem itemValue="200000" itemLabel="200000 SGD" noSelectionOption="true" />
+                            <f:selectItem itemValue="300000" itemLabel="300000 SGD" noSelectionOption="true" />
+                            <f:selectItem itemValue="400000" itemLabel="400000 SGD" noSelectionOption="true" />
+                        </p:selectOneMenu>
+                    </p:column>
+
+                    <p:column>
+                        <p:selectOneMenu  rendered="#{viewRecommendedProductManagedBean.filterParentCategory != null}" value="#{viewRecommendedProductManagedBean.filterChildCategory}" id="selChildCategory">
+                            <p:ajax update="@form" event="itemSelect" listener="#{viewRecommendedProductManagedBean.retrieveFilteredProducts}"/>
+                            <f:selectItem itemValue="null" itemLabel="No preference" noSelectionOption="true" />
+                            <f:selectItems value="#{viewRecommendedProductManagedBean.stringChildCategory}" var="childCategory" itemValue="#{childCategory}" itemLabel="#{childCategory}" />
+                        </p:selectOneMenu>
+                    </p:column>
+                </p:panelGrid>
+            </p:fieldset>
+
+            <br/>
+            <h2 class="viewAllProductsPageTitle">Recommended Products for you</h2>
+            <br/>
+            <p:dataTable style="width:80%; margin: 0 auto" class="bodyText" id="dataTableAllProducts" widgetVar="dataTableAllProducts" value="#{viewRecommendedProductManagedBean.listOfProducts}" var="productEntity" rowKey="#{productEntity.productEntity.productId}" rowIndexVar="row"
+                         filteredValue="#{viewRecommendedProductManagedBean.filteredProducts}"
+                         rows="10" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50">
+
+                <f:facet name="header">
+                    <p:outputPanel style="text-align: right;">
+                        <h:outputText value="Search all fields:" class="bodyText"/>
+                        <p:inputText id="globalFilter" onkeyup="PF('dataTableAllProducts').filter()" style="width:300px;" placeholder="Enter keyword"/>
+                    </p:outputPanel>
+                </f:facet>
+
+                <p:column headerText="Product Name" sortBy="#{productEntity.productEntity.productName}" class="bodyText dataTableNameCol" style="width:20%!important" filterMatchMode="contains" filterBy="#{productEntity.productEntity.productName}" filterable="false">
+                    <h:outputText value="#{productEntity.productEntity.productName}" class="bodyText"/>
+                </p:column>
+
+                <p:column headerText="Coverage Term" sortBy="#{productEntity.productEntity.coverageTerm}" class="bodyText dataTableCoverageCol" filterMatchMode="contains" filterBy="#{productEntity.productEntity.coverageTerm}" filterable="false">
+                    <h:outputText value="#{productEntity.productEntity.coverageTerm}" class="bodyText" />
+                </p:column>                            
+
+                <p:column headerText="Premium Term" sortBy="#{productEntity.productEntity.premiumTerm}" class="bodyText dataTablePremiumCol" filterMatchMode="contains" filterBy="#{productEntity.productEntity.premiumTerm}" filterable="false">
+                    <h:outputText value="#{productEntity.productEntity.premiumTerm}" class="bodyText" />
+                </p:column>
+
+                <p:column headerText="Minimum Sum Assured" sortBy="#{productEntity.productEntity.assuredSum}" class="bodyText dataTableSumAssured" filterMatchMode="contains" filterBy="#{productEntity.productEntity.assuredSum}" filterable="false">
+                    <h:outputText value="#{productEntity.productEntity.assuredSum}" class="bodyText" />
+                </p:column>
+
+                <p:column headerText="Product Type" sortBy="#{productEntity.stringChildCategory}" class="bodyText dataTableProductType" filterMatchMode="contains" filterBy="#{productEntity.stringChildCategory}" filterable="false">
+                    <h:outputText value="#{productEntity.stringChildCategory}"  class="bodyText"/>
+                </p:column>
+
+                <p:column headerText="Action" class="bodyText dataTableAction">
+                    <p:commandButton actionListener="#{viewRecommendedProductManagedBean.redirectToViewProductPage}" icon="ui-icon-document" title="View">
+                        <f:attribute name="productToView" value="#{productEntity}"/>
+                    </p:commandButton>
+                    &nbsp;
+                    &nbsp;
+                    <p:commandButton icon="pi-star-o" >
+                    </p:commandButton>
+
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
+
     </ui:define>
 
-    <ui:define name="sidebar">
-        sidebar
-    </ui:define>
-
-    <ui:define name="footer">
-        footer
-    </ui:define>
 
 </ui:composition>

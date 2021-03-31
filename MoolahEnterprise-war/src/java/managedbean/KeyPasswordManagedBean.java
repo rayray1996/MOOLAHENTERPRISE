@@ -10,7 +10,9 @@ import ejb.stateless.CustomerSessionBeanLocal;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -25,26 +27,48 @@ import util.exception.UnknownPersistenceException;
  * @author Ada Wong
  */
 @Named(value = "keyPasswordManagedBean")
-@ViewScoped
+@SessionScoped
 public class KeyPasswordManagedBean implements Serializable {
 
     @EJB
     private CustomerSessionBeanLocal customerSessionBean;
 
+    private CustomerEntity customer;
+    
     private String newPassword;
 
     public KeyPasswordManagedBean() {
     }
 
-    public void updateCustomerPassword(ActionEvent event) throws CustomerUpdateException {
-
-        CustomerEntity customer = (CustomerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("changePwCust");
-        customer.setPassword(getNewPassword());
+    @PostConstruct
+    public void init() {
         try {
-            customerSessionBean.updateCustomer(customer);
-        } catch (CustomerDoesNotExistsException | UnknownPersistenceException ex) {
+            String customerId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("customerId");
+            setCustomer(customerSessionBean.retrieveCustomerById(Long.parseLong(customerId))); 
+            
+        } catch (CustomerDoesNotExistsException ex) {
+            Logger.getLogger(KeyPasswordManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void updateCustomerPassword(ActionEvent event) {
+
+        try {
+
+            getCustomer().setPassword(getNewPassword());
+            customerSessionBean.updateCustomer(getCustomer());
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "You have successfully updated your password!", null));
+        } catch (CustomerDoesNotExistsException | UnknownPersistenceException | CustomerUpdateException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
-        } 
+        }
+    }
+
+    public CustomerEntity getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(CustomerEntity customer) {
+        this.customer = customer;
     }
 
     public String getNewPassword() {
@@ -54,6 +78,6 @@ public class KeyPasswordManagedBean implements Serializable {
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
     }
-    
-    
+
+
 }
