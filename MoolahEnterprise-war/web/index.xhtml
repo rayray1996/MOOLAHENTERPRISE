@@ -40,7 +40,7 @@
 
         </h:panelGroup>
 
-        <h:form id="productToView" >
+        <h:form id="productToView" rendered="#{sessionScope.isLogin == true}" >
             <div class="card">
                 <h5>Recommended Products For You</h5>
                 <p:carousel value="#{indexManagedBean.listOfProduct}" var="product" responsive="true" numVisible="3">
