@@ -11,6 +11,7 @@ import ejb.entity.ProductEntity;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.ejb.Local;
+import util.exception.AssetEntityDoesNotExistException;
 import util.exception.CustomerAlreadyExistException;
 import util.exception.CustomerCreationException;
 import util.exception.CustomerDoesNotExistsException;
@@ -52,7 +53,8 @@ public interface CustomerSessionBeanLocal {
     public List<ProductEntity> retrieveRecommendedProducts(Long customerId) throws CustomerDoesNotExistsException, ProductNotFoundException;
 
     public void resetPassword(String email) throws CustomerPasswordExistsException, CustomerDoesNotExistsException;
-    
+
     public CustomerEntity retrieveCustomerByParaLink(String path) throws CustomerDoesNotExistsException;
+
 
 }
