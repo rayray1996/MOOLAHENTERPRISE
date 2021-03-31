@@ -6,6 +6,7 @@
 package ejb.stateless;
 
 import ejb.entity.AssetEntity;
+import ejb.entity.CompanyEntity;
 import ejb.entity.ComparisonEntity;
 import ejb.entity.CustomerEntity;
 import ejb.entity.PremiumEntity;
@@ -17,8 +18,17 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
+import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
+import javax.ejb.Timeout;
+import javax.ejb.Timer;
+import javax.ejb.TimerConfig;
+import javax.ejb.TimerService;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -28,6 +38,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import util.exception.AssetEntityDoesNotExistException;
 import util.exception.CustomerAlreadyExistException;
 import util.exception.CustomerCreationException;
 import util.exception.CustomerDoesNotExistsException;
@@ -57,9 +68,20 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
 
+    @Resource
+    private SessionContext sessionContext;
+
+    private TimerService timerService;
+
     public CustomerSessionBean() {
         validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
+    }
+
+    @PostConstruct
+    public void init() {
+        timerService = sessionContext.getTimerService();
+
     }
 
     @Override
@@ -122,17 +144,36 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 
             int value = (int) (Math.random() * (max - min + 1) + min);
             String pathParam = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(String.valueOf(value)));
-            
+
             cust.setResetPasswordPathParam(pathParam);
             Calendar expiryDate = new GregorianCalendar();
             Calendar requestedDate = (Calendar) expiryDate.clone();
             expiryDate.add(GregorianCalendar.MINUTE, 30);
             cust.setExpiryDateOfPathParam(expiryDate);
-            
+
             // send email 
             emailSessionBean.emailResetPassword(cust, pathParam, email, requestedDate);
+
+            TimerConfig timerConfig = new TimerConfig(cust, true);
+
+            timerService.createSingleActionTimer(expiryDate.getTime(), timerConfig);
+
         } catch (NoResultException ex) {
             throw new CustomerDoesNotExistsException("Customer does not exists!");
+        }
+    }
+
+    @Timeout
+    @Override
+    public void timeoutCleanUp(Timer timer) {
+        try {
+            CustomerEntity customer = (CustomerEntity) timer.getInfo();
+            customer = retrieveCustomerById(customer.getCustomerId());
+            System.err.println("TImeout method triggered for Customer Reset Pw! Customer: " + customer.getEmail());
+            
+            //remove the param
+        } catch (CustomerDoesNotExistsException ex) {
+            System.out.println("ERROR: CUSTOMER DOES NOT EXIST EX:" + ex.getMessage());
         }
     }
 
@@ -179,10 +220,10 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
             throw new CustomerDoesNotExistsException("Customer with ID " + id + " does not exists!");
         }
     }
-    
+
     @Override
     public CustomerEntity retrieveCustomerByParaLink(String path) throws CustomerDoesNotExistsException {
-         try {
+        try {
             CustomerEntity cust = (CustomerEntity) em.createQuery("SELECT c FROM CustomerEntity c WHERE c.resetPasswordPathParam =:pathParam").setParameter("pathParam", path).getSingleResult();
             cust.getListOfIssues().size();
             cust.getListOfLikeProducts().size();
@@ -277,7 +318,8 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     }
 
     @Override
-    public boolean canAffordProduct(CustomerEntity customer, ProductEntity product, List<BigDecimal> nextThreeYearsOfCapital) throws ProductNotFoundException, CustomerDoesNotExistsException {
+    public boolean canAffordProduct(CustomerEntity customer, ProductEntity product,
+            List<BigDecimal> nextThreeYearsOfCapital) throws ProductNotFoundException, CustomerDoesNotExistsException {
         if (product == null) {
             throw new ProductNotFoundException("No product is selected");
         }
@@ -332,7 +374,8 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     }
 
     @Override
-    public Integer getAgeOfCustomer(CustomerEntity customer) {
+    public Integer getAgeOfCustomer(CustomerEntity customer
+    ) {
         int currentYear = new GregorianCalendar().get(GregorianCalendar.YEAR);
         int birthYear = customer.getDateOfBirth().get(GregorianCalendar.YEAR);
 
@@ -348,5 +391,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 
         return msg;
     }
+
+  
 
 }

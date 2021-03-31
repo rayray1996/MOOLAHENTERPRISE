@@ -39,11 +39,13 @@ public class ResetPasswordManagedBean implements Serializable{
     
     
     public void resetCustomerPassword(ActionEvent event){
+        System.out.println("***********************************************Enter into the reset customer method in managed bean ");
         try {
             customerSessionBean.resetPassword(getEmail());
+            System.out.println("***********************************************Enter into the reset customer method in the customer session bean ");
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "A link has successfully been sent to your email for you to reset your password", null));
         } catch (CustomerPasswordExistsException | CustomerDoesNotExistsException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.toString(), null));
         }
     }
 

@@ -11,7 +11,6 @@ import ejb.stateless.CustomerSessionBeanLocal;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.context.FacesContext;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -25,7 +24,6 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import managedbean.ViewProductDetailManagedBean;
 import util.exception.CustomerDoesNotExistsException;
 
 /**
@@ -91,11 +89,17 @@ public class MoolahEnterpriseFilter implements Filter {
         if (path.equals("/index.xhtml")
                 || path.equals("/accessRightError.xhtml")
                 || path.startsWith("/javax.faces.resource")
+                || path.equals("/aboutUs.xhtml")
+                || path.equals("/financialCalculator_home.xhtml")
+                || path.equals("/monthlySaveToAchieveCalculator.xhtml")
+                || path.equals("/howLongToSaveAmtCalculator.xhtml")
+                || path.equals("/yearlyAmtAfterSavingCalculator.xhtml")
                 || path.startsWith("/aboutUs.xhtml")
                 || path.startsWith("/resetPassword.xhtml")
                 || path.startsWith("/createAccount.xhtml")
                 || path.startsWith("/product/ViewRecommendedProduct.xhtml")
                 || path.startsWith("/product/viewProductDetail.xhtml")) {
+
             return true;
         } else {
             return false;
