@@ -10,16 +10,12 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <h:outputStylesheet name="./css/default.css"/>
         <h:outputStylesheet name="./css/cssLayout.css"/>
-        <!--        <style>
-                    .ui-layout-unit .ui-layout-unit-content{
-                        overflow:hidden;
-                    }
-                    .ui-layout-unit-content{
-                        height:99%!important;
-                    }
-                    
-                </style>-->
+   
         <title>Moolah Enterprise</title>
+        
+        <style>
+             footer{margin-top:-1%;}
+        </style>
     </h:head>
 
     <h:body>
@@ -46,14 +42,7 @@
             </p:layoutUnit>
 
 
-            <p:layoutUnit minSize="200" position="east" header="Advertisements" collapsible="true" collapsed="true">
-                <ui:insert name="sidebar">
-                    <!--<ui:include src="/sidebar.xhtml" />-->
-                </ui:insert>        
-
-            </p:layoutUnit>
-
-            <p:layoutUnit position="south" size="120" >
+            <p:layoutUnit position="south"   maxSize="40" minSize="40" >
                 <ui:insert name="footer">
                     <ui:include src="/footer.xhtml" />
                 </ui:insert>
