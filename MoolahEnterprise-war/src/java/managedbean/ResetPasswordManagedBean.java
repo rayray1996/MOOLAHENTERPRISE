@@ -26,30 +26,28 @@ import util.exception.CustomerPasswordExistsException;
  */
 @Named(value = "resetPasswordManagedBean")
 @ViewScoped
-public class ResetPasswordManagedBean implements Serializable{
+public class ResetPasswordManagedBean implements Serializable {
 
     @EJB
     private CustomerSessionBeanLocal customerSessionBean;
 
-    
-    private String email; 
-    
+    private String email;
+
     public ResetPasswordManagedBean() {
     }
-    
-    
-    public void resetCustomerPassword(ActionEvent event){
-        System.out.println("***********************************************Enter into the reset customer method in managed bean ");
+
+    public void resetCustomerPassword(ActionEvent event) {
+
         try {
             customerSessionBean.resetPassword(getEmail());
-            System.out.println("***********************************************Enter into the reset customer method in the customer session bean ");
+
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "A link has successfully been sent to your email for you to reset your password", null));
+            email = "";
         } catch (CustomerPasswordExistsException | CustomerDoesNotExistsException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.toString(), null));
         }
     }
 
-            
     public String getEmail() {
         return email;
     }
@@ -57,8 +55,5 @@ public class ResetPasswordManagedBean implements Serializable{
     public void setEmail(String email) {
         this.email = email;
     }
-    
-    
-    
-    
+
 }
