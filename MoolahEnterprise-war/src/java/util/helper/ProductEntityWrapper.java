@@ -15,8 +15,8 @@ import java.io.Serializable;
 public class ProductEntityWrapper implements Serializable{
 
     private ProductEntity productEntity;
-    private String stringParentCategory;
-    private String stringChildCategory;
+    private String stringParentCategory; // main category - wholelife, termlife, endowment
+    private String stringChildCategory; // specific category for each main category -- accident, hospital etc...
     
     public ProductEntityWrapper() {
     }
@@ -49,6 +49,11 @@ public class ProductEntityWrapper implements Serializable{
 
     public void setStringChildCategory(String stringChildCategory) {
         this.stringChildCategory = stringChildCategory;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductEntityWrapper{" + "productEntity=" + productEntity + ", stringParentCategory=" + stringParentCategory + ", stringChildCategory=" + stringChildCategory + '}';
     }
     
     

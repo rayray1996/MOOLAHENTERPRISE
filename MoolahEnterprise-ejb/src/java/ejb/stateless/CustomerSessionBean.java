@@ -130,7 +130,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
             }
 
         } catch (NoResultException ex) {
-            throw new IncorrectLoginParticularsException(ex.getMessage());
+            throw new IncorrectLoginParticularsException("Login particulars incorrect");
         }
     }
 
@@ -157,7 +157,6 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
             TimerConfig timerConfig = new TimerConfig(cust, true);
 
 //            timerService.createSingleActionTimer(expiryDate.getTime(), timerConfig);
-
         } catch (NoResultException ex) {
             throw new CustomerDoesNotExistsException("Customer does not exists!");
         }
@@ -289,11 +288,17 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         BigDecimal yearTwoCapital = nextThreeYearsOfCapital.get(1);
         BigDecimal yearThreeCapital = nextThreeYearsOfCapital.get(2);
 
+        String smokerString = "";
+        if (customer.getSmoker()) {
+            smokerString = "(p.listOfSmokerPremium IS NOT EMPTY)";
+        } else {
+            smokerString = "(p.listOfSmokerPremium IS EMPTY OR p.listOfSmokerPremium IS NOT EMPTY)";
+        }
         /*
         Recommend products based on 3 years affordability
          */
 //        Query query = em.createQuery("SELECT p FROM ProductEntity p WHERE p.isDeleted = false AND p.company.isDeleted = false AND p.company.isDeactivated = false");
-        Query query = em.createQuery("SELECT p FROM ProductEntity p, IN (p.listOfPremium) premium WHERE p.isDeleted = false AND p.company.isDeleted = false AND p.company.isDeactivated = false AND :age >= premium.minAgeGroup AND :age <= premium.maxAgeGroup AND :yearOne >= premium.value AND :yearTwo >= premium.value AND :yearThree >= premium.value");
+        Query query = em.createQuery("SELECT p FROM ProductEntity p, IN (p.listOfPremium) premium WHERE p.isDeleted = false AND p.company.isDeleted = false AND p.company.isDeactivated = false AND :age >= premium.minAgeGroup AND :age <= premium.maxAgeGroup AND :yearOne >= premium.premiumValue AND :yearTwo >= premium.premiumValue AND :yearThree >= premium.premiumValue AND " + smokerString);
         query.setParameter("age", age);
         query.setParameter("yearOne", yearOneCapital);
         query.setParameter("yearTwo", yearOneCapital);

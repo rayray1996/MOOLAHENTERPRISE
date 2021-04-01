@@ -33,7 +33,7 @@ public class endOfDUrationTotalSavingCalculatorManagedBean implements Serializab
     private BigDecimal inflationRate;
     private BigDecimal aimingAmt;
     private Integer noOfYear;
-    private BigDecimal paymentAmt;
+    private BigDecimal totalAmt;
     private AssetEntity assetEntity;
     private CustomerEntity tempCE;
     private BigDecimal currentlySaving;
@@ -46,7 +46,7 @@ public class endOfDUrationTotalSavingCalculatorManagedBean implements Serializab
         this.currentlySaving = currentlySaving;
     }
 
-    public static BigDecimal INFLATION_RATE = new BigDecimal("0.022");
+    public static BigDecimal INFLATION_RATE = new BigDecimal("2.2");
 
     public BigDecimal getCurrentlyHave() {
         return currentlyHave;
@@ -96,12 +96,12 @@ public class endOfDUrationTotalSavingCalculatorManagedBean implements Serializab
         this.tempCE = tempCE;
     }
 
-    public BigDecimal getPaymentAmt() {
-        return paymentAmt;
+    public BigDecimal getTotalAmt() {
+        return totalAmt;
     }
 
-    public void setPaymentAmt(BigDecimal paymentAmt) {
-        this.paymentAmt = paymentAmt;
+    public void setTotalAmt(BigDecimal totalAmt) {
+        this.totalAmt = totalAmt;
     }
 
     @PostConstruct
@@ -110,38 +110,37 @@ public class endOfDUrationTotalSavingCalculatorManagedBean implements Serializab
         assetEntity = tempCE.getAsset();
         currentlyHave = assetEntity.getCashInHand().add(assetEntity.getInvestments());
         inflationRate = INFLATION_RATE;
-
+        currentlySaving = assetEntity.getMonthlyIncome().subtract(assetEntity.getMonthlyExpense());
     }
 
     /*
  * TBC again  
      */
     public void computeEndOfDurationTotalAmt(ActionEvent event) {
-        currentlyHave = assetEntity.getCashInHand().add(assetEntity.getInvestments());
-        BigDecimal noOfMonth = BigDecimal.ZERO;
+
+        BigDecimal intRate = BigDecimal.ZERO;
+         //If user did not enter inflation rate, we will use 2.2%, otherwise we will use user's entered interest rate
         if (inflationRate.compareTo(BigDecimal.ZERO) == 0 || inflationRate == null) {
-            noOfMonth = INFLATION_RATE;
-            inflationRate = INFLATION_RATE;
+            intRate = INFLATION_RATE.divide(new BigDecimal("100"),7, RoundingMode.DOWN);
+            inflationRate = INFLATION_RATE.divide(new BigDecimal("100"),7, RoundingMode.DOWN);
         } else {
-            noOfMonth = inflationRate;
+            intRate = inflationRate.divide(new BigDecimal("100"),7, RoundingMode.DOWN);;
         }
-        BigDecimal interestRate = noOfMonth.add(new BigDecimal("1"));
+        //get compound interest * principal Amt
+        BigDecimal interestRate = intRate.add(new BigDecimal("1"));
         interestRate = new BigDecimal(Math.pow(interestRate.doubleValue(), noOfYear));
         BigDecimal tempCurrentlyHave = currentlyHave.multiply(interestRate);
-        System.out.println("computed monthly :" + currentlyHave.toString());
 
         // difference
-        BigDecimal difference = aimingAmt.subtract(tempCurrentlyHave);
-        //BigDecimal onePlusR = BigDecimal.ONE.add(inflationRate);
-        //BigDecimal negativePowerN = new BigDecimal(Math.pow(onePlusR.doubleValue(), (-1) * noOfYear.doubleValue())) ;
-        //BigDecimal minusOne = negativePowerN.subtract(BigDecimal.ONE);
-        //BigDecimal fvifa = minusOne.divide(inflationRate);
-//        BigDecimal onePlusR = BigDecimal.ONE.add(inflationRate);
-//        BigDecimal negativePowerN = new BigDecimal(Math.pow(onePlusR.doubleValue(), (-1) * noOfYear.doubleValue()));
-//        BigDecimal oneMinus = BigDecimal.ONE.subtract(negativePowerN);
-//        BigDecimal pvifa = oneMinus.divide(inflationRate, 6, RoundingMode.HALF_UP);
-//        paymentAmt = difference.divide(pvifa, 3, RoundingMode.HALF_UP);
-
+        BigDecimal onePlusR = BigDecimal.ONE.add(intRate);
+        //calculate FVIFA
+        BigDecimal negativePowerN = new BigDecimal(Math.pow(onePlusR.doubleValue(), noOfYear.doubleValue()));
+        BigDecimal minusOne = negativePowerN.subtract(BigDecimal.ONE);
+        totalAmt = (minusOne.divide(intRate, 7, RoundingMode.DOWN));
+        totalAmt = totalAmt.multiply(currentlySaving);
+        totalAmt = totalAmt.add(tempCurrentlyHave);
+        //get final value
+        totalAmt = totalAmt.divide(BigDecimal.ONE, 3, RoundingMode.DOWN);
     }
 
     /**
