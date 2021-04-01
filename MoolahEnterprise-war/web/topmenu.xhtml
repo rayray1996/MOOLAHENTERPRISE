@@ -10,6 +10,9 @@
         .ui-growl {
             right:20%;
         }
+        #loggedinDisplay .ui-menubutton .ui-button{
+            margin-top: 10%
+        }
     </style>
 
     <header>
@@ -74,13 +77,16 @@
                 </p:megaMenu>
 
 
-                <div id = "loggedinDisplay" style="width:19%; float:right;margin-top:-1.7%;font-size:14px;;">
+                <div id = "loggedinDisplay" style="width:19%; float:right;margin-top:-4%;font-size:14px;;">
                     <h:outputText value="You are login as #{sessionScope.customerEntity.fullName}" />&nbsp;
-                    
+
                     <p:menuButton value ="My Account">
-                        <p:menuitem  icon="" value="View My Profile" outcome="/myProfile.xhtml"
+                        <p:menuitem  icon="pi pi-user" value="View My Profile" outcome="/myProfile.xhtml"/>
+                        <p:menuitem value="My Saved Comparisons"/>
+                        <p:menuitem value="My Saved Comparisons"/>
+                        <p:menuitem value="Logout" actionListener="#{moolahLoginManagedBean.logout}" />
                     </p:menuButton>
-<!--                    <p:commandButton value="Logout" actionListener="#{moolahLoginManagedBean.logout}" />-->
+
                 </div>
 
             </h:form>
