@@ -13,19 +13,16 @@ import ejb.entity.WholeLifeProductEntity;
 import ejb.stateless.CustomerSessionBeanLocal;
 import ejb.stateless.ProductSessionBeanLocal;
 import java.io.IOException;
-import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import org.primefaces.event.SelectEvent;
@@ -33,7 +30,6 @@ import util.enumeration.CategoryEnum;
 import util.enumeration.EndowmentProductEnum;
 import util.enumeration.TermLifeProductEnum;
 import util.enumeration.WholeLifeProductEnum;
-import util.exception.CustomerDoesNotExistsException;
 import util.exception.InvalidFilterCriteriaException;
 import util.exception.ProductNotFoundException;
 import util.helper.ProductEntityWrapper;
@@ -42,10 +38,11 @@ import util.helper.ProductEntityWrapper;
  *
  * @author rayta
  */
-@Named(value = "viewRecommendedProductManagedBean")
+@Named(value = "viewAllProductManagedBean")
 @ViewScoped
-public class ViewRecommendedProductManagedBean implements Serializable {
+public class ViewAllProductManagedBean implements Serializable{
 
+   
     @EJB
     private CustomerSessionBeanLocal customerSessionBean;
 
@@ -54,7 +51,7 @@ public class ViewRecommendedProductManagedBean implements Serializable {
 
     @Inject
     private ViewCurrentComparison viewCurrentComparison;
-
+    
     private CustomerEntity customer;
     private ProductEntityWrapper productToView;
 
@@ -69,8 +66,9 @@ public class ViewRecommendedProductManagedBean implements Serializable {
     private Integer filterPremiumTerm;
     private BigDecimal filterSumAssured;
     private String filterChildCategory;
+    private String filterIsSmoker;
 
-    public ViewRecommendedProductManagedBean() {
+    public ViewAllProductManagedBean() {
         listOfProducts = new ArrayList<>();
         filteredProducts = new ArrayList<>();
         searchedProducts = new ArrayList<>();
@@ -80,97 +78,75 @@ public class ViewRecommendedProductManagedBean implements Serializable {
 
     @PostConstruct
     public void dataInit() {
-        System.out.println("dataInit viewRecommendedProducts");
-        customer = (CustomerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("customerEntity");
-        if (customer == null) {
-            FacesContext.getCurrentInstance().addMessage("null", new FacesMessage(FacesMessage.SEVERITY_INFO, "You are not logged in!", ""));
-            return;
-        }
-        try {
-            List<ProductEntity> tempProducts = customerSessionBean.retrieveRecommendedProducts(customer.getCustomerId());
-            for (ProductEntity p : tempProducts) {
-                listOfProducts.add(new ProductEntityWrapper(p, getParentClassAsString(p), getChildEnumAsString(p)));
-                filteredProducts.add(new ProductEntityWrapper(p, getParentClassAsString(p), getChildEnumAsString(p)));
-                if (!stringParentCategory.contains(getParentClassAsString(p))) {
-                    stringParentCategory.add(getParentClassAsString(p));
-                }
+        List<ProductEntity> tempProducts = productSessionBean.retrieveAllFinancialProducts();
+        for (ProductEntity p : tempProducts) {
+            listOfProducts.add(new ProductEntityWrapper(p, getParentClassAsString(p), getChildEnumAsString(p)));
+            filteredProducts.add(new ProductEntityWrapper(p, getParentClassAsString(p), getChildEnumAsString(p)));
+            if (!stringParentCategory.contains(getParentClassAsString(p))) {
+                stringParentCategory.add(getParentClassAsString(p));
             }
-        } catch (CustomerDoesNotExistsException ex) {
-            FacesContext.getCurrentInstance().addMessage("null", new FacesMessage(FacesMessage.SEVERITY_INFO, "You are not logged in!", ""));
-        } catch (ProductNotFoundException ex) {
-            FacesContext.getCurrentInstance().addMessage("null", new FacesMessage(FacesMessage.SEVERITY_INFO, "No products are available!", ""));
         }
     }
 
     public void updateProductTable(SelectEvent event) {
-        try {
-            listOfProducts.clear();
-            filteredProducts.clear();
-            stringChildCategory.clear();
-            filterSumAssured = BigDecimal.valueOf(-1);
-            filterCoverageTerm = -1;
-            filterPremiumTerm = -1;
-            filterChildCategory = "";
-            List<ProductEntity> allProducts = customerSessionBean.retrieveRecommendedProducts(customer.getCustomerId());
-            if (filterParentCategory == null) {
-                dataInit();
-                return;
-            }
+        listOfProducts.clear();
+        filteredProducts.clear();
+        stringChildCategory.clear();
+        filterSumAssured = BigDecimal.valueOf(-1);
+        filterCoverageTerm = -1;
+        filterPremiumTerm = -1;
+        filterChildCategory = "";
+        filterIsSmoker = "";
+        if (filterParentCategory == null) {
+            dataInit();
+            return;
+        }
+        switch (filterParentCategory) {
+            case "Endowment":
+                stringChildCategory.add("Endowment");
 
-            Boolean isSmoker = customer.getSmoker();
+                List<EndowmentEntity> tempE = productSessionBean.retrieveAllEndowmentProducts();
+                for (EndowmentEntity e : tempE) {
+                    listOfProducts.add(new ProductEntityWrapper(e, getParentClassAsString(e), getChildEnumAsString(e)));
+                    filteredProducts.add(new ProductEntityWrapper(e, getParentClassAsString(e), getChildEnumAsString(e)));
+                }
+                break;
 
-            switch (filterParentCategory) {
-                case "Endowment":
-                    stringChildCategory.add("Endowment");
-                    for (ProductEntity e : allProducts) {
-                        if (getParentClassAsString(e).equals("Endowment")) {
-                            listOfProducts.add(new ProductEntityWrapper(e, getParentClassAsString(e), getChildEnumAsString(e)));
-                            filteredProducts.add(new ProductEntityWrapper(e, getParentClassAsString(e), getChildEnumAsString(e)));
-                        }
+            case "Term Life":
+                stringChildCategory.add("Accident");
+                stringChildCategory.add("Critical Illness");
+                stringChildCategory.add("Hospital");
+
+                List<TermLifeProductEntity> tempT = productSessionBean.retrieveAllTermLifeProducts();
+                for (TermLifeProductEntity t : tempT) {
+                    listOfProducts.add(new ProductEntityWrapper(t, getParentClassAsString(t), getChildEnumAsString(t)));
+                    filteredProducts.add(new ProductEntityWrapper(t, getParentClassAsString(t), getChildEnumAsString(t)));
+                }
+                break;
+
+            case "Whole Life":
+                stringChildCategory.add("Accident");
+                stringChildCategory.add("Critical Illness");
+                stringChildCategory.add("Hospital");
+                stringChildCategory.add("Life Insurance");
+
+                List<WholeLifeProductEntity> tempW = productSessionBean.retrieveAllWholeLifeProducts();
+                for (WholeLifeProductEntity w : tempW) {
+                    listOfProducts.add(new ProductEntityWrapper(w, getParentClassAsString(w), getChildEnumAsString(w)));
+                    filteredProducts.add(new ProductEntityWrapper(w, getParentClassAsString(w), getChildEnumAsString(w)));
+                }
+                break;
+            default:
+                System.out.println("nothing");
+                List<ProductEntity> tempProducts = productSessionBean.retrieveAllFinancialProducts();
+                for (ProductEntity p : tempProducts) {
+                    listOfProducts.add(new ProductEntityWrapper(p, getParentClassAsString(p), getChildEnumAsString(p)));
+                    filteredProducts.add(new ProductEntityWrapper(p, getParentClassAsString(p), getChildEnumAsString(p)));
+                    if (!stringParentCategory.contains(getParentClassAsString(p))) {
+                        stringParentCategory.add(getParentClassAsString(p));
                     }
-                    break;
-
-                case "Term Life":
-                    stringChildCategory.add("Accident");
-                    stringChildCategory.add("Critical Illness");
-                    stringChildCategory.add("Hospital");
-
-                    for (ProductEntity t : allProducts) {
-                        if (getParentClassAsString(t).equals("Term Life")) {
-                            listOfProducts.add(new ProductEntityWrapper(t, getParentClassAsString(t), getChildEnumAsString(t)));
-                            filteredProducts.add(new ProductEntityWrapper(t, getParentClassAsString(t), getChildEnumAsString(t)));
-                        }
-                    }
-                    break;
-
-                case "Whole Life":
-                    stringChildCategory.add("Accident");
-                    stringChildCategory.add("Critical Illness");
-                    stringChildCategory.add("Hospital");
-                    stringChildCategory.add("Life Insurance");
-
-                    for (ProductEntity w : allProducts) {
-                        if (getParentClassAsString(w).equals("Whole Life")) {
-                            listOfProducts.add(new ProductEntityWrapper(w, getParentClassAsString(w), getChildEnumAsString(w)));
-                            filteredProducts.add(new ProductEntityWrapper(w, getParentClassAsString(w), getChildEnumAsString(w)));
-                        }
-                    }
-                    break;
-
-                default:
-                    for (ProductEntity p : allProducts) {
-                        listOfProducts.add(new ProductEntityWrapper(p, getParentClassAsString(p), getChildEnumAsString(p)));
-                        filteredProducts.add(new ProductEntityWrapper(p, getParentClassAsString(p), getChildEnumAsString(p)));
-                        if (!stringParentCategory.contains(getParentClassAsString(p))) {
-                            stringParentCategory.add(getParentClassAsString(p));
-                        }
-                    }
-                    break;
-            }
-        } catch (CustomerDoesNotExistsException ex) {
-            FacesContext.getCurrentInstance().addMessage("null", new FacesMessage(FacesMessage.SEVERITY_INFO, "You are not logged in!", ""));
-        } catch (ProductNotFoundException ex) {
-            FacesContext.getCurrentInstance().addMessage("null", new FacesMessage(FacesMessage.SEVERITY_INFO, "No products are available!", ""));
+                }
+                break;
         }
     }
 
@@ -230,15 +206,14 @@ public class ViewRecommendedProductManagedBean implements Serializable {
             }
 
             // is smoker
-            Boolean isSmoker = customer.getSmoker();
+            Boolean isSmoker = (filterIsSmoker.equals("Yes"));
 
             List<ProductEntity> resultProducts = new ArrayList<>();
-            System.out.println("filterSumAssured = " + filterSumAssured.toString());
+            System.out.println("filterIsSmoker = " + isSmoker);
             resultProducts = productSessionBean.filterProductsByCriteria(parentCategory, null, isSmoker, filterSumAssured, filterCoverageTerm, filterPremiumTerm, endowmentChildCategory, termLifeChildCategory, wholeLifeChildCategory);
             for (ProductEntity r : resultProducts) {
                 listOfProducts.add(new ProductEntityWrapper(r, getParentClassAsString(r), getChildEnumAsString(r)));
                 filteredProducts.add(new ProductEntityWrapper(r, getParentClassAsString(r), getChildEnumAsString(r)));
-
             }
         } catch (InvalidFilterCriteriaException | ProductNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, ex.toString(), null));
@@ -321,7 +296,7 @@ public class ViewRecommendedProductManagedBean implements Serializable {
     public void addToComparison(ActionEvent event) {
         viewCurrentComparison.addToComparison((ProductEntityWrapper) event.getComponent().getAttributes().get("productToCompare"));
     }
-
+    
     public List<String> getStringParentCategory() {
         return stringParentCategory;
     }
@@ -425,4 +400,13 @@ public class ViewRecommendedProductManagedBean implements Serializable {
     public void setViewCurrentComparison(ViewCurrentComparison viewCurrentComparison) {
         this.viewCurrentComparison = viewCurrentComparison;
     }
+
+    public String getFilterIsSmoker() {
+        return filterIsSmoker;
+    }
+
+    public void setFilterIsSmoker(String filterIsSmoker) {
+        this.filterIsSmoker = filterIsSmoker;
+    }
+    
 }

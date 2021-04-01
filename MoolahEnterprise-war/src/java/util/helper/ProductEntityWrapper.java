@@ -50,6 +50,11 @@ public class ProductEntityWrapper implements Serializable{
     public void setStringChildCategory(String stringChildCategory) {
         this.stringChildCategory = stringChildCategory;
     }
+
+    @Override
+    public String toString() {
+        return "ProductEntityWrapper{" + "productEntity=" + productEntity + ", stringParentCategory=" + stringParentCategory + ", stringChildCategory=" + stringChildCategory + '}';
+    }
     
     
 }

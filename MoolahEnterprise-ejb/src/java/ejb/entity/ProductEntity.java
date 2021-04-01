@@ -89,6 +89,8 @@ public class ProductEntity implements Serializable {
     @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
     @JoinColumn(nullable = true)
     private List<PremiumEntity> listOfSmokerPremium;
+    @NotNull
+    private Boolean isAvailableToSmoker;
 
     public ProductEntity() {
         listOfAdditionalFeatures = new ArrayList<FeatureEntity>();
@@ -99,9 +101,10 @@ public class ProductEntity implements Serializable {
         listOfPremium = new ArrayList<PremiumEntity>();
         listOfSmokerPremium = new ArrayList<PremiumEntity>();
         productImage = null;
+        isAvailableToSmoker = true;
     }
 
-    public ProductEntity(String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm, PolicyCurrencyEnum currency, CategoryPricingEntity pricing, BigDecimal averageInterestRate) {
+    public ProductEntity(String productName, Integer coverageTerm, BigDecimal assuredSum, String description, Boolean isDeleted, Integer premiumTerm, PolicyCurrencyEnum currency, CategoryPricingEntity pricing, BigDecimal averageInterestRate, Boolean isAvailableToSmoker) {
         this();
         this.productName = productName;
         this.coverageTerm = coverageTerm;
@@ -113,6 +116,7 @@ public class ProductEntity implements Serializable {
         this.policyCurrency = currency;
         this.productCategoryPricing = pricing;
         this.averageInterestRate = averageInterestRate;
+        this.isAvailableToSmoker = isAvailableToSmoker;
     }
 
     public List<PremiumEntity> getListOfSmokerPremium() {
@@ -282,6 +286,14 @@ public class ProductEntity implements Serializable {
     @Override
     public String toString() {
         return "ProductEntity{" + "productId=" + productId + ", productImage=" + productImage + ", productDateCreated=" + productDateCreated + ", productName=" + productName + ", coverageTerm=" + coverageTerm + ", assuredSum=" + assuredSum + ", description=" + description + ", isDeleted=" + isDeleted + ", premiumTerm=" + premiumTerm + ", policyCurrency=" + policyCurrency + ", listOfAdditionalFeatures=" + listOfAdditionalFeatures + ", listOfRiders=" + listOfRiders + ", clickThroughInfo=" + clickThroughInfo + ", productCategoryPricing=" + productCategoryPricing + ", company=" + company + ", listOfPremium=" + listOfPremium + ", listOfSmokerPremium=" + listOfSmokerPremium + '}';
+    }
+
+    public Boolean getIsAvailableToSmokers() {
+        return isAvailableToSmoker;
+    }
+
+    public void setIsAvailableToSmokers(Boolean isAvailableToSmokers) {
+        this.isAvailableToSmoker = isAvailableToSmokers;
     }
 
 

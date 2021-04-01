@@ -105,7 +105,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         }
         return results;
     }
-
+    
     @Override
     public List<WholeLifeProductEntity> retrieveAllWholeLifeProducts() {
         Query query = em.createQuery("SELECT w FROM WholeLifeProductEntity w WHERE w.isDeleted = FALSE AND w.company.isDeleted = false AND w.company.isDeactivated = false");
@@ -200,9 +200,9 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         // smoker default to no
         String smokerString = "";
         if (isSmoker) {
-            smokerString = "(p.listOfSmokerPremium IS NOT EMPTY)";
+            smokerString = "(p.isAvailableToSmoker = true)";
         } else {
-            smokerString = "(p.listOfSmokerPremium IS EMPTY OR p.listOfSmokerPremium IS NOT EMPTY)";
+            smokerString = "(p.isAvailableToSmoker = true or p.isAvailableToSmoker = false)";
         }
 
         // coverage term default to -1 (no preference)
@@ -226,10 +226,8 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         String sumAssuredString = "";
         if (sumAssured.compareTo(BigDecimal.ZERO) <= 0) {
             sumAssuredString = "(p.assuredSum >= 0)";
-            System.out.println("sessionbean = " + sumAssuredString);
         } else {
             sumAssuredString = "(:sumAssured <= p.assuredSum)";
-            System.out.println("sessionbean = " + sumAssuredString);
         }
 
         Query query = em.createQuery("SELECT DISTINCT p.productId FROM " + categoryType + " JOIN p.listOfPremium s WHERE p.isDeleted = FALSE AND p.company.isDeleted = false AND p.company.isDeactivated = false" + " AND "
