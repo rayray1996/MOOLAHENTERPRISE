@@ -105,7 +105,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         }
         return results;
     }
-
+    
     @Override
     public List<WholeLifeProductEntity> retrieveAllWholeLifeProducts() {
         Query query = em.createQuery("SELECT w FROM WholeLifeProductEntity w WHERE w.isDeleted = FALSE AND w.company.isDeleted = false AND w.company.isDeactivated = false");

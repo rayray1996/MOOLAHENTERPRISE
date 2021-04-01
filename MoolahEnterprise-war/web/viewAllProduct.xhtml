@@ -1,12 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./../template/defaultTemplate.xhtml"
+                template="./template/defaultTemplate.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
-
-
 
     <ui:define name="content">
         <style>
@@ -102,7 +100,7 @@
                     </p:column>
 
                     <p:column>
-                        <p:selectOneMenu  rendered="#{viewRecommendedProductManagedBean.filterParentCategory != null}" value="#{viewRecommendedProductManagedBean.filterCoverageTerm}" id="selCoverage">
+                        <p:selectOneMenu rendered="#{viewRecommendedProductManagedBean.filterParentCategory != null}" value="#{viewRecommendedProductManagedBean.filterCoverageTerm}" id="selCoverage">
                             <p:ajax update="@form" event="itemSelect" listener="#{viewRecommendedProductManagedBean.retrieveFilteredProducts}"/>
                             <f:selectItem itemValue="-1" itemLabel="No preference" noSelectionOption="true" />
                             <f:selectItem itemValue="50" itemLabel="Up to 50 y.o." noSelectionOption="true" />
@@ -195,11 +193,9 @@
                     </p:commandButton>
                 </p:column>
 
-                
+
             </p:dataTable>
         </h:form>
-
     </ui:define>
-
 
 </ui:composition>
