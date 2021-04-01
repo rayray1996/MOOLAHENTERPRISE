@@ -60,104 +60,108 @@
                 width: 21%;
             }
 
-            .ui-panelgrid .ui-panelgrid-cell  {
-                border: none;
+            #divForToggle .ui-panelgrid .ui-panelgrid-cell  {
+                border: none!important;
             }
+
         </style>
 
         <h:form id="viewProductForm">
             <p:fieldset style="border: none!important;" collapsed="true" id="filterFieldSet" class="bodyText" legend="Filter Criterias" toggleable="true" toggleSpeed="500">
                 <p:ajax event="toggle" />
-                <p:panelGrid id="filterToggle" columns="6" columnClasses="viewProductDetailsFilterCriteriaCategoryStyle,viewProductDetailsFilterCriteriaCategoryStyle,viewProductDetailsFilterCriteriaCategoryStyle,viewProductDetailsFilterCriteriaCategoryStyle,viewProductDetailsFilterCriteriaCategoryStyle,viewProductDetailsFilterCriteriaCategoryStyle">
+                <div id="divForToggle" class="ui-panelgrid ui-panelgrid-cell">
 
-                    <p:column>
-                        <h:outputText class="bodyText" value="Category:*"/>
-                    </p:column>
+                    <p:panelGrid id="filterToggle" columns="6" columnClasses="viewProductDetailsFilterCriteriaCategoryStyle,viewProductDetailsFilterCriteriaCategoryStyle,viewProductDetailsFilterCriteriaCategoryStyle,viewProductDetailsFilterCriteriaCategoryStyle,viewProductDetailsFilterCriteriaCategoryStyle,viewProductDetailsFilterCriteriaCategoryStyle">
 
-                    <p:column>
-                        <h:outputText rendered="#{viewAllProductManagedBean.filterParentCategory != null}" class="bodyText" value="Coverage Term up till:"/>
-                    </p:column>
+                        <p:column>
+                            <h:outputText class="bodyText" value="Category:*"/>
+                        </p:column>
 
-                    <p:column>
-                        <h:outputText  rendered="#{viewAllProductManagedBean.filterParentCategory != null}" class="bodyText" value="Premium Term:"/>
-                    </p:column>
+                        <p:column>
+                            <h:outputText rendered="#{viewAllProductManagedBean.filterParentCategory != null}" class="bodyText" value="Coverage Term up till:"/>
+                        </p:column>
 
-                    <p:column>
-                        <h:outputText  rendered="#{viewAllProductManagedBean.filterParentCategory != null}" class="bodyText" value="Minimum Sum Assured:"/>
-                    </p:column>
+                        <p:column>
+                            <h:outputText  rendered="#{viewAllProductManagedBean.filterParentCategory != null}" class="bodyText" value="Premium Term:"/>
+                        </p:column>
 
-                    <p:column>
-                        <h:outputText  rendered="#{viewAllProductManagedBean.filterParentCategory != null}" class="bodyText" value="Product Type:"/>
-                    </p:column>
+                        <p:column>
+                            <h:outputText  rendered="#{viewAllProductManagedBean.filterParentCategory != null}" class="bodyText" value="Minimum Sum Assured:"/>
+                        </p:column>
 
-                    <p:column>
-                        <h:outputText  rendered="#{viewAllProductManagedBean.filterParentCategory != null}" class="bodyText" value="Are you a smoker?"/>
-                    </p:column>
+                        <p:column>
+                            <h:outputText  rendered="#{viewAllProductManagedBean.filterParentCategory != null}" class="bodyText" value="Product Type:"/>
+                        </p:column>
 
-                    <p:column>
-                        <p:selectOneMenu value="#{viewAllProductManagedBean.filterParentCategory}" id="selCategory">
-                            <p:ajax update="@form" event="itemSelect" listener="#{viewAllProductManagedBean.updateProductTable}"/>
-                            <f:selectItem itemValue="#{null}" itemLabel="No preference" noSelectionOption="true" />
-                            <f:selectItems value="#{viewAllProductManagedBean.stringParentCategory}" var="parentCategory" itemValue="#{parentCategory}" itemLabel="#{parentCategory}" />
-                        </p:selectOneMenu>
-                    </p:column>
+                        <p:column>
+                            <h:outputText  rendered="#{viewAllProductManagedBean.filterParentCategory != null}" class="bodyText" value="Are you a smoker?"/>
+                        </p:column>
 
-                    <p:column>
-                        <p:selectOneMenu rendered="#{viewAllProductManagedBean.filterParentCategory != null}" value="#{viewAllProductManagedBean.filterCoverageTerm}" id="selCoverage">
-                            <p:ajax update="@form" event="itemSelect" listener="#{viewAllProductManagedBean.retrieveFilteredProducts}"/>
-                            <f:selectItem itemValue="-1" itemLabel="No preference" noSelectionOption="true" />
-                            <f:selectItem itemValue="50" itemLabel="Up to 50 y.o." noSelectionOption="true" />
-                            <f:selectItem itemValue="60" itemLabel="Up to 60 y.o." noSelectionOption="true" />
-                            <f:selectItem itemValue="70" itemLabel="Up to 70 y.o." noSelectionOption="true" />
-                            <f:selectItem itemValue="80" itemLabel="Up to 80 y.o." noSelectionOption="true" />
-                            <f:selectItem itemValue="90" itemLabel="Up to 90 y.o." noSelectionOption="true" />
-                            <f:selectItem itemValue="100" itemLabel="Up to 100 y.o." noSelectionOption="true" />
-                        </p:selectOneMenu>
-                    </p:column>
+                        <p:column>
+                            <p:selectOneMenu value="#{viewAllProductManagedBean.filterParentCategory}" id="selCategory">
+                                <p:ajax update="@form" event="itemSelect" listener="#{viewAllProductManagedBean.updateProductTable}"/>
+                                <f:selectItem itemValue="#{null}" itemLabel="No preference" noSelectionOption="true" />
+                                <f:selectItems value="#{viewAllProductManagedBean.stringParentCategory}" var="parentCategory" itemValue="#{parentCategory}" itemLabel="#{parentCategory}" />
+                            </p:selectOneMenu>
+                        </p:column>
 
-                    <p:column>
-                        <p:selectOneMenu  rendered="#{viewAllProductManagedBean.filterParentCategory != null}" value="#{viewAllProductManagedBean.filterPremiumTerm}" id="selPremiumTerm">
-                            <p:ajax update="@form" event="itemSelect" listener="#{viewAllProductManagedBean.retrieveFilteredProducts}"/>
-                            <f:selectItem itemValue="-1" itemLabel="No preference" noSelectionOption="true" />
-                            <f:selectItem itemValue="0" itemLabel="No term" noSelectionOption="true" />
-                            <f:selectItem itemValue="5" itemLabel="Up to 5 years" noSelectionOption="true" />
-                            <f:selectItem itemValue="10" itemLabel="Up to 10 years" noSelectionOption="true" />
-                            <f:selectItem itemValue="15" itemLabel="Up to 15 years" noSelectionOption="true" />
-                            <f:selectItem itemValue="20" itemLabel="Up to 20 years" noSelectionOption="true" />
-                            <f:selectItem itemValue="25" itemLabel="Up to 25 years" noSelectionOption="true" />
-                        </p:selectOneMenu>
-                    </p:column>
+                        <p:column>
+                            <p:selectOneMenu rendered="#{viewAllProductManagedBean.filterParentCategory != null}" value="#{viewAllProductManagedBean.filterCoverageTerm}" id="selCoverage">
+                                <p:ajax update="@form" event="itemSelect" listener="#{viewAllProductManagedBean.retrieveFilteredProducts}"/>
+                                <f:selectItem itemValue="-1" itemLabel="No preference" noSelectionOption="true" />
+                                <f:selectItem itemValue="50" itemLabel="Up to 50 y.o." noSelectionOption="true" />
+                                <f:selectItem itemValue="60" itemLabel="Up to 60 y.o." noSelectionOption="true" />
+                                <f:selectItem itemValue="70" itemLabel="Up to 70 y.o." noSelectionOption="true" />
+                                <f:selectItem itemValue="80" itemLabel="Up to 80 y.o." noSelectionOption="true" />
+                                <f:selectItem itemValue="90" itemLabel="Up to 90 y.o." noSelectionOption="true" />
+                                <f:selectItem itemValue="100" itemLabel="Up to 100 y.o." noSelectionOption="true" />
+                            </p:selectOneMenu>
+                        </p:column>
 
-                    <p:column>
-                        <p:selectOneMenu  rendered="#{viewAllProductManagedBean.filterParentCategory != null}" value="#{viewAllProductManagedBean.filterSumAssured}" id="selSumAssured">
-                            <p:ajax update="@form" event="itemSelect" listener="#{viewAllProductManagedBean.retrieveFilteredProducts}"/>
-                            <f:selectItem itemValue="-1" itemLabel="No preference" noSelectionOption="true" />
-                            <f:selectItem itemValue="50000" itemLabel="50000 SGD" noSelectionOption="true" />
-                            <f:selectItem itemValue="100000" itemLabel="100000 SGD" noSelectionOption="true" />
-                            <f:selectItem itemValue="150000" itemLabel="150000 SGD" noSelectionOption="true" />
-                            <f:selectItem itemValue="200000" itemLabel="200000 SGD" noSelectionOption="true" />
-                            <f:selectItem itemValue="300000" itemLabel="300000 SGD" noSelectionOption="true" />
-                            <f:selectItem itemValue="400000" itemLabel="400000 SGD" noSelectionOption="true" />
-                        </p:selectOneMenu>
-                    </p:column>
+                        <p:column>
+                            <p:selectOneMenu  rendered="#{viewAllProductManagedBean.filterParentCategory != null}" value="#{viewAllProductManagedBean.filterPremiumTerm}" id="selPremiumTerm">
+                                <p:ajax update="@form" event="itemSelect" listener="#{viewAllProductManagedBean.retrieveFilteredProducts}"/>
+                                <f:selectItem itemValue="-1" itemLabel="No preference" noSelectionOption="true" />
+                                <f:selectItem itemValue="0" itemLabel="No term" noSelectionOption="true" />
+                                <f:selectItem itemValue="5" itemLabel="Up to 5 years" noSelectionOption="true" />
+                                <f:selectItem itemValue="10" itemLabel="Up to 10 years" noSelectionOption="true" />
+                                <f:selectItem itemValue="15" itemLabel="Up to 15 years" noSelectionOption="true" />
+                                <f:selectItem itemValue="20" itemLabel="Up to 20 years" noSelectionOption="true" />
+                                <f:selectItem itemValue="25" itemLabel="Up to 25 years" noSelectionOption="true" />
+                            </p:selectOneMenu>
+                        </p:column>
 
-                    <p:column>
-                        <p:selectOneMenu  rendered="#{viewAllProductManagedBean.filterParentCategory != null}" value="#{viewAllProductManagedBean.filterChildCategory}" id="selChildCategory">
-                            <p:ajax update="@form" event="itemSelect" listener="#{viewAllProductManagedBean.retrieveFilteredProducts}"/>
-                            <f:selectItem itemValue="null" itemLabel="No preference" noSelectionOption="true" />
-                            <f:selectItems value="#{viewAllProductManagedBean.stringChildCategory}" var="childCategory" itemValue="#{childCategory}" itemLabel="#{childCategory}" />
-                        </p:selectOneMenu>
-                    </p:column>
+                        <p:column>
+                            <p:selectOneMenu  rendered="#{viewAllProductManagedBean.filterParentCategory != null}" value="#{viewAllProductManagedBean.filterSumAssured}" id="selSumAssured">
+                                <p:ajax update="@form" event="itemSelect" listener="#{viewAllProductManagedBean.retrieveFilteredProducts}"/>
+                                <f:selectItem itemValue="-1" itemLabel="No preference" noSelectionOption="true" />
+                                <f:selectItem itemValue="50000" itemLabel="50000 SGD" noSelectionOption="true" />
+                                <f:selectItem itemValue="100000" itemLabel="100000 SGD" noSelectionOption="true" />
+                                <f:selectItem itemValue="150000" itemLabel="150000 SGD" noSelectionOption="true" />
+                                <f:selectItem itemValue="200000" itemLabel="200000 SGD" noSelectionOption="true" />
+                                <f:selectItem itemValue="300000" itemLabel="300000 SGD" noSelectionOption="true" />
+                                <f:selectItem itemValue="400000" itemLabel="400000 SGD" noSelectionOption="true" />
+                            </p:selectOneMenu>
+                        </p:column>
 
-                    <p:column>
-                        <p:selectOneMenu  rendered="#{viewAllProductManagedBean.filterParentCategory != null}" value="#{viewAllProductManagedBean.filterIsSmoker}" id="selIsSmoker">
-                            <p:ajax update="@form" event="itemSelect" listener="#{viewAllProductManagedBean.retrieveFilteredProducts}"/>
-                            <f:selectItem itemValue="No" itemLabel="No" noSelectionOption="true" />
-                            <f:selectItem itemValue="Yes" itemLabel="Yes" noSelectionOption="true" />
-                        </p:selectOneMenu>
-                    </p:column>
+                        <p:column>
+                            <p:selectOneMenu  rendered="#{viewAllProductManagedBean.filterParentCategory != null}" value="#{viewAllProductManagedBean.filterChildCategory}" id="selChildCategory">
+                                <p:ajax update="@form" event="itemSelect" listener="#{viewAllProductManagedBean.retrieveFilteredProducts}"/>
+                                <f:selectItem itemValue="null" itemLabel="No preference" noSelectionOption="true" />
+                                <f:selectItems value="#{viewAllProductManagedBean.stringChildCategory}" var="childCategory" itemValue="#{childCategory}" itemLabel="#{childCategory}" />
+                            </p:selectOneMenu>
+                        </p:column>
 
-                </p:panelGrid>
+                        <p:column>
+                            <p:selectOneMenu  rendered="#{viewAllProductManagedBean.filterParentCategory != null}" value="#{viewAllProductManagedBean.filterIsSmoker}" id="selIsSmoker">
+                                <p:ajax update="@form" event="itemSelect" listener="#{viewAllProductManagedBean.retrieveFilteredProducts}"/>
+                                <f:selectItem itemValue="No" itemLabel="No" noSelectionOption="true" />
+                                <f:selectItem itemValue="Yes" itemLabel="Yes" noSelectionOption="true" />
+                            </p:selectOneMenu>
+                        </p:column>
+
+                    </p:panelGrid>
+                    </div>
             </p:fieldset>
 
             <br/>
@@ -205,9 +209,13 @@
                     </p:commandButton>
                 </p:column>
 
-
             </p:dataTable>
         </h:form>
+
+        <p:growl>
+            <p:autoUpdate>
+            </p:autoUpdate>
+        </p:growl>
     </ui:define>
 
 </ui:composition>
