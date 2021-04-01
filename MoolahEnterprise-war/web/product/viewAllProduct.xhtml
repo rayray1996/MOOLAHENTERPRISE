@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./template/defaultTemplate.xhtml"
+                template="./../template/defaultTemplate.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
@@ -42,8 +42,8 @@
             }
 
             .bodyText{
-                font-size: 14px;
-                font-family: sans-serif;
+                font-size: 14px!important;
+                font-family: sans-serif!important;
             }
             li, label {
                 font-size: 14px;
@@ -66,42 +66,45 @@
         </style>
 
         <h:form id="viewProductForm">
-
-            <p:fieldset style="border: none!important; padding-left: 30px" collapsed="true" id="filterFieldSet" class="bodyText" legend="Filter Criterias" toggleable="true" toggleSpeed="500">
+            <p:fieldset style="border: none!important;" collapsed="true" id="filterFieldSet" class="bodyText" legend="Filter Criterias" toggleable="true" toggleSpeed="500">
                 <p:ajax event="toggle" />
-                <p:panelGrid id="filterToggle" columns="5" columnClasses="viewProductDetailsFilterCriteriaCategoryStyle,viewProductDetailsFilterCriteriaCategoryStyle,viewProductDetailsFilterCriteriaCategoryStyle,viewProductDetailsFilterCriteriaCategoryStyle,viewProductDetailsFilterCriteriaCategoryStyle">
+                <p:panelGrid id="filterToggle" columns="6" columnClasses="viewProductDetailsFilterCriteriaCategoryStyle,viewProductDetailsFilterCriteriaCategoryStyle,viewProductDetailsFilterCriteriaCategoryStyle,viewProductDetailsFilterCriteriaCategoryStyle,viewProductDetailsFilterCriteriaCategoryStyle,viewProductDetailsFilterCriteriaCategoryStyle">
 
                     <p:column>
                         <h:outputText class="bodyText" value="Category:*"/>
                     </p:column>
 
                     <p:column>
-                        <h:outputText rendered="#{viewRecommendedProductManagedBean.filterParentCategory != null}" class="bodyText" value="Coverage Term up till:"/>
+                        <h:outputText rendered="#{viewAllProductManagedBean.filterParentCategory != null}" class="bodyText" value="Coverage Term up till:"/>
                     </p:column>
 
                     <p:column>
-                        <h:outputText  rendered="#{viewRecommendedProductManagedBean.filterParentCategory != null}" class="bodyText" value="Premium Term:"/>
+                        <h:outputText  rendered="#{viewAllProductManagedBean.filterParentCategory != null}" class="bodyText" value="Premium Term:"/>
                     </p:column>
 
                     <p:column>
-                        <h:outputText  rendered="#{viewRecommendedProductManagedBean.filterParentCategory != null}" class="bodyText" value="Minimum Sum Assured:"/>
+                        <h:outputText  rendered="#{viewAllProductManagedBean.filterParentCategory != null}" class="bodyText" value="Minimum Sum Assured:"/>
                     </p:column>
 
                     <p:column>
-                        <h:outputText  rendered="#{viewRecommendedProductManagedBean.filterParentCategory != null}" class="bodyText" value="Product Type:"/>
+                        <h:outputText  rendered="#{viewAllProductManagedBean.filterParentCategory != null}" class="bodyText" value="Product Type:"/>
                     </p:column>
 
                     <p:column>
-                        <p:selectOneMenu value="#{viewRecommendedProductManagedBean.filterParentCategory}" id="selCategory">
-                            <p:ajax update="@form" event="itemSelect" listener="#{viewRecommendedProductManagedBean.updateProductTable}"/>
+                        <h:outputText  rendered="#{viewAllProductManagedBean.filterParentCategory != null}" class="bodyText" value="Are you a smoker?"/>
+                    </p:column>
+
+                    <p:column>
+                        <p:selectOneMenu value="#{viewAllProductManagedBean.filterParentCategory}" id="selCategory">
+                            <p:ajax update="@form" event="itemSelect" listener="#{viewAllProductManagedBean.updateProductTable}"/>
                             <f:selectItem itemValue="#{null}" itemLabel="No preference" noSelectionOption="true" />
-                            <f:selectItems value="#{viewRecommendedProductManagedBean.stringParentCategory}" var="parentCategory" itemValue="#{parentCategory}" itemLabel="#{parentCategory}" />
+                            <f:selectItems value="#{viewAllProductManagedBean.stringParentCategory}" var="parentCategory" itemValue="#{parentCategory}" itemLabel="#{parentCategory}" />
                         </p:selectOneMenu>
                     </p:column>
 
                     <p:column>
-                        <p:selectOneMenu rendered="#{viewRecommendedProductManagedBean.filterParentCategory != null}" value="#{viewRecommendedProductManagedBean.filterCoverageTerm}" id="selCoverage">
-                            <p:ajax update="@form" event="itemSelect" listener="#{viewRecommendedProductManagedBean.retrieveFilteredProducts}"/>
+                        <p:selectOneMenu rendered="#{viewAllProductManagedBean.filterParentCategory != null}" value="#{viewAllProductManagedBean.filterCoverageTerm}" id="selCoverage">
+                            <p:ajax update="@form" event="itemSelect" listener="#{viewAllProductManagedBean.retrieveFilteredProducts}"/>
                             <f:selectItem itemValue="-1" itemLabel="No preference" noSelectionOption="true" />
                             <f:selectItem itemValue="50" itemLabel="Up to 50 y.o." noSelectionOption="true" />
                             <f:selectItem itemValue="60" itemLabel="Up to 60 y.o." noSelectionOption="true" />
@@ -113,8 +116,8 @@
                     </p:column>
 
                     <p:column>
-                        <p:selectOneMenu  rendered="#{viewRecommendedProductManagedBean.filterParentCategory != null}" value="#{viewRecommendedProductManagedBean.filterPremiumTerm}" id="selPremiumTerm">
-                            <p:ajax update="@form" event="itemSelect" listener="#{viewRecommendedProductManagedBean.retrieveFilteredProducts}"/>
+                        <p:selectOneMenu  rendered="#{viewAllProductManagedBean.filterParentCategory != null}" value="#{viewAllProductManagedBean.filterPremiumTerm}" id="selPremiumTerm">
+                            <p:ajax update="@form" event="itemSelect" listener="#{viewAllProductManagedBean.retrieveFilteredProducts}"/>
                             <f:selectItem itemValue="-1" itemLabel="No preference" noSelectionOption="true" />
                             <f:selectItem itemValue="0" itemLabel="No term" noSelectionOption="true" />
                             <f:selectItem itemValue="5" itemLabel="Up to 5 years" noSelectionOption="true" />
@@ -126,8 +129,8 @@
                     </p:column>
 
                     <p:column>
-                        <p:selectOneMenu  rendered="#{viewRecommendedProductManagedBean.filterParentCategory != null}" value="#{viewRecommendedProductManagedBean.filterSumAssured}" id="selSumAssured">
-                            <p:ajax update="@form" event="itemSelect" listener="#{viewRecommendedProductManagedBean.retrieveFilteredProducts}"/>
+                        <p:selectOneMenu  rendered="#{viewAllProductManagedBean.filterParentCategory != null}" value="#{viewAllProductManagedBean.filterSumAssured}" id="selSumAssured">
+                            <p:ajax update="@form" event="itemSelect" listener="#{viewAllProductManagedBean.retrieveFilteredProducts}"/>
                             <f:selectItem itemValue="-1" itemLabel="No preference" noSelectionOption="true" />
                             <f:selectItem itemValue="50000" itemLabel="50000 SGD" noSelectionOption="true" />
                             <f:selectItem itemValue="100000" itemLabel="100000 SGD" noSelectionOption="true" />
@@ -139,20 +142,29 @@
                     </p:column>
 
                     <p:column>
-                        <p:selectOneMenu  rendered="#{viewRecommendedProductManagedBean.filterParentCategory != null}" value="#{viewRecommendedProductManagedBean.filterChildCategory}" id="selChildCategory">
-                            <p:ajax update="@form" event="itemSelect" listener="#{viewRecommendedProductManagedBean.retrieveFilteredProducts}"/>
+                        <p:selectOneMenu  rendered="#{viewAllProductManagedBean.filterParentCategory != null}" value="#{viewAllProductManagedBean.filterChildCategory}" id="selChildCategory">
+                            <p:ajax update="@form" event="itemSelect" listener="#{viewAllProductManagedBean.retrieveFilteredProducts}"/>
                             <f:selectItem itemValue="null" itemLabel="No preference" noSelectionOption="true" />
-                            <f:selectItems value="#{viewRecommendedProductManagedBean.stringChildCategory}" var="childCategory" itemValue="#{childCategory}" itemLabel="#{childCategory}" />
+                            <f:selectItems value="#{viewAllProductManagedBean.stringChildCategory}" var="childCategory" itemValue="#{childCategory}" itemLabel="#{childCategory}" />
                         </p:selectOneMenu>
                     </p:column>
+
+                    <p:column>
+                        <p:selectOneMenu  rendered="#{viewAllProductManagedBean.filterParentCategory != null}" value="#{viewAllProductManagedBean.filterIsSmoker}" id="selIsSmoker">
+                            <p:ajax update="@form" event="itemSelect" listener="#{viewAllProductManagedBean.retrieveFilteredProducts}"/>
+                            <f:selectItem itemValue="No" itemLabel="No" noSelectionOption="true" />
+                            <f:selectItem itemValue="Yes" itemLabel="Yes" noSelectionOption="true" />
+                        </p:selectOneMenu>
+                    </p:column>
+
                 </p:panelGrid>
             </p:fieldset>
 
             <br/>
-            <h2 class="viewAllProductsPageTitle">Recommended Products for you</h2>
+            <h2 class="viewAllProductsPageTitle">View All Products</h2>
             <br/>
-            <p:dataTable style="width:80%; margin: 0 auto" class="bodyText" id="dataTableAllProducts" widgetVar="dataTableAllProducts" value="#{viewRecommendedProductManagedBean.listOfProducts}" var="productEntity" rowKey="#{productEntity.productEntity.productId}" rowIndexVar="row"
-                         filteredValue="#{viewRecommendedProductManagedBean.filteredProducts}"
+            <p:dataTable style="width:80%; margin: 0 auto" class="bodyText" id="dataTableAllProducts" widgetVar="dataTableAllProducts" value="#{viewAllProductManagedBean.listOfProducts}" var="productEntity" rowKey="#{productEntity.productEntity.productId}" rowIndexVar="row"
+                         filteredValue="#{viewAllProductManagedBean.filteredProducts}"
                          rows="10" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50">
 
                 <f:facet name="header">
@@ -183,12 +195,12 @@
                 </p:column>
 
                 <p:column headerText="Action" class="bodyText dataTableAction">
-                    <p:commandButton actionListener="#{viewRecommendedProductManagedBean.redirectToViewProductPage}" icon="ui-icon-document" title="View">
+                    <p:commandButton actionListener="#{viewAllProductManagedBean.redirectToViewProductPage}" icon="ui-icon-document" title="View">
                         <f:attribute name="productToView" value="#{productEntity}"/>
                     </p:commandButton>
                     &nbsp;
                     &nbsp;
-                    <p:commandButton title="Add to Compare List" icon="ui-icon-plus" actionListener="#{viewRecommendedProductManagedBean.addToComparison}">
+                    <p:commandButton title="Add to Compare List" icon="ui-icon-plus" actionListener="#{viewAllProductManagedBean.addToComparison}">
                         <f:attribute name="productToCompare" value="#{productEntity}" />
                     </p:commandButton>
                 </p:column>
