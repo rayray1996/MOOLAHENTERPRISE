@@ -6,32 +6,39 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
 
-    
+
     <ui:define name="content">
         <h:outputStylesheet library="css" name="default.css" />
+        <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces"/>
 
-        <h1 style="text-align: center">My Profile</h1> 
-        
+        <div>
+            <h1 style="text-align: center">My Profile</h1> 
 
-        <p:panelGrid style="margin: 0 auto;" styleClass="noBorders" >
-            <h:form id="myProfile">
+        </div>
+
+
+
+        <h:form id="myProfileForm">
+            <p:commandButton style="margin-left: 70%" icon="pi pi-pencil" id="editProfile" update="myProfileForm" actionListener="#{myProfileManagedBean.updateForm}" rendered="#{myProfileManagedBean.editable == false}"/>
+            <p:panelGrid style="margin: 0 auto;" styleClass="noBorders" rendered="#{myProfileManagedBean.editable == false}" >
+
 
                 <p:row styleClass="panelGrid_row_height_account_registration">
                     <p:column class="panelGrid_col2_colStyle">
                         <p:outputLabel value="Full Name:"/><br/>
-                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="name" value="#{myProfileManagedBean.customer.fullName}" placeholder="#{myProfileManagedBean.customer.fullName}" required="true" requiredMessage="Name is required!"/>
+                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="name1" disabled="true" placeholder="#{myProfileManagedBean.customer.fullName}" required="true" requiredMessage="Name is required!"/>
                     </p:column>
                     &nbsp;
                     <p:column styleClass="panelGrid_col2_colStyle">
                         <p:outputLabel value="Birth Date:"/><br/>
-                        <p:datePicker disabled="true" styleClass="panelGrid_col2_formInputBox" id="birthdate"  placeholder="#{myProfileManagedBean.customer.dateOfBirth}"/>
+                        <p:inputText disabled="true" styleClass="panelGrid_col2_formInputBox" type="text" id="birthdate1" onfocus="(this.type = 'date')" placeholder="#{myProfileManagedBean.dateOfBirth}" onblur="(this.type = 'text')"/>
                     </p:column>
                 </p:row>
 
                 <p:row styleClass="panelGrid_row_height_account_registration">
                     <p:column styleClass="panelGrid_col2_colStyle">
                         <p:outputLabel value="Gender:"/><br/>
-                        <p:selectOneRadio id="gender" disabled="true" value="#{myProfileManagedBean.customer.gender}">
+                        <p:selectOneRadio id="gender1" disabled="true" value="#{myProfileManagedBean.customer.gender}">
                             <f:selectItem  itemLabel="Male" itemValue="MALE"/>
                             <f:selectItem  itemLabel="Female" itemValue="FEMALE"/>
                         </p:selectOneRadio>                    
@@ -39,14 +46,14 @@
                     &nbsp;
                     <p:column styleClass="panelGrid_col2_colStyle">
                         <p:outputLabel value="Phone Number:"/><br/>
-                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="phoneNumber" value="#{myProfileManagedBean.customer.phoneNumber}" placeholder="#{myProfileManagedBean.customer.phoneNumber}" required="true" requiredMessage="Phone Number is required!"/>
+                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="phoneNumber1" disabled="true" placeholder="#{myProfileManagedBean.customer.phoneNumber}"/>
                     </p:column>
                 </p:row>
 
                 <p:row styleClass="panelGrid_row_height_account_registration">
                     <p:column styleClass="panelGrid_col2_colStyle">
                         <p:outputLabel value="Have you smoked in the last 3 years?:"/><br/>
-                        <p:selectOneRadio id="smoker" value="#{myProfileManagedBean.customer.smoker}" required="true" requiredMessage="You need to declare if you had smoked in the last 3 years!">
+                        <p:selectOneRadio id="smoker1" value="#{myProfileManagedBean.customer.smoker}" disabled ="true">
                             <f:selectItem itemLabel="Yes" itemValue="true"/>
                             <f:selectItem itemLabel="No" itemValue="false"/>
                         </p:selectOneRadio>                    
@@ -54,61 +61,205 @@
                     &nbsp;
                     <p:column styleClass="panelGrid_col2_colStyle">
                         <p:outputLabel value="Email Address:"/><br/>
-                        <p:inputText styleClass="panelGrid_col2_formInputBox" disabled="true" id="email" placeholder="#{myProfileManagedBean.customer.email}"/>
+                        <p:inputText styleClass="panelGrid_col2_formInputBox" disabled="true" id="email1" placeholder="#{myProfileManagedBean.customer.email}"/>
                     </p:column>
                 </p:row>
 
                 <p:row styleClass="panelGrid_row_height_account_registration">
                     <p:column styleClass="panelGrid_col2_colStyle">
                         <p:outputLabel value="Marital Status:"/><br/>
-                        <p:selectOneMenu id="maritalStatus" value="#{createAccountManagedBean.marriedString}" styleClass="panelGrid_col2_formInputBox">
-                            <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true"/>
-                            <f:selectItem itemLabel="Single" itemValue="SINGLE"/>
-                            <f:selectItem itemLabel="Married" itemValue="MARRRIED"/>
-                            <f:selectItem itemLabel="Divorced" itemValue="DIVORCED"/>
-                            <f:selectItem itemLabel="Widowed" itemValue="WIDOWED"/>
-                        </p:selectOneMenu>
+                        <p:selectOneRadio id="maritalStatus1" value="#{myProfileManagedBean.customer.isMarried}" disabled ="true">
+                            <f:selectItem itemLabel="Is Married" itemValue="true"/>
+                            <f:selectItem itemLabel="Is Not Married" itemValue="false"/>
+                        </p:selectOneRadio>  
                     </p:column>
                     &nbsp;
                     <p:column styleClass="panelGrid_col2_colStyle">
                         <p:outputLabel value="Password:"/><br/>
-                        <p:password styleClass="panelGrid_col2_formInputBox" id="password" value="#{myProfileManagedBean.customer.password}" placeholder="#{myProfileManagedBean.customer.password}" required="true" requiredMessage="Password is required!"/>
+                        <p:password styleClass="panelGrid_col2_formInputBox" id="password1" disabled="true" placeholder="**************"/>
                     </p:column>
                 </p:row>
 
                 <p:row styleClass="panelGrid_row_height_account_registration">
                     <p:column styleClass="panelGrid_col2_colStyle">
                         <p:outputLabel value="Cash On Hand:"/><br/>
-                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="cashOnHand" value="#{myProfileManagedBean.customer.asset.cashInHand}" placeholder="#{myProfileManagedBean.customer.asset.cashInHand}" required="true" requiredMessage="Cash on hand field is required!"/>
+                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="cashOnHand1" disabled="true" placeholder="#{myProfileManagedBean.customer.asset.cashInHand}"/>
                     </p:column>
                     &nbsp;
                     <p:column styleClass="panelGrid_col2_colStyle">
                         <p:outputLabel value="Investments:"/><br/>
-                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="investments" value="#{myProfileManagedBean.customer.asset.investments}" placeholder="#{myProfileManagedBean.customer.asset.investments}" required="true" requiredMessage="Investment field is required!"/>
+                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="investments1" disabled="true" placeholder="#{myProfileManagedBean.customer.asset.investments}"/>
                     </p:column>
                 </p:row>
 
                 <p:row styleClass="panelGrid_row_height_account_registration">
                     <p:column styleClass="panelGrid_col2_colStyle">
                         <p:outputLabel value="Monthly Income:"/><br/>
-                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="monthlyIncome" value="#{myProfileManagedBean.customer.asset.monthlyIncome}" placeholder="#{myProfileManagedBean.customer.asset.monthlyIncome}" required="true" requiredMessage="Monthly Income field is required!"/>
+                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="monthlyIncome1" disabled="true" placeholder="#{myProfileManagedBean.customer.asset.monthlyIncome}"/>
                     </p:column>
                     &nbsp;
                     <p:column styleClass="panelGrid_col2_colStyle">
                         <p:outputLabel value="Monthly Expenses:"/><br/>
-                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="monthlyExpenses" value="#{myProfileManagedBean.customer.asset.monthlyExpense}" placeholder="#{myProfileManagedBean.customer.asset.monthlyExpense}" required="true" requiredMessage="Monthly Expenses field is required!"/>
+                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="monthlyExpenses1" disabled="true" placeholder="#{myProfileManagedBean.customer.asset.monthlyExpense}"/>
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+
+            <p:panelGrid style="margin: 0 auto;" styleClass="noBorders"  rendered="#{myProfileManagedBean.editable == true}" >
+
+
+                <p:row styleClass="panelGrid_row_height_account_registration">
+                    <p:column class="panelGrid_col2_colStyle">
+                        <p:outputLabel value="Full Name:"/><br/>
+                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="name2" value="#{myProfileManagedBean.customer.fullName}" placeholder="#{myProfileManagedBean.customer.fullName}" required="true" requiredMessage="Name is required!"/>
+                    </p:column>
+                    &nbsp;
+                    <p:column styleClass="panelGrid_col2_colStyle">
+                        <p:outputLabel value="Birth Date:"/><br/>
+                        <p:inputText disabled="true" styleClass="panelGrid_col2_formInputBox" type="text" id="birthdate2" onfocus="(this.type = 'date')" placeholder="#{myProfileManagedBean.dateOfBirth}" onblur="(this.type = 'text')"/>
+                    </p:column>
+                </p:row>
+
+                <p:row styleClass="panelGrid_row_height_account_registration">
+                    <p:column styleClass="panelGrid_col2_colStyle">
+                        <p:outputLabel value="Gender:"/><br/>
+                        <p:selectOneRadio id="gender2" disabled="true" value="#{myProfileManagedBean.customer.gender}">
+                            <f:selectItem  itemLabel="Male" itemValue="MALE"/>
+                            <f:selectItem  itemLabel="Female" itemValue="FEMALE"/>
+                        </p:selectOneRadio>                    
+                    </p:column>
+                    &nbsp;
+                    <p:column styleClass="panelGrid_col2_colStyle">
+                        <p:outputLabel value="Phone Number:"/><br/>
+                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="phoneNumber2" value="#{myProfileManagedBean.customer.phoneNumber}" placeholder="#{myProfileManagedBean.customer.phoneNumber}" required="true" requiredMessage="Phone Number is required!"/>
+                    </p:column>
+                </p:row>
+
+                <p:row styleClass="panelGrid_row_height_account_registration">
+                    <p:column styleClass="panelGrid_col2_colStyle">
+                        <p:outputLabel value="Have you smoked in the last 3 years?:"/><br/>
+                        <p:selectOneRadio id="smoker2" value="#{myProfileManagedBean.customer.smoker}" required="true" requiredMessage="You need to declare if you had smoked in the last 3 years!">
+                            <f:selectItem itemLabel="Yes" itemValue="true"/>
+                            <f:selectItem itemLabel="No" itemValue="false"/>
+                        </p:selectOneRadio>                    
+                    </p:column>
+                    &nbsp;
+                    <p:column styleClass="panelGrid_col2_colStyle">
+                        <p:outputLabel value="Email Address:"/><br/>
+                        <p:inputText styleClass="panelGrid_col2_formInputBox" disabled="true" id="email2" placeholder="#{myProfileManagedBean.customer.email}"/>
+                    </p:column>
+                </p:row>
+
+                <p:row styleClass="panelGrid_row_height_account_registration">
+                    <p:column styleClass="panelGrid_col2_colStyle">
+                        <p:outputLabel value="Marital Status:"/><br/>
+                        <p:selectOneRadio id="maritalStatus2" value="#{myProfileManagedBean.customer.isMarried}" required="true" requiredMessage="You need to declare your marital status!">
+                            <f:selectItem itemLabel="Is Married" itemValue="true"/>
+                            <f:selectItem itemLabel="Is Not Married" itemValue="false"/>
+                        </p:selectOneRadio>  
+                    </p:column>
+                    &nbsp;
+                    <p:column styleClass="panelGrid_col2_colStyle">
+                        <p:outputLabel value="Password:"/><br/>
+                        <p:password styleClass="panelGrid_col2_formInputBox" id="password2" disabled="true" placeholder="**************"/>
+                        <p:commandButton icon="pi pi-pencil" onclick="PF('changePasswordForm').show()"/>
+                    </p:column>
+
+                </p:row>
+
+                <p:row styleClass="panelGrid_row_height_account_registration">
+                    <p:column styleClass="panelGrid_col2_colStyle">
+                        <p:outputLabel value="Cash On Hand:"/><br/>
+                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="cashOnHand2" value="#{myProfileManagedBean.customer.asset.cashInHand}" placeholder="#{myProfileManagedBean.customer.asset.cashInHand}" required="true" requiredMessage="Cash on hand field is required!"/>
+                    </p:column>
+                    &nbsp;
+                    <p:column styleClass="panelGrid_col2_colStyle">
+                        <p:outputLabel value="Investments:"/><br/>
+                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="investments2" value="#{myProfileManagedBean.customer.asset.investments}" placeholder="#{myProfileManagedBean.customer.asset.investments}" required="true" requiredMessage="Investment field is required!"/>
+                    </p:column>
+                </p:row>
+
+                <p:row styleClass="panelGrid_row_height_account_registration">
+                    <p:column styleClass="panelGrid_col2_colStyle">
+                        <p:outputLabel value="Monthly Income:"/><br/>
+                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="monthlyIncome2" value="#{myProfileManagedBean.customer.asset.monthlyIncome}" placeholder="#{myProfileManagedBean.customer.asset.monthlyIncome}" required="true" requiredMessage="Monthly Income field is required!"/>
+                    </p:column>
+                    &nbsp;
+                    <p:column styleClass="panelGrid_col2_colStyle">
+                        <p:outputLabel value="Monthly Expenses:"/><br/>
+                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="monthlyExpenses2" value="#{myProfileManagedBean.customer.asset.monthlyExpense}" placeholder="#{myProfileManagedBean.customer.asset.monthlyExpense}" required="true" requiredMessage="Monthly Expenses field is required!"/>
                     </p:column>
                 </p:row>
 
                 <p:row styleClass="panelGrid_row_height_account_registration">
                     <p:column style="text-align: center" colspan="2">
-                        <p:commandButton id="updateProfile" value="Update My Profile" type="submit" actionListener="#{myProfileManagedBean.updateCustomerAccount}"/> &nbsp;
+                        <p:commandButton id="updateProfile" value="Update My Profile" type="submit" update="myProfileForm" actionListener="#{myProfileManagedBean.updateMyProfile}"/> &nbsp;
                     </p:column>
                 </p:row>
-            </h:form>
-        </p:panelGrid>
-        
+
+            </p:panelGrid>
+
+        </h:form>
+
+        <p:growl>
+            <p:autoUpdate>
+            </p:autoUpdate>
+        </p:growl>
+
+
+        <h:form id="changePassword">
+            <p:dialog id="dialogToChangePassword" widgetVar="changePasswordForm" header="Change My Password"  closable="true" showEffect="fade">
+                <p:panelGrid style="margin : 0 auto" styleClass="noBorders">
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="newPassword" value="New Password: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:password id="newPassword" value="#{myProfileManagedBean.changePassword}" match="confirmPassword" feedback="true" placeholder="Enter new password" required="true" requiredMessage="New password is required" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value=""/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value=""/>
+                        </p:column>
+                    </p:row>
+
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="confirmPassword" value="Re-enter Password: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:password id="confirmPassword" value="#{myProfileManagedBean.changePassword}" placeholder="Re-enter your password" required="true" requiredMessage="Please enter your password again" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="confirmPassword" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>                        
+                        <p:column style="text-align: center" colspan="2">
+                            <p:commandButton update="changePassword" type="submit" value="Confirm Password" actionListener="#{myProfileManagedBean.updateCustomerPassword}"  />
+                        </p:column>
+
+                        <p:messages id="messages" showDetail="true">
+                            <p:autoUpdate/>
+                        </p:messages>
+
+                    </p:row>
+
+                </p:panelGrid>
+
+            </p:dialog>
+        </h:form>
+
     </ui:define>
-        
-   
+
 </ui:composition>

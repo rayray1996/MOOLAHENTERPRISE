@@ -15,9 +15,10 @@
 
         <h1 style="text-align: center">Create an Account</h1> 
 
-        <p:panelGrid style="margin: 0 auto;" styleClass="noBorders" >
-            <h:form id="accountForm">
+          <h:form id="accountForm">
 
+        <p:panelGrid style="margin: 0 auto;" styleClass="noBorders" >
+          
                 <p:row styleClass="panelGrid_row_height_account_registration">
                     <p:column class="panelGrid_col2_colStyle">
                         <p:outputLabel value="Full Name:"/><br/>
@@ -63,13 +64,11 @@
                 <p:row styleClass="panelGrid_row_height_account_registration">
                     <p:column styleClass="panelGrid_col2_colStyle">
                         <p:outputLabel value="Marital Status:"/><br/>
-                        <p:selectOneMenu id="maritalStatus" value="#{createAccountManagedBean.marriedString}" styleClass="panelGrid_col2_formInputBox">
-                            <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true"/>
-                            <f:selectItem itemLabel="Single" itemValue="SINGLE"/>
-                            <f:selectItem itemLabel="Married" itemValue="MARRRIED"/>
-                            <f:selectItem itemLabel="Divorced" itemValue="DIVORCED"/>
-                            <f:selectItem itemLabel="Widowed" itemValue="WIDOWED"/>
-                        </p:selectOneMenu>
+                        <p:selectOneRadio id="maritalStatus1" value="#{createAccountManagedBean.customer.isMarried}" required="true" requiredMessage="You need to declare your marital status!">
+                            <f:selectItem itemLabel="Is Married" itemValue="true"/>
+                            <f:selectItem itemLabel="Is Not Married" itemValue="false"/>
+                        </p:selectOneRadio>  
+                       
                     </p:column>
                     &nbsp;
                     <p:column styleClass="panelGrid_col2_colStyle">
@@ -104,12 +103,13 @@
 
                 <p:row styleClass="panelGrid_row_height_account_registration">
                     <p:column style="text-align: center" colspan="2">
-                        <p:commandButton id="submitAccountRegistration" value="Create Account" type="submit" actionListener="#{createAccountManagedBean.createAccount}"/> &nbsp;
+                        <p:commandButton update="accountForm" id="submitAccountRegistration" value="Create Account" type="submit" actionListener="#{createAccountManagedBean.createAccount}"/> &nbsp;
                         <p:commandButton id="reset" value="Reset" type="reset"/>
                     </p:column>
                 </p:row>
-            </h:form>
+            
         </p:panelGrid>
+        </h:form>
         
         <p:growl>
             <p:autoUpdate>

@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces"/>
+        <style>
+            .dataTableNameCol {
+                width:20%!important;
+            }
+
+            .bodyText{
+                font-size: 14px!important;
+                font-family: sans-serif!important;
+            }
+
+            /*            .ui-panelgrid .ui-panelgrid-cell  {
+                            border: none!important;
+                        }*/
+
+            #currentComparisonGrid .ui-widget-content {
+                border: none!important;
+                background: none!important;
+            }
+        </style>
+
+        <div style="text-align:right; padding-right: 60px;">
+            <p:commandButton onclick="PF('dialogCurrentComparison').show();" style="font-size: 14px; font-family: sans-serif;" value="Current Comparison (#{viewCurrentComparison.comparisonSize})" icon="ui-icon-suitcase"/>
+        </div>
+
+        <p:dialog resizable="false" id="dialogCurrentComparison" widgetVar="dialogCurrentComparison" closeOnEscape="true" style="margin: 5em 5em 5em 5em;">
+            <!--<f:ajax event="mouseout" onevent="PF('dialogCurrentComparison').hide();"/>-->
+            <div style="text-align: center; font-weight: bold; font-family: sans-serif; font-size: 16px" >
+                <h:outputText value="Products to Compare"/>
+                <br/>
+                <br/>
+            </div>
+            <div rendered="#{viewCurrentComparison.currentComparisons.size() > 0}">
+
+                <p:panelGrid id="currentComparisonGrid" columns="4" class="bodyText ui-widget-content">
+                    <c:forEach items="#{viewCurrentComparison.currentComparisons}" var="current">
+                        <p:column>
+                            <h:outputText value="#{viewCurrentComparison.currentComparisons.indexOf(current) + 1}"/>
+                        </p:column>
+
+                        <p:column>
+                            <p:graphicImage library="images" name="#{current.productEntity.company.companyImage}" height="80" width="80"/>
+                        </p:column>
+
+                        <p:column>
+                            <h:outputText value="#{current.productEntity.productName}"/>
+                            <br/>
+                            <h:outputText value="#{current.stringParentCategory}"/>
+                        </p:column>
+
+                        <p:column>
+                            <p:commandButton icon="pi pi-trash"/>
+                        </p:column>
+                    </c:forEach>
+                </p:panelGrid>
+            </div>
+
+            <h:outputText rendered="#{viewCurrentComparison.currentComparisons.size() == 0}" value="You have not added any products in your compare list" class="bodyText"/>
+        </p:dialog>
+    </cc:implementation>
+</html>
