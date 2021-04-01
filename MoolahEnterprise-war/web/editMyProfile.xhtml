@@ -6,26 +6,20 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
 
-
     <ui:define name="content">
         <h:outputStylesheet library="css" name="default.css" />
-        <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces"/>
 
-        <div>
-            <h1 style="text-align: center">My Profile</h1> 
-            <p:button style="margin-left: 70%" icon="pi pi-pencil" id="editProfile" outcome="/editMyProfile.xhtml"/>
-        </div>
+        <h1 style="text-align: center">My Profile</h1> 
+        
 
-
-
-        <h:form id="myProfileCannotEdit">
+        <h:form id="myProfile">
             <p:panelGrid style="margin: 0 auto;" styleClass="noBorders" >
 
 
                 <p:row styleClass="panelGrid_row_height_account_registration">
                     <p:column class="panelGrid_col2_colStyle">
                         <p:outputLabel value="Full Name:"/><br/>
-                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="name" disabled="true" placeholder="#{myProfileManagedBean.customer.fullName}" required="true" requiredMessage="Name is required!"/>
+                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="name" value="#{myProfileManagedBean.customer.fullName}" placeholder="#{myProfileManagedBean.customer.fullName}" required="true" requiredMessage="Name is required!"/>
                     </p:column>
                     &nbsp;
                     <p:column styleClass="panelGrid_col2_colStyle">
@@ -45,14 +39,14 @@
                     &nbsp;
                     <p:column styleClass="panelGrid_col2_colStyle">
                         <p:outputLabel value="Phone Number:"/><br/>
-                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="phoneNumber" disabled="true" placeholder="#{myProfileManagedBean.customer.phoneNumber}"/>
+                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="phoneNumber" value="#{myProfileManagedBean.customer.phoneNumber}" placeholder="#{myProfileManagedBean.customer.phoneNumber}" required="true" requiredMessage="Phone Number is required!"/>
                     </p:column>
                 </p:row>
 
                 <p:row styleClass="panelGrid_row_height_account_registration">
                     <p:column styleClass="panelGrid_col2_colStyle">
                         <p:outputLabel value="Have you smoked in the last 3 years?:"/><br/>
-                        <p:selectOneRadio id="smoker" value="#{myProfileManagedBean.customer.smoker}" disabled ="true">
+                        <p:selectOneRadio id="smoker" value="#{myProfileManagedBean.customer.smoker}" required="true" requiredMessage="You need to declare if you had smoked in the last 3 years!">
                             <f:selectItem itemLabel="Yes" itemValue="true"/>
                             <f:selectItem itemLabel="No" itemValue="false"/>
                         </p:selectOneRadio>                    
@@ -67,46 +61,53 @@
                 <p:row styleClass="panelGrid_row_height_account_registration">
                     <p:column styleClass="panelGrid_col2_colStyle">
                         <p:outputLabel value="Marital Status:"/><br/>
-                        <p:selectOneRadio id="maritalStatus" value="#{myProfileManagedBean.customer.isMarried}" disabled ="true">
-                            <f:selectItem itemLabel="Is Married" itemValue="true"/>
-                            <f:selectItem itemLabel="Is Not Married" itemValue="false"/>
-                        </p:selectOneRadio>  
+                        <p:selectOneMenu id="maritalStatus" value="#{createAccountManagedBean.marriedString}" styleClass="panelGrid_col2_formInputBox">
+                            <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true"/>
+                            <f:selectItem itemLabel="Single" itemValue="SINGLE"/>
+                            <f:selectItem itemLabel="Married" itemValue="MARRRIED"/>
+                            <f:selectItem itemLabel="Divorced" itemValue="DIVORCED"/>
+                            <f:selectItem itemLabel="Widowed" itemValue="WIDOWED"/>
+                        </p:selectOneMenu>
                     </p:column>
                     &nbsp;
                     <p:column styleClass="panelGrid_col2_colStyle">
                         <p:outputLabel value="Password:"/><br/>
-                        <p:password styleClass="panelGrid_col2_formInputBox" id="password" disabled="true" placeholder="**************"/>
+                        <p:password styleClass="panelGrid_col2_formInputBox" id="password" value="#{myProfileManagedBean.customer.password}" placeholder="**************" required="true" requiredMessage="Password is required!"/>
                     </p:column>
                 </p:row>
 
                 <p:row styleClass="panelGrid_row_height_account_registration">
                     <p:column styleClass="panelGrid_col2_colStyle">
                         <p:outputLabel value="Cash On Hand:"/><br/>
-                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="cashOnHand" disabled="true" placeholder="#{myProfileManagedBean.customer.asset.cashInHand}"/>
+                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="cashOnHand" value="#{myProfileManagedBean.customer.asset.cashInHand}" placeholder="#{myProfileManagedBean.customer.asset.cashInHand}" required="true" requiredMessage="Cash on hand field is required!"/>
                     </p:column>
                     &nbsp;
                     <p:column styleClass="panelGrid_col2_colStyle">
                         <p:outputLabel value="Investments:"/><br/>
-                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="investments" disabled="true" placeholder="#{myProfileManagedBean.customer.asset.investments}"/>
+                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="investments" value="#{myProfileManagedBean.customer.asset.investments}" placeholder="#{myProfileManagedBean.customer.asset.investments}" required="true" requiredMessage="Investment field is required!"/>
                     </p:column>
                 </p:row>
 
                 <p:row styleClass="panelGrid_row_height_account_registration">
                     <p:column styleClass="panelGrid_col2_colStyle">
                         <p:outputLabel value="Monthly Income:"/><br/>
-                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="monthlyIncome" disabled="true" placeholder="#{myProfileManagedBean.customer.asset.monthlyIncome}"/>
+                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="monthlyIncome" value="#{myProfileManagedBean.customer.asset.monthlyIncome}" placeholder="#{myProfileManagedBean.customer.asset.monthlyIncome}" required="true" requiredMessage="Monthly Income field is required!"/>
                     </p:column>
                     &nbsp;
                     <p:column styleClass="panelGrid_col2_colStyle">
                         <p:outputLabel value="Monthly Expenses:"/><br/>
-                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="monthlyExpenses" disabled="true" placeholder="#{myProfileManagedBean.customer.asset.monthlyExpense}"/>
+                        <p:inputText styleClass="panelGrid_col2_formInputBox" id="monthlyExpenses" value="#{myProfileManagedBean.customer.asset.monthlyExpense}" placeholder="#{myProfileManagedBean.customer.asset.monthlyExpense}" required="true" requiredMessage="Monthly Expenses field is required!"/>
                     </p:column>
                 </p:row>
+
+                <p:row styleClass="panelGrid_row_height_account_registration">
+                    <p:column style="text-align: center" colspan="2">
+                        <p:commandButton id="updateProfile" value="Update My Profile" type="submit" actionListener="#{myProfileManagedBean.updateCustomerAccount}"/> &nbsp;
+                    </p:column>
+                </p:row>
+
             </p:panelGrid>
-        </h:form>
-
-
+        </h:form> 
     </ui:define>
-
 
 </ui:composition>

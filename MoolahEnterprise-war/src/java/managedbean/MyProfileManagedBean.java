@@ -8,6 +8,8 @@ package managedbean;
 import ejb.entity.CustomerEntity;
 import ejb.stateless.CustomerSessionBeanLocal;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -33,10 +35,17 @@ public class MyProfileManagedBean implements Serializable {
     private CustomerSessionBeanLocal customerSessionBean;
 
     private CustomerEntity customer;
-
+    
+    private Date dob;
+    
+    private String dateOfBirth;
+    
     @PostConstruct
     public void init() {
         customer = (CustomerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("customerEntity");
+        setDob(customer.getDateOfBirth().getTime());
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-YYYY");
+        dateOfBirth = format.format(dob);
     }
 
     public MyProfileManagedBean() {
@@ -51,6 +60,10 @@ public class MyProfileManagedBean implements Serializable {
         }
 
     }
+    
+  
+    
+    
 
     public CustomerEntity getCustomer() {
         return customer;
@@ -58,6 +71,22 @@ public class MyProfileManagedBean implements Serializable {
 
     public void setCustomer(CustomerEntity customer) {
         this.customer = customer;
+    }
+
+    public Date getDob() {
+        return dob;
+    }
+
+    public void setDob(Date dob) {
+        this.dob = dob;
+    }
+
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
 }
