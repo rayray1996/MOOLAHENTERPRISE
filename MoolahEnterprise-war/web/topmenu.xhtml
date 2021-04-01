@@ -76,7 +76,11 @@
 
                 <div id = "loggedinDisplay" style="width:19%; float:right;margin-top:-1.7%;font-size:14px;;">
                     <h:outputText value="You are login as #{sessionScope.customerEntity.fullName}" />&nbsp;
-                    <p:commandButton value="Logout" actionListener="#{moolahLoginManagedBean.logout}" />
+                    
+                    <p:menuButton value ="My Account">
+                        <p:menuitem  icon="" value="View My Profile" outcome="/myProfile.xhtml"
+                    </p:menuButton>
+<!--                    <p:commandButton value="Logout" actionListener="#{moolahLoginManagedBean.logout}" />-->
                 </div>
 
             </h:form>
