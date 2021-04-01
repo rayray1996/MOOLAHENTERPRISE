@@ -6,7 +6,10 @@
 package managedbean;
 
 import ejb.entity.CustomerEntity;
+import ejb.entity.EndowmentEntity;
 import ejb.entity.ProductEntity;
+import ejb.entity.TermLifeProductEntity;
+import ejb.entity.WholeLifeProductEntity;
 import ejb.stateless.CustomerSessionBeanLocal;
 import ejb.stateless.ProductSessionBeanLocal;
 import java.io.IOException;
@@ -18,12 +21,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import util.enumeration.EndowmentProductEnum;
+import util.enumeration.TermLifeProductEnum;
+import util.enumeration.WholeLifeProductEnum;
 import util.exception.CustomerDoesNotExistsException;
 import util.exception.ProductNotFoundException;
+import util.helper.ProductEntityWrapper;
 
 /**
  *
@@ -41,11 +49,6 @@ public class IndexManagedBean implements Serializable {
 
     private List<ProductEntity> listOfProduct;
 
-    private ProductEntity currProd1;
-
-    private ProductEntity currProd2;
-
-    private ProductEntity currProd3;
 
     private Random rand;
 
@@ -77,63 +80,59 @@ public class IndexManagedBean implements Serializable {
     }
 
     public void viewProduct(ActionEvent event) throws IOException {
-        Long productId = (Long) event.getComponent().getAttributes().get("productId");
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("productId", productId);
-        System.out.println("Product ID: " + productId);
-        FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml"); // to replace
-    }
-
-    public ProductEntity getCurrProd1() {
-        int maxSize = listOfProduct.size() - 1;
-        int index = rand.nextInt(maxSize);
-        System.out.println("Index: " + index);
-        currProd1 = listOfProduct.get(index);
-        return currProd1;
-    }
-
-    public void setCurrProd1(ProductEntity currProd1) {
-        this.currProd1 = currProd1;
-    }
-
-    public ProductEntity getCurrProd2() {
-        int maxSize = listOfProduct.size() - 1;
-        int index = rand.nextInt(maxSize);
-        System.out.println("Index: " + index);
-        currProd2 = listOfProduct.get(index);
-        if (!currProd2.getProductId().equals(currProd1.getProductId())) {
-            return currProd2;
-        } else {
-            maxSize = listOfProduct.size() - 1;
-            index = rand.nextInt(maxSize);
-            System.out.println("Index: " + index);
-            currProd2 = listOfProduct.get(index);
-            return currProd2;
+        try {
+            Long productId = (Long) event.getComponent().getAttributes().get("productId");
+            ProductEntity product = productSessionBean.retrieveProductEntityById(productId);
+            ProductEntityWrapper wrapper = new ProductEntityWrapper(product, getParentClassAsString(product), getChildEnumAsString(product));
+            
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("productToView", wrapper);
+            System.out.println("Product ID: " + productId);
+            FacesContext.getCurrentInstance().getExternalContext().redirect("product/viewProductDetail.xhtml");
+        } catch (ProductNotFoundException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Product cannot be found! EX: " + ex.getMessage(), null));
         }
     }
 
-    public void setCurrProd2(ProductEntity currProd2) {
-        this.currProd2 = currProd2;
-    }
-
-    public ProductEntity getCurrProd3() {
-        int maxSize = listOfProduct.size() - 1;
-        int index = rand.nextInt(maxSize);
-        System.out.println("Index: " + index);
-        currProd3 = listOfProduct.get(index);
-        if (!currProd2.getProductId().equals(currProd1.getProductId()) && !currProd3.getProductId().equals(currProd2.getProductId())) {
-            return currProd3;
+    private String getParentClassAsString(ProductEntity p) {
+        if (p instanceof EndowmentEntity) {
+            return "Endowment";
+        } else if (p instanceof TermLifeProductEntity) {
+            return "Term Life";
         } else {
-            maxSize = listOfProduct.size() - 1;
-            index = rand.nextInt(maxSize);
-            System.out.println("Index: " + index);
-            currProd3 = listOfProduct.get(index);
-            return currProd3;
+            return "Whole Life";
         }
     }
 
-    public void setCurrProd3(ProductEntity currProd3) {
-        this.currProd3 = currProd3;
-
+    private String getChildEnumAsString(ProductEntity p) {
+        if (p instanceof EndowmentEntity) {
+            EndowmentProductEnum tempEnum = ((EndowmentEntity) p).getProductEnum();
+            if (tempEnum == EndowmentProductEnum.ENDOWMENT) {
+                return "Endowment";
+            }
+        } else if (p instanceof TermLifeProductEntity) {
+            TermLifeProductEnum tempEnum = ((TermLifeProductEntity) p).getProductEnum();
+            if (tempEnum == TermLifeProductEnum.ACCIDENT) {
+                return "Accident";
+            } else if (tempEnum == TermLifeProductEnum.CRITICALILLNESS) {
+                return "Critical Illness";
+            } else {
+                return "Hospital";
+            }
+        } else {
+            WholeLifeProductEnum tempEnum = ((WholeLifeProductEntity) p).getProductEnum();
+            if (tempEnum == WholeLifeProductEnum.ACCIDENT) {
+                return "Accident";
+            } else if (tempEnum == WholeLifeProductEnum.CRITICALILLNESS) {
+                return "Critical Illness";
+            } else if (tempEnum == WholeLifeProductEnum.LIFEINSURANCE) {
+                return "Life Insurance";
+            } else {
+                return "Hospital";
+            }
+        }
+        return "";
     }
+    
+    
 
 }

@@ -15,8 +15,8 @@ import java.io.Serializable;
 public class ProductEntityWrapper implements Serializable{
 
     private ProductEntity productEntity;
-    private String stringParentCategory;
-    private String stringChildCategory;
+    private String stringParentCategory; // main category - wholelife, termlife, endowment
+    private String stringChildCategory; // specific category for each main category -- accident, hospital etc...
     
     public ProductEntityWrapper() {
     }
