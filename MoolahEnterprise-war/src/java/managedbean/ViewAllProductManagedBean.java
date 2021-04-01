@@ -66,6 +66,7 @@ public class ViewAllProductManagedBean implements Serializable{
     private Integer filterPremiumTerm;
     private BigDecimal filterSumAssured;
     private String filterChildCategory;
+    private String filterIsSmoker;
 
     public ViewAllProductManagedBean() {
         listOfProducts = new ArrayList<>();
@@ -85,11 +86,6 @@ public class ViewAllProductManagedBean implements Serializable{
                 stringParentCategory.add(getParentClassAsString(p));
             }
         }
-//        } catch (CustomerDoesNotExistsException ex) {
-//            FacesContext.getCurrentInstance().addMessage("null", new FacesMessage(FacesMessage.SEVERITY_INFO, "You are not logged in!", ""));
-//        } catch (ProductNotFoundException ex) {
-//            FacesContext.getCurrentInstance().addMessage("null", new FacesMessage(FacesMessage.SEVERITY_INFO, "No products are available!", ""));
-//        }
     }
 
     public void updateProductTable(SelectEvent event) {
@@ -100,6 +96,7 @@ public class ViewAllProductManagedBean implements Serializable{
         filterCoverageTerm = -1;
         filterPremiumTerm = -1;
         filterChildCategory = "";
+        filterIsSmoker = "";
         if (filterParentCategory == null) {
             dataInit();
             return;
@@ -209,15 +206,14 @@ public class ViewAllProductManagedBean implements Serializable{
             }
 
             // is smoker
-            Boolean isSmoker = customer.getSmoker();
+            Boolean isSmoker = (filterIsSmoker.equals("Yes"));
 
             List<ProductEntity> resultProducts = new ArrayList<>();
-            System.out.println("filterSumAssured = " + filterSumAssured.toString());
+            System.out.println("filterIsSmoker = " + isSmoker);
             resultProducts = productSessionBean.filterProductsByCriteria(parentCategory, null, isSmoker, filterSumAssured, filterCoverageTerm, filterPremiumTerm, endowmentChildCategory, termLifeChildCategory, wholeLifeChildCategory);
             for (ProductEntity r : resultProducts) {
                 listOfProducts.add(new ProductEntityWrapper(r, getParentClassAsString(r), getChildEnumAsString(r)));
                 filteredProducts.add(new ProductEntityWrapper(r, getParentClassAsString(r), getChildEnumAsString(r)));
-
             }
         } catch (InvalidFilterCriteriaException | ProductNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, ex.toString(), null));
@@ -403,6 +399,14 @@ public class ViewAllProductManagedBean implements Serializable{
 
     public void setViewCurrentComparison(ViewCurrentComparison viewCurrentComparison) {
         this.viewCurrentComparison = viewCurrentComparison;
+    }
+
+    public String getFilterIsSmoker() {
+        return filterIsSmoker;
+    }
+
+    public void setFilterIsSmoker(String filterIsSmoker) {
+        this.filterIsSmoker = filterIsSmoker;
     }
     
 }

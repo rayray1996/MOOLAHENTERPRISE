@@ -290,14 +290,14 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 
         String smokerString = "";
         if (customer.getSmoker()) {
-            smokerString = "(p.listOfSmokerPremium IS NOT EMPTY)";
+            smokerString = "(p.isAvailableToSmoker = true)";
         } else {
-            smokerString = "(p.listOfSmokerPremium IS EMPTY OR p.listOfSmokerPremium IS NOT EMPTY)";
+            smokerString = "(p.isAvailableToSmoker = true and p.isAvailableToSmoker = false)";
         }
         /*
         Recommend products based on 3 years affordability
          */
-//        Query query = em.createQuery("SELECT p FROM ProductEntity p WHERE p.isDeleted = false AND p.company.isDeleted = false AND p.company.isDeactivated = false");
+        // need to recommend products at their age
         Query query = em.createQuery("SELECT p FROM ProductEntity p, IN (p.listOfPremium) premium WHERE p.isDeleted = false AND p.company.isDeleted = false AND p.company.isDeactivated = false AND :age >= premium.minAgeGroup AND :age <= premium.maxAgeGroup AND :yearOne >= premium.premiumValue AND :yearTwo >= premium.premiumValue AND :yearThree >= premium.premiumValue AND " + smokerString);
         query.setParameter("age", age);
         query.setParameter("yearOne", yearOneCapital);
