@@ -81,9 +81,9 @@
                     <h:outputText value="You are login as #{sessionScope.customerEntity.fullName}" />&nbsp;
 
                     <p:menuButton value ="My Account">
-                        <p:menuitem  icon="pi pi-user" value="View My Profile" outcome="/myProfile.xhtml"/>
+                        <p:menuitem value="View My Profile" outcome="/myProfile.xhtml"/>
                         <p:menuitem value="My Saved Comparisons"/>
-                        <p:menuitem value="My Saved Comparisons"/>
+                        <p:menuitem value="My Liked Products"/>
                         <p:menuitem value="Logout" actionListener="#{moolahLoginManagedBean.logout}" />
                     </p:menuButton>
 
