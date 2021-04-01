@@ -13,10 +13,10 @@
     </style>
 
     <header>
-        <figure class="companyLogo" style="float:left; " >
-            <p:graphicImage library="images" name="c1_logo.png" height="50" width="20" alt="Moolah" style="width:130%; height:15%; margin-top:-42%; margin-left:-11%;" />
 
-        </figure>
+        <h:link class="companyLogo" style="float:left; " outcome="/index.xhtml" >
+            <p:graphicImage library="images" name="c1_logo.png" height="50" width="20" alt="Moolah" style="width:130%; height:15%; margin-top:-31%; margin-left:18%;" />
+        </h:link>
         <h:panelGroup rendered="#{sessionScope.isLogin == false || sessionScope.isLogin == NULL}">
             <h:form id="loginForm">
 
