@@ -12,25 +12,25 @@
             .endOfDurationTotalSaving_calculator_input{
                 width:40%
             }
-            
+
         </style>
         <h:form id="endOfDurationTotalSaving_calculator_input">
 
-            <h3 style="color:#0070a3; text-align:center;">(NOT WORKING) Duration to save a certain amount based on my current spending and saving habits? </h3><br/>
+            <h3 style="color:#0070a3; text-align:center;margin-right:14%;">Duration to save a certain amount based on my current spending and saving habits? </h3><br/>
             <div class="monthlySaveToAchieve" style="margin-left:38%">
                 <p:outputLabel value="How much do I have currently?"/><br/><br/>
-                <p:inputText class="financial_calculator_input" value="#{monthlySaveCalculatorManagedBean.currentlyHave}" placeholder="Enter your currently have" required="true" requiredMessage="Currently have is required!"/><br/><br/>
+                <p:inputText class="endOfDurationTotalSaving_calculator_input" value="#{endOfDUrationTotalSavingCalculatorManagedBean.currentlyHave}" placeholder="Enter your currently have" required="true" requiredMessage="Currently have is required!"/><br/><br/>
                 <br/>
                 <p:outputLabel value="Inflation Rate:"/><br/>
-                <p:inputText class="financial_calculator_input" value="#{monthlySaveCalculatorManagedBean.inflationRate}" placeholder="Enter your interest rate/ leave blank if you dont know"/><br/><br/>
-                <p:outputLabel value="How much am I aiming for?"/><br/><br/>
-                <p:inputText class="financial_calculator_input" value="#{monthlySaveCalculatorManagedBean.aimingAmt}" placeholder="Enter your aiming amount" required="true" requiredMessage="Aiming amount is required!"/><br/><br/>
+                <p:inputText class="endOfDurationTotalSaving_calculator_input" value="#{endOfDUrationTotalSavingCalculatorManagedBean.inflationRate}" placeholder="Enter your interest rate/ leave blank if you dont know"/><br/><br/>
+                <p:outputLabel value="How much am I saving every year?"/><br/><br/>
+                <p:inputText class="endOfDurationTotalSaving_calculator_input" value="#{endOfDUrationTotalSavingCalculatorManagedBean.currentlySaving}" placeholder="Enter your saving amount" required="true" requiredMessage="Aiming amount is required!"/><br/><br/>
                 <p:outputLabel value="No of years time to achieve the stated amount?"/><br/><br/>
-                <p:inputText  class="financial_calculator_input" value="#{monthlySaveCalculatorManagedBean.noOfYear}" placeholder="Enter your no of year" required="true" requiredMessage="No of year is required!"/><br/><br/>
-                <h:commandButton type="submit" actionListener="#{monthlySaveCalculatorManagedBean.computeMonthlySave}" value ="Compute" /><br/><br/>
-               
-                <p:outputLabel value="Monthly required to save:"/>&nbsp;
-                <p:outputLabel value="#{monthlySaveCalculatorManagedBean.paymentAmt}"/>
+                <p:inputText  class="endOfDurationTotalSaving_calculator_input" value="#{endOfDUrationTotalSavingCalculatorManagedBean.noOfYear}" placeholder="Enter your no of year" required="true" requiredMessage="No of year is required!"/><br/><br/>
+                <h:commandButton type="submit" actionListener="#{endOfDUrationTotalSavingCalculatorManagedBean.computeEndOfDurationTotalAmt}" value ="Compute" /><br/><br/>
+
+                <p:outputLabel value="By saving $ #{endOfDUrationTotalSavingCalculatorManagedBean.currentlySaving} every year, you are expected to have #{endOfDUrationTotalSavingCalculatorManagedBean.totalAmt} after #{endOfDUrationTotalSavingCalculatorManagedBean.noOfYear} years!"/>&nbsp;
+                
 
             </div>
         </h:form>
