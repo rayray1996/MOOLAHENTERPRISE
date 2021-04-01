@@ -64,6 +64,9 @@ public class IndexManagedBean implements Serializable {
         System.out.println("Customer ID: " + cust.getFullName());
 //            listOfProduct = customerSessionBean.retrieveRecommendedProducts(cust.getCustomerId());
         listOfProduct = productSessionBean.retrieveAllFinancialProducts();
+        for(ProductEntity prod: listOfProduct){
+            prod.setDescription(prod.getDescription().substring(0, 152) + "...");
+        }
         System.out.println("Product size: " + listOfProduct.size());
 
 //        } catch (CustomerDoesNotExistsException | ProductNotFoundException ex) {
