@@ -107,6 +107,9 @@ public class CompanyEntity implements Serializable {
     
     @NotNull
     private String companyImage;
+    
+    @NotNull
+    private String companyUrl;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar expiryDateOfPathParam;
@@ -126,7 +129,7 @@ public class CompanyEntity implements Serializable {
         this.isWarned = false;
     }
 
-    public CompanyEntity(String companyName, String companyEmail, String businessRegNumber, String companyContactNumber, String password, BigInteger creditOwned, String companyImage) {
+    public CompanyEntity(String companyName, String companyEmail, String businessRegNumber, String companyContactNumber, String password, BigInteger creditOwned, String companyImage, String companyUrl) {
         this();
         this.companyName = companyName;
         this.companyEmail = companyEmail;
@@ -135,6 +138,7 @@ public class CompanyEntity implements Serializable {
         this.creditOwned = creditOwned;
         this.businessRegNumber = businessRegNumber;
         this.companyImage = companyImage;
+        this.companyUrl = companyUrl;
 
         setPassword(password);
     }
@@ -317,6 +321,14 @@ public class CompanyEntity implements Serializable {
 
     public void setCompanyImage(String companyImage) {
         this.companyImage = companyImage;
+    }
+
+    public String getCompanyUrl() {
+        return companyUrl;
+    }
+
+    public void setCompanyUrl(String companyUrl) {
+        this.companyUrl = companyUrl;
     }
     
     
