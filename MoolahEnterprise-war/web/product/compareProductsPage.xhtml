@@ -1,0 +1,354 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/defaultTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+        <script>
+            function setHeightOfPanelGrids() {
+                var maxHeight = 0;
+//                companyCol
+                var company1 = document.getElementById("companyColOne").style.height;
+                alert(company1.);
+                var company2 = document.getElementById("companyColTwo").style.height;
+                var company3 = document.getElementById("companyColThree").style.height;
+                var company4 = document.getElementById("companyColFour").style.height;
+//                nameCol
+//                cTermCol
+//                pTermCol
+//                premiumCol
+//                sumAssuredCol
+//                featuresCol
+//                ridersCol
+            }
+            
+            setHeightOfPanelGrids();
+            alert("test");
+            
+        </script>
+        
+        <br/>
+        <div style=" text-align: center;">
+            <h:outputText style="font-weight: bold;" value="Compare Product"/>
+        </div>
+
+        <br/>
+
+        <div style="text-align:center;">
+            <h:outputText rendered="#{viewCurrentComparison.currentComparisons.size() == 0}" value="You have not added any products to compare"/>
+            <br/>
+            <br/>            
+            <h:outputText rendered="#{viewCurrentComparison.currentComparisons.size() == 0}" value="Start adding products to compare now!"/>
+            <br/>
+            <br/>
+            <p:commandButton rendered="#{viewCurrentComparison.currentComparisons.size() == 0}" value="View Recommended Products"/>
+            <br/>
+            <br/>
+            <p:commandButton rendered="#{viewCurrentComparison.currentComparisons.size() == 0}" value="View All Products"/>
+        </div>
+
+        <div style="text-align:center;width:90%" >
+            <p:panelGrid style="width:10%;float: left" rendered="#{viewCurrentComparison.currentComparisons.size() > 0}">
+                <p:row>
+                    <p:column id="companyCol" class="">
+                        <h:outputText value="Company"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="nameCol">
+                        <h:outputText value="Product Name"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="cTermCol">
+                        <h:outputText value="Coverage Term"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="pTermCol">
+                        <h:outputText value="Premium Term"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="premiumCol">
+                        <h:outputText value="Premium"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="sumAssuredCol">
+                        <h:outputText value="Minimum Sum Assured"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="featuresCol">
+                        <h:outputText value="Features"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column id="ridersCol">
+                        <h:outputText value="Optional Riders"/>
+                    </p:column>
+                </p:row>
+
+            </p:panelGrid>
+
+
+            <!--first product-->
+            <p:panelGrid style="width: 20%;float: left;" rendered="#{viewCurrentComparison.currentComparisons.size() > 0}">
+                <p:row>
+                    <p:column id="companyColOne">
+                        <p:graphicImage library="images" name="#{viewCurrentComparison.firstProduct.productEntity.company.companyImage}" height="120" width="120"/>
+                        <h:outputText value="#{viewCurrentComparison.firstProduct.productEntity.company.companyName}"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="nameColOne">
+                        <h:outputText value="#{viewCurrentComparison.firstProduct.productEntity.productName}"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="cTermColOne">
+                        <h:outputText value="#{viewCurrentComparison.firstProduct.productEntity.coverageTerm}"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="pTermColOne">
+                        <h:outputText value="#{viewCurrentComparison.firstProduct.productEntity.premiumTerm}"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="premiumColOne">
+                        <h:outputText value="Premium"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="sumAssuredColOne">
+                        <h:outputText value="#{viewCurrentComparison.firstProduct.productEntity.assuredSum}"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="featuresColOne">
+                        <c:forEach items="#{viewCurrentComparison.firstProduct.productEntity.listOfAdditionalFeatures}" var="feature">
+                            <li>
+                                <h:outputText value="#{feature.featureName}"/>
+                            </li>
+                        </c:forEach>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column id="ridersColOne">
+                        <c:forEach items="#{viewCurrentComparison.firstProduct.productEntity.listOfRiders}" var="rider">
+                            <li>
+                                <h:outputText value="#{rider.riderName}"/>
+                            </li>
+                        </c:forEach>
+                    </p:column>
+                </p:row>
+
+            </p:panelGrid>
+
+            <!--second product-->
+
+            <p:panelGrid style="width: 20%;float: left;" rendered="#{viewCurrentComparison.currentComparisons.size() > 0}">
+                <p:row>
+                    <p:column id="companyColTwo">
+                        <p:graphicImage library="images" name="#{viewCurrentComparison.secondProduct.productEntity.company.companyImage}" height="120" width="120"/>
+                        <h:outputText value="#{viewCurrentComparison.secondProduct.productEntity.company.companyName}"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="nameColTwo">
+                        <h:outputText value="#{viewCurrentComparison.secondProduct.productEntity.productName}"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="cTermColTwo">
+                        <h:outputText value="#{viewCurrentComparison.secondProduct.productEntity.coverageTerm}"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="pTermColTwo">
+                        <h:outputText value="#{viewCurrentComparison.secondProduct.productEntity.premiumTerm}"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="premiumColTwo">
+                        <h:outputText value="Premium"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="sumAssuredColTwo">
+                        <h:outputText value="#{viewCurrentComparison.secondProduct.productEntity.assuredSum}"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="featuresColTwo">
+                        <c:forEach items="#{viewCurrentComparison.secondProduct.productEntity.listOfAdditionalFeatures}" var="feature">
+                            <li>
+                                <h:outputText value="#{feature.featureName}"/>
+                            </li>
+                        </c:forEach>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column id="ridersColTwo">
+                        <c:forEach items="#{viewCurrentComparison.secondProduct.productEntity.listOfRiders}" var="rider">
+                            <li>
+                                <h:outputText value="#{rider.riderName}"/>
+                            </li>
+                        </c:forEach>
+                    </p:column>
+                </p:row>
+
+            </p:panelGrid>
+
+
+            <!--third product-->
+
+
+            <p:panelGrid style="width: 20%;float: left;" rendered="#{viewCurrentComparison.currentComparisons.size() > 0}">
+                <p:row>
+                    <p:column id="companyColThree">
+                        <p:graphicImage library="images" name="#{viewCurrentComparison.thirdProduct.productEntity.company.companyImage}" height="120" width="120"/>
+                        <h:outputText value="#{viewCurrentComparison.thirdProduct.productEntity.company.companyName}"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="nameColThree">
+                        <h:outputText value="#{viewCurrentComparison.thirdProduct.productEntity.productName}"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="cTermColThree">
+                        <h:outputText value="#{viewCurrentComparison.thirdProduct.productEntity.coverageTerm}"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="pTermColThree">
+                        <h:outputText value="#{viewCurrentComparison.thirdProduct.productEntity.premiumTerm}"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="premiumColThree">
+                        <h:outputText value="Premium"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="sumAssuredColThree">
+                        <h:outputText value="#{viewCurrentComparison.thirdProduct.productEntity.assuredSum}"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="featuresColThree">
+                        <c:forEach items="#{viewCurrentComparison.thirdProduct.productEntity.listOfAdditionalFeatures}" var="feature">
+                            <li>
+                                <h:outputText value="#{feature.featureName}"/>
+                            </li>
+                        </c:forEach>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column id="ridersColThree">
+                        <c:forEach items="#{viewCurrentComparison.thirdProduct.productEntity.listOfRiders}" var="rider">
+                            <li>
+                                <h:outputText value="#{rider.riderName}"/>
+                            </li>
+                        </c:forEach>
+                    </p:column>
+                </p:row>
+
+            </p:panelGrid>
+
+
+            <!--fourth product-->
+
+            <p:panelGrid style="width: 20%;float: left;" rendered="#{viewCurrentComparison.currentComparisons.size() > 0}">
+                <p:row>
+                    <p:column id="companyColFour">
+                        <p:graphicImage library="images" name="#{viewCurrentComparison.fourthProduct.productEntity.company.companyImage}" height="120" width="120"/>
+                        <h:outputText value="#{viewCurrentComparison.fourthProduct.productEntity.company.companyName}"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="nameColFour">
+                        <h:outputText value="#{viewCurrentComparison.fourthProduct.productEntity.productName}"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="cTermColFour">
+                        <h:outputText value="#{viewCurrentComparison.fourthProduct.productEntity.coverageTerm}"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="pTermColFour">
+                        <h:outputText value="#{viewCurrentComparison.fourthProduct.productEntity.premiumTerm}"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="premiumColFour">
+                        <h:outputText value="Premium"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="sumAssuredColFour">
+                        <h:outputText value="#{viewCurrentComparison.fourthProduct.productEntity.assuredSum}"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column id="featuresColFour">
+                        <c:forEach items="#{viewCurrentComparison.fourthProduct.productEntity.listOfAdditionalFeatures}" var="feature">
+                            <li>
+                                <h:outputText value="#{feature.featureName}"/>
+                            </li>
+                        </c:forEach>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column id="ridersColFour">
+                        <c:forEach items="#{viewCurrentComparison.fourthProduct.productEntity.listOfRiders}" var="rider">
+                            <li>
+                                <h:outputText value="#{rider.riderName}"/>
+                            </li>
+                        </c:forEach>
+                    </p:column>
+                </p:row>
+
+            </p:panelGrid>
+        </div>
+    </ui:define>
+
+</ui:composition>
