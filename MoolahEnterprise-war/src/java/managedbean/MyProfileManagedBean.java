@@ -40,12 +40,17 @@ public class MyProfileManagedBean implements Serializable {
     
     private String dateOfBirth;
     
+    private Boolean editable;
+    
+    private String changePassword;
+    
     @PostConstruct
     public void init() {
         customer = (CustomerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("customerEntity");
         setDob(customer.getDateOfBirth().getTime());
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-YYYY");
         dateOfBirth = format.format(dob);
+        editable = false;
     }
 
     public MyProfileManagedBean() {
@@ -53,17 +58,25 @@ public class MyProfileManagedBean implements Serializable {
 
     public void updateMyProfile(ActionEvent event) {
         try {
-            customerSessionBean.updateCustomer(getCustomer());
+            
+            
+            customerSessionBean.updateCustomer(customer);
+            setEditable(false);
+           
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "You have successfully updated your profile", null));
         } catch (CustomerDoesNotExistsException | UnknownPersistenceException | CustomerUpdateException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
         }
-
+    }  
+    
+    public void updateForm(ActionEvent event){
+        setEditable(true);
     }
     
-  
-    
-    
+    public void updateCustomerPassword(ActionEvent event){
+        customer.setPassword(getChangePassword());       
+    }
+   
 
     public CustomerEntity getCustomer() {
         return customer;
@@ -87,6 +100,22 @@ public class MyProfileManagedBean implements Serializable {
 
     public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public Boolean getEditable() {
+        return editable;
+    }
+
+    public void setEditable(Boolean editable) {
+        this.editable = editable;
+    }
+
+    public String getChangePassword() {
+        return changePassword;
+    }
+
+    public void setChangePassword(String changePassword) {
+        this.changePassword = changePassword;
     }
 
 }
