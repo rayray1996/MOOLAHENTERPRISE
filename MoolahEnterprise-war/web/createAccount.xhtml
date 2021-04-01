@@ -9,7 +9,6 @@
     <ui:define name="header">
         header
     </ui:define>
-
     
     <ui:define name="content">
         <h:outputStylesheet library="css" name="default.css" />
@@ -27,7 +26,7 @@
                     &nbsp;
                     <p:column styleClass="panelGrid_col2_colStyle">
                         <p:outputLabel value="Birth Date:"/><br/>
-                        <p:datePicker yearNavigator="true" yearRange="1900:2021" maxdate="#{createAccountManagedBean.currentDate}" styleClass="panelGrid_col2_formInputBox" id="birthdate" value="#{createAccountManagedBean.dateOfBirth}" placeholder="Click here to select your birth date" required="true" requiredMessage="Birthdate is required!"/>
+                        <p:datePicker yearNavigator="true" yearRange="1900:2021" maxdate="#{createAccountManagedBean.currentDate}"  styleClass="panelGrid_col2_formInputBox" id="birthdate" value="#{createAccountManagedBean.dateOfBirth}" placeholder="Click here to select your birth date" required="true" requiredMessage="Birthdate is required!"/>
                     </p:column>
                 </p:row>
 
