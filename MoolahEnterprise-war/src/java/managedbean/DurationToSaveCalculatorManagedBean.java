@@ -125,7 +125,7 @@ public class DurationToSaveCalculatorManagedBean implements Serializable {
  * TBC again  
      */
     public void computeHowLong(ActionEvent event) {
-        int tempMonth = 1;
+        int tempMonth = 0;
         boolean hasReachedTheTarget = true;
         BigDecimal intRate = BigDecimal.ZERO;
         //If user did not enter inflation rate, we will use 2.2%, otherwise we will use user's entered interest rate
@@ -140,13 +140,13 @@ public class DurationToSaveCalculatorManagedBean implements Serializable {
         BigDecimal interestRate = intRate.add(new BigDecimal("1"));
         double actualYear = 0;
         while (hasReachedTheTarget) {
-
+            actualYear = (int) actualYear;
             if (tempMonth > 11) {
                 actualYear = actualYear + 1;
                 tempMonth = 0;
             }
             if (tempMonth >= 1) {
-                actualYear = actualYear + (((double) tempMonth) / 12.0);
+                actualYear = actualYear + ((tempMonth) / 12.0);
                 System.out.println("************tempMonth/12.0***************" + (((double) tempMonth) / 12.0));
             }
             System.out.println("******************actualYear*********" + actualYear);
