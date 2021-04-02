@@ -89,7 +89,7 @@ public class CustomerEntity implements Serializable {
     private List<ComparisonEntity> savedComparisons;
 
     //Unidirectional
-    @OneToOne(optional = false, cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, orphanRemoval = true)
+    @OneToOne(optional = false, cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private AssetEntity asset;
 
     //unidirectional

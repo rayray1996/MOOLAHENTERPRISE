@@ -35,7 +35,6 @@ public class CreateAccountManagedBean {
 
     private CustomerEntity customer;
     private Date dateOfBirth;
-    private String marriedString;
     private Date currentDate;
 
     public Date getCurrentDate() {
@@ -52,21 +51,18 @@ public class CreateAccountManagedBean {
             GregorianCalendar gc = new GregorianCalendar();
             gc.setTime(dateOfBirth);
             customer.setDateOfBirth(gc);
-            if (marriedString.equals("MARRIED")) {
-                customer.setIsMarried(Boolean.TRUE);
-            } else {
-                customer.setIsMarried(Boolean.FALSE);
-            }
             CustomerEntity newCustomer = customerSessionBean.createCustomer(customer);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Account successfully created! (ID: " + customer.getCustomerId() + ")", null));
             customer = new CustomerEntity();
             dateOfBirth = null;
-            marriedString = null;
         } catch (CustomerAlreadyExistException | UnknownPersistenceException | CustomerCreationException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, ex.toString(), null));
         }
+        
+        
     }
-
+    
+   
     public CustomerEntity getCustomer() {
         return customer;
     }
@@ -81,14 +77,6 @@ public class CreateAccountManagedBean {
 
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
-    }
-
-    public String getMarriedString() {
-        return marriedString;
-    }
-
-    public void setMarriedString(String marriedString) {
-        this.marriedString = marriedString;
     }
 
 }
