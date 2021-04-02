@@ -10,7 +10,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <h:outputStylesheet name="./css/default.css"/>
         <h:outputStylesheet name="./css/cssLayout.css"/>
-
+        <script src='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js'></script>
+        <link href='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
         <title>Moolah Enterprise</title>
 
         <style>
@@ -23,9 +24,9 @@
 
 
             <p:layoutUnit position="center" style="margin-top:2%;">
-               
-                    <ui:include src="/topmenu.xhtml" class="menu_style" />
-               
+
+                <ui:include src="/topmenu.xhtml" class="menu_style" />
+
 
                 <ui:insert name="content">Content</ui:insert>
             </p:layoutUnit>
