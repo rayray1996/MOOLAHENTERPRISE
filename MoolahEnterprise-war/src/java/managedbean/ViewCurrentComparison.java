@@ -9,6 +9,7 @@ import ejb.entity.ComparisonEntity;
 import ejb.entity.CustomerEntity;
 import ejb.entity.ProductEntity;
 import ejb.stateless.ComparisonSessionBeanLocal;
+import ejb.stateless.CustomerSessionBeanLocal;
 import java.io.IOException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -26,6 +27,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import util.exception.ComparisonErrorException;
+import util.exception.CustomerDoesNotExistsException;
+import util.exception.CustomerUpdateException;
 import util.exception.UnknownPersistenceException;
 import util.helper.ProductEntityWrapper;
 
@@ -36,6 +39,9 @@ import util.helper.ProductEntityWrapper;
 @Named(value = "viewCurrentComparison")
 @SessionScoped
 public class ViewCurrentComparison implements Serializable {
+
+    @EJB
+    private CustomerSessionBeanLocal customerSessionBean;
 
     @EJB
     private ComparisonSessionBeanLocal comparisonSessionBean;
@@ -120,6 +126,12 @@ public class ViewCurrentComparison implements Serializable {
             comparisonEntity.setProductsToCompare(listOfProducts);
             comparisonSessionBean.saveThisComparison(comparisonEntity);
             customer.getSavedComparisons().add(comparisonEntity);
+            try {
+                customerSessionBean.updateCustomer(customer);
+            } catch (CustomerDoesNotExistsException | CustomerUpdateException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, ex.toString(), null));
+            }
+            
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Comparison " + comparisonEntity.getComparisonName() + " has been saved successfully", null));
             comparisonEntity = new ComparisonEntity();
             currentComparisons = new ArrayList<>();
@@ -132,12 +144,10 @@ public class ViewCurrentComparison implements Serializable {
     }
 
     public void redirectToViewRecommendedProduct() throws IOException {
-        System.out.println("redircetR");
         FacesContext.getCurrentInstance().getExternalContext().redirect("ViewRecommendedProduct.xhtml");
     }
 
     public void redirectToViewAllProduct() throws IOException {
-        System.out.println("redirectA");
         FacesContext.getCurrentInstance().getExternalContext().redirect("viewAllProduct.xhtml");
     }
 

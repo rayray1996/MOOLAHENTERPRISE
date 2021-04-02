@@ -150,7 +150,9 @@
                 }
             }
 
-            $(document).ready(function () {adjustWidth()});
+            $(document).ready(function () {
+                adjustWidth()
+            });
         </script>
         <br/>
         <div style=" text-align: center;">
@@ -238,10 +240,12 @@
                     <p:panelGrid id="firstProductPG" style="width: 22.5%;float: left;margin:0 auto;" rendered="#{viewCurrentComparison.currentComparisons.size() > 0}">
                         <p:row>
                             <p:column class="companyColHeader">
-                                <p:commandButton oncomplete="adjustWidth();" update="@form noProductBlockForm saveComparisonFormMain" style="float: right; background: none; border: none;" icon="pi pi-times" actionListener="#{viewCurrentComparison.deleteSelectedComparison}">
-                                    <f:attribute name="compareProductToDelete" value="#{viewCurrentComparison.firstProduct}"/>
-                                </p:commandButton>
-                                <p:graphicImage library="images" name="#{viewCurrentComparison.firstProduct.productEntity.company.companyImage}" height="120" width="120"/>
+                                <div style="text-align: right">
+                                    <p:commandButton oncomplete="adjustWidth();" update="@form noProductBlockForm saveComparisonFormMain" style="float: top; background: none; border: none;" icon="pi pi-times" actionListener="#{viewCurrentComparison.deleteSelectedComparison}">
+                                        <f:attribute name="compareProductToDelete" value="#{viewCurrentComparison.firstProduct}"/>
+                                    </p:commandButton>
+                                </div>                            
+                                <p:graphicImage style="object-fit: cover; width: 120px; height:80px;" library="images" name="#{viewCurrentComparison.firstProduct.productEntity.company.companyImage}" height="120" width="120"/>
                                 <br/>
                                 <h:outputText value="#{viewCurrentComparison.firstProduct.productEntity.company.companyName}"/>
                             </p:column>
@@ -310,10 +314,13 @@
                     <p:panelGrid id="secondProductPG" style="width: 22.5%;float: left;margin:0 auto;" rendered="#{viewCurrentComparison.currentComparisons.size() > 1}">
                         <p:row>
                             <p:column class="companyColHeader">
-                                <p:commandButton oncomplete="adjustWidth();" update="@form noProductBlockForm saveComparisonFormMain" style="float: right; background: none; border: none;" icon="pi pi-times" actionListener="#{viewCurrentComparison.deleteSelectedComparison}">
-                                    <f:attribute name="compareProductToDelete" value="#{viewCurrentComparison.secondProduct}"/>
-                                </p:commandButton>
-                                <p:graphicImage library="images" name="#{viewCurrentComparison.secondProduct.productEntity.company.companyImage}" height="120" width="120"/>
+                                <div style="text-align: right">
+                                    <p:commandButton oncomplete="adjustWidth();" update="@form noProductBlockForm saveComparisonFormMain" style="float:top; background: none; border: none;" icon="pi pi-times" actionListener="#{viewCurrentComparison.deleteSelectedComparison}">
+                                        <f:attribute name="compareProductToDelete" value="#{viewCurrentComparison.secondProduct}"/>
+                                    </p:commandButton>
+                                </div>
+                                <br/>
+                                <p:graphicImage style="object-fit: cover; width: 120px; height:80px;" library="images" name="#{viewCurrentComparison.secondProduct.productEntity.company.companyImage}" height="120" width="120"/>
                                 <br/>
                                 <h:outputText value="#{viewCurrentComparison.secondProduct.productEntity.company.companyName}"/>
                             </p:column>
@@ -382,10 +389,13 @@
                     <p:panelGrid id="thirdProductPG" style="width: 22.5%;float: left;margin:0 auto;" rendered="#{viewCurrentComparison.currentComparisons.size() > 2}">
                         <p:row>
                             <p:column class="companyColHeader">
-                                <p:commandButton oncomplete="adjustWidth();" update="@form noProductBlockForm saveComparisonFormMain" style="float: right; background: none; border: none;" icon="pi pi-times" actionListener="#{viewCurrentComparison.deleteSelectedComparison}">
-                                    <f:attribute name="compareProductToDelete" value="#{viewCurrentComparison.thirdProduct}"/>
-                                </p:commandButton>
-                                <p:graphicImage library="images" name="#{viewCurrentComparison.thirdProduct.productEntity.company.companyImage}" height="120" width="120"/>
+                                <div style="text-align: right">
+                                    <p:commandButton oncomplete="adjustWidth();" update="@form noProductBlockForm saveComparisonFormMain" style="float:top; background: none; border: none;" icon="pi pi-times" actionListener="#{viewCurrentComparison.deleteSelectedComparison}">
+                                        <f:attribute name="compareProductToDelete" value="#{viewCurrentComparison.thirdProduct}"/>
+                                    </p:commandButton>
+                                </div>
+                                <br/>
+                                <p:graphicImage style="object-fit: cover; width: 120px; height:80px;" library="images" name="#{viewCurrentComparison.thirdProduct.productEntity.company.companyImage}" height="120" width="120"/>
                                 <br/>
                                 <h:outputText value="#{viewCurrentComparison.thirdProduct.productEntity.company.companyName}"/>
                             </p:column>
@@ -455,10 +465,13 @@
                     <p:panelGrid id="fourthProductPG" style="width: 22.5%;float: left;margin:0 auto;" rendered="#{viewCurrentComparison.currentComparisons.size() > 3}">
                         <p:row>
                             <p:column class="companyColHeader">
-                                <p:commandButton oncomplete="adjustWidth();" update="@form noProductBlockForm saveComparisonFormMain" style="float: right; background: none; border: none;" icon="pi pi-times" actionListener="#{viewCurrentComparison.deleteSelectedComparison}">
-                                    <f:attribute name="compareProductToDelete" value="#{viewCurrentComparison.fourthProduct}"/>
-                                </p:commandButton>
-                                <p:graphicImage library="images" name="#{viewCurrentComparison.fourthProduct.productEntity.company.companyImage}" height="120" width="120"/>
+                                <div style="text-align: right">
+                                    <p:commandButton oncomplete="adjustWidth();" update="@form noProductBlockForm saveComparisonFormMain" style="float:top; background: none; border: none;" icon="pi pi-times" actionListener="#{viewCurrentComparison.deleteSelectedComparison}">
+                                        <f:attribute name="compareProductToDelete" value="#{viewCurrentComparison.fourthProduct}"/>
+                                    </p:commandButton>
+                                </div>
+                                <br/>
+                                <p:graphicImage style="object-fit: cover; width: 120px; height:80px;" library="images" name="#{viewCurrentComparison.fourthProduct.productEntity.company.companyImage}" height="120" width="120"/>
                                 <br/>
                                 <h:outputText value="#{viewCurrentComparison.fourthProduct.productEntity.company.companyName}"/>
                             </p:column>
