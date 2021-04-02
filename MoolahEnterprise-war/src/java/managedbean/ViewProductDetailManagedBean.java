@@ -60,6 +60,8 @@ public class ViewProductDetailManagedBean implements Serializable {
     @EJB
     private ProductSessionBeanLocal productSessionBean;
 
+    private CustomerEntity cust;
+
     private ProductEntityWrapper productToView;
 
     private ProductEntity product;
@@ -75,6 +77,7 @@ public class ViewProductDetailManagedBean implements Serializable {
     private List<AffordabilityWrapper> listOfAffordability;
 
     public ViewProductDetailManagedBean() {
+        listOfAffordability = new ArrayList<>();
     }
 
     @PostConstruct
@@ -83,43 +86,48 @@ public class ViewProductDetailManagedBean implements Serializable {
             productToView = (ProductEntityWrapper) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("productToView");
             product = productSessionBean.retrieveProductEntityById(productToView.getProductEntity().getProductId());
 
-            CustomerEntity cust = (CustomerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("customerEntity");
+            cust = (CustomerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("customerEntity");
             cust = customerSessionBean.retrieveCustomerById(cust.getCustomerId());
             listOfAssetCust = customerSessionBean.getThreeYearsOfCapital(cust.getCustomerId());
 
             List<PremiumEntity> listOfPremiums = new ArrayList<>();
-            List<PremiumEntity> listOfPremiums2 = new ArrayList<>();
             if (cust.getSmoker()) {
-                System.out.println("Check entry smoker");
-                listOfPremiums = premiumSessionBean.retrieveListOfSmokerPremiumEntityForProduct(product.getProductId());
-                listOfPremiums2 = product.getListOfSmokerPremium();
+                if (product.getIsAvailableToSmokers() == true) {
+                    if (!product.getListOfSmokerPremium().isEmpty()) {
+                        System.out.println("Smoker premium special");
+                        listOfPremiums = product.getListOfSmokerPremium();
+                    } else {
+                        System.out.println("Smoker premium same");
+                        listOfPremiums = product.getListOfPremium();
+                        product.setListOfSmokerPremium(listOfPremiums);
+                    }
+                }
             } else {
                 System.out.println("Check entry non smoker");
-                listOfPremiums = premiumSessionBean.retrieveListOfPremiumEntityForProduct(product.getProductId());
-                listOfPremiums2 = product.getListOfPremium();
+                listOfPremiums = product.getListOfPremium();
             }
 
             int dobYear = customerSessionBean.getAgeOfCustomer(cust);
 
             System.out.println("Date of birth: " + dobYear);
             System.out.println("List of premium size: " + listOfPremiums.size());
-            System.out.println("List of premium2 size: " + listOfPremiums2.size());
 
             List<PremiumEntity> custPremiums = new ArrayList<>();
 
-            for (PremiumEntity premium : listOfPremiums2) {
-                System.out.println("All Premium: " + premium.getPremiumValue() + " Age: " + premium.getMinAgeGroup());
-                if ((dobYear >= premium.getMinAgeGroup() || dobYear <= premium.getMaxAgeGroup()) && custPremiums.size() < 3) {
+            for (PremiumEntity premium : listOfPremiums) {
+                if (((dobYear >= premium.getMinAgeGroup() && dobYear <= premium.getMaxAgeGroup()) || 
+                        ( !premium.getMinAgeGroup().equals(premium.getMaxAgeGroup()) && (dobYear >= premium.getMinAgeGroup() || dobYear <= premium.getMaxAgeGroup()))) && custPremiums.size() < 3) {
                     custPremiums.add(premium);
-                    System.out.println("Premium: " + premium.getPremiumValue() + " Age: " + premium.getMinAgeGroup());
+                    dobYear++;
+                    System.out.println("Premiums added: " + premium);
                 }
             }
 
             AffordabilityWrapper tempWrapper = new AffordabilityWrapper(listOfAssetCust.get(0), listOfAssetCust.get(0).subtract(custPremiums.get(0).getPremiumValue()));
             listOfAffordability.add(tempWrapper);
-            AffordabilityWrapper tempWrapper2 = new AffordabilityWrapper(listOfAssetCust.get(1), listOfAssetCust.get(1).subtract(custPremiums.get(0).getPremiumValue()).subtract(custPremiums.get(1).getPremiumValue()));
+            AffordabilityWrapper tempWrapper2 = new AffordabilityWrapper(listOfAssetCust.get(1).subtract(custPremiums.get(0).getPremiumValue()), listOfAssetCust.get(1).subtract(custPremiums.get(0).getPremiumValue()).subtract(custPremiums.get(1).getPremiumValue()));
             listOfAffordability.add(tempWrapper2);
-            AffordabilityWrapper tempWrapper3 = new AffordabilityWrapper(listOfAssetCust.get(2), listOfAssetCust.get(2).subtract(custPremiums.get(0).getPremiumValue()).subtract(custPremiums.get(1).getPremiumValue()).subtract(custPremiums.get(2).getPremiumValue()));
+            AffordabilityWrapper tempWrapper3 = new AffordabilityWrapper(listOfAssetCust.get(2).subtract(custPremiums.get(0).getPremiumValue()).subtract(custPremiums.get(1).getPremiumValue()), listOfAssetCust.get(2).subtract(custPremiums.get(0).getPremiumValue()).subtract(custPremiums.get(1).getPremiumValue()).subtract(custPremiums.get(2).getPremiumValue()));
             listOfAffordability.add(tempWrapper3);
 
             customerLikeProduct();
@@ -151,16 +159,18 @@ public class ViewProductDetailManagedBean implements Serializable {
 
     public void likeProduct(ActionEvent event) {
         try {
-            CustomerEntity cust = (CustomerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("customerEntity");
-            cust = customerSessionBean.retrieveCustomerById(cust.getCustomerId());
+//            cust = (CustomerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("customerEntity");
+//            cust = customerSessionBean.retrieveCustomerById(cust.getCustomerId());
             if (cust.getListOfLikeProducts().contains(product)) {
                 cust = customerSessionBean.retrieveCustomerById(cust.getCustomerId());
                 cust.getListOfLikeProducts().remove(product);
                 customerSessionBean.updateCustomer(cust);
+                cust = customerSessionBean.retrieveCustomerById(cust.getCustomerId());
                 customerLikeProduct();
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product has been removed from your profile!", null));
             } else {
                 customerSessionBean.likeAProduct(cust.getCustomerId(), product.getProductId());
+                cust = customerSessionBean.retrieveCustomerById(cust.getCustomerId());
                 customerLikeProduct();
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product has been saved to your profile!", null));
             }
@@ -238,5 +248,13 @@ public class ViewProductDetailManagedBean implements Serializable {
 
     public void setListOfAffordability(List<AffordabilityWrapper> listOfAffordability) {
         this.listOfAffordability = listOfAffordability;
+    }
+
+    public CustomerEntity getCust() {
+        return cust;
+    }
+
+    public void setCust(CustomerEntity cust) {
+        this.cust = cust;
     }
 }
