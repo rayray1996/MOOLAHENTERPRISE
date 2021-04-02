@@ -12,12 +12,12 @@
         <h1 style="font-size: 18px; text-align: left; padding-left: 1%">
             About the Product
         </h1>
+
         <h:form id="myButtons">
             <p:commandButton icon="pi pi-star-o" styleClass="rounded-button ui-button-help" style="margin-left: 16%; height: 5%" actionListener="#{viewProductDetailManagedBean.likeProduct}" rendered="#{viewProductDetailManagedBean.customerLiked == false}" id="prodButton" process="@this" update="@form" iconPos=""/>
             <p:commandButton icon="pi pi-star" styleClass="rounded-button ui-button-help" style="margin-left: 16%; height: 5%" actionListener="#{viewProductDetailManagedBean.likeProduct}" rendered="#{viewProductDetailManagedBean.customerLiked == true}" process="@this" update="@form" />
+            <p:commandButton  value="Add to My Comparison" styleClass="rounded-button ui-button-help" style="font-size: 12px; height: 5%" actionListener="#{viewAllProductManagedBean.addToComparison}" />
         </h:form>
-        <p:commandButton  value="Add to My Comparison" styleClass="rounded-button ui-button-help" style="margin-left: 20%; font-size: 12px; height: 5%" actionListener="#{viewAllProductManagedBean.addToComparison}" />
-
         <div style="text-align: center">
             <p:graphicImage library="images" name="#{viewProductDetailManagedBean.productToView.productEntity.company.companyImage}" height="350" width="350 " 
                             alt="AIA Insurance"/>
@@ -147,8 +147,22 @@
                 </p:tab>
 
                 <p:tab title="Your Affordability Table">
-                    <h5>This is a generated affordability table for #{viewProductDetailManagedBean.product.productName}</h5>
-                    <p:dataTable>
+                    <h5 style="text-align: center">This is a generated affordability table for #{viewProductDetailManagedBean.product.productName}</h5>
+                    <p style="text-align: justify; font-size: 10px">**First year calculation is based on current cash on hand and investments. Subsequent years has accounted for the yearly expense and yearly income.</p>
+                    <p:dataTable id="affordabilityTable" widgetVar="affordTable" value="#{viewProductDetailManagedBean.listOfAffordability}" 
+                                 var="afford" rowKey="#{features.featureId}" rowIndexVar="rowIndex"  style="width:70%; padding-left: 5%; margin-left: auto; margin-right: auto">
+
+                        <p:column headerText="Year">
+                            <h:outputText value="#{rowIndex+1}" />
+                        </p:column>
+
+                        <p:column headerText="Liquid Assets" >
+                            <h:outputText value="#{afford.affordability}" />
+                        </p:column>                            
+
+                        <p:column headerText="Description">
+                            <h:outputText value="#{afford.amountAfterPremium}" />
+                        </p:column>
 
                     </p:dataTable>
                 </p:tab>

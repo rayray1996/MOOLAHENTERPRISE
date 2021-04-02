@@ -5,14 +5,24 @@
  */
 package managedbean;
 
+import ejb.entity.CompanyEntity;
 import ejb.entity.CustomerEntity;
+import ejb.entity.PremiumEntity;
 import ejb.entity.ProductEntity;
+import ejb.stateless.CompanySessionBeanLocal;
 import ejb.stateless.CustomerSessionBeanLocal;
+import ejb.stateless.PremiumSessionBeanLocal;
 import ejb.stateless.ProductSessionBeanLocal;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
@@ -20,10 +30,14 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import util.exception.CompanyDoesNotExistException;
 import util.exception.CustomerDoesNotExistsException;
 import util.exception.CustomerUpdateException;
+import util.exception.InvalidProductCreationException;
+import util.exception.ProductAlreadyExistsException;
 import util.exception.ProductNotFoundException;
 import util.exception.UnknownPersistenceException;
+import util.helper.AffordabilityWrapper;
 import util.helper.ProductEntityWrapper;
 
 /**
@@ -33,6 +47,12 @@ import util.helper.ProductEntityWrapper;
 @Named(value = "viewProductDetailManagedBean")
 @ViewScoped
 public class ViewProductDetailManagedBean implements Serializable {
+
+    @EJB
+    private PremiumSessionBeanLocal premiumSessionBean;
+
+    @EJB
+    private CompanySessionBeanLocal companySessionBean;
 
     @EJB
     private CustomerSessionBeanLocal customerSessionBean;
@@ -46,6 +66,14 @@ public class ViewProductDetailManagedBean implements Serializable {
 
     private Boolean customerLiked;
 
+    private Long startTime;
+
+    private Float endTime;
+
+    private List<BigDecimal> listOfAssetCust;
+
+    private List<AffordabilityWrapper> listOfAffordability;
+
     public ViewProductDetailManagedBean() {
     }
 
@@ -53,26 +81,88 @@ public class ViewProductDetailManagedBean implements Serializable {
     public void dataInit() {
         try {
             productToView = (ProductEntityWrapper) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("productToView");
-            setProduct(productSessionBean.retrieveProductEntityById(productToView.getProductEntity().getProductId()));
+            product = productSessionBean.retrieveProductEntityById(productToView.getProductEntity().getProductId());
+
+            CustomerEntity cust = (CustomerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("customerEntity");
+            cust = customerSessionBean.retrieveCustomerById(cust.getCustomerId());
+            listOfAssetCust = customerSessionBean.getThreeYearsOfCapital(cust.getCustomerId());
+
+            List<PremiumEntity> listOfPremiums = new ArrayList<>();
+            List<PremiumEntity> listOfPremiums2 = new ArrayList<>();
+            if (cust.getSmoker()) {
+                System.out.println("Check entry smoker");
+                listOfPremiums = premiumSessionBean.retrieveListOfSmokerPremiumEntityForProduct(product.getProductId());
+                listOfPremiums2 = product.getListOfSmokerPremium();
+            } else {
+                System.out.println("Check entry non smoker");
+                listOfPremiums = premiumSessionBean.retrieveListOfPremiumEntityForProduct(product.getProductId());
+                listOfPremiums2 = product.getListOfPremium();
+            }
+
+            int dobYear = customerSessionBean.getAgeOfCustomer(cust);
+
+            System.out.println("Date of birth: " + dobYear);
+            System.out.println("List of premium size: " + listOfPremiums.size());
+            System.out.println("List of premium2 size: " + listOfPremiums2.size());
+
+            List<PremiumEntity> custPremiums = new ArrayList<>();
+
+            for (PremiumEntity premium : listOfPremiums2) {
+                System.out.println("All Premium: " + premium.getPremiumValue() + " Age: " + premium.getMinAgeGroup());
+                if ((dobYear >= premium.getMinAgeGroup() || dobYear <= premium.getMaxAgeGroup()) && custPremiums.size() < 3) {
+                    custPremiums.add(premium);
+                    System.out.println("Premium: " + premium.getPremiumValue() + " Age: " + premium.getMinAgeGroup());
+                }
+            }
+
+            AffordabilityWrapper tempWrapper = new AffordabilityWrapper(listOfAssetCust.get(0), listOfAssetCust.get(0).subtract(custPremiums.get(0).getPremiumValue()));
+            listOfAffordability.add(tempWrapper);
+            AffordabilityWrapper tempWrapper2 = new AffordabilityWrapper(listOfAssetCust.get(1), listOfAssetCust.get(1).subtract(custPremiums.get(0).getPremiumValue()).subtract(custPremiums.get(1).getPremiumValue()));
+            listOfAffordability.add(tempWrapper2);
+            AffordabilityWrapper tempWrapper3 = new AffordabilityWrapper(listOfAssetCust.get(2), listOfAssetCust.get(2).subtract(custPremiums.get(0).getPremiumValue()).subtract(custPremiums.get(1).getPremiumValue()).subtract(custPremiums.get(2).getPremiumValue()));
+            listOfAffordability.add(tempWrapper3);
+
             customerLikeProduct();
-        } catch (ProductNotFoundException ex) {
+            startTime = System.currentTimeMillis();
+            System.out.println("StartTime: " + startTime);
+
+        } catch (ProductNotFoundException | CustomerDoesNotExistsException ex) {
             System.out.println("Product does not exists!");
+        }
+    }
+
+    @PreDestroy
+    public void cleanup() {
+        long elapsedTimeMillis = System.currentTimeMillis() - startTime;
+        endTime = elapsedTimeMillis / 1000F;
+        System.out.println("Endtime: " + endTime);
+        if (endTime >= 10.0) {
+            try {
+                BigInteger newCounter = product.getClickThroughInfo().getMonthCounter().add(BigInteger.ONE);
+                product.getClickThroughInfo().setMonthCounter(newCounter);
+                System.out.println("EndTime Prod ID: " + product.getProductId());
+                System.out.println("New Counter: " + newCounter);
+                productSessionBean.updateProductListing(product);
+            } catch (ProductAlreadyExistsException | UnknownPersistenceException | InvalidProductCreationException ex) {
+                System.out.println(ex.getMessage());
+            }
         }
     }
 
     public void likeProduct(ActionEvent event) {
         try {
             CustomerEntity cust = (CustomerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("customerEntity");
+            cust = customerSessionBean.retrieveCustomerById(cust.getCustomerId());
             if (cust.getListOfLikeProducts().contains(product)) {
                 cust = customerSessionBean.retrieveCustomerById(cust.getCustomerId());
                 cust.getListOfLikeProducts().remove(product);
                 customerSessionBean.updateCustomer(cust);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product has been removed from your profile!", null));
                 customerLikeProduct();
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product has been removed from your profile!", null));
             } else {
                 customerSessionBean.likeAProduct(cust.getCustomerId(), product.getProductId());
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product has been saved to your profile!", null));
                 customerLikeProduct();
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product has been saved to your profile!", null));
             }
 
         } catch (CustomerDoesNotExistsException | ProductNotFoundException | UnknownPersistenceException | CustomerUpdateException ex) {
@@ -116,5 +206,37 @@ public class ViewProductDetailManagedBean implements Serializable {
 
     public void setCustomerLiked(Boolean customerLiked) {
         this.customerLiked = customerLiked;
+    }
+
+    public Long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Long startTime) {
+        this.startTime = startTime;
+    }
+
+    public Float getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Float endTime) {
+        this.endTime = endTime;
+    }
+
+    public List<BigDecimal> getListOfAssetCust() {
+        return listOfAssetCust;
+    }
+
+    public void setListOfAssetCust(List<BigDecimal> listOfAssetCust) {
+        this.listOfAssetCust = listOfAssetCust;
+    }
+
+    public List<AffordabilityWrapper> getListOfAffordability() {
+        return listOfAffordability;
+    }
+
+    public void setListOfAffordability(List<AffordabilityWrapper> listOfAffordability) {
+        this.listOfAffordability = listOfAffordability;
     }
 }
