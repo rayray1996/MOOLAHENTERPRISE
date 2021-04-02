@@ -15,7 +15,7 @@
         </style>
         <h:outputStylesheet name="./css/default.css"/>
         <h:outputStylesheet name="./css/cssLayout.css"/>
-
+        <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces"/>
         <h:panelGroup rendered="#{sessionScope.isLogin == false}">
 
             <p:messages globalOnly="true"/>
@@ -23,7 +23,7 @@
             <br/>
             <br/>
             <div style="width: 60%; margin-left: auto; margin-right: auto; text-align: center; line-height: 2.5">
-                <p:outputLabel style="font-family: Garamond,serif; ; font-size: 18px"> Moolah aims to provide young adults a quick overview of the different financial products offered by financial institutions. 
+                <p:outputLabel style="font-family: sans-serif; font-size: 18px"> Moolah aims to provide young adults a quick overview of the different financial products offered by financial institutions. 
                     On top of that, it allows users to compare the products offered by different institutions. 
                     For users who are unsure of what financial products are suitable for them, 
                     our application can also feature products which are more relevant to them based on the results of the questionnaire posed to them.
@@ -35,8 +35,8 @@
             </div>
 
             <br/>
-            <figure class="aia logo">
-                <p:graphicImage library="images" name="aia-group-limited-vector-logo.svg" height="180" width="200" alt="aia" style=" margin-left: 15%" />
+            <figure class="aia logo" style="text-align: center">
+                <p:graphicImage library="images" name="aia-group-limited-vector-logo.svg" height="180" width="200" alt="aia" />
                 <p:graphicImage library="images" name="aviva logo transparent.svg" height="180" width="200 " alt="aviva" style=" margin-left: 5%" />
                 <p:graphicImage library="images" name="prudential-2.svg" height="200" width="200 " alt="prudential" style=" margin-left: 5%" />
                 <p:graphicImage library="images" name="GE.svg" height="200" width="200 " alt="ge" style=" margin-left: 5%" />
@@ -46,16 +46,19 @@
 
         </h:panelGroup>
 
+
         <h:form id="productToView" rendered="#{sessionScope.isLogin == true}" >
+            <br/>
+            <h3 style="text-align: center">Recommended Products For You</h3>
+
             <div class="card">
-                <h5 style="font-size: 16px; text-align: center; ">Recommended Products For You</h5>
-                <p:carousel value="#{indexManagedBean.listOfProduct}" var="product" responsive="true" numVisible="4" autoPlayInterval="10000" 
-                            style="width:80%; margin-left: auto; margin-right: auto;" itemStyle="width: 25% ; height: auto"  >
+                <p:carousel value="#{indexManagedBean.listOfProduct}" var="product" responsive="false" numVisible="4" autoPlayInterval="10000" 
+                            style="width:80%; margin-left: auto; margin-right: auto;" itemStyle="width: 25% ; height: 90%" >
                     <div class="product">  
                         <div class="product-grid-item p-p-5">
 
                             <div class="product-grid-item-content">
-                                <div style="margin: 0px auto;">
+                                <div style="margin: 0px auto; text-align: center">
                                     <p:graphicImage library="images" name="#{product.company.companyImage}" height="200" width="200 " alt="This is the image of the company" />
                                 </div>
                                 <br/>

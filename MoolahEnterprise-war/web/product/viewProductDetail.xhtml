@@ -4,25 +4,33 @@
                 template="./../template/defaultTemplate.xhtml"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 xmlns:ezcomp="http://xmlns.jcp.org/jsf/composite/ezcomp">
 
 
     <ui:define name="content">
-
-        <h1 style="font-size: 18px">
+        <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces"/>
+        <h1 style="font-size: 18px; text-align: left; padding-left: 1%">
             About the Product
         </h1>
 
-        <p:graphicImage library="images" name="#{viewProductDetailManagedBean.productToView.productEntity.company.companyImage}" height="400" width="400 " 
-                        alt="AIA Insurance" style="margin-left: auto; margin-right: auto;"/>
+        <h:form id="myButtons">
+            <p:commandButton icon="pi pi-star-o" styleClass="rounded-button ui-button-help" style="margin-left: 16%; height: 4%" actionListener="#{viewProductDetailManagedBean.likeProduct}" rendered="#{viewProductDetailManagedBean.customerLiked == false}" id="prodButton" process="@this" update="@form" iconPos=""/>
+            <p:commandButton icon="pi pi-star" styleClass="rounded-button ui-button-help" style="margin-left: 16%; height: 4%" actionListener="#{viewProductDetailManagedBean.likeProduct}" rendered="#{viewProductDetailManagedBean.customerLiked == true}" process="@this" update="@form" />
+            <p:commandButton  value="Add to My Comparison" styleClass="rounded-button ui-button-help" style="font-size: 12px; height: 4%" actionListener="#{viewAllProductManagedBean.addToComparison}" />
+        </h:form>
+        <div style="text-align: center">
+            <p:graphicImage library="images" name="#{viewProductDetailManagedBean.productToView.productEntity.company.companyImage}" height="350" width="350 " 
+                            alt="AIA Insurance"/>
+        </div>
+        <p:growl life="3000">
+            <p:autoUpdate/>
+        </p:growl>
 
         <div class="card">
-            <h5 class="p-mt-0">Default</h5>
             <p:tabView>
-                <p:tab title="Product Details">
-                    <p:panelGrid columns="2" columnClasses="" style="margin-left: 5%; width: 60%; noBorders">
-                        <p:column >
+                <p:tab title="Product Details" >
+                    <p:panelGrid columns="2" columnClasses="" style="margin-left: auto; width: 60%; margin-right: auto">
+                        <p:column>
                             <p:outputLabel value="Company Name: "/>
                         </p:column>
                         <p:column>
@@ -60,90 +68,130 @@
                     </p:panelGrid>
                 </p:tab>
                 <p:tab title="Coverage">
-                    <p:panelGrid columns="2" columnClasses=""  style="margin-left: 5%; width: 30%; noBorders">
+                    <p:panelGrid columns="2" columnClasses=""  style="margin-left: auto; width: 60%; margin-right: auto">
                         <p:column>
                             <p:outputLabel value="Coverage Term: "/>
                         </p:column>
-                        <p:column>
-                            <h:outputText value="#{viewProductDetailManagedBean.productToView.productEntity.coverageTerm}"/>
+                        <p:column style="width: 60%">
+                            <h:outputText value="#{viewProductDetailManagedBean.productToView.productEntity.coverageTerm} years"/>
                         </p:column>
 
-                        <p:column>
+                        <p:column style="width: 40%">
                             <p:outputLabel value="Minimum Sum Assured:"/>
                         </p:column>
-                        <p:column>
-                            <h:outputText value="#{viewProductDetailManagedBean.productToView.productEntity.assuredSum}"/>
+                        <p:column style="width: 60%">
+                            <h:outputText value="$#{viewProductDetailManagedBean.productToView.productEntity.assuredSum}"/>
                         </p:column>
                     </p:panelGrid>
                 </p:tab>
-                <p:tab title="Premiums For Product">
-                    <p style="font-weight: bold; font-size: 14px"> Premium for Product: #{viewProductDetailManagedBean.product.productName}</p>
-                    <p:dataTable id="productPremiumTable" widgetVar="productPremiumTable" value="#{viewProductDetailManagedBean.productToView.productEntity.listOfPremium}" 
-                                 var="premium" rowKey="#{premium.premiumId}" style="width:80%; padding-left: 5%">
-                        <p:column headerText="S/N" sortBy="#{premium.premiumId}" filterBy="#{premium.premiumId}" filterMatchMode="contains">
+                <p:tab title="Premiums For Product" rendered="#{viewProductDetailManagedBean.cust.smoker == false}">
+                    <p style="font-weight: bold; font-size: 14px; text-align: center"> Non Smoking Premium for Product: #{viewProductDetailManagedBean.product.productName}</p>
+                    <p:dataTable id="productPremiumTableNonSmoker" widgetVar="productPremiumTable" value="#{viewProductDetailManagedBean.productToView.productEntity.listOfPremium}" 
+                                 var="premium" rowKey="#{premium.premiumId}" style="width:60%; padding-left: 5%; margin-left: auto; margin-right: auto">
+                        <p:column headerText="S/N" style="width: 10% !important; ">
                             <h:outputText value="#{premium.premiumId}"/>
                         </p:column>
-                        <p:column headerText="Min Age Group" sortBy="#{premium.minAgeGroup}" filterBy="#{premium.minAgeGroup}" filterMatchMode="contains">
-                            <h:outputText value="#{premium.minAgeGroup}" />
+                        <p:column headerText="Min Age Group" style="width: 20% !important; text-align: center">
+                            <h:outputText value="#{premium.minAgeGroup} y/o" />
                         </p:column>
 
-                        <p:column headerText="Max Age Group" sortBy="#{premium.maxAgeGroup}" filterBy="#{premium.maxAgeGroup}" filterMatchMode="contains">
-                            <h:outputText value="#{premium.maxAgeGroup}" />
+                        <p:column headerText="Max Age Group" style="width: 20% !important; text-align: center ">
+                            <h:outputText value="#{premium.maxAgeGroup} y/o" />
                         </p:column>                            
 
-                        <p:column headerText="Premium Price" sortBy="#{premium.premiumValue}" filterBy="#{premium.premiumValue}" filterMatchMode="contains">
-                            <h:outputText value="#{premium.premiumValue}" />
+                        <p:column headerText="Premium Price" style="width: 50% !important; text-align: center ">
+                            <h:outputText value="$#{premium.premiumValue}" />
                         </p:column>
                     </p:dataTable>
                 </p:tab>
+
+                <p:tab title="Premiums For Product" rendered="#{viewProductDetailManagedBean.cust.smoker == true}">
+                    <p style="font-weight: bold; font-size: 14px; text-align: center"> Smoking Premium for Product: #{viewProductDetailManagedBean.product.productName}</p>
+                    <p:dataTable id="productPremiumTableSmoker" widgetVar="productPremiumTable" value="#{viewProductDetailManagedBean.product.listOfSmokerPremium}" 
+                                 var="premium" rowKey="#{premium.premiumId}" style="width:60%; margin-left: auto; margin-right: auto">
+                        <p:column headerText="S/N" style="width: 10% !important; ">
+                            <h:outputText value="#{premium.premiumId}"/>
+                        </p:column>
+                        <p:column headerText="Min Age Group" style="width: 20% !important; text-align: center">
+                            <h:outputText value="#{premium.minAgeGroup} y/o" />
+                        </p:column>
+
+                        <p:column headerText="Max Age Group" style="width: 20% !important; text-align: center ">
+                            <h:outputText value="#{premium.maxAgeGroup} y/o" />
+                        </p:column>                            
+
+                        <p:column headerText="Premium Price" style="width: 50% !important; text-align: center ">
+                            <h:outputText value="$#{premium.premiumValue}" />
+                        </p:column>
+                    </p:dataTable>
+                </p:tab>
+
+
+                <p:tab title="Riders For Product">
+                    <p:dataTable id="productRider" widgetVar="productRider" value="#{viewProductDetailManagedBean.productToView.productEntity.listOfRiders}" 
+                                 var="rider" rowKey="#{rider.riderId}" rowIndexVar="rowIndex" style="width:70%; margin-left: auto; margin-right: auto">
+                        <p:column headerText="No" style="width: 10% !important; ">
+                            <h:outputText value="#{rowIndex+1}" />
+                        </p:column>
+
+                        <p:column headerText="Name" style="width: 30% !important; ">
+                            <h:outputText value="#{rider.riderName}" />
+                        </p:column>                            
+
+                        <p:column headerText="Description" style="width: 30% !important; ">
+                            <h:outputText value="#{rider.riderDescription}" />
+                        </p:column>
+
+                        <p:column headerText="Addtional Premium per year" style="width: 20% !important; ">
+                            <h:outputText value="$#{rider.riderPremiumValue}" />
+                        </p:column>
+                    </p:dataTable>
+                </p:tab>
+
+                <p:tab title="Features For Product">
+                    <p:dataTable id="productFeatures" widgetVar="productFeatures" value="#{viewProductDetailManagedBean.productToView.productEntity.listOfAdditionalFeatures}" 
+                                 var="features" rowKey="#{features.featureId}" rowIndexVar="rowIndex"  style="width:70%; margin-left: auto; margin-right: auto">
+                        <p:column headerText="No">
+                            <h:outputText value="#{rowIndex+1}" />
+                        </p:column>
+
+                        <p:column headerText="Name">
+                            <h:outputText value="#{features.featureName}" />
+                        </p:column>                            
+
+                        <p:column headerText="Description">
+                            <h:outputText value="#{features.featureDescription}" />
+                        </p:column>
+
+                    </p:dataTable>
+
+                </p:tab>
+
+                <p:tab title="Your Affordability Table">
+                    <h5 style="text-align: center">This is a generated affordability table for #{viewProductDetailManagedBean.product.productName}</h5>
+                    <p style=" margin-left: 18%; text-align: justify; font-size: 10px">**First year calculation is based on current cash on hand and investments. Subsequent years has accounted for the yearly expense and yearly income.</p>
+                    <p:dataTable id="affordabilityTable" widgetVar="affordTable" value="#{viewProductDetailManagedBean.listOfAffordability}" 
+                                 var="afford" rowKey="#{features.featureId}" rowIndexVar="rowIndex"  style="width:70%; margin-left: auto; margin-right: auto">
+
+                        <p:column headerText="Year" style="width: 10% !important; ">
+                            <h:outputText value="#{rowIndex+1}" />
+                        </p:column>
+
+                        <p:column headerText="Liquid Assets" style="width: 20% !important; ">
+                            <h:outputText value="$#{afford.affordability}" />
+                        </p:column>                            
+
+                        <p:column headerText="After paying premium" style="width: 20% !important; ">
+                            <h:outputText value="$#{afford.amountAfterPremium}" />
+                        </p:column>
+
+                    </p:dataTable>
+                </p:tab>
             </p:tabView>
+
         </div>
 
 
-
-
-
-
-
-
-
-        <p:dataTable id="productRider" widgetVar="productRider" value="#{viewProductDetailManagedBean.productToView.productEntity.listOfRiders}" var="rider" rowKey="#{rider.riderId}" rowIndexVar="rowIndex">
-            <p:column headerText="No" sortBy="#{rowIndex}" filterBy="#{rowIndex}" filterMatchMode="contains">
-                <h:outputText value="#{rowIndex+1}" />
-            </p:column>
-
-            <p:column headerText="Name" sortBy="#{rider.riderName}" filterBy="#{rider.riderName}" filterMatchMode="contains">
-                <h:outputText value="#{rider.riderName}" />
-            </p:column>                            
-
-            <p:column headerText="Description">
-                <h:outputText value="#{rider.riderDescription}" />
-            </p:column>
-
-            <p:column headerText="Addtional Premium per year">
-                <h:outputText value="#{rider.riderPremiumValue}" />
-            </p:column>
-        </p:dataTable>
-
-        <p:dataTable id="productFeatures" widgetVar="productFeatures" value="#{viewProductDetailManagedBean.productToView.productEntity.listOfAdditionalFeatures}" var="features" rowKey="#{features.featureId}" rowIndexVar="rowIndex">
-            <p:column headerText="No" sortBy="#{rowIndex}" filterBy="#{rowIndex}" filterMatchMode="contains">
-                <h:outputText value="#{rowIndex+1}" />
-            </p:column>
-
-            <p:column headerText="Name">
-                <h:outputText value="#{features.featureName}" />
-            </p:column>                            
-
-            <p:column headerText="Description">
-                <h:outputText value="#{features.featureDescription}" />
-            </p:column>
-
-        </p:dataTable>
-
-        <h2>Affordability Table</h2>
-        <p:dataTable>
-
-        </p:dataTable>
 
         <ezcomp:InterestRateNotice id="ccInterestRateNotice"/>
     </ui:define>

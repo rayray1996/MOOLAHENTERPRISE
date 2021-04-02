@@ -8,9 +8,9 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content" >
-     <br/>
+        <br/>
         <h1 style="text-align:center;">About Us</h1>
-        <p style="letter-spacing:1px; width:60%;line-height:2.5; margin-left:auto; margin-right:auto;">
+        <p style="letter-spacing:1px; width:60%;line-height:2.5; margin-left:auto; margin-right:auto; font-family: sans-serif; text-align: justify;">
             Moolah was founded by a group of University students who recognized the difficulty in deciding which financial products are truly beneficial for them. As such, when given the opportunity to work on a project, they decided to create Moolah to facilitate youths in their financial planning process. 
 
             Along the way, many challenges were faced as it was their first time working on such a large-scale project. In fact, due to the limited financial knowledge that they possess, it made it even tougher. However, after much research and hard work, they have finally succeeded in meeting their goals.
@@ -19,12 +19,28 @@
         </p>
         <h4 style="letter-spacing:1px; width:60%;line-height:2.5; margin-left:auto; margin-right:auto;">
             Please visit call us at 65-6112 3345 (24hours hotline) or you can look up us at 10 Shenton Way, Singapore 079117.
-                
-        </h4>
- 
-        
-        
 
+        </h4>
+
+        <!--        <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=true"></script>
+        
+                <div class="card">
+                    <p:gmap center="41.381542, 2.122893" zoom="15" type="HYBRID" style="width:80%;height:400px; margin-left: auto; margin-right: auto"/>
+                </div>-->
+
+        <div id='map' style='width: 80%; height: 300px; margin-left: auto; margin-right: auto; padding-bottom: 5%'></div>
+        <script>
+            mapboxgl.accessToken = 'pk.eyJ1IjoibmljaG9sYXMtZyIsImEiOiJja2F3bWwyaW4yY3k1MnFwbHc2NnBrczdiIn0.q4cbqA1DZqSxOeitgcs-wg';
+            var map = new mapboxgl.Map({
+                container: 'map', // container ID
+                style: 'mapbox://styles/mapbox/streets-v11', // style URL
+                center: [103.8464, 1.2746], // starting position [lng, lat]
+                zoom: 17 // starting zoom
+            });
+        </script>
+
+        <br/>
+        <br/>
     </ui:define>
 
 

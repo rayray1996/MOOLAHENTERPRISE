@@ -125,7 +125,7 @@ public class DurationToSaveCalculatorManagedBean implements Serializable {
  * TBC again  
      */
     public void computeHowLong(ActionEvent event) {
-        int tempMonth = 1;
+        int tempMonth = 0;
         boolean hasReachedTheTarget = true;
         BigDecimal intRate = BigDecimal.ZERO;
         //If user did not enter inflation rate, we will use 2.2%, otherwise we will use user's entered interest rate
