@@ -24,53 +24,97 @@
                 font-family: sans-serif!important;
             }
 
-            /*            .ui-panelgrid .ui-panelgrid-cell  {
-                            border: none!important;
-                        }*/
+            .ui-panelgrid {
+                border: none!important;
+            }
 
-            #currentComparisonGrid .ui-widget-content {
+            .currentComparisonSerialColumn   {
+                border: none!important;
+                width:10%!important;
+            }
+
+            .currentComparisonImageColumn  {
+                border: none!important;
+                width:30%!important;
+            }
+
+            .currentComparisonDescrptionColumn  {
+                border: none!important;
+                width:50%!important;
+            }
+
+            .currentComparisonActionColumn  {
+                border: none!important;
+                width:10%!important;
+            }
+
+            .currentComparisonGrid .ui-widget-content {
                 border: none!important;
                 background: none!important;
             }
+
+            #divDialogBox .ui-dialog {
+                position: absolute;
+                padding: 0;
+                overflow: hidden;
+                display: none;
+                left: 68%!important;
+                top: -3%!important;
+                width: 25.5%!important;
+            }
         </style>
-
-        <div style="text-align:right; padding-right: 60px;">
-            <p:commandButton onclick="PF('dialogCurrentComparison').show();" style="font-size: 14px; font-family: sans-serif;" value="Current Comparison (#{viewCurrentComparison.comparisonSize})" icon="ui-icon-suitcase"/>
-        </div>
-
-        <p:dialog resizable="false" id="dialogCurrentComparison" widgetVar="dialogCurrentComparison" closeOnEscape="true" style="margin: 5em 5em 5em 5em;">
-            <!--<f:ajax event="mouseout" onevent="PF('dialogCurrentComparison').hide();"/>-->
-            <div style="text-align: center; font-weight: bold; font-family: sans-serif; font-size: 16px" >
-                <h:outputText value="Products to Compare"/>
-                <br/>
-                <br/>
+        <div id="#{cc.clientId}">
+            <div style="text-align:right; padding-right: 60px;">
+                <p:commandButton id="viewCurrentComparisonButton" onclick="PF('dialogCurrentComparison').show();" style="font-size: 14px; font-family: sans-serif;" value="Current Comparison (#{viewCurrentComparison.comparisonSize})" icon="ui-icon-suitcase"/>
             </div>
-            <div rendered="#{viewCurrentComparison.currentComparisons.size() > 0}">
 
-                <p:panelGrid id="currentComparisonGrid" columns="4" class="bodyText ui-widget-content">
-                    <c:forEach items="#{viewCurrentComparison.currentComparisons}" var="current">
-                        <p:column>
-                            <h:outputText value="#{viewCurrentComparison.currentComparisons.indexOf(current) + 1}"/>
-                        </p:column>
-
-                        <p:column>
-                            <p:graphicImage library="images" name="#{current.productEntity.company.companyImage}" height="80" width="80"/>
-                        </p:column>
-
-                        <p:column>
-                            <h:outputText value="#{current.productEntity.productName}"/>
+            <div id="divDialogBox">
+                <p:dialog resizable="false" id="dialogCurrentComparison" widgetVar="dialogCurrentComparison" closeOnEscape="true" style="margin-top: 10%!important;">
+                    <h:form id="compareProductForm">
+                        <div style="text-align: center; font-weight: bold; font-family: sans-serif; font-size: 16px" >
+                            <h:outputText value="Products to Compare"/>
                             <br/>
-                            <h:outputText value="#{current.stringParentCategory}"/>
-                        </p:column>
+                            <br/>
+                        </div>
 
-                        <p:column>
-                            <p:commandButton icon="pi pi-trash"/>
-                        </p:column>
-                    </c:forEach>
-                </p:panelGrid>
+                        <div style="text-align: center;">
+
+                            <p:panelGrid rendered="#{viewCurrentComparison.currentComparisons.size() > 0}" id="currentComparisonGrid" columns="4" columnClasses="currentComparisonSerialColumn,currentComparisonImageColumn,currentComparisonDescrptionColumn,currentComparisonActionColumn" class="bodyText">
+                                <c:forEach items="#{viewCurrentComparison.currentComparisons}" var="current">
+                                    <p:column id="currentComparisonSerialColumn">
+                                        <h:outputText value="#{viewCurrentComparison.currentComparisons.indexOf(current) + 1}"/>
+                                    </p:column>
+
+                                    <p:column id="currentComparisonImageColumn">
+                                        <p:graphicImage library="images" name="#{current.productEntity.company.companyImage}" height="80" width="80"/>
+                                    </p:column>
+
+                                    <p:column id="currentComparisonDescriptionColumn">
+                                        <h:outputText style="font-weight: bold;" value="#{current.productEntity.productName}"/>
+                                        <br/>
+                                        <h:outputText value="#{current.stringParentCategory} plan"/>
+                                    </p:column>
+
+                                    <p:column id="currentComparisonActionColumn">
+                                        <p:commandButton icon="pi pi-trash" actionListener="#{viewCurrentComparison.deleteSelectedComparison}" update="@form #{cc.clientId}:viewCurrentComparisonButton">
+                                            <f:attribute name="compareProductToDelete" value="#{current}"/>
+                                        </p:commandButton>
+                                    </p:column>
+                                </c:forEach>
+                            </p:panelGrid>
+
+                            <br/>
+
+                            <div style="text-align: center;">
+                                <p:commandButton rendered="#{viewCurrentComparison.currentComparisons.size() > 0}" class="bodyText" id="viewCurrentComparisonsDetailButton" value="Compare" actionListener="#{viewCurrentComparison.goToComparePage}"/>
+                            </div>
+                        </div>
+                        <div style="text-align: center;" >
+                            <h:outputText rendered="#{viewCurrentComparison.currentComparisons.size() == 0}" value="You have not added any products to your compare list" class="bodyText"/>
+                        </div>
+                    </h:form>
+                </p:dialog>
             </div>
-
-            <h:outputText rendered="#{viewCurrentComparison.currentComparisons.size() == 0}" value="You have not added any products in your compare list" class="bodyText"/>
-        </p:dialog>
+        </div>
     </cc:implementation>
 </html>

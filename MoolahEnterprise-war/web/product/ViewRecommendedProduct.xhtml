@@ -73,8 +73,9 @@
             }
         </style>
 
-        <ezcomp:currentComparison></ezcomp:currentComparison>
 
+        <ezcomp:currentComparison id="currentComparisonCC"></ezcomp:currentComparison>
+        
         <h:form id="viewProductForm">
             <div id="viewProductFormDiv">
                 <p:fieldset style="border: none!important;text-align: left;" collapsed="true" id="filterFieldSet" class="bodyText" legend="Filter Criterias" toggleable="true" toggleSpeed="500">
@@ -199,7 +200,7 @@
                     </p:commandButton>
                     &nbsp;
                     &nbsp;
-                    <p:commandButton title="Add to Compare List" icon="ui-icon-plus" actionListener="#{viewRecommendedProductManagedBean.addToComparison}">
+                    <p:commandButton title="Add to Compare List" icon="ui-icon-plus" actionListener="#{viewRecommendedProductManagedBean.addToComparison}" update="currentComparisonCC">
                         <f:attribute name="productToCompare" value="#{productEntity}" />
                     </p:commandButton>
                 </p:column>
