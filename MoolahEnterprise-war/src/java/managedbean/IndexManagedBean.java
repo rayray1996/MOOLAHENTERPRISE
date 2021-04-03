@@ -49,7 +49,6 @@ public class IndexManagedBean implements Serializable {
 
     private List<ProductEntity> listOfProduct;
 
-
     private Random rand;
 
     public IndexManagedBean() {
@@ -58,20 +57,20 @@ public class IndexManagedBean implements Serializable {
 
     @PostConstruct
     public void init() {
-//        try {
-        rand = new Random();
-        CustomerEntity cust = (CustomerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("customerEntity");
-        System.out.println("Customer ID: " + cust.getFullName());
-//            listOfProduct = customerSessionBean.retrieveRecommendedProducts(cust.getCustomerId());
-        listOfProduct = productSessionBean.retrieveAllFinancialProducts();
-        for(ProductEntity prod: listOfProduct){
-            prod.setDescription(prod.getDescription().substring(0, 152) + "...");
-        }
-        System.out.println("Product size: " + listOfProduct.size());
+        try {
+            rand = new Random();
+            CustomerEntity cust = (CustomerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("customerEntity");
+            System.out.println("Customer ID: " + cust.getFullName());
+            listOfProduct = customerSessionBean.retrieveRecommendedProducts(cust.getCustomerId());
+//        listOfProduct = productSessionBean.retrieveAllFinancialProducts();
+            for (ProductEntity prod : listOfProduct) {
+                prod.setDescription(prod.getDescription().substring(0, 152) + "...");
+            }
+            System.out.println("Product size: " + listOfProduct.size());
 
-//        } catch (CustomerDoesNotExistsException | ProductNotFoundException ex) {
-//            System.out.println("Customer has no recommended Products! EX: " + ex.getMessage());
-//        }
+        } catch (CustomerDoesNotExistsException | ProductNotFoundException ex) {
+            System.out.println("Customer has no recommended Products! EX: " + ex.getMessage());
+        }
     }
 
     public List<ProductEntity> getListOfProduct() {
@@ -87,7 +86,7 @@ public class IndexManagedBean implements Serializable {
             Long productId = (Long) event.getComponent().getAttributes().get("productId");
             ProductEntity product = productSessionBean.retrieveProductEntityById(productId);
             ProductEntityWrapper wrapper = new ProductEntityWrapper(product, getParentClassAsString(product), getChildEnumAsString(product));
-            
+
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("productToView", wrapper);
             System.out.println("Product ID: " + productId);
             FacesContext.getCurrentInstance().getExternalContext().redirect("product/viewProductDetail.xhtml");
@@ -135,7 +134,5 @@ public class IndexManagedBean implements Serializable {
         }
         return "";
     }
-    
-    
 
 }

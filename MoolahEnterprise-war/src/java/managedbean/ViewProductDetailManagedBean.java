@@ -103,7 +103,7 @@ public class ViewProductDetailManagedBean implements Serializable {
                         listOfPremiums = product.getListOfPremium();
                         product.setListOfSmokerPremium(listOfPremiums);
                     }
-                }
+                } 
             } else {
                 System.out.println("Check entry non smoker");
                 listOfPremiums = product.getListOfPremium();
