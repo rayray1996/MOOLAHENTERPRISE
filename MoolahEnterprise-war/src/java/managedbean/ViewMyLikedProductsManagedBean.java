@@ -79,9 +79,13 @@ public class ViewMyLikedProductsManagedBean implements Serializable {
     public void deleteFromLikedProducts (ActionEvent event) {
         try {
             ProductEntity productToRemove = (ProductEntity)event.getComponent().getAttributes().get("product");
+            System.err.println("*********************** Product To Remove" + productToRemove.getProductId());
             customerLikedProducts.remove(productToRemove);
+            System.err.println("*********************** Product successfully removed from customer ");
             customer.getListOfLikeProducts().remove(productToRemove);
+            System.err.println("*********************** Product successfully removed from customer BACKEND ");
             customerSessionBean.updateCustomer(customer);
+             System.err.println("*********************** Updated customer successfully ");
         } catch (CustomerDoesNotExistsException |UnknownPersistenceException| CustomerUpdateException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Product cannot be deleted!", null));
         }

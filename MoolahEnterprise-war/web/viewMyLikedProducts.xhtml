@@ -70,10 +70,11 @@
 
                 <p:column headerText="Product name" sortBy="#{product.productName}" class="bodyText dataTableCoverageCol" filterMatchMode="contains" filterBy="#{product.productName}" filterable="false">
                     <div style="float: left">
-                        <p:graphicImage library="images" name="#{product.company.companyImage}" height="350" width="350 " 
+                        <p:graphicImage library="images" name="#{product.company.companyImage}" height="80" width="80 " 
                                         alt="image of company"/>
                     </div>
-                    <h:outputText value="#{product.productName}" class="bodyText" />
+                    <h:outputText style="float: right; margin-top: 10%" value="#{product.productName}" class="bodyText" />
+
                 </p:column>                            
 
                 <p:column headerText="Action" class="bodyText dataTableAction">
@@ -83,7 +84,7 @@
                         </p:commandButton>
                         &nbsp;
                         &nbsp;
-                        <p:commandButton title="Remove from Liked Products" icon="pi pi-trash" actionListener="#{viewMyLikedProductsManagedBean.deleteFromLikedProducts}" update="dataTableLikedProducts">
+                        <p:commandButton title="Remove from Liked Products" icon="pi pi-trash" actionListener="#{viewMyLikedProductsManagedBean.deleteFromLikedProducts}" update="likedProductsForm">
                             <f:attribute name="product" value="#{product}" />
                             <p:confirm header="Confirmation" message="Are you sure you want to remove #{product.productName} from your Liked Products?" icon="ui-icon-alert" />
                         </p:commandButton>
