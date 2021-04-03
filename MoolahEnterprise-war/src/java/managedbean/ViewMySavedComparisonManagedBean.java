@@ -76,7 +76,7 @@ public class ViewMySavedComparisonManagedBean implements Serializable {
     public void viewComparison(ActionEvent event) throws IOException {
         comparisonToView = (ComparisonEntity) event.getComponent().getAttributes().get("comparisonToView");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("comparisonToView", comparisonToView);
-        FacesContext.getCurrentInstance().getExternalContext().redirect("./viewSavedComparisonDetail.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("myAccount/viewSavedComparisonDetail.xhtml");
     }
 
     public void deleteComparison(ActionEvent event) {

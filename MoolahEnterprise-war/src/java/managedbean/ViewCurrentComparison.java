@@ -97,7 +97,7 @@ public class ViewCurrentComparison implements Serializable {
     }
 
     public void goToComparePage(ActionEvent event) throws IOException {
-        FacesContext.getCurrentInstance().getExternalContext().redirect("compareProductsPage.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("product/compareProductsPage.xhtml");
     }
 
     public void deleteSelectedComparison(ActionEvent event) {
@@ -144,11 +144,11 @@ public class ViewCurrentComparison implements Serializable {
     }
 
     public void redirectToViewRecommendedProduct() throws IOException {
-        FacesContext.getCurrentInstance().getExternalContext().redirect("ViewRecommendedProduct.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("product/ViewRecommendedProduct.xhtml");
     }
 
     public void redirectToViewAllProduct() throws IOException {
-        FacesContext.getCurrentInstance().getExternalContext().redirect("viewAllProduct.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("product/viewAllProduct.xhtml");
     }
 
     public List<ProductEntityWrapper> getCurrentComparisons() {
