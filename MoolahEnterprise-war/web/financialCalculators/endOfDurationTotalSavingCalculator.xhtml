@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./template/defaultTemplate.xhtml"
+                template="../template/defaultTemplate.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
@@ -21,16 +21,16 @@
                 <p:outputLabel value="How much do I have currently?"/><br/><br/>
                 <p:inputNumber  minValue="0" decimalPlaces="2" class="endOfDurationTotalSaving_calculator_input" value="#{endOfDUrationTotalSavingCalculatorManagedBean.currentlyHave}" placeholder="Enter your currently have" required="true" requiredMessage="Currently have is required!"/><br/><br/>
                 <br/>
-                <p:outputLabel value="Inflation Rate:"/><br/>
+                <p:outputLabel value="Inflation Rate:(%)"/><br/>
                 <p:inputNumber   minValue="0" decimalPlaces="5" class="endOfDurationTotalSaving_calculator_input" value="#{endOfDUrationTotalSavingCalculatorManagedBean.inflationRate}" placeholder="Enter your interest rate/ leave blank if you dont know"/><br/><br/>
                 <p:outputLabel value="How much am I saving every year?"/><br/><br/>
                 <p:inputNumber  minValue="0" decimalPlaces="2" class="endOfDurationTotalSaving_calculator_input" value="#{endOfDUrationTotalSavingCalculatorManagedBean.currentlySaving}" placeholder="Enter your saving amount" required="true" requiredMessage="Aiming amount is required!"/><br/><br/>
                 <p:outputLabel value="No of years time to achieve the stated amount?"/><br/><br/>
                 <p:inputNumber  minValue="0"  class="endOfDurationTotalSaving_calculator_input" value="#{endOfDUrationTotalSavingCalculatorManagedBean.noOfYear}" placeholder="Enter your no of year" required="true" requiredMessage="No of year is required!"/><br/><br/>
                 <h:commandButton type="submit" actionListener="#{endOfDUrationTotalSavingCalculatorManagedBean.computeEndOfDurationTotalAmt}" value ="Compute" /><br/><br/>
-
-                <p:outputLabel value="By saving $#{endOfDUrationTotalSavingCalculatorManagedBean.currentlySaving} every year, you are expected to have #{endOfDUrationTotalSavingCalculatorManagedBean.totalAmt} after #{endOfDUrationTotalSavingCalculatorManagedBean.noOfYear} years!"/>&nbsp;
-
+                <h:panelGroup rendered="#{(endOfDUrationTotalSavingCalculatorManagedBean.totalAmt != null and endOfDUrationTotalSavingCalculatorManagedBean.totalAmt>=0)}">
+                    <p:outputLabel value="By saving $#{endOfDUrationTotalSavingCalculatorManagedBean.currentlySaving} every year, you are expected to have $#{endOfDUrationTotalSavingCalculatorManagedBean.totalAmt} after #{endOfDUrationTotalSavingCalculatorManagedBean.noOfYear} years!"/>&nbsp;
+                </h:panelGroup>
 
             </div>
         </h:form>

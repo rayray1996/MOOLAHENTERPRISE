@@ -119,10 +119,11 @@ public class endOfDUrationTotalSavingCalculatorManagedBean implements Serializab
     public void computeEndOfDurationTotalAmt(ActionEvent event) {
 
         BigDecimal intRate = BigDecimal.ZERO;
+        
          //If user did not enter inflation rate, we will use 2.2%, otherwise we will use user's entered interest rate
         if (inflationRate.compareTo(BigDecimal.ZERO) == 0 || inflationRate == null) {
             intRate = INFLATION_RATE.divide(new BigDecimal("100"),7, RoundingMode.DOWN);
-            inflationRate = INFLATION_RATE.divide(new BigDecimal("100"),7, RoundingMode.DOWN);
+            inflationRate = INFLATION_RATE;
         } else {
             intRate = inflationRate.divide(new BigDecimal("100"),7, RoundingMode.DOWN);;
         }

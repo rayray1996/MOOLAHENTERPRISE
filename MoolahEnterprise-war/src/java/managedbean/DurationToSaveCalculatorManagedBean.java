@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
@@ -38,7 +39,6 @@ public class DurationToSaveCalculatorManagedBean implements Serializable {
     private AssetEntity assetEntity;
     private CustomerEntity tempCE;
     private BigDecimal currentlySaving;
-    
 
     public BigDecimal getCurrentlySaving() {
         return currentlySaving;
@@ -125,45 +125,49 @@ public class DurationToSaveCalculatorManagedBean implements Serializable {
  * TBC again  
      */
     public void computeHowLong(ActionEvent event) {
+        if ((currentlyHave.compareTo(BigDecimal.ZERO) == 0 || currentlyHave == null) && (currentlySaving.compareTo(BigDecimal.ZERO) == 0) || currentlySaving == null) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "You must fill in \"How much do you have currently?\" or \"What is my current savings for every year?\" ", null));
+            return;
+        }
         noOfYear = 0;
         boolean hasReachedTheTarget = true;
         BigDecimal intRate = BigDecimal.ZERO;
         //If user did not enter inflation rate, we will use 2.2%, otherwise we will use user's entered interest rate
         if (inflationRate.compareTo(BigDecimal.ZERO) == 0 || inflationRate == null) {
             intRate = INFLATION_RATE.divide(new BigDecimal("100"), 7, RoundingMode.DOWN);
-            inflationRate = INFLATION_RATE.divide(new BigDecimal("100"), 7, RoundingMode.DOWN);
+            inflationRate = INFLATION_RATE;
         } else {
             intRate = inflationRate.divide(new BigDecimal("100"), 7, RoundingMode.DOWN);;
         }
         //get compound interest * principal Amt
-        System.out.println("intRate :" + intRate);
+        // System.out.println("intRate :" + intRate);
 
         BigDecimal interestRate = intRate.add(new BigDecimal("1"));
 
         while (hasReachedTheTarget) {
-            System.out.println("******** Year :" + noOfYear + " *********");
+            // System.out.println("******** Year :" + noOfYear + " *********");
             BigDecimal tempTargetValue = BigDecimal.ZERO;
 
             BigDecimal tempInterestRate = new BigDecimal(Math.pow(interestRate.doubleValue(), noOfYear));
             BigDecimal tempCurrentlyHave = currentlyHave.multiply(tempInterestRate);
-            System.out.println("tempCurrentlyHave:" + tempCurrentlyHave);
+            // System.out.println("tempCurrentlyHave:" + tempCurrentlyHave);
             tempTargetValue = tempTargetValue.add(tempCurrentlyHave);
-            System.out.println("tempTargetValue:" + tempTargetValue);
+            //   System.out.println("tempTargetValue:" + tempTargetValue);
             // difference
 
-            System.out.println("aimingAmt:" + aimingAmt);
+            //  System.out.println("aimingAmt:" + aimingAmt);
             BigDecimal onePlusR = BigDecimal.ONE.add(intRate);
-            System.out.println("onePlusR:" + onePlusR);
+            // System.out.println("onePlusR:" + onePlusR);
             BigDecimal negativePowerN = new BigDecimal(Math.pow(onePlusR.doubleValue(), (noOfYear.doubleValue())));
-            System.out.println("negativePowerN:" + negativePowerN);
+            // System.out.println("negativePowerN:" + negativePowerN);
             BigDecimal minusOne = negativePowerN.subtract(BigDecimal.ONE);
-            System.out.println("minusOne:" + minusOne);
+            // System.out.println("minusOne:" + minusOne);
             BigDecimal fvifa = minusOne.divide(intRate, 7, RoundingMode.DOWN);
-            System.out.println("fvifa:" + fvifa);
+            // System.out.println("fvifa:" + fvifa);
             BigDecimal tempSaving = fvifa.multiply(currentlySaving);
-            System.out.println("tempSaving:" + tempSaving);
+            //  System.out.println("tempSaving:" + tempSaving);
             tempTargetValue = tempTargetValue.add(tempSaving);
-            System.out.println("tempTargetValue:" + tempTargetValue);
+            //  System.out.println("tempTargetValue:" + tempTargetValue);
             if (aimingAmt.compareTo(tempTargetValue) <= 0) {
                 hasReachedTheTarget = false;
                 break;

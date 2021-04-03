@@ -114,33 +114,34 @@ public class MonthlySaveCalculatorManagedBean implements Serializable {
     }
 
     public void computeMonthlySave(ActionEvent event) {
+        
         BigDecimal intRateInPercentage = BigDecimal.ZERO;
         //If user did not enter inflation rate, we will use 2.2%, otherwise we will use user's entered interest rate
         if (inflationRate.compareTo(BigDecimal.ZERO) == 0 || inflationRate == null) {
             intRateInPercentage = INFLATION_RATE.divide(new BigDecimal("100"), 7, RoundingMode.DOWN);
-            inflationRate = INFLATION_RATE.divide(new BigDecimal("100"), 7, RoundingMode.DOWN);
+            inflationRate = INFLATION_RATE;
         } else {
             intRateInPercentage = inflationRate.divide(new BigDecimal("100"), 7, RoundingMode.DOWN);
         }
         //Get compound interest * principal 
         BigDecimal interestRate = intRateInPercentage.add(new BigDecimal("1"));
         interestRate = new BigDecimal(Math.pow(interestRate.doubleValue(), noOfYear));
-        System.out.println("interestRate" + interestRate);
+       // System.out.println("interestRate" + interestRate);
         BigDecimal tempCurrentlyHave = currentlyHave.multiply(interestRate);
-        System.out.println("tempCurrentlyHave" + tempCurrentlyHave);
+       // System.out.println("tempCurrentlyHave" + tempCurrentlyHave);
         // difference in sum at last year, see how much it lacks
         BigDecimal difference = aimingAmt.subtract(tempCurrentlyHave);
         if (aimingAmt.compareTo(tempCurrentlyHave) > 0) {
-            System.out.println("difference" + difference);
+          //  System.out.println("difference" + difference);
             //compute PVIFA formula
             BigDecimal onePlusR = BigDecimal.ONE.add(intRateInPercentage);
             BigDecimal negativePowerN = new BigDecimal(Math.pow(onePlusR.doubleValue(), (-1) * noOfYear.doubleValue()));
             BigDecimal oneMinus = BigDecimal.ONE.subtract(negativePowerN);
             BigDecimal pvifa = oneMinus.divide(intRateInPercentage, 6, RoundingMode.DOWN);
-            System.out.println("pfvifa : " + pvifa);
+           // System.out.println("pfvifa : " + pvifa);
             //get final amount
             paymentAmt = difference.divide(pvifa, 3, RoundingMode.DOWN);
-            System.out.println("paymentAmt : " + paymentAmt);
+            //System.out.println("paymentAmt : " + paymentAmt);
         } else {
             paymentAmt = BigDecimal.ZERO;
         }
