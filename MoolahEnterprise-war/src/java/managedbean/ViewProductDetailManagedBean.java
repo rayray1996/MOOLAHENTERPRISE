@@ -76,6 +76,8 @@ public class ViewProductDetailManagedBean implements Serializable {
 
     private List<AffordabilityWrapper> listOfAffordability;
 
+    private Boolean hasCounted;
+
     public ViewProductDetailManagedBean() {
         listOfAffordability = new ArrayList<>();
     }
@@ -115,8 +117,8 @@ public class ViewProductDetailManagedBean implements Serializable {
             List<PremiumEntity> custPremiums = new ArrayList<>();
 
             for (PremiumEntity premium : listOfPremiums) {
-                if (((dobYear >= premium.getMinAgeGroup() && dobYear <= premium.getMaxAgeGroup()) || 
-                        ( !premium.getMinAgeGroup().equals(premium.getMaxAgeGroup()) && (dobYear >= premium.getMinAgeGroup() || dobYear <= premium.getMaxAgeGroup()))) && custPremiums.size() < 3) {
+                if (((dobYear >= premium.getMinAgeGroup() && dobYear <= premium.getMaxAgeGroup())
+                        || (!premium.getMinAgeGroup().equals(premium.getMaxAgeGroup()) && (dobYear >= premium.getMinAgeGroup() || dobYear <= premium.getMaxAgeGroup()))) && custPremiums.size() < 3) {
                     custPremiums.add(premium);
                     dobYear++;
                     System.out.println("Premiums added: " + premium);
@@ -131,31 +133,13 @@ public class ViewProductDetailManagedBean implements Serializable {
             listOfAffordability.add(tempWrapper3);
 
             customerLikeProduct();
-            startTime = System.currentTimeMillis();
-            System.out.println("StartTime: " + startTime);
+            hasCounted = false;
 
         } catch (ProductNotFoundException | CustomerDoesNotExistsException ex) {
             System.out.println("Product does not exists!");
         }
     }
 
-    @PreDestroy
-    public void cleanup() {
-        long elapsedTimeMillis = System.currentTimeMillis() - startTime;
-        endTime = elapsedTimeMillis / 1000F;
-        System.out.println("Endtime: " + endTime);
-        if (endTime >= 10.0) {
-            try {
-                BigInteger newCounter = product.getClickThroughInfo().getMonthCounter().add(BigInteger.ONE);
-                product.getClickThroughInfo().setMonthCounter(newCounter);
-                System.out.println("EndTime Prod ID: " + product.getProductId());
-                System.out.println("New Counter: " + newCounter);
-                productSessionBean.updateProductListing(product);
-            } catch (ProductAlreadyExistsException | UnknownPersistenceException | InvalidProductCreationException ex) {
-                System.out.println(ex.getMessage());
-            }
-        }
-    }
 
     public void likeProduct(ActionEvent event) {
         try {
@@ -177,6 +161,21 @@ public class ViewProductDetailManagedBean implements Serializable {
 
         } catch (CustomerDoesNotExistsException | ProductNotFoundException | UnknownPersistenceException | CustomerUpdateException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
+        }
+    }
+
+    public void addCount() {
+        if (!hasCounted) {
+            try {
+                BigInteger newCounter = product.getClickThroughInfo().getMonthCounter().add(BigInteger.ONE);
+                product.getClickThroughInfo().setMonthCounter(newCounter);
+                System.out.println("EndTime Prod ID: " + product.getProductId());
+                System.out.println("New Counter: " + newCounter);
+                productSessionBean.updateProductListing(product);
+                hasCounted = true;
+            } catch (ProductAlreadyExistsException | UnknownPersistenceException | InvalidProductCreationException ex) {
+                System.out.println(ex.getMessage());
+            }
         }
     }
 
@@ -256,5 +255,13 @@ public class ViewProductDetailManagedBean implements Serializable {
 
     public void setCust(CustomerEntity cust) {
         this.cust = cust;
+    }
+
+    public Boolean getHasCounted() {
+        return hasCounted;
+    }
+
+    public void setHasCounted(Boolean hasCounted) {
+        this.hasCounted = hasCounted;
     }
 }
