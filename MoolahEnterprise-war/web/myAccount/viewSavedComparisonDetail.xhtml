@@ -1,0 +1,508 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <body>
+
+        <ui:composition template="../template/defaultTemplate.xhtml">
+
+            <ui:define name="content">
+                <h:outputStylesheet library="css" name="default.css" />
+                <style>
+                    .companyColHeader {
+                        height: 180px;
+                        text-align: center;
+                        font-weight: bold;
+                        font-size: 14px;
+                        font-family: sans-serif;
+                    }
+
+                    .productNameColHeader {
+                        height: 50px;
+                        text-align: center;
+                        font-weight: bold;
+                        font-size: 14px;
+                        font-family: sans-serif;
+                    }
+
+                    .cTermColHeader {
+                        height: 50px;
+                        text-align: center;
+                        font-weight: bold;
+                        font-size: 14px;
+                        font-family: sans-serif;
+                    }
+
+                    .pTermColHeader {
+                        height: 50px;
+                        text-align: center;
+                        font-weight: bold;
+                        font-size: 14px;
+                        font-family: sans-serif;
+                    }
+
+                    .premiumColHeader {
+                        height: 50px;
+                        text-align: center;
+                        font-weight: bold;
+                        font-size: 14px;
+                        font-family: sans-serif;
+                    }
+
+                    .sumAssuredColHeader {
+                        height: 50px;
+                        text-align: center;
+                        font-weight: bold;
+                        font-size: 14px;
+                        font-family: sans-serif;
+                    }
+
+                    .featuresColHeader {
+                        height: 200px;
+                        text-align: center;
+                        font-weight: bold;
+                        font-size: 14px;
+                        font-family: sans-serif;
+                        overflow: auto;
+                    }
+
+                    .ridersColHeader {
+                        height: 200px;                
+                        text-align: center;
+                        font-weight: bold;
+                        font-size: 14px;
+                        font-family: sans-serif;
+                        overflow: auto;
+                    }
+
+                    .productNameColName {
+                        height: 50px;
+                        font-size: 14px;
+                        font-family: sans-serif;
+                        text-align: center;
+                    }
+
+                    .cTermColName {
+                        height: 50px;
+                        font-size: 14px;
+                        font-family: sans-serif;
+                        text-align: center;
+                    }
+
+                    .pTermColName {
+                        height: 50px;
+                        font-size: 14px;
+                        font-family: sans-serif;
+                        text-align: center;
+                    }
+
+                    .premiumColName {
+                        height: 50px;
+                        font-size: 14px;
+                        font-family: sans-serif;
+                        text-align: center;
+                    }
+
+                    .sumAssuredColName {
+                        height: 50px;
+                        font-size: 14px;
+                        font-family: sans-serif;
+                        text-align: center;
+                    }
+
+                    .featuresColName {
+                        height: 200px!important;
+                        font-size: 14px;
+                        font-family: sans-serif;
+                        text-align: center;
+                    }
+
+                    .ridersColName {
+                        height: 200px!important;                
+                        font-size: 14px;
+                        font-family: sans-serif;
+                        text-align: center;
+                    }
+                </style>
+
+                <script>
+                    function adjustWidth() {
+                        if (document.getElementById('productTableBlockForm:fourthProductPG') !== null) {
+                            console.log("4");
+                            document.getElementById('productTableBlockForm:firstProductPG').style.width = "22.5%";
+                            document.getElementById('productTableBlockForm:secondProductPG').style.width = "22.5%";
+                            document.getElementById('productTableBlockForm:thirdProductPG').style.width = "22.5%";
+                            document.getElementById('productTableBlockForm:fourthProductPG').style.width = "22.5%";
+                        } else if (document.getElementById('productTableBlockForm:thirdProductPG') !== null) {
+                            console.log("3");
+                            document.getElementById('productTableBlockForm:firstProductPG').style.width = "30%";
+                            document.getElementById('productTableBlockForm:secondProductPG').style.width = "30%";
+                            document.getElementById('productTableBlockForm:thirdProductPG').style.width = "30%";
+                        } else if (document.getElementById('productTableBlockForm:secondProductPG') !== null) {
+                            console.log("2");
+                            document.getElementById('productTableBlockForm:firstProductPG').style.width = "45%";
+                            document.getElementById('productTableBlockForm:secondProductPG').style.width = "45%";
+                        } else if (document.getElementById('productTableBlockForm:firstProductPG') !== null) {
+                            console.log("1");
+                            document.getElementById('productTableBlockForm:firstProductPG').style.width = "90%";
+                        }
+                    }
+
+                    $(document).ready(function () {
+                        adjustWidth();
+                    });
+                </script>
+                <br/>
+                <div style=" text-align: center;">
+                    <h:outputText style="font-weight: bold; font-size: 18px" value="Saved Comparison"/>
+                    <br/>
+                    <br/>
+                    <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.comparisonToView != null}" style="font-weight: bold; font-size: 16px" value="#{viewSavedComparisonDetailManagedBean.comparisonToView.comparisonName}"/>
+                    <br/>
+                    <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.comparisonToView != null}" style="font-size: 16px" value="Date Added: #{viewSavedComparisonDetailManagedBean.dateAdded}"/>
+                    <h:outputText style="bodyText" rendered="#{viewSavedComparisonDetailManagedBean.comparisonToView == null}" value="You have not selected any comparison to view"/>
+                </div>
+
+                <br/>
+                
+                <h:form id="productTableBlockForm">
+                    <ui:fragment id="productTableBlock" rendered="#{viewSavedComparisonDetailManagedBean.products.size() > 0}">
+                        <div style="width:90%;margin: 0 auto;" id="compareProductsDiv">
+                            <p:panelGrid style="width:10%;float: left;margin: 0 auto;" rendered="#{viewSavedComparisonDetailManagedBean.products.size() > 0}">
+                                <p:row>
+                                    <p:column class="companyColHeader">
+                                        <h:outputText value="Company"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="productNameColHeader">
+                                        <h:outputText value="Product Name"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="cTermColHeader">
+                                        <h:outputText value="Coverage Term"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="pTermColHeader">
+                                        <h:outputText value="Premium Term"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="premiumColHeader">
+                                        <h:outputText value="Premium"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="sumAssuredColHeader">
+                                        <h:outputText value="Minimum Sum Assured"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="featuresColHeader">
+                                        <h:outputText value="Features"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column class="ridersColHeader">
+                                        <h:outputText value="Optional Riders"/>
+                                    </p:column>
+                                </p:row>
+
+                            </p:panelGrid>
+
+
+                            <!--first product-->
+                            <p:panelGrid id="firstProductPG" style="width: 22.5%;float: left;margin:0 auto;" rendered="#{viewSavedComparisonDetailManagedBean.products.size() > 0}">
+                                <p:row>
+                                    <p:column class="companyColHeader">
+                                        <p:graphicImage library="images" name="#{viewSavedComparisonDetailManagedBean.firstProduct.company.companyImage}" height="120" width="120"/>
+                                        <br/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.firstProduct.company.companyName}"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="productNameColName">
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.firstProduct.productName}"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="cTermColName">
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.firstProduct.coverageTerm}"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="pTermColName">
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.firstProduct.premiumTerm}"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="premiumColName">
+                                        <h:outputText value="Premium"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="sumAssuredColName">
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.firstProduct.assuredSum}"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="featuresColName">
+                                        <c:forEach items="#{viewSavedComparisonDetailManagedBean.firstProduct.listOfAdditionalFeatures}" var="feature">
+                                            <div style="overflow: auto; height: 190px; text-align: left;">
+                                                <li>
+                                                    <h:outputText value="#{feature.featureName}"/>
+                                                </li>
+                                            </div>
+                                        </c:forEach>
+                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.firstProduct.listOfAdditionalFeatures.size() == 0}" value="NIL" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column class="ridersColName">
+                                        <c:forEach items="#{viewSavedComparisonDetailManagedBean.firstProduct.listOfRiders}" var="rider">
+                                            <div style="overflow: auto; height: 190px; text-align: left;">
+                                                <li>
+                                                    <h:outputText value="#{rider.riderName}"/>
+                                                </li>
+                                            </div>
+                                        </c:forEach>
+                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.firstProduct.listOfRiders.size() == 0}" value="NIL" />
+                                    </p:column>
+                                </p:row>
+
+                            </p:panelGrid>
+
+
+
+                            <!--second product-->
+                            <p:panelGrid id="secondProductPG" style="width: 22.5%;float: left;margin:0 auto;" rendered="#{viewSavedComparisonDetailManagedBean.products.size() > 1}">
+                                <p:row>
+                                    <p:column class="companyColHeader">
+                                        <p:graphicImage library="images" name="#{viewSavedComparisonDetailManagedBean.secondProduct.company.companyImage}" height="120" width="120"/>
+                                        <br/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.secondProduct.company.companyName}"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="productNameColName">
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.secondProduct.productName}"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="cTermColName">
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.secondProduct.coverageTerm}"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="pTermColName">
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.secondProduct.premiumTerm}"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="premiumColName">
+                                        <h:outputText value="Premium"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="sumAssuredColName">
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.secondProduct.assuredSum}"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="featuresColName">
+                                        <c:forEach items="#{viewSavedComparisonDetailManagedBean.secondProduct.listOfAdditionalFeatures}" var="feature">
+                                            <div style="overflow: auto; height: 190px; text-align: left;">
+                                                <li>
+                                                    <h:outputText value="#{feature.featureName}"/>
+                                                </li>
+                                            </div>
+                                        </c:forEach>
+                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.secondProduct.listOfAdditionalFeatures.size() == 0}" value="NIL" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column class="ridersColName">
+                                        <c:forEach items="#{viewSavedComparisonDetailManagedBean.secondProduct.listOfRiders}" var="rider">
+                                            <div style="overflow: auto; height: 190px; text-align: left;">
+                                                <li>
+                                                    <h:outputText value="#{rider.riderName}"/>
+                                                </li>
+                                            </div>
+                                        </c:forEach>
+                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.secondProduct.listOfRiders.size() == 0}" value="NIL" />
+                                    </p:column>
+                                </p:row>
+
+                            </p:panelGrid>
+
+
+
+                            <!--third product-->
+                            <p:panelGrid id="thirdProductPG" style="width: 22.5%;float: left;margin:0 auto;" rendered="#{viewSavedComparisonDetailManagedBean.products.size() > 2}">
+                                <p:row>
+                                    <p:column class="companyColHeader">
+                                        <p:graphicImage library="images" name="#{viewSavedComparisonDetailManagedBean.thirdProduct.company.companyImage}" height="120" width="120"/>
+                                        <br/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.thirdProduct.company.companyName}"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="productNameColName">
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.thirdProduct.productName}"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="cTermColName">
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.thirdProduct.coverageTerm}"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="pTermColName">
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.thirdProduct.premiumTerm}"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="premiumColName">
+                                        <h:outputText value="Premium"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="sumAssuredColName">
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.thirdProduct.assuredSum}"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="featuresColName">
+                                        <c:forEach items="#{viewSavedComparisonDetailManagedBean.thirdProduct.listOfAdditionalFeatures}" var="feature">
+                                            <div style="overflow: auto; height: 190px; text-align: left;">
+                                                <li>
+                                                    <h:outputText value="#{feature.featureName}"/>
+                                                </li>
+                                            </div>
+                                        </c:forEach>
+                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.thirdProduct.listOfAdditionalFeatures.size() == 0}" value="NIL" />
+
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column class="ridersColName">
+                                        <c:forEach items="#{viewSavedComparisonDetailManagedBean.thirdProduct.listOfRiders}" var="rider">
+                                            <div style="overflow: auto; height: 190px; text-align: left;">
+                                                <li>
+                                                    <h:outputText value="#{rider.riderName}"/>
+                                                </li>
+                                            </div>
+                                        </c:forEach>
+                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.thirdProduct.listOfRiders.size() == 0}" value="NIL" />
+                                    </p:column>
+                                </p:row>
+
+                            </p:panelGrid>
+
+
+
+                            <!--fourth product-->
+                            <p:panelGrid id="fourthProductPG" style="width: 22.5%;float: left;margin:0 auto;" rendered="#{viewSavedComparisonDetailManagedBean.products.size() > 3}">
+                                <p:row>
+                                    <p:column class="companyColHeader">
+                                        <p:graphicImage library="images" name="#{viewSavedComparisonDetailManagedBean.fourthProduct.company.companyImage}" height="120" width="120"/>
+                                        <br/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.fourthProduct.company.companyName}"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="productNameColName">
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.fourthProduct.productName}"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="cTermColName">
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.fourthProduct.coverageTerm}"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="pTermColName">
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.fourthProduct.premiumTerm}"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="premiumColName">
+                                        <h:outputText value="Premium"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="sumAssuredColName">
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.fourthProduct.assuredSum}"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="featuresColName">
+                                        <c:forEach items="#{viewSavedComparisonDetailManagedBean.fourthProduct.listOfAdditionalFeatures}" var="feature">
+                                            <div style="overflow: auto; height: 190px; text-align: left;">
+                                                <li>
+                                                    <h:outputText value="#{feature.featureName}"/>
+                                                </li>
+                                            </div>
+                                        </c:forEach>
+                                    </p:column>
+                                    <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.fourthProduct.listOfAdditionalFeatures.size() == 0}" value="NIL" />
+                                </p:row>
+                                <p:row>
+                                    <p:column class="ridersColName">
+                                        <c:forEach items="#{viewSavedComparisonDetailManagedBean.fourthProduct.listOfRiders}" var="rider">
+                                            <div style="overflow: auto; height: 190px; text-align: left;">
+                                                <li>
+                                                    <h:outputText value="#{rider.riderName}"/>
+                                                </li>
+                                            </div>
+                                        </c:forEach>
+                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.fourthProduct.listOfRiders.size() == 0}" value="NIL" />
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+                        </div>
+                    </ui:fragment>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
