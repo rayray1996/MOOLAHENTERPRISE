@@ -9,30 +9,36 @@
     <!-- Come back later-->
     <ui:define name="content" >
         <style>
-            .financial_calculator_input{
-                width:40%
+            .monthlySaveToAchieve .ui-widget-header .ui-inputfield, .ui-widget-content .ui-inputfield{
+                width:42%
             }
-            
+
         </style>
         <h:form id="financial_calculator_how_much">
 
             <h3 style="color:#0070a3; text-align:center;">Duration to save a certain amount based on my current spending and saving habits? </h3><br/>
-            <div class="monthlySaveToAchieve" style="margin-left:38%">
+            <div class="monthlySaveToAchieve" style="margin-left:37%;">
                 <p:outputLabel value="How much do I have currently?"/><br/><br/>
-                <p:inputText class="financial_calculator_input" value="#{durationToSaveCalculator.currentlyHave}" placeholder="Enter your currently have" required="true" requiredMessage="Currently have is required!"/><br/><br/>
+                <p:inputNumber minValue="0" decimalPlaces="2" class="financial_calculator_input" value="#{durationToSaveCalculator.currentlyHave}" placeholder="Enter your currently have" required="true" requiredMessage="Currently have is required!"/><br/><br/>
                 <br/>
                 <p:outputLabel value="Inflation Rate:"/><br/>
-                <p:inputText class="financial_calculator_input" value="#{durationToSaveCalculator.inflationRate}" placeholder="Enter your interest rate/ leave blank if you dont know"/><br/><br/>
+                <p:inputNumber minValue="0" decimalPlaces="5" class="financial_calculator_input" value="#{durationToSaveCalculator.inflationRate}" placeholder="Enter your interest rate/ leave blank if you dont know"/><br/><br/>
                 <p:outputLabel value="How much I wish to achieve?"/><br/><br/>
-                <p:inputText class="financial_calculator_input" value="#{durationToSaveCalculator.aimingAmt}" placeholder="Enter your aiming amount" required="true" requiredMessage="Aiming amount is required!"/><br/><br/>
-                <p:outputLabel value="What is my current savins every year?"/><br/><br/>
-                <p:inputText  class="financial_calculator_input" value="#{durationToSaveCalculator.currentlySaving}" placeholder="Enter your no of year" required="true" requiredMessage="No of year is required!"/><br/><br/>
+                <p:inputNumber minValue="1" decimalPlaces="2" class="financial_calculator_input" value="#{durationToSaveCalculator.aimingAmt}" placeholder="Enter your aiming amount" required="true" requiredMessage="Aiming amount is required!"/><br/><br/>
+                <p:outputLabel value="What is my current savings for every year?"/><br/><br/>
+                <p:inputNumber minValue="0" decimalPlaces="2"  class="financial_calculator_input" value="#{durationToSaveCalculator.currentlySaving}" placeholder="Enter your no of year" required="true" requiredMessage="No of year is required!" /><br/><br/>
                 <h:commandButton type="submit" actionListener="#{durationToSaveCalculator.computeHowLong}" value ="Compute" /><br/><br/>
-               
-                <p:outputLabel value="Monthly required to save:"/>&nbsp;
-                <p:outputLabel value="#{durationToSaveCalculator.noOfYear}"/>
 
+                <h:panelGroup rendered="#{(durationToSaveCalculator.noOfYear != null and durationToSaveCalculator.noOfYear>0)}">
+                    <p:outputLabel id="displayYearMonth" value="By saving $#{durationToSaveCalculator.currentlySaving} after #{durationToSaveCalculator.noOfYear } year(s), you are expected to have $#{durationToSaveCalculator.aimingAmt}. "/>&nbsp;
+                </h:panelGroup>
+                <h:panelGroup rendered="#{(durationToSaveCalculator.noOfYear != null and durationToSaveCalculator.noOfYear==0)}">
+                    <p:outputLabel value="You will reach your target without yearly saving."/>&nbsp;
+                </h:panelGroup>
             </div>
+            <p:growl>
+                <p:autoUpdate/>
+            </p:growl>
         </h:form>
 
     </ui:define>
