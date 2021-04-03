@@ -13,14 +13,18 @@
             About the Product
         </h1>
 
+
         <h:form id="myButtons">
+            <p:poll interval="10" listener="#{viewProductDetailManagedBean.addCount}" />
+
+
             <p:commandButton icon="pi pi-star-o" styleClass="rounded-button ui-button-help" style="margin-left: 16%; height: 4%" actionListener="#{viewProductDetailManagedBean.likeProduct}" rendered="#{viewProductDetailManagedBean.customerLiked == false}" id="prodButton" process="@this" update="@form" iconPos=""/>
             <p:commandButton icon="pi pi-star" styleClass="rounded-button ui-button-help" style="margin-left: 16%; height: 4%" actionListener="#{viewProductDetailManagedBean.likeProduct}" rendered="#{viewProductDetailManagedBean.customerLiked == true}" process="@this" update="@form" />
             <p:commandButton  value="Add to My Comparison" styleClass="rounded-button ui-button-help" style="font-size: 12px; height: 4%" actionListener="#{viewAllProductManagedBean.addToComparison}" />
         </h:form>
         <div style="text-align: center">
             <p:graphicImage library="images" name="#{viewProductDetailManagedBean.productToView.productEntity.company.companyImage}" height="350" width="350 " 
-                            alt="AIA Insurance"/>
+                            alt="Image of Company"/>
         </div>
         <p:growl life="3000">
             <p:autoUpdate/>
@@ -87,9 +91,9 @@
                 <p:tab title="Premiums For Product" rendered="#{viewProductDetailManagedBean.cust.smoker == false}">
                     <p style="font-weight: bold; font-size: 14px; text-align: center"> Non Smoking Premium for Product: #{viewProductDetailManagedBean.product.productName}</p>
                     <p:dataTable id="productPremiumTableNonSmoker" widgetVar="productPremiumTable" value="#{viewProductDetailManagedBean.productToView.productEntity.listOfPremium}" 
-                                 var="premium" rowKey="#{premium.premiumId}" style="width:60%; padding-left: 5%; margin-left: auto; margin-right: auto">
+                                 var="premium" rowKey="#{premium.premiumId}" style="width:60%; padding-left: 5%; margin-left: auto; margin-right: auto" rowIndexVar="row" >
                         <p:column headerText="S/N" style="width: 10% !important; ">
-                            <h:outputText value="#{premium.premiumId}"/>
+                            <h:outputText value="#{row + 1}"/>
                         </p:column>
                         <p:column headerText="Min Age Group" style="width: 20% !important; text-align: center">
                             <h:outputText value="#{premium.minAgeGroup} y/o" />
@@ -108,9 +112,9 @@
                 <p:tab title="Premiums For Product" rendered="#{viewProductDetailManagedBean.cust.smoker == true}">
                     <p style="font-weight: bold; font-size: 14px; text-align: center"> Smoking Premium for Product: #{viewProductDetailManagedBean.product.productName}</p>
                     <p:dataTable id="productPremiumTableSmoker" widgetVar="productPremiumTable" value="#{viewProductDetailManagedBean.product.listOfSmokerPremium}" 
-                                 var="premium" rowKey="#{premium.premiumId}" style="width:60%; margin-left: auto; margin-right: auto">
+                                 var="premium" rowKey="#{premium.premiumId}" style="width:60%; margin-left: auto; margin-right: auto" rowIndexVar="row">
                         <p:column headerText="S/N" style="width: 10% !important; ">
-                            <h:outputText value="#{premium.premiumId}"/>
+                            <h:outputText value="#{row + 1}"/>
                         </p:column>
                         <p:column headerText="Min Age Group" style="width: 20% !important; text-align: center">
                             <h:outputText value="#{premium.minAgeGroup} y/o" />
