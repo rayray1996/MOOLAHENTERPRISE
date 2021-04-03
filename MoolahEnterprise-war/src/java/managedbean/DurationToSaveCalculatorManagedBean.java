@@ -17,7 +17,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
-import jdk.nashorn.internal.runtime.regexp.joni.constants.NodeType;
 import static managedbean.endOfDUrationTotalSavingCalculatorManagedBean.INFLATION_RATE;
 
 /**
@@ -39,6 +38,7 @@ public class DurationToSaveCalculatorManagedBean implements Serializable {
     private AssetEntity assetEntity;
     private CustomerEntity tempCE;
     private BigDecimal currentlySaving;
+    
 
     public BigDecimal getCurrentlySaving() {
         return currentlySaving;
@@ -125,12 +125,13 @@ public class DurationToSaveCalculatorManagedBean implements Serializable {
  * TBC again  
      */
     public void computeHowLong(ActionEvent event) {
-        int tempMonth = 0;
+        noOfYear = 0;
         boolean hasReachedTheTarget = true;
         BigDecimal intRate = BigDecimal.ZERO;
         //If user did not enter inflation rate, we will use 2.2%, otherwise we will use user's entered interest rate
         if (inflationRate.compareTo(BigDecimal.ZERO) == 0 || inflationRate == null) {
             intRate = INFLATION_RATE.divide(new BigDecimal("100"), 7, RoundingMode.DOWN);
+            inflationRate = INFLATION_RATE.divide(new BigDecimal("100"), 7, RoundingMode.DOWN);
         } else {
             intRate = inflationRate.divide(new BigDecimal("100"), 7, RoundingMode.DOWN);;
         }
@@ -138,31 +139,22 @@ public class DurationToSaveCalculatorManagedBean implements Serializable {
         System.out.println("intRate :" + intRate);
 
         BigDecimal interestRate = intRate.add(new BigDecimal("1"));
-        double actualYear = 0;
+
         while (hasReachedTheTarget) {
-            actualYear = (int) actualYear;
-            if (tempMonth > 11) {
-                actualYear = actualYear + 1;
-                tempMonth = 0;
-            }
-            if (tempMonth >= 1) {
-                actualYear = actualYear + ((tempMonth) / 12.0);
-                System.out.println("************tempMonth/12.0***************" + (((double) tempMonth) / 12.0));
-            }
-            System.out.println("******************actualYear*********" + actualYear);
-            System.out.println("******** tempMonth :" + tempMonth + " tempMonth" + actualYear + " *********");
+            System.out.println("******** Year :" + noOfYear + " *********");
             BigDecimal tempTargetValue = BigDecimal.ZERO;
 
-            BigDecimal tempInterestRate = new BigDecimal(Math.pow(interestRate.doubleValue(), actualYear));
+            BigDecimal tempInterestRate = new BigDecimal(Math.pow(interestRate.doubleValue(), noOfYear));
             BigDecimal tempCurrentlyHave = currentlyHave.multiply(tempInterestRate);
             System.out.println("tempCurrentlyHave:" + tempCurrentlyHave);
             tempTargetValue = tempTargetValue.add(tempCurrentlyHave);
             System.out.println("tempTargetValue:" + tempTargetValue);
             // difference
+
             System.out.println("aimingAmt:" + aimingAmt);
             BigDecimal onePlusR = BigDecimal.ONE.add(intRate);
             System.out.println("onePlusR:" + onePlusR);
-            BigDecimal negativePowerN = new BigDecimal(Math.pow(onePlusR.doubleValue(), (actualYear)));
+            BigDecimal negativePowerN = new BigDecimal(Math.pow(onePlusR.doubleValue(), (noOfYear.doubleValue())));
             System.out.println("negativePowerN:" + negativePowerN);
             BigDecimal minusOne = negativePowerN.subtract(BigDecimal.ONE);
             System.out.println("minusOne:" + minusOne);
@@ -173,11 +165,15 @@ public class DurationToSaveCalculatorManagedBean implements Serializable {
             tempTargetValue = tempTargetValue.add(tempSaving);
             System.out.println("tempTargetValue:" + tempTargetValue);
             if (aimingAmt.compareTo(tempTargetValue) <= 0) {
-
                 hasReachedTheTarget = false;
                 break;
             }
-            tempMonth += 1;
+            noOfYear += 1;
+            //            BigDecimal onePlusR = BigDecimal.ONE.add(inflationRate);
+            //            BigDecimal negativePowerN = new BigDecimal(Math.pow(onePlusR.doubleValue(), (-1) * noOfYear.doubleValue()));
+            //            BigDecimal oneMinus = BigDecimal.ONE.subtract(negativePowerN);
+            //            BigDecimal pvifa = oneMinus.divide(inflationRate, 6, RoundingMode.HALF_UP);
+            //            paymentAmt = difference.divide(pvifa, 3, RoundingMode.HALF_UP);
 
         }
 
