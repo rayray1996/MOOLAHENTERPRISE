@@ -43,16 +43,18 @@
             }
         </style>
 
-        <div style="text-align:center">
-            <h:outputText style="font-weight: bold; font-size: 18px" value="View My Saved Comparison"/>
-            <br/>
-            <br/>
-            <h:outputText class="bodyText" rendered="#{viewMySavedComparisonManagedBean.listOfComparisons.size() == 0}" value="You have no saved comparisons"/>
-        </div>
 
 
-        <h:form id="comparisonTableForm" rendered="#{viewMySavedComparisonManagedBean.listOfComparisons.size() > 0}">
-            <p:dataTable style="width:40%; margin: 0 auto" class="bodyText" id="dataTableSavedComparisons" widgetVar="dataTableSavedComparisons" value="#{viewMySavedComparisonManagedBean.listOfComparisons}" var="comparison" rowKey="#{comparison.comparisonId}" rowIndexVar="row"
+        <h:form id="comparisonTableForm">
+
+            <div style="text-align:center">
+                <h:outputText style="font-weight: bold; font-size: 18px" value="View My Saved Comparison"/>
+                <br/>
+                <br/>
+                <h:outputText class="bodyText" rendered="#{viewMySavedComparisonManagedBean.listOfComparisons.size() == 0}" value="You have no saved comparisons"/>
+            </div>
+
+            <p:dataTable rendered="#{viewMySavedComparisonManagedBean.listOfComparisons.size() > 0}" style="width:40%; margin: 0 auto" class="bodyText" id="dataTableSavedComparisons" widgetVar="dataTableSavedComparisons" value="#{viewMySavedComparisonManagedBean.listOfComparisons}" var="comparison" rowKey="#{comparison.comparisonId}" rowIndexVar="row"
                          filteredValue="#{viewMySavedComparisonManagedBean.filteredComparisons}"
                          rows="10" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50">
 
@@ -78,7 +80,7 @@
                         </p:commandButton>
                         &nbsp;
                         &nbsp;
-                        <p:commandButton title="Delete from Saved Comparison" icon="pi pi-trash" actionListener="#{viewMySavedComparisonManagedBean.deleteComparison}" update="dataTableSavedComparisons">
+                        <p:commandButton title="Delete from Saved Comparison" icon="pi pi-trash" actionListener="#{viewMySavedComparisonManagedBean.deleteComparison}" update="comparisonTableForm">
                             <f:attribute name="comparisonToDelete" value="#{comparison}" />
                             <p:confirm header="Confirmation" message="Are you sure you want to delete #{comparison.comparisonName} from your Saved Comparisons?" icon="ui-icon-alert" />
                         </p:commandButton>

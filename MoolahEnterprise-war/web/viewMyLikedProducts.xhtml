@@ -44,18 +44,19 @@
             }
         </style>
 
-        <div style="text-align:center">
-            <h:outputText style="font-weight: bold; font-size: 18px" value="View My Liked Products"/>
-            <br/>
-            <br/>
-            <h:outputText class="bodyText" rendered="#{viewMyLikedProductsManagedBean.customerLikedProducts.size() == 0}" value="You have no liked products"/>
-        </div>
 
 
-        <h:form id="likedProductsForm" rendered="#{viewMyLikedProductsManagedBean.customerLikedProducts.size() > 0}">
-            <p:dataTable style="width:40%; margin: 0 auto" class="bodyText" id="dataTableLikedProducts" widgetVar="dataTableLikedProducts" value="#{viewMyLikedProductsManagedBean.customerLikedProducts}" var="product" rowKey="#{product.productId}" rowIndexVar="row"
-                         filteredValue="#{viewMyLikedProductsManagedBean.filteredLikedProducts}"
-                         rows="10" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50">
+        <h:form id="likedProductsForm">
+            <div style="text-align:center" id="test">
+                <h:outputText style="font-weight: bold; font-size: 18px" value="View My Liked Products"/>
+                <br/>
+                <br/>
+                <h:outputText class="bodyText" rendered="#{viewMyLikedProductsManagedBean.customerLikedProducts.size() == 0}" value="You have no liked products"/>
+            </div>
+
+            <p:dataTable  rendered="#{viewMyLikedProductsManagedBean.customerLikedProducts.size() > 0}" style="width:40%; margin: 0 auto" class="bodyText" id="dataTableLikedProducts" widgetVar="dataTableLikedProducts" value="#{viewMyLikedProductsManagedBean.customerLikedProducts}" var="product" rowKey="#{product.productId}" rowIndexVar="row"
+                          filteredValue="#{viewMyLikedProductsManagedBean.filteredLikedProducts}"
+                          rows="10" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50">
 
                 <f:facet name="header">
                     <p:outputPanel style="text-align: right;">
@@ -93,7 +94,7 @@
             </p:dataTable>
 
             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" update="@form" />
                 <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
             </p:confirmDialog>
         </h:form>
