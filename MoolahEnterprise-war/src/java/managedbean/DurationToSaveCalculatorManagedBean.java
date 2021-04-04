@@ -125,7 +125,7 @@ public class DurationToSaveCalculatorManagedBean implements Serializable {
  * TBC again  
      */
     public void computeHowLong(ActionEvent event) {
-        if ((currentlyHave.compareTo(BigDecimal.ZERO) == 0 || currentlyHave == null) && (currentlySaving.compareTo(BigDecimal.ZERO) == 0) || currentlySaving == null) {
+        if ((currentlyHave.compareTo(BigDecimal.ZERO) == 0 || currentlyHave == null) && (currentlySaving.compareTo(BigDecimal.ZERO) == 0 || currentlySaving == null)) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "You must fill in \"How much do you have currently?\" or \"What is my current savings for every year?\" ", null));
             return;
         }
@@ -143,12 +143,16 @@ public class DurationToSaveCalculatorManagedBean implements Serializable {
         // System.out.println("intRate :" + intRate);
 
         BigDecimal interestRate = intRate.add(new BigDecimal("1"));
-
+        System.out.println("interest rate:" + interestRate);
         while (hasReachedTheTarget) {
             // System.out.println("******** Year :" + noOfYear + " *********");
+            if (noOfYear >= 150) {
+                break;
+            }
             BigDecimal tempTargetValue = BigDecimal.ZERO;
-
+            System.out.println("noOfYear:" + noOfYear);
             BigDecimal tempInterestRate = new BigDecimal(Math.pow(interestRate.doubleValue(), noOfYear));
+
             BigDecimal tempCurrentlyHave = currentlyHave.multiply(tempInterestRate);
             // System.out.println("tempCurrentlyHave:" + tempCurrentlyHave);
             tempTargetValue = tempTargetValue.add(tempCurrentlyHave);
