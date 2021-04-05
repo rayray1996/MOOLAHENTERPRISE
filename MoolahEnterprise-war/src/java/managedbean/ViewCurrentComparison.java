@@ -97,7 +97,7 @@ public class ViewCurrentComparison implements Serializable {
     }
 
     public void goToComparePage(ActionEvent event) throws IOException {
-        FacesContext.getCurrentInstance().getExternalContext().redirect("product/compareProductsPage.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("compareProductsPage.xhtml");
     }
 
     public void deleteSelectedComparison(ActionEvent event) {
