@@ -97,11 +97,15 @@ public class ViewCurrentComparison implements Serializable {
     }
 
     public void goToComparePage(ActionEvent event) throws IOException {
-        FacesContext.getCurrentInstance().getExternalContext().redirect("compareProductsPage.xhtml");
+        System.out.println("viewCurrentComparison.goToComparePage()");
+        String path = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+        FacesContext.getCurrentInstance().getExternalContext().redirect(path + "/product/compareProductsPage.xhtml");
+        System.out.println(path);
+
     }
 
     public void deleteSelectedComparison(ActionEvent event) {
-        System.out.println("in here");
+        System.out.println("viewCurrentComparison.deleteSelectedComparison");
         ProductEntityWrapper toDeleteCompareProduct = (ProductEntityWrapper) event.getComponent().getAttributes().get("compareProductToDelete");
         if (toDeleteCompareProduct == null) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "An error has occurred, product is unable to delete", null));
@@ -112,7 +116,6 @@ public class ViewCurrentComparison implements Serializable {
         comparisonSize = currentComparisons.size();
     }
 
-    
     public void saveComparison(ActionEvent event) {
         try {
             System.out.println("here");
@@ -129,9 +132,9 @@ public class ViewCurrentComparison implements Serializable {
             try {
                 customerSessionBean.updateCustomer(customer);
             } catch (CustomerDoesNotExistsException | CustomerUpdateException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, ex.toString(), null));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, ex.toString(), null));
             }
-            
+
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Comparison " + comparisonEntity.getComparisonName() + " has been saved successfully", null));
             comparisonEntity = new ComparisonEntity();
             currentComparisons = new ArrayList<>();

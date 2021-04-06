@@ -81,16 +81,20 @@
                 <div id = "loggedinDisplay" style="width:19%; float:right;margin-top:-4%;font-size:14px;;">
                     <h:outputText value="You are login as #{sessionScope.customerEntity.fullName}" />&nbsp;
 
+                    <br/>
+
                     <p:menuButton value ="My Account">
                         <p:menuitem value="View My Profile" outcome="/myAccount/myProfile.xhtml"/>
                         <p:menuitem value="My Saved Comparisons" outcome="/myAccount/viewMySavedComparison.xhtml"/>
                         <p:menuitem value="My Liked Products" outcome="/myAccount/viewMyLikedProducts.xhtml"/>
                         <p:menuitem value="Logout" actionListener="#{moolahLoginManagedBean.logout}" />
                     </p:menuButton>
-                    
+
                 </div>
 
             </h:form>
+
+            <ezcomp:currentComparison id="currentComparisonCC"> </ezcomp:currentComparison>
 
 
         </h:panelGroup>

@@ -212,7 +212,7 @@
                     </p:commandButton>
                     &nbsp;
                     &nbsp;
-                    <p:commandButton title="Add to Compare List" icon="ui-icon-plus" actionListener="#{viewAllProductManagedBean.addToComparison}">
+                    <p:commandButton update="currentComparisonCC" title="Add to Compare List" icon="ui-icon-plus" actionListener="#{viewAllProductManagedBean.addToComparison}">
                         <f:attribute name="productToCompare" value="#{productEntity}" />
                     </p:commandButton>
                 </p:column>

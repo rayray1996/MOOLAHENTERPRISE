@@ -283,7 +283,6 @@ public class ViewAllProductManagedBean implements Serializable{
     }
 
     public void redirectToViewProductPage(ActionEvent event) {
-        System.out.println("redirect page");
         ProductEntityWrapper temp = (ProductEntityWrapper) event.getComponent().getAttributes().get("productToView");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("productToView", temp);
         try {
