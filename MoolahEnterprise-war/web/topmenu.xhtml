@@ -17,17 +17,19 @@
     </style>
 
     <header>
+        <h:outputStylesheet library="css" name="default.css" />
 
         <h:link class="companyLogo" style="float:left; " outcome="/index.xhtml" >
             <p:graphicImage library="images" name="c1_logo.png" height="50" width="20" alt="Moolah" style="width:130%; height:15%; margin-top:-31%; margin-left:18%;" />
         </h:link>
+
         <h:panelGroup rendered="#{sessionScope.isLogin == false || sessionScope.isLogin == NULL}">
             <h:form id="loginForm">
 
                 <p:growl>
                     <p:autoUpdate />
                 </p:growl>
-                <p:megaMenu orientation="horizontal" autoDisplay="false" style="height:5%; width:60%; margin-left:18%; margin-top:3%;font-size:14px;">
+                <p:megaMenu orientation="horizontal" autoDisplay="false" style="height:5%; width:55%; margin-left:18%; margin-top:3%;font-size:14px;">
 
                     <p:menuitem value="Home" outcome="/index.xhtml"/>
                     <p:menuitem value="About Us" outcome="/aboutUs.xhtml"/>
@@ -58,43 +60,46 @@
         </h:panelGroup>
 
         <h:panelGroup rendered="#{sessionScope.isLogin == true}">
-            <h:form id="logoutForm">
+
+            <p:megaMenu orientation="horizontal" autoDisplay="false" style="height:5%; width:55%; margin-left:18%; margin-top:3%;font-size:14px;">
+
+                <p:menuitem value="Home" outcome="/index.xhtml"/>
+                <p:menuitem value="About Us" outcome="/aboutUs.xhtml"/> 
+                <p:submenu label="Products">
+                    <p:column>
+                        <p:submenu label="Products">
+                            <p:menuitem value="Recommend For Me" outcome="/product/ViewRecommendedProduct.xhtml" />
+                            <p:menuitem value="Search for products " outcome="/product/viewAllProduct.xhtml" /></p:submenu>
+                    </p:column>
+                </p:submenu>
+                <p:menuitem value="Financial Calculator" outcome="/financialCalculators/financialCalculator_home.xhtml"/>
 
 
-                <p:megaMenu orientation="horizontal" autoDisplay="false" style="height:5%; width:60%; margin-left:18%; margin-top:3%;font-size:14px;">
-
-                    <p:menuitem value="Home" outcome="/index.xhtml"/>
-                    <p:menuitem value="About Us" outcome="/aboutUs.xhtml"/> 
-                    <p:submenu label="Products">
-                        <p:column>
-                            <p:submenu label="Products">
-                                <p:menuitem value="Recommend For Me" outcome="/product/ViewRecommendedProduct.xhtml" />
-                                <p:menuitem value="Search for products " outcome="/product/viewAllProduct.xhtml" /></p:submenu>
-                        </p:column>
-                    </p:submenu>
-                    <p:menuitem value="Financial Calculator" outcome="/financialCalculators/financialCalculator_home.xhtml"/>
+            </p:megaMenu>
 
 
-                </p:megaMenu>
-
-
-                <div id = "loggedinDisplay" style="width:19%; float:right;margin-top:-4%;font-size:14px;;">
+            <div id = "loggedinDisplay" style="width:25%;float:right;margin-top:-4%;font-size:14px;">
+                <div style="margin-left: 47.5%;">
                     <h:outputText value="You are login as #{sessionScope.customerEntity.fullName}" />&nbsp;
+                </div>
+                <br/>
+                <div style="float: left">
+                    <ezcomp:currentComparison style="margin-left: -20%;" id="currentComparisonCC"> </ezcomp:currentComparison>
 
-                    <br/>
-
-                    <p:menuButton value ="My Account">
-                        <p:menuitem value="View My Profile" outcome="/myAccount/myProfile.xhtml"/>
-                        <p:menuitem value="My Saved Comparisons" outcome="/myAccount/viewMySavedComparison.xhtml"/>
-                        <p:menuitem value="My Liked Products" outcome="/myAccount/viewMyLikedProducts.xhtml"/>
-                        <p:menuitem value="Logout" actionListener="#{moolahLoginManagedBean.logout}" />
-                    </p:menuButton>
-
+                    <h:form id="logoutForm" style="margin-top: -15%; margin-left: 90%;width:80%;" class="bodyText">
+                        <p:menuButton value ="My Account" >
+                            <p:menuitem value="View My Profile" outcome="/myAccount/myProfile.xhtml"/>
+                            <p:menuitem value="My Saved Comparisons" outcome="/myAccount/viewMySavedComparison.xhtml"/>
+                            <p:menuitem value="My Liked Products" outcome="/myAccount/viewMyLikedProducts.xhtml"/>
+                            <p:menuitem value="Logout" actionListener="#{moolahLoginManagedBean.logout}" />
+                        </p:menuButton>
+                    </h:form>
                 </div>
 
-            </h:form>
 
-            <ezcomp:currentComparison id="currentComparisonCC"> </ezcomp:currentComparison>
+            </div>
+
+
 
 
         </h:panelGroup>
