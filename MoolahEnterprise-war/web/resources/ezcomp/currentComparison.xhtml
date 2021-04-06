@@ -64,9 +64,7 @@
             }
         </style>
         <div id="#{cc.clientId}">
-            <div style="text-align:right; padding-right: 60px;">
-                <p:commandButton id="viewCurrentComparisonButton" onclick="PF('dialogCurrentComparison').show();" style="font-size: 14px; font-family: sans-serif;" value="Current Comparison (#{viewCurrentComparison.comparisonSize})" icon="ui-icon-suitcase"/>
-            </div>
+                <p:commandButton id="viewCurrentComparisonButton" onclick="PF('dialogCurrentComparison').show();" style="font-size: 14px; font-family: sans-serif;" value="Comparison (#{viewCurrentComparison.comparisonSize})" icon="ui-icon-suitcase"/>
 
             <div id="divDialogBox">
                 <p:overlayPanel style="width: 30%;" id="dialogCurrentComparison" widgetVar="dialogCurrentComparison" for="viewCurrentComparisonButton" showCloseIcon="true" dismissable="true" my="right top" at="right bottom">

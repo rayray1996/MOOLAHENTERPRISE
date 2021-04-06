@@ -29,7 +29,7 @@
                 <p:growl>
                     <p:autoUpdate />
                 </p:growl>
-                <p:megaMenu orientation="horizontal" autoDisplay="false" style="height:5%; width:55%; margin-left:18%; margin-top:3%;font-size:14px;">
+                <p:megaMenu class="bodyText" orientation="horizontal" autoDisplay="false" style="height:5%; width:55%; margin-left:18%; margin-top:3%;font-size:14px;">
 
                     <p:menuitem value="Home" outcome="/index.xhtml"/>
                     <p:menuitem value="About Us" outcome="/aboutUs.xhtml"/>
@@ -39,7 +39,7 @@
                 </p:megaMenu>
 
 
-                <div style="float:right; width:18%;font-size:14px;margin-top:-6%;margin-right:0%;" >
+                <div style="float:right; width:18%;font-size:14px;margin-top:-6%;margin-right:0%;" class="bodyText">
                     <p:outputLabel for="email" value="Email" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <p:inputText id="email" value="#{moolahLoginManagedBean.email}" size="16" required="true" requiredMessage="Email is required" maxlength="32">
                         <f:validateLength minimum="4" />
@@ -61,15 +61,15 @@
 
         <h:panelGroup rendered="#{sessionScope.isLogin == true}">
 
-            <p:megaMenu orientation="horizontal" autoDisplay="false" style="height:5%; width:55%; margin-left:18%; margin-top:3%;font-size:14px;">
+            <p:megaMenu orientation="horizontal" autoDisplay="false" style="height:5%; width:60%; margin-left:18%; margin-top:3%;font-size:14px;" class="bodyText">
 
                 <p:menuitem value="Home" outcome="/index.xhtml"/>
                 <p:menuitem value="About Us" outcome="/aboutUs.xhtml"/> 
                 <p:submenu label="Products">
                     <p:column>
                         <p:submenu label="Products">
-                            <p:menuitem value="Recommend For Me" outcome="/product/ViewRecommendedProduct.xhtml" />
-                            <p:menuitem value="Search for products " outcome="/product/viewAllProduct.xhtml" /></p:submenu>
+                            <p:menuitem class="bodyText" value="Recommend For Me" outcome="/product/ViewRecommendedProduct.xhtml" />
+                            <p:menuitem class="bodyText" value="Search for Products " outcome="/product/viewAllProduct.xhtml" /></p:submenu>
                     </p:column>
                 </p:submenu>
                 <p:menuitem value="Financial Calculator" outcome="/financialCalculators/financialCalculator_home.xhtml"/>
@@ -83,19 +83,17 @@
                     <h:outputText value="You are login as #{sessionScope.customerEntity.fullName}" />&nbsp;
                 </div>
                 <br/>
-                <div style="float: left">
-                    <ezcomp:currentComparison style="margin-left: -20%;" id="currentComparisonCC"> </ezcomp:currentComparison>
-
-                    <h:form id="logoutForm" style="margin-top: -15%; margin-left: 90%;width:80%;" class="bodyText">
-                        <p:menuButton value ="My Account" >
-                            <p:menuitem value="View My Profile" outcome="/myAccount/myProfile.xhtml"/>
-                            <p:menuitem value="My Saved Comparisons" outcome="/myAccount/viewMySavedComparison.xhtml"/>
-                            <p:menuitem value="My Liked Products" outcome="/myAccount/viewMyLikedProducts.xhtml"/>
-                            <p:menuitem value="Logout" actionListener="#{moolahLoginManagedBean.logout}" />
-                        </p:menuButton>
-                    </h:form>
+                <div style="margin-left: 20%!important">
+                <ezcomp:currentComparison id="currentComparisonCC"> </ezcomp:currentComparison>
                 </div>
-
+                <h:form id="logoutForm" style="margin-top: -9.5%;margin-left: 60%;width:80%;" class="bodyText">
+                    <p:menuButton value ="My Account" >
+                        <p:menuitem value="View My Profile" outcome="/myAccount/myProfile.xhtml"/>
+                        <p:menuitem value="My Saved Comparisons" outcome="/myAccount/viewMySavedComparison.xhtml"/>
+                        <p:menuitem value="My Liked Products" outcome="/myAccount/viewMyLikedProducts.xhtml"/>
+                        <p:menuitem value="Logout" actionListener="#{moolahLoginManagedBean.logout}" />
+                    </p:menuButton>
+                </h:form>
 
             </div>
 

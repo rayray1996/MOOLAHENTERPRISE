@@ -8,7 +8,7 @@ body {
 
 h1 {
     font-family: Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
-/*    border-bottom: 1px solid #AFAFAF; */
+    /*    border-bottom: 1px solid #AFAFAF; */
     font-size:  16px;
     font-weight: bold;
     margin: 0px;
@@ -65,5 +65,11 @@ a:link:hover, a:visited:hover  {
     width: 33%;
     float: left;
     padding:20px;
+}
 
+.pageHeader {
+    font-size: 18px;
+    font-family: sans-serif;
+    font-weight: bold;
+    text-align: center;
 }

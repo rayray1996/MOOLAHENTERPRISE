@@ -7,7 +7,8 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
 
-    <ui:define name="content" >
+    <ui:define name="content" >   
+        <h:outputStylesheet library="css" name="default.css" />
         <style>
             .save_monthly{
                 width:25%;
@@ -20,7 +21,7 @@
 
         </style>
         <br/>
-        <h1 style="text-align:center;">What do you wish to calculate</h1>
+        <h1 style="text-align:center;" class="pageHeader">What do you wish to calculate</h1>
         <h:form>
             <div class="save_monthly" style="margin-top:3%; margin-left:3%;">
                 <p>

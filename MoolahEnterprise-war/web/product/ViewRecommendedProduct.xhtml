@@ -10,6 +10,7 @@
 
 
     <ui:define name="content">
+                <h:outputStylesheet library="css" name="default.css" />
         <style>
             th {
                 height:50px;
@@ -72,9 +73,12 @@
                 background: none!important;
             }
         </style>
-        
+
+        <br/>
+        <h2 class="pageHeader">Recommended Products for you</h2>
+
         <h:form id="viewProductForm">
-            <div id="viewProductFormDiv">
+            <div id="viewProductFormDiv" style="margin-left:5%;">
                 <p:fieldset style="border: none!important;text-align: left;" collapsed="true" id="filterFieldSet" class="bodyText" legend="Filter Criterias" toggleable="true" toggleSpeed="500">
                     <p:ajax event="toggle" />
                     <div id="divForToggle" class="ui-panelgrid ui-panelgrid-cell">
@@ -157,8 +161,6 @@
                     </div>
                 </p:fieldset>
             </div>
-            <br/>
-            <h2 class="viewAllProductsPageTitle">Recommended Products for you</h2>
             <br/>
             <p:dataTable style="width:80%; margin: 0 auto" class="bodyText" id="dataTableAllProducts" widgetVar="dataTableAllProducts" value="#{viewRecommendedProductManagedBean.listOfProducts}" var="productEntity" rowKey="#{productEntity.productEntity.productId}" rowIndexVar="row"
                          filteredValue="#{viewRecommendedProductManagedBean.filteredProducts}"

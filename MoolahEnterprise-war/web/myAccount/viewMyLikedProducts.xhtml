@@ -44,11 +44,9 @@
             }
         </style>
 
-
-
         <h:form id="likedProductsForm">
             <div style="text-align:center" id="test">
-                <h:outputText style="font-weight: bold; font-size: 18px" value="View My Liked Products"/>
+                <h:outputText style="font-weight: bold" class="pageHeader" value="View My Liked Products"/>
                 <br/>
                 <br/>
                 <h:outputText class="bodyText" rendered="#{viewMyLikedProductsManagedBean.customerLikedProducts.size() == 0}" value="You have no liked products"/>
