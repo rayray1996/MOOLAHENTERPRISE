@@ -366,7 +366,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         }
 
         BigDecimal yearlyIncrement = (customer.getAsset().getMonthlyIncome().subtract(customer.getAsset().getMonthlyExpense())).multiply(BigDecimal.valueOf(12));
-        BigDecimal yearOneCapital = customer.getAsset().getCashInHand();
+        BigDecimal yearOneCapital = customer.getAsset().getCashInHand().add(customer.getAsset().getInvestments());
         BigDecimal yearTwoCapital = yearOneCapital.add(yearlyIncrement);
         BigDecimal yearThreeCapital = yearTwoCapital.add(yearlyIncrement);
 

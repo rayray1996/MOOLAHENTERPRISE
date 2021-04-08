@@ -198,8 +198,8 @@
                 </p:tab>
 
                 <p:tab title="Your Affordability Table">
-                    <h5 style="text-align: center">This is a generated affordability table for #{viewProductDetailManagedBean.product.productName}</h5>
-                    <p style=" margin-left: 18%; text-align: justify; font-size: 10px">**First year calculation is based on current cash on hand and investments. Subsequent years has accounted for the yearly expense and yearly income.</p>
+                    <h2 class="bodyText" style="text-align: center">This is a generated affordability table for #{viewProductDetailManagedBean.product.productName}</h2>
+                    <p class="bodyText" style=" margin-left: 18%; text-align: justify; font-size: 10px!important">**First year calculation is based on current cash on hand and investments. Subsequent years has accounted for the yearly expense and yearly income.</p>
                     <p:dataTable id="affordabilityTable" widgetVar="affordTable" value="#{viewProductDetailManagedBean.listOfAffordability}" 
                                  var="afford" rowKey="#{features.featureId}" rowIndexVar="rowIndex"  style="width:70%; margin-left: auto; margin-right: auto">
 
