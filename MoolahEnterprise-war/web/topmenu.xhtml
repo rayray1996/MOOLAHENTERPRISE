@@ -14,6 +14,14 @@
         #loggedinDisplay .ui-menubutton .ui-button{
             margin-top: 10%
         }
+        .bodyText{
+            font-size: 14px!important;
+            font-family: sans-serif!important;
+        }
+        #button .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button{
+            font-size: 14px!important;
+            font-family: sans-serif!important;            
+        }
     </style>
 
     <header>
@@ -29,18 +37,20 @@
                 <p:growl>
                     <p:autoUpdate />
                 </p:growl>
-                <p:megaMenu class="bodyText" orientation="horizontal" autoDisplay="false" style="height:5%; width:55%; margin-left:18%; margin-top:3%;font-size:14px;">
+                <p:megaMenu orientation="horizontal" autoDisplay="false" class="bodyText" style="height:3.75%; width:40%; margin-left:18%; margin-top:3%;font-size:14px;">
 
-                    <p:menuitem value="Home" outcome="/index.xhtml"/>
-                    <p:menuitem value="About Us" outcome="/aboutUs.xhtml"/>
-                    <p:menuitem value="Create Account" outcome="/createAccount.xhtml"/>
+                    <p:menuitem value="&nbsp;&nbsp;&nbsp;Home&nbsp;&nbsp;&nbsp;" outcome="/index.xhtml"/>
+                    <p:menuitem value="&nbsp;&nbsp;&nbsp;About Us&nbsp;&nbsp;&nbsp;" outcome="/aboutUs.xhtml"/>
+                    <p:menuitem value="&nbsp;&nbsp;&nbsp;Create Account&nbsp;&nbsp;&nbsp;" outcome="/createAccount.xhtml"/>
 
 
                 </p:megaMenu>
 
 
+                <br/>
+                <br/>
                 <div style="float:right; width:18%;font-size:14px;margin-top:-6%;margin-right:0%;" class="bodyText">
-                    <p:outputLabel for="email" value="Email" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <p:outputLabel for="email" value="Email" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <p:inputText id="email" value="#{moolahLoginManagedBean.email}" size="16" required="true" requiredMessage="Email is required" maxlength="32">
                         <f:validateLength minimum="4" />
                     </p:inputText>
@@ -61,40 +71,39 @@
 
         <h:panelGroup rendered="#{sessionScope.isLogin == true}">
 
-            <p:megaMenu orientation="horizontal" autoDisplay="false" style="height:5%; width:60%; margin-left:18%; margin-top:3%;font-size:14px;" class="bodyText">
+            <p:megaMenu class="bodyText" orientation="horizontal" autoDisplay="false" style="height:3.75%; width:40%; margin-left:18%; margin-top:3%;font-size:14px;font-family: sans-serif">
 
-                <p:menuitem value="Home" outcome="/index.xhtml"/>
-                <p:menuitem value="About Us" outcome="/aboutUs.xhtml"/> 
-                <p:submenu label="Products">
+                <p:menuitem class="bodyText" value="&nbsp;&nbsp;&nbsp;Home&nbsp;&nbsp;&nbsp;" outcome="/index.xhtml"/>
+                <p:menuitem class="bodyText" value="&nbsp;&nbsp;&nbsp;About Us&nbsp;&nbsp;&nbsp;" outcome="/aboutUs.xhtml"/> 
+                <p:submenu class="bodyText" label="&nbsp;&nbsp;&nbsp;Products&nbsp;&nbsp;&nbsp;">
                     <p:column>
-                        <p:submenu label="Products">
+                        <p:submenu class="bodyText" label="Products">
                             <p:menuitem class="bodyText" value="Recommend For Me" outcome="/product/ViewRecommendedProduct.xhtml" />
                             <p:menuitem class="bodyText" value="Search for Products " outcome="/product/viewAllProduct.xhtml" /></p:submenu>
                     </p:column>
                 </p:submenu>
-                <p:menuitem value="Financial Calculator" outcome="/financialCalculators/financialCalculator_home.xhtml"/>
+                <p:menuitem class="bodyText" value="&nbsp;&nbsp;&nbsp;Financial Calculator&nbsp;&nbsp;&nbsp;" outcome="/financialCalculators/financialCalculator_home.xhtml"/>
 
 
             </p:megaMenu>
 
 
-            <div id = "loggedinDisplay" style="width:25%;float:right;margin-top:-4%;font-size:14px;">
-                <div style="margin-left: 47.5%;">
+            <div id = "loggedinDisplay" style="width:25%;margin-top:-3%;margin-left: 63%; font-size:14px;">
+                <div style="margin-left: 51%;">
                     <h:outputText value="You are login as #{sessionScope.customerEntity.fullName}" />&nbsp;
                 </div>
                 <br/>
                 <div style="margin-left: 20%!important">
-                <ezcomp:currentComparison id="currentComparisonCC"> </ezcomp:currentComparison>
+                    <ezcomp:currentComparison id="currentComparisonCC"> </ezcomp:currentComparison>
                 </div>
-                <h:form id="logoutForm" style="margin-top: -9.5%;margin-left: 60%;width:80%;" class="bodyText">
-                    <p:menuButton value ="My Account" >
-                        <p:menuitem value="View My Profile" outcome="/myAccount/myProfile.xhtml"/>
-                        <p:menuitem value="My Saved Comparisons" outcome="/myAccount/viewMySavedComparison.xhtml"/>
-                        <p:menuitem value="My Liked Products" outcome="/myAccount/viewMyLikedProducts.xhtml"/>
-                        <p:menuitem value="Logout" actionListener="#{moolahLoginManagedBean.logout}" />
+                <h:form id="logoutForm" class="bodyText">
+                    <p:menuButton id="button" value ="My Account" style="height:3.5%; margin-top: -9.4%; margin-left: 59%;">
+                        <p:menuitem class="bodyText" value="View My Profile" outcome="/myAccount/myProfile.xhtml"/>
+                        <p:menuitem class="bodyText" value="My Saved Comparisons" outcome="/myAccount/viewMySavedComparison.xhtml"/>
+                        <p:menuitem class="bodyText" value="My Liked Products" outcome="/myAccount/viewMyLikedProducts.xhtml"/>
+                        <p:menuitem class="bodyText" value="Logout" actionListener="#{moolahLoginManagedBean.logout}" />
                     </p:menuButton>
                 </h:form>
-
             </div>
 
 

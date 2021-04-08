@@ -312,7 +312,7 @@ public class ViewRecommendedProductManagedBean implements Serializable {
         ProductEntityWrapper temp = (ProductEntityWrapper) event.getComponent().getAttributes().get("productToView");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("productToView", temp);
         try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("product/viewProductDetail.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("viewProductDetail.xhtml");
         } catch (IOException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Link is faulty", null));
         }

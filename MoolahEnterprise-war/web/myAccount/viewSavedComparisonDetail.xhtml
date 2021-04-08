@@ -169,7 +169,7 @@
                 </div>
 
                 <br/>
-                
+
                 <h:form id="productTableBlockForm">
                     <ui:fragment id="productTableBlock" rendered="#{viewSavedComparisonDetailManagedBean.products.size() > 0}">
                         <div style="width:90%;margin: 0 auto;" id="compareProductsDiv">
@@ -205,6 +205,18 @@
                                 </p:row>
 
                                 <p:row>
+                                    <p:column class="premiumColHeader">
+                                        <h:outputText value="Normal Premium"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="premiumColHeader">
+                                        <h:outputText value="Smoker Premium"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
                                     <p:column class="sumAssuredColHeader">
                                         <h:outputText value="Minimum Sum Assured"/>
                                     </p:column>
@@ -228,64 +240,71 @@
                             <p:panelGrid id="firstProductPG" style="width: 22.5%;float: left;margin:0 auto;" rendered="#{viewSavedComparisonDetailManagedBean.products.size() > 0}">
                                 <p:row>
                                     <p:column class="companyColHeader">
-                                        <p:graphicImage library="images" name="#{viewSavedComparisonDetailManagedBean.firstProduct.company.companyImage}" height="120" width="120"/>
+                                        <p:graphicImage library="images" name="#{viewSavedComparisonDetailManagedBean.firstProduct.productEntity.company.companyImage}" height="120" width="120"/>
                                         <br/>
-                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.firstProduct.company.companyName}"/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.firstProduct.productEntity.company.companyName}"/>
                                     </p:column>
                                 </p:row>
 
                                 <p:row>
                                     <p:column class="productNameColName">
-                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.firstProduct.productName}"/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.firstProduct.productEntity.productName}"/>
                                     </p:column>
                                 </p:row>
 
                                 <p:row>
                                     <p:column class="cTermColName">
-                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.firstProduct.coverageTerm}"/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.firstProduct.productEntity.coverageTerm}"/>
                                     </p:column>
                                 </p:row>
 
                                 <p:row>
                                     <p:column class="pTermColName">
-                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.firstProduct.premiumTerm}"/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.firstProduct.productEntity.premiumTerm}"/>
                                     </p:column>
                                 </p:row>
 
                                 <p:row>
                                     <p:column class="premiumColName">
-                                        <h:outputText value="Premium"/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.firstProduct.normalPremium.premiumValue}"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="premiumColName">
+                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.firstProduct.smokerPremium != null}" value="#{viewSavedComparisonDetailManagedBean.firstProduct.smokerPremium.premiumValue}"/>
+                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.firstProduct.smokerPremium == null}" value="NIL"/>
                                     </p:column>
                                 </p:row>
 
                                 <p:row>
                                     <p:column class="sumAssuredColName">
-                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.firstProduct.assuredSum}"/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.firstProduct.productEntity.assuredSum}"/>
                                     </p:column>
                                 </p:row>
 
                                 <p:row>
                                     <p:column class="featuresColName">
-                                        <c:forEach items="#{viewSavedComparisonDetailManagedBean.firstProduct.listOfAdditionalFeatures}" var="feature">
+                                        <c:forEach items="#{viewSavedComparisonDetailManagedBean.firstProduct.productEntity.listOfAdditionalFeatures}" var="feature">
                                             <div style="overflow: auto; height: 190px; text-align: left;">
                                                 <li>
                                                     <h:outputText value="#{feature.featureName}"/>
                                                 </li>
                                             </div>
                                         </c:forEach>
-                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.firstProduct.listOfAdditionalFeatures.size() == 0}" value="NIL" />
+                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.firstProduct.productEntity.listOfAdditionalFeatures.size() == 0}" value="NIL" />
                                     </p:column>
                                 </p:row>
                                 <p:row>
                                     <p:column class="ridersColName">
-                                        <c:forEach items="#{viewSavedComparisonDetailManagedBean.firstProduct.listOfRiders}" var="rider">
+                                        <c:forEach items="#{viewSavedComparisonDetailManagedBean.firstProduct.productEntity.listOfRiders}" var="rider">
                                             <div style="overflow: auto; height: 190px; text-align: left;">
                                                 <li>
                                                     <h:outputText value="#{rider.riderName}"/>
                                                 </li>
                                             </div>
                                         </c:forEach>
-                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.firstProduct.listOfRiders.size() == 0}" value="NIL" />
+                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.firstProduct.productEntity.listOfRiders.size() == 0}" value="NIL" />
                                     </p:column>
                                 </p:row>
 
@@ -297,64 +316,71 @@
                             <p:panelGrid id="secondProductPG" style="width: 22.5%;float: left;margin:0 auto;" rendered="#{viewSavedComparisonDetailManagedBean.products.size() > 1}">
                                 <p:row>
                                     <p:column class="companyColHeader">
-                                        <p:graphicImage library="images" name="#{viewSavedComparisonDetailManagedBean.secondProduct.company.companyImage}" height="120" width="120"/>
+                                        <p:graphicImage library="images" name="#{viewSavedComparisonDetailManagedBean.secondProduct.productEntity.company.companyImage}" height="120" width="120"/>
                                         <br/>
-                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.secondProduct.company.companyName}"/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.secondProduct.productEntity.company.companyName}"/>
                                     </p:column>
                                 </p:row>
 
                                 <p:row>
                                     <p:column class="productNameColName">
-                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.secondProduct.productName}"/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.secondProduct.productEntity.productName}"/>
                                     </p:column>
                                 </p:row>
 
                                 <p:row>
                                     <p:column class="cTermColName">
-                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.secondProduct.coverageTerm}"/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.secondProduct.productEntity.coverageTerm}"/>
                                     </p:column>
                                 </p:row>
 
                                 <p:row>
                                     <p:column class="pTermColName">
-                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.secondProduct.premiumTerm}"/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.secondProduct.productEntity.premiumTerm}"/>
                                     </p:column>
                                 </p:row>
 
                                 <p:row>
                                     <p:column class="premiumColName">
-                                        <h:outputText value="Premium"/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.secondProduct.normalPremium.premiumValue}"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="premiumColName">
+                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.secondProduct.smokerPremium != null}" value="#{viewSavedComparisonDetailManagedBean.secondProduct.smokerPremium.premiumValue}"/>
+                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.secondProduct.smokerPremium == null}" value="NIL"/>
                                     </p:column>
                                 </p:row>
 
                                 <p:row>
                                     <p:column class="sumAssuredColName">
-                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.secondProduct.assuredSum}"/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.secondProduct.productEntity.assuredSum}"/>
                                     </p:column>
                                 </p:row>
 
                                 <p:row>
                                     <p:column class="featuresColName">
-                                        <c:forEach items="#{viewSavedComparisonDetailManagedBean.secondProduct.listOfAdditionalFeatures}" var="feature">
+                                        <c:forEach items="#{viewSavedComparisonDetailManagedBean.secondProduct.productEntity.listOfAdditionalFeatures}" var="feature">
                                             <div style="overflow: auto; height: 190px; text-align: left;">
                                                 <li>
                                                     <h:outputText value="#{feature.featureName}"/>
                                                 </li>
                                             </div>
                                         </c:forEach>
-                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.secondProduct.listOfAdditionalFeatures.size() == 0}" value="NIL" />
+                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.secondProduct.productEntity.listOfAdditionalFeatures.size() == 0}" value="NIL" />
                                     </p:column>
                                 </p:row>
                                 <p:row>
                                     <p:column class="ridersColName">
-                                        <c:forEach items="#{viewSavedComparisonDetailManagedBean.secondProduct.listOfRiders}" var="rider">
+                                        <c:forEach items="#{viewSavedComparisonDetailManagedBean.secondProduct.productEntity.listOfRiders}" var="rider">
                                             <div style="overflow: auto; height: 190px; text-align: left;">
                                                 <li>
                                                     <h:outputText value="#{rider.riderName}"/>
                                                 </li>
                                             </div>
                                         </c:forEach>
-                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.secondProduct.listOfRiders.size() == 0}" value="NIL" />
+                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.secondProduct.productEntity.listOfRiders.size() == 0}" value="NIL" />
                                     </p:column>
                                 </p:row>
 
@@ -366,65 +392,72 @@
                             <p:panelGrid id="thirdProductPG" style="width: 22.5%;float: left;margin:0 auto;" rendered="#{viewSavedComparisonDetailManagedBean.products.size() > 2}">
                                 <p:row>
                                     <p:column class="companyColHeader">
-                                        <p:graphicImage library="images" name="#{viewSavedComparisonDetailManagedBean.thirdProduct.company.companyImage}" height="120" width="120"/>
+                                        <p:graphicImage library="images" name="#{viewSavedComparisonDetailManagedBean.thirdProduct.productEntity.company.companyImage}" height="120" width="120"/>
                                         <br/>
-                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.thirdProduct.company.companyName}"/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.thirdProduct.productEntity.company.companyName}"/>
                                     </p:column>
                                 </p:row>
 
                                 <p:row>
                                     <p:column class="productNameColName">
-                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.thirdProduct.productName}"/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.thirdProduct.productEntity.productName}"/>
                                     </p:column>
                                 </p:row>
 
                                 <p:row>
                                     <p:column class="cTermColName">
-                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.thirdProduct.coverageTerm}"/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.thirdProduct.productEntity.coverageTerm}"/>
                                     </p:column>
                                 </p:row>
 
                                 <p:row>
                                     <p:column class="pTermColName">
-                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.thirdProduct.premiumTerm}"/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.thirdProduct.productEntity.premiumTerm}"/>
                                     </p:column>
                                 </p:row>
 
                                 <p:row>
                                     <p:column class="premiumColName">
-                                        <h:outputText value="Premium"/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.thirdProduct.normalPremium.premiumValue}"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="premiumColName">
+                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.thirdProduct.smokerPremium != null}" value="#{viewSavedComparisonDetailManagedBean.thirdProduct.smokerPremium.premiumValue}"/>
+                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.thirdProduct.smokerPremium == null}" value="NIL"/>
                                     </p:column>
                                 </p:row>
 
                                 <p:row>
                                     <p:column class="sumAssuredColName">
-                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.thirdProduct.assuredSum}"/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.thirdProduct.productEntity.assuredSum}"/>
                                     </p:column>
                                 </p:row>
 
                                 <p:row>
                                     <p:column class="featuresColName">
-                                        <c:forEach items="#{viewSavedComparisonDetailManagedBean.thirdProduct.listOfAdditionalFeatures}" var="feature">
+                                        <c:forEach items="#{viewSavedComparisonDetailManagedBean.thirdProduct.productEntity.listOfAdditionalFeatures}" var="feature">
                                             <div style="overflow: auto; height: 190px; text-align: left;">
                                                 <li>
                                                     <h:outputText value="#{feature.featureName}"/>
                                                 </li>
                                             </div>
                                         </c:forEach>
-                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.thirdProduct.listOfAdditionalFeatures.size() == 0}" value="NIL" />
+                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.thirdProduct.productEntity.listOfAdditionalFeatures.size() == 0}" value="NIL" />
 
                                     </p:column>
                                 </p:row>
                                 <p:row>
                                     <p:column class="ridersColName">
-                                        <c:forEach items="#{viewSavedComparisonDetailManagedBean.thirdProduct.listOfRiders}" var="rider">
+                                        <c:forEach items="#{viewSavedComparisonDetailManagedBean.thirdProduct.productEntity.listOfRiders}" var="rider">
                                             <div style="overflow: auto; height: 190px; text-align: left;">
                                                 <li>
                                                     <h:outputText value="#{rider.riderName}"/>
                                                 </li>
                                             </div>
                                         </c:forEach>
-                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.thirdProduct.listOfRiders.size() == 0}" value="NIL" />
+                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.thirdProduct.productEntity.listOfRiders.size() == 0}" value="NIL" />
                                     </p:column>
                                 </p:row>
 
@@ -436,45 +469,52 @@
                             <p:panelGrid id="fourthProductPG" style="width: 22.5%;float: left;margin:0 auto;" rendered="#{viewSavedComparisonDetailManagedBean.products.size() > 3}">
                                 <p:row>
                                     <p:column class="companyColHeader">
-                                        <p:graphicImage library="images" name="#{viewSavedComparisonDetailManagedBean.fourthProduct.company.companyImage}" height="120" width="120"/>
+                                        <p:graphicImage library="images" name="#{viewSavedComparisonDetailManagedBean.fourthProduct.productEntity.company.companyImage}" height="120" width="120"/>
                                         <br/>
-                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.fourthProduct.company.companyName}"/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.fourthProduct.productEntity.company.companyName}"/>
                                     </p:column>
                                 </p:row>
 
                                 <p:row>
                                     <p:column class="productNameColName">
-                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.fourthProduct.productName}"/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.fourthProduct.productEntity.productName}"/>
                                     </p:column>
                                 </p:row>
 
                                 <p:row>
                                     <p:column class="cTermColName">
-                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.fourthProduct.coverageTerm}"/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.fourthProduct.productEntity.coverageTerm}"/>
                                     </p:column>
                                 </p:row>
 
                                 <p:row>
                                     <p:column class="pTermColName">
-                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.fourthProduct.premiumTerm}"/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.fourthProduct.productEntity.premiumTerm}"/>
                                     </p:column>
                                 </p:row>
 
                                 <p:row>
                                     <p:column class="premiumColName">
-                                        <h:outputText value="Premium"/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.fourthProduct.normalPremium.premiumValue}"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column class="premiumColName">
+                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.fourthProduct.smokerPremium != null}" value="#{viewSavedComparisonDetailManagedBean.fourthProduct.smokerPremium.premiumValue}"/>
+                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.fourthProduct.smokerPremium == null}" value="NIL"/>
                                     </p:column>
                                 </p:row>
 
                                 <p:row>
                                     <p:column class="sumAssuredColName">
-                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.fourthProduct.assuredSum}"/>
+                                        <h:outputText value="#{viewSavedComparisonDetailManagedBean.fourthProduct.productEntity.assuredSum}"/>
                                     </p:column>
                                 </p:row>
 
                                 <p:row>
                                     <p:column class="featuresColName">
-                                        <c:forEach items="#{viewSavedComparisonDetailManagedBean.fourthProduct.listOfAdditionalFeatures}" var="feature">
+                                        <c:forEach items="#{viewSavedComparisonDetailManagedBean.fourthProduct.productEntity.listOfAdditionalFeatures}" var="feature">
                                             <div style="overflow: auto; height: 190px; text-align: left;">
                                                 <li>
                                                     <h:outputText value="#{feature.featureName}"/>
@@ -482,18 +522,18 @@
                                             </div>
                                         </c:forEach>
                                     </p:column>
-                                    <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.fourthProduct.listOfAdditionalFeatures.size() == 0}" value="NIL" />
+                                    <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.fourthProduct.productEntity.listOfAdditionalFeatures.size() == 0}" value="NIL" />
                                 </p:row>
                                 <p:row>
                                     <p:column class="ridersColName">
-                                        <c:forEach items="#{viewSavedComparisonDetailManagedBean.fourthProduct.listOfRiders}" var="rider">
+                                        <c:forEach items="#{viewSavedComparisonDetailManagedBean.fourthProduct.productEntity.listOfRiders}" var="rider">
                                             <div style="overflow: auto; height: 190px; text-align: left;">
                                                 <li>
                                                     <h:outputText value="#{rider.riderName}"/>
                                                 </li>
                                             </div>
                                         </c:forEach>
-                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.fourthProduct.listOfRiders.size() == 0}" value="NIL" />
+                                        <h:outputText rendered="#{viewSavedComparisonDetailManagedBean.fourthProduct.productEntity.listOfRiders.size() == 0}" value="NIL" />
                                     </p:column>
                                 </p:row>
                             </p:panelGrid>

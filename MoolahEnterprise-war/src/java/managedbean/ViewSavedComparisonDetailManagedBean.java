@@ -6,11 +6,14 @@
 package managedbean;
 
 import ejb.entity.ComparisonEntity;
+import ejb.entity.CustomerEntity;
+import ejb.entity.PremiumEntity;
 import ejb.entity.ProductEntity;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
@@ -29,12 +32,12 @@ public class ViewSavedComparisonDetailManagedBean implements Serializable {
     private ComparisonEntity comparisonToView;
     private String dateAdded;
 
-    private List<ProductEntity> products;
+    private List<ProductEntityWrapper> products;
 
-    private ProductEntity firstProduct;
-    private ProductEntity secondProduct;
-    private ProductEntity thirdProduct;
-    private ProductEntity fourthProduct;
+    private ProductEntityWrapper firstProduct;
+    private ProductEntityWrapper secondProduct;
+    private ProductEntityWrapper thirdProduct;
+    private ProductEntityWrapper fourthProduct;
 
     public ViewSavedComparisonDetailManagedBean() {
         products = new ArrayList();
@@ -43,17 +46,40 @@ public class ViewSavedComparisonDetailManagedBean implements Serializable {
     @PostConstruct
     public void dataInit() {
         comparisonToView = (ComparisonEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("comparisonToView");
-        if (comparisonToView == null) {
+        CustomerEntity currentCustomer = (CustomerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("customerEntity");
+        if (comparisonToView == null || currentCustomer == null) {
             products = new ArrayList<>();
             return;
         }
-        products = comparisonToView.getProductsToCompare();
+        for (ProductEntity prod : comparisonToView.getProductsToCompare()) {
+            ProductEntityWrapper temp = new ProductEntityWrapper(prod, null, null);
+            int age = new GregorianCalendar().get(GregorianCalendar.YEAR) - currentCustomer.getDateOfBirth().get(GregorianCalendar.YEAR);
+            // add the correct premium to wrapper
+            for (PremiumEntity p : prod.getListOfPremium()) {
+                if (age >= p.getMinAgeGroup() && age <= p.getMaxAgeGroup()) {
+                    temp.setNormalPremium(p);
+                    break;
+                }
+            }
+
+            // add the correct smoker premium to wrapper
+            for (PremiumEntity p : prod.getListOfSmokerPremium()) {
+                if (age >= p.getMinAgeGroup() && age <= p.getMaxAgeGroup()) {
+                    temp.setSmokerPremium(p);
+                    break;
+                }
+            }
+
+            products.add(temp);
+
+        }
+
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         String dateRequested = format.format(Calendar.getInstance().getTime());
         dateAdded = dateRequested;
     }
 
-    public ProductEntity getFirstProduct() {
+    public ProductEntityWrapper getFirstProduct() {
         try {
             return products.get(0);
         } catch (IndexOutOfBoundsException ex) {
@@ -61,11 +87,11 @@ public class ViewSavedComparisonDetailManagedBean implements Serializable {
         }
     }
 
-    public void setFirstProduct(ProductEntity firstProduct) {
+    public void setFirstProduct(ProductEntityWrapper firstProduct) {
         this.firstProduct = firstProduct;
     }
 
-    public ProductEntity getSecondProduct() {
+    public ProductEntityWrapper getSecondProduct() {
         try {
             return products.get(1);
         } catch (IndexOutOfBoundsException ex) {
@@ -73,11 +99,11 @@ public class ViewSavedComparisonDetailManagedBean implements Serializable {
         }
     }
 
-    public void setSecondProduct(ProductEntity secondProduct) {
+    public void setSecondProduct(ProductEntityWrapper secondProduct) {
         this.secondProduct = secondProduct;
     }
 
-    public ProductEntity getThirdProduct() {
+    public ProductEntityWrapper getThirdProduct() {
         try {
             return products.get(2);
         } catch (IndexOutOfBoundsException ex) {
@@ -85,11 +111,11 @@ public class ViewSavedComparisonDetailManagedBean implements Serializable {
         }
     }
 
-    public void setThirdProduct(ProductEntity thirdProduct) {
+    public void setThirdProduct(ProductEntityWrapper thirdProduct) {
         this.thirdProduct = thirdProduct;
     }
 
-    public ProductEntity getFourthProduct() {
+    public ProductEntityWrapper getFourthProduct() {
         try {
             return products.get(3);
         } catch (IndexOutOfBoundsException ex) {
@@ -97,15 +123,15 @@ public class ViewSavedComparisonDetailManagedBean implements Serializable {
         }
     }
 
-    public void setFourthProduct(ProductEntity fourthProduct) {
+    public void setFourthProduct(ProductEntityWrapper fourthProduct) {
         this.fourthProduct = fourthProduct;
     }
 
-    public List<ProductEntity> getProducts() {
+    public List<ProductEntityWrapper> getProducts() {
         return products;
     }
 
-    public void setProducts(List<ProductEntity> products) {
+    public void setProducts(List<ProductEntityWrapper> products) {
         this.products = products;
     }
 
