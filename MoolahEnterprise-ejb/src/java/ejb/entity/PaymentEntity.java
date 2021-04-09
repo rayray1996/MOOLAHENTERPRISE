@@ -53,7 +53,7 @@ public class PaymentEntity implements Serializable {
     @NotNull
     private Calendar dateGenerated; // This should not be null because it should indicate when it is generated
 
-    @ManyToOne(optional = false, cascade = {CascadeType.MERGE})
+    @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.DETACH})
     @JoinColumn(nullable = false)
     @NotNull
     private CompanyEntity company;

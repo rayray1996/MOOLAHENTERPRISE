@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -31,21 +32,21 @@ import util.exception.UnknownPersistenceException;
  */
 @Stateless
 public class RiderSessionBean implements RiderSessionBeanLocal {
-
+    
     @EJB
     private ProductSessionBeanLocal productSessionBean;
-
+    
     @PersistenceContext(unitName = "MoolahEnterprise-ejbPU")
     private EntityManager em;
-
+    
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
-
+    
     public RiderSessionBean() {
         validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
     }
-
+    
     @Override
     public RiderEntity retrieveRiderByRiderID(Long riderId) throws RiderDoesNotExistException {
         RiderEntity rider = em.find(RiderEntity.class, riderId);
@@ -57,16 +58,16 @@ public class RiderSessionBean implements RiderSessionBeanLocal {
     }
     
     @Override
-    public List<RiderEntity> retrieveListOfRiderEntityForProduct(Long productId) throws ProductNotFoundException{
+    public List<RiderEntity> retrieveListOfRiderEntityForProduct(Long productId) throws ProductNotFoundException {
         ProductEntity product = em.find(ProductEntity.class, productId);
-        if(product == null){
-            throw new ProductNotFoundException("Product with ID "  + productId + " cannot be found!");
+        if (product == null) {
+            throw new ProductNotFoundException("Product with ID " + productId + " cannot be found!");
         } else {
             List<RiderEntity> listofRider = product.getListOfRiders();
             return listofRider;
         }
     }
-
+    
     @Override
     public void deleteRider(Long riderId) throws RiderDoesNotExistException, ProductNotFoundException {
         RiderEntity rider = em.find(RiderEntity.class, riderId);
@@ -81,14 +82,24 @@ public class RiderSessionBean implements RiderSessionBeanLocal {
             }
         }
     }
-
+    
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<RiderEntity>> constraintViolations) {
         String msg = "Input data validation error!:";
-
+        
         for (ConstraintViolation constraintViolation : constraintViolations) {
             msg += "\n\t" + constraintViolation.getPropertyPath() + " - " + constraintViolation.getInvalidValue() + "; " + constraintViolation.getMessage();
         }
-
+        
         return msg;
+    }
+    
+    public List<RiderEntity> listOfEntity() {
+        List<RiderEntity> riderList;
+        Query query = em.createQuery("SELECT s FROM RiderEntity s");
+        riderList = query.getResultList();
+        for (RiderEntity rl : riderList) {
+            em.detach(rl);
+        }
+        return riderList;
     }
 }

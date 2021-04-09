@@ -27,4 +27,5 @@ public interface RiderSessionBeanLocal {
 
     public List<RiderEntity> retrieveListOfRiderEntityForProduct(Long productId) throws ProductNotFoundException;
 
+    public List<RiderEntity> listOfEntity();
 }

@@ -89,25 +89,25 @@ public class CompanyEntity implements Serializable {
     @Column(columnDefinition = "CHAR(32) NOT NULL")
     private String salt;
 
-    @OneToOne(mappedBy = "company", cascade = {CascadeType.MERGE})
+    @OneToOne(mappedBy = "company", cascade = {CascadeType.MERGE, CascadeType.DETACH})
     private RefundEntity refund;
 
-    @OneToMany(mappedBy = "company", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "company", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH})
     @JoinColumn(nullable = false)
     private List<PointOfContactEntity> listOfPointOfContacts;
 
-    @OneToMany(mappedBy = "company", cascade = {CascadeType.MERGE})
+    @OneToMany(mappedBy = "company", cascade = {CascadeType.MERGE, CascadeType.DETACH})
     @JoinColumn(nullable = true)
     private List<PaymentEntity> listOfPayments;
 
-    @OneToMany(mappedBy = "company", cascade = {CascadeType.MERGE})
+    @OneToMany(mappedBy = "company", cascade = {CascadeType.MERGE, CascadeType.DETACH})
     private List<ProductEntity> listOfProducts;
 
     private String resetPasswordPathParam;
-    
+
     @NotNull
     private String companyImage;
-    
+
     @NotNull
     private String companyUrl;
 
@@ -330,8 +330,6 @@ public class CompanyEntity implements Serializable {
     public void setCompanyUrl(String companyUrl) {
         this.companyUrl = companyUrl;
     }
-    
-    
 
     @Override
     public int hashCode() {
@@ -357,9 +355,5 @@ public class CompanyEntity implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "CompanyEntity{" + "companyId=" + companyId + ", profilePic=" + profilePic + ", companyName=" + companyName + ", companyEmail=" + companyEmail + ", businessRegNumber=" + businessRegNumber + ", companyContactNumber=" + companyContactNumber + ", warningMessage=" + warningMessage + ", isVerified=" + isVerified + ", password=" + password + ", verificationDate=" + verificationDate + ", creditOwned=" + creditOwned + ", isDeactivated=" + isDeactivated + ", isDeleted=" + isDeleted + ", isWarned=" + isWarned + ", salt=" + salt + ", refund=" + refund + ", listOfPointOfContacts=" + listOfPointOfContacts + ", listOfPayments=" + listOfPayments + ", listOfProducts=" + listOfProducts + '}';
-    }
 
 }

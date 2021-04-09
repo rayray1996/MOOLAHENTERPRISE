@@ -74,19 +74,25 @@ public class ProductEntity implements Serializable {
     @NotNull
     @Enumerated(EnumType.STRING)
     private PolicyCurrencyEnum policyCurrency;
-    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH}, orphanRemoval = true)
     private List<FeatureEntity> listOfAdditionalFeatures;
-    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
+
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH}, orphanRemoval = true)
     private List<RiderEntity> listOfRiders;
-    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
+
+    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH}, orphanRemoval = true)
     private ClickThroughEntity clickThroughInfo;
-    @ManyToOne
+
+    @ManyToOne(cascade = CascadeType.DETACH)
     private CategoryPricingEntity productCategoryPricing;
-    @ManyToOne
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE})
     private CompanyEntity company;
-    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
+
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH}, orphanRemoval = true)
     private List<PremiumEntity> listOfPremium;
-    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
+
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH}, orphanRemoval = true)
     @JoinColumn(nullable = true)
     private List<PremiumEntity> listOfSmokerPremium;
     @NotNull
@@ -134,7 +140,7 @@ public class ProductEntity implements Serializable {
     public void setAverageInterestRate(BigDecimal averageInterestRate) {
         this.averageInterestRate = averageInterestRate;
     }
-    
+
     public String getProductName() {
         return productName;
     }
@@ -295,6 +301,5 @@ public class ProductEntity implements Serializable {
     public void setIsAvailableToSmokers(Boolean isAvailableToSmokers) {
         this.isAvailableToSmoker = isAvailableToSmokers;
     }
-
 
 }

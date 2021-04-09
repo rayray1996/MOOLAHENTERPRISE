@@ -10,6 +10,7 @@ import ejb.Singleton.MoolahCreditConverterLocal;
 import ejb.entity.CompanyEntity;
 import ejb.entity.MonthlyPaymentEntity;
 import ejb.entity.PaymentEntity;
+import ejb.entity.PointOfContactEntity;
 import ejb.entity.ProductEntity;
 import ejb.entity.RefundEntity;
 import java.math.BigDecimal;
@@ -17,6 +18,7 @@ import java.math.BigInteger;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -46,11 +48,13 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import util.exception.CompanyAlreadyExistException;
+import util.exception.CompanyBeanValidaionException;
 import util.exception.CompanyCreationException;
 import util.exception.CompanyDoesNotExistException;
 import util.exception.CompanySQLConstraintException;
 import util.exception.IncorrectLoginParticularsException;
 import util.exception.MonthlyPaymentNotFoundException;
+import util.exception.PointOfContactBeanValidationException;
 import util.exception.RefundCreationException;
 import util.exception.RefundErrorException;
 import util.exception.RefundHasBeenTransactedException;
@@ -94,6 +98,44 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
     public void init() {
         timerService = sessionContext.getTimerService();
 
+    }
+
+    @Override
+    public CompanyEntity createAccountForCompanyWS(CompanyEntity newCompany) throws CompanyAlreadyExistException, UnknownPersistenceException, CompanyCreationException, PointOfContactBeanValidationException {
+        Set<ConstraintViolation<CompanyEntity>> companyError = validator.validate(newCompany);
+        if (companyError.isEmpty()) {
+            try {
+                if (newCompany.getListOfPointOfContacts() != null && !newCompany.getListOfPointOfContacts().isEmpty()) {
+                    for (PointOfContactEntity pe : newCompany.getListOfPointOfContacts()) {
+                        Set<ConstraintViolation<PointOfContactEntity>> pointOfContactError = validator.validate(pe);
+                        if (!pointOfContactError.isEmpty()) {
+                            throw new PointOfContactBeanValidationException("Please check your point of contact input");
+                        }
+
+                    }
+                }
+                List<PointOfContactEntity> pocs = new ArrayList<>(newCompany.getListOfPointOfContacts());
+                for(PointOfContactEntity poc : pocs) {
+                    poc.setCompany(newCompany);
+                }
+                em.persist(newCompany);
+                em.flush();
+
+                return newCompany;
+            } catch (PersistenceException ex) {
+                if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
+                    if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
+                        throw new CompanyAlreadyExistException("Company already exists!");
+                    } else {
+                        throw new UnknownPersistenceException(ex.getMessage());
+                    }
+                } else {
+                    throw new UnknownPersistenceException(ex.getMessage());
+                }
+            }
+        } else {
+            throw new CompanyCreationException(prepareInputDataValidationErrorsMessage(companyError));
+        }
     }
 
     @Override
@@ -159,7 +201,16 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
     public List<CompanyEntity> retrieveAllActiveCompanies() {
         List<CompanyEntity> listOfCompanies = em.createQuery("SELECT c FROM CompanyEntity c WHERE c.isDeleted = FALSE").getResultList();
         for (CompanyEntity coy : listOfCompanies) {
-            coy.getListOfProducts().size();
+            if (coy.getListOfProducts() != null && !coy.getListOfProducts().isEmpty()) {
+                coy.getListOfProducts().size();
+            }
+            if (coy.getListOfPayments() != null && !coy.getListOfPayments().isEmpty()) {
+                coy.getListOfPayments().size();
+            }
+            if (coy.getListOfPointOfContacts() != null && !coy.getListOfPointOfContacts().isEmpty()) {
+                coy.getListOfPointOfContacts().size();
+            }
+            coy.getRefund();
         }
 
         return listOfCompanies;
@@ -180,6 +231,39 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
             } else {
                 throw new UnknownPersistenceException(ex.getMessage());
             }
+        }
+    }
+
+    @Override
+    public void updateCompanyInformationWS(CompanyEntity company) throws UnknownPersistenceException, CompanySQLConstraintException, PointOfContactBeanValidationException, CompanyBeanValidaionException {
+        Set<ConstraintViolation<CompanyEntity>> companyError = validator.validate(company);
+        if (companyError.isEmpty()) {
+            try {
+                if (company.getListOfPointOfContacts() != null && !company.getListOfPointOfContacts().isEmpty()) {
+                    for (PointOfContactEntity pe : company.getListOfPointOfContacts()) {
+                        Set<ConstraintViolation<PointOfContactEntity>> pointOfContactError = validator.validate(pe);
+                        if (!pointOfContactError.isEmpty()) {
+                            throw new PointOfContactBeanValidationException("Please check your point of contact input");
+                        }
+
+                    }
+                }
+                em.merge(company);
+
+                em.flush();
+            } catch (PersistenceException ex) {
+                if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
+                    if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
+                        throw new CompanySQLConstraintException(ex.getMessage());
+                    } else {
+                        throw new UnknownPersistenceException(ex.getMessage());
+                    }
+                } else {
+                    throw new UnknownPersistenceException(ex.getMessage());
+                }
+            }
+        } else {
+            throw new CompanyBeanValidaionException(prepareInputDataValidationErrorsMessage(companyError));
         }
     }
 

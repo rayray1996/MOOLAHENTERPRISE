@@ -48,7 +48,7 @@ public class PointOfContactEntity implements Serializable {
     @Email
     private String pocEmail;
     
-    @ManyToOne(cascade = {CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH})
     @JoinColumn(nullable = false)
     private CompanyEntity company;
 
@@ -148,10 +148,5 @@ public class PointOfContactEntity implements Serializable {
             return false;
         }
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return "PointOfContactEntity{" + "pocId=" + pocId + ", pocName=" + pocName + ", pocMobileNumber=" + pocMobileNumber + ", pocOfficeNumber=" + pocOfficeNumber + ", pocEmail=" + pocEmail + ", company=" + company + '}';
     }
 }
