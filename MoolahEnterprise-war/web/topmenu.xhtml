@@ -22,6 +22,17 @@
             font-size: 14px!important;
             font-family: sans-serif!important;            
         }
+        #currentComparisonCC .ui-button {
+            height:3.5%!important;
+            margin-left:22% !important;
+        }
+        #logoutForm .ui-button{
+
+            margin-left: 227%;
+            margin-top: -14%;
+            width: 109%;
+
+        }
     </style>
 
     <header>
@@ -37,7 +48,7 @@
                 <p:growl>
                     <p:autoUpdate />
                 </p:growl>
-                <p:megaMenu orientation="horizontal" autoDisplay="false" class="bodyText" style="height:3.75%; width:40%; margin-left:18%; margin-top:3%;font-size:14px;">
+                <p:megaMenu orientation="horizontal" autoDisplay="false" class="bodyText" style="height:3.5%; width:40%; margin-left:22%; margin-top:3%;font-size:14px;">
 
                     <p:menuitem value="&nbsp;&nbsp;&nbsp;Home&nbsp;&nbsp;&nbsp;" outcome="/index.xhtml"/>
                     <p:menuitem value="&nbsp;&nbsp;&nbsp;About Us&nbsp;&nbsp;&nbsp;" outcome="/aboutUs.xhtml"/>
@@ -71,7 +82,7 @@
 
         <h:panelGroup rendered="#{sessionScope.isLogin == true}">
 
-            <p:megaMenu class="bodyText" orientation="horizontal" autoDisplay="false" style="height:3.75%; width:40%; margin-left:18%; margin-top:3%;font-size:14px;font-family: sans-serif">
+            <p:megaMenu class="bodyText" orientation="horizontal" autoDisplay="false" style="height:3.5%; width:40%; margin-left:22%; margin-top:3%;font-size:14px;font-family: sans-serif">
 
                 <p:menuitem class="bodyText" value="&nbsp;&nbsp;&nbsp;Home&nbsp;&nbsp;&nbsp;" outcome="/index.xhtml"/>
                 <p:menuitem class="bodyText" value="&nbsp;&nbsp;&nbsp;About Us&nbsp;&nbsp;&nbsp;" outcome="/aboutUs.xhtml"/> 
@@ -88,16 +99,14 @@
             </p:megaMenu>
 
 
-            <div id = "loggedinDisplay" style="width:25%;margin-top:-3%;margin-left: 63%; font-size:14px;">
-                <div style="margin-left: 51%;">
-                    <h:outputText value="You are login as #{sessionScope.customerEntity.fullName}" />&nbsp;
-                </div>
-                <br/>
-                <div style="margin-left: 20%!important">
-                    <ezcomp:currentComparison id="currentComparisonCC"> </ezcomp:currentComparison>
-                </div>
+            <div style="margin-left: 80%; margin-top:-4%;">
+                <h:outputText value="You are login as #{sessionScope.customerEntity.fullName}" />&nbsp;
+            </div>
+            <br/>
+            <div id="comparisonDiv" style="float:right;width:31%">
+                <ezcomp:currentComparison id="currentComparisonCC"> </ezcomp:currentComparison>
                 <h:form id="logoutForm" class="bodyText">
-                    <p:menuButton id="button" value ="My Account" style="height:3.5%; margin-top: -9.4%; margin-left: 59%;">
+                    <p:menuButton id="button" value ="My Account" style="height:3.5%; margin-top:-2%;">
                         <p:menuitem class="bodyText" value="View My Profile" outcome="/myAccount/myProfile.xhtml"/>
                         <p:menuitem class="bodyText" value="My Saved Comparisons" outcome="/myAccount/viewMySavedComparison.xhtml"/>
                         <p:menuitem class="bodyText" value="My Liked Products" outcome="/myAccount/viewMyLikedProducts.xhtml"/>
@@ -105,6 +114,7 @@
                     </p:menuButton>
                 </h:form>
             </div>
+
 
 
 
