@@ -10,7 +10,23 @@
 
     <ui:define name="content">
         <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces"/>
-        <h1 style="font-size: 18px; text-align: left; padding-left: 1%">
+        <style>
+            .ui-datatable tbody.ui-datatable-data { 
+                font-size: 14px;
+                font-family: sans-serif;
+            }
+
+            .ui-datatable thead th, .ui-datatable tfoot td {
+                font-size:14px;
+                font-family: sans-serif;
+            }
+        </style>
+
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <h1 class="pageHeader" style="text-align: center;">
             About the Product
         </h1>
 
@@ -18,12 +34,18 @@
         <h:form id="myButtons">
             <p:poll interval="10" listener="#{viewProductDetailManagedBean.addCount}" />
 
+            &nbsp;
+            &nbsp;
+            <div style="text-align: center;">
+                <p:commandButton class="bodyText" icon="pi pi-star-o" actionListener="#{viewProductDetailManagedBean.likeProduct}" rendered="#{viewProductDetailManagedBean.customerLiked == false}" id="prodButton" process="@this" update="@form" iconPos=""/>
 
-            <p:commandButton icon="pi pi-star-o" styleClass="rounded-button ui-button-help" style="margin-left: 16%; height: 4%" actionListener="#{viewProductDetailManagedBean.likeProduct}" rendered="#{viewProductDetailManagedBean.customerLiked == false}" id="prodButton" process="@this" update="@form" iconPos=""/>
-            <p:commandButton icon="pi pi-star" styleClass="rounded-button ui-button-help" style="margin-left: 16%; height: 4%" actionListener="#{viewProductDetailManagedBean.likeProduct}" rendered="#{viewProductDetailManagedBean.customerLiked == true}" process="@this" update="@form" />
-            <p:commandButton  value="Add to My Comparison" styleClass="rounded-button ui-button-help" style="font-size: 12px; height: 4%;" actionListener="#{viewAllProductManagedBean.addToComparison}">
-                <f:attribute name="productToCompare" value="${viewProductDetailManagedBean.productToView}"/>
-            </p:commandButton>
+                <p:commandButton class="bodyText" icon="pi pi-star" actionListener="#{viewProductDetailManagedBean.likeProduct}" rendered="#{viewProductDetailManagedBean.customerLiked == true}" process="@this" update="@form" />
+                &nbsp;
+                &nbsp;          
+                <p:commandButton class="bodyText" value="Add to My Comparison" style="font-size: 12px; height: 4%;" actionListener="#{viewAllProductManagedBean.addToComparison}" update="currentComparisonCC">
+                    <f:attribute name="productToCompare" value="${viewProductDetailManagedBean.productToView}"/>
+                </p:commandButton>
+            </div>
         </h:form>
         <div style="text-align: center">
             <p:graphicImage library="images" name="#{viewProductDetailManagedBean.productToView.productEntity.company.companyImage}" height="350" width="350 " 
@@ -33,40 +55,40 @@
             <p:autoUpdate/>
         </p:growl>
 
-        <div class="card">
-            <p:tabView>
+        <div class="card" style="margin: 0 auto;">
+            <p:tabView class="bodyText" style="width:57%!important;text-align: center;margin: 0 auto;">
                 <p:tab title="Product Details" >
-                    <p:panelGrid columns="2" columnClasses="" style="margin-left: auto; width: 60%; margin-right: auto">
+                    <p:panelGrid class="bodyText" columns="2" style="margin-left: auto; width: 60%; margin-right: auto">
                         <p:column>
-                            <p:outputLabel value="Company Name: "/>
+                            <h:outputText value="Company Name: "/>
                         </p:column>
                         <p:column>
                             <h:outputText value="#{viewProductDetailManagedBean.productToView.productEntity.company.companyName}"/>
                         </p:column>
 
                         <p:column>
-                            <p:outputLabel value="Product Name"/>
+                            <h:outputText value="Product Name"/>
                         </p:column>
                         <p:column>
                             <h:outputText value="#{viewProductDetailManagedBean.productToView.productEntity.productName}"/>
                         </p:column>
 
                         <p:column>
-                            <p:outputLabel value="Product Category"/>
+                            <h:outputText value="Product Category"/>
                         </p:column>
                         <p:column>
                             <h:outputText value="#{viewProductDetailManagedBean.productToView.stringParentCategory}"/>
                         </p:column>
 
                         <p:column>
-                            <p:outputLabel value="Product Type"/>
+                            <h:outputText value="Product Type"/>
                         </p:column>
                         <p:column>
                             <h:outputText value="#{viewProductDetailManagedBean.productToView.stringChildCategory}"/>
                         </p:column>
 
                         <p:column>
-                            <p:outputLabel value="Average Interest Rate"/>
+                            <h:outputText value="Average Interest Rate"/>
                         </p:column>
                         <p:column>
                             <h:outputText value="#{viewProductDetailManagedBean.productToView.productEntity.averageInterestRate}"/>
@@ -75,63 +97,65 @@
                     </p:panelGrid>
                 </p:tab>
                 <p:tab title="Coverage">
-                    <p:panelGrid columns="2" columnClasses=""  style="margin-left: auto; width: 60%; margin-right: auto">
+                    <p:panelGrid class="bodyText" columns="2" columnClasses=""  style="margin-left: auto; width: 60%; margin-right: auto">
                         <p:column>
-                            <p:outputLabel value="Coverage Term: "/>
+                            <h:outputText value="Coverage Term: "/>
                         </p:column>
                         <p:column style="width: 60%">
                             <h:outputText value="#{viewProductDetailManagedBean.productToView.productEntity.coverageTerm} years"/>
                         </p:column>
 
                         <p:column style="width: 40%">
-                            <p:outputLabel value="Minimum Sum Assured:"/>
+                            <h:outputText value="Minimum Sum Assured:"/>
                         </p:column>
                         <p:column style="width: 60%">
                             <h:outputText value="$#{viewProductDetailManagedBean.productToView.productEntity.assuredSum}"/>
                         </p:column>
                     </p:panelGrid>
                 </p:tab>
-                <p:tab title="Premiums For Product" rendered="#{viewProductDetailManagedBean.cust.smoker == false}">
+                <p:tab class="bodyText" title="Premiums For Product" rendered="#{viewProductDetailManagedBean.cust.smoker == false}">
                     <p style="font-weight: bold; font-size: 14px; text-align: center"> Non Smoking Premium for Product: #{viewProductDetailManagedBean.product.productName}</p>
                     <p:dataTable id="productPremiumTableNonSmoker" widgetVar="productPremiumTable" value="#{viewProductDetailManagedBean.productToView.productEntity.listOfPremium}" 
                                  var="premium" rowKey="#{premium.premiumId}" style="width:60%; padding-left: 5%; margin-left: auto; margin-right: auto" rowIndexVar="row" >
-                        <p:column headerText="S/N" style="width: 10% !important; ">
-                            <h:outputText value="#{row + 1}"/>
+                        <p:column class="bodyText" headerText="S/N" style="width: 10% !important; ">
+                            <h:outputText class="bodyText" value="#{row + 1}"/>
                         </p:column>
-                        <p:column headerText="Min Age Group" style="width: 20% !important; text-align: center">
-                            <h:outputText value="#{premium.minAgeGroup} y/o" />
+                        <p:column class="bodyText" headerText="Min Age Group" style="width: 20% !important; text-align: center">
+                            <h:outputText class="bodyText" value="#{premium.minAgeGroup} y/o" />
                         </p:column>
 
-                        <p:column headerText="Max Age Group" style="width: 20% !important; text-align: center ">
-                            <h:outputText value="#{premium.maxAgeGroup} y/o" />
+                        <p:column class="bodyText" headerText="Max Age Group" style="width: 20% !important; text-align: center ">
+                            <h:outputText class="bodyText" value="#{premium.maxAgeGroup} y/o" />
                         </p:column>                            
 
-                        <p:column headerText="Premium Price" style="width: 50% !important; text-align: center ">
-                            <h:outputText value="$#{premium.premiumValue}" />
+                        <p:column class="bodyText" headerText="Premium Price" style="width: 50% !important; text-align: center ">
+                            <h:outputText class="bodyText" value="$#{premium.premiumValue}" />
                         </p:column>
                     </p:dataTable>
                 </p:tab>
 
-                <p:tab title="Premiums For Product" rendered="#{viewProductDetailManagedBean.cust.smoker == true}">
-                    <p style="font-weight: bold; font-size: 14px; text-align: center"> Smoking Premium for Product: #{viewProductDetailManagedBean.product.productName}</p>
-                    <p:dataTable id="productPremiumTableSmoker" widgetVar="productPremiumTable" value="#{viewProductDetailManagedBean.product.listOfSmokerPremium}" 
-                                 var="premium" rowKey="#{premium.premiumId}" style="width:60%; margin-left: auto; margin-right: auto" rowIndexVar="row">
-                        <p:column headerText="S/N" style="width: 10% !important; ">
-                            <h:outputText value="#{row + 1}"/>
-                        </p:column>
-                        <p:column headerText="Min Age Group" style="width: 20% !important; text-align: center">
-                            <h:outputText value="#{premium.minAgeGroup} y/o" />
-                        </p:column>
+                <div>
+                    <p:tab title="Premiums For Product" rendered="#{viewProductDetailManagedBean.cust.smoker == true}">
+                        <p style="font-weight: bold; font-size: 14px; text-align: center"> Smoking Premium for Product: #{viewProductDetailManagedBean.product.productName}</p>
+                        <p:dataTable id="productPremiumTableSmoker" widgetVar="productPremiumTable" value="#{viewProductDetailManagedBean.product.listOfSmokerPremium}" 
+                                     var="premium" rowKey="#{premium.premiumId}" style="width:60%; margin-left: auto; margin-right: auto" rowIndexVar="row">
+                            <p:column headerText="S/N" style="width: 10% !important; ">
+                                <h:outputText value="#{row + 1}"/>
+                            </p:column>
+                            <p:column headerText="Min Age Group" style="width: 20% !important; text-align: center">
+                                <h:outputText value="#{premium.minAgeGroup} y/o" />
+                            </p:column>
 
-                        <p:column headerText="Max Age Group" style="width: 20% !important; text-align: center ">
-                            <h:outputText value="#{premium.maxAgeGroup} y/o" />
-                        </p:column>                            
+                            <p:column headerText="Max Age Group" style="width: 20% !important; text-align: center ">
+                                <h:outputText value="#{premium.maxAgeGroup} y/o" />
+                            </p:column>                            
 
-                        <p:column headerText="Premium Price" style="width: 50% !important; text-align: center ">
-                            <h:outputText value="$#{premium.premiumValue}" />
-                        </p:column>
-                    </p:dataTable>
-                </p:tab>
+                            <p:column headerText="Premium Price" style="width: 50% !important; text-align: center ">
+                                <h:outputText value="$#{premium.premiumValue}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+                </div>
 
 
                 <p:tab title="Riders For Product">
@@ -175,8 +199,8 @@
                 </p:tab>
 
                 <p:tab title="Your Affordability Table">
-                    <h5 style="text-align: center">This is a generated affordability table for #{viewProductDetailManagedBean.product.productName}</h5>
-                    <p style=" margin-left: 18%; text-align: justify; font-size: 10px">**First year calculation is based on current cash on hand and investments. Subsequent years has accounted for the yearly expense and yearly income.</p>
+                    <h2 class="bodyText" style="text-align: center">This is a generated affordability table for #{viewProductDetailManagedBean.product.productName}</h2>
+                    <p class="bodyText" style=" margin-left: 18%; text-align: justify; font-size: 10px!important">**First year calculation is based on current cash on hand and investments. Subsequent years has accounted for the yearly expense and yearly income.</p>
                     <p:dataTable id="affordabilityTable" widgetVar="affordTable" value="#{viewProductDetailManagedBean.listOfAffordability}" 
                                  var="afford" rowKey="#{features.featureId}" rowIndexVar="rowIndex"  style="width:70%; margin-left: auto; margin-right: auto">
 

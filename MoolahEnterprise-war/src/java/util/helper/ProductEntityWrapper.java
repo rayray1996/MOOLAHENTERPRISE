@@ -5,6 +5,7 @@
  */
 package util.helper;
 
+import ejb.entity.PremiumEntity;
 import ejb.entity.ProductEntity;
 import java.io.Serializable;
 
@@ -17,6 +18,8 @@ public class ProductEntityWrapper implements Serializable{
     private ProductEntity productEntity;
     private String stringParentCategory; // main category - wholelife, termlife, endowment
     private String stringChildCategory; // specific category for each main category -- accident, hospital etc...
+    private PremiumEntity smokerPremium;
+    private PremiumEntity normalPremium;
     
     public ProductEntityWrapper() {
     }
@@ -55,6 +58,23 @@ public class ProductEntityWrapper implements Serializable{
     public String toString() {
         return "ProductEntityWrapper{" + "productEntity=" + productEntity + ", stringParentCategory=" + stringParentCategory + ", stringChildCategory=" + stringChildCategory + '}';
     }
+
+    public PremiumEntity getSmokerPremium() {
+        return smokerPremium;
+    }
+
+    public void setSmokerPremium(PremiumEntity smokerPremium) {
+        this.smokerPremium = smokerPremium;
+    }
+
+    public PremiumEntity getNormalPremium() {
+        return normalPremium;
+    }
+
+    public void setNormalPremium(PremiumEntity normalPremium) {
+        this.normalPremium = normalPremium;
+    }
+
     
     
 }

@@ -16,6 +16,8 @@
         <h:outputStylesheet name="./css/default.css"/>
         <h:outputStylesheet name="./css/cssLayout.css"/>
         <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces"/>
+        
+        
         <h:panelGroup rendered="#{sessionScope.isLogin == false}">
 
             <p:messages globalOnly="true"/>
@@ -49,11 +51,13 @@
 
         <h:form id="productToView" rendered="#{sessionScope.isLogin == true}" >
             <br/>
+            <br/>
+            <br/>
             <h3 style="text-align: center; font-size:18px;">Recommended Products For You</h3>
 
             <div class="card">
                 <p:carousel value="#{indexManagedBean.listOfProduct}" var="product" responsive="false" numVisible="4" autoPlayInterval="10000" 
-                            style="width:80%; margin-left: auto; margin-right: auto;" itemStyle="width: 25% ; height: 90%" >
+                            style="width:75%; margin-left: auto; margin-right: auto;" itemStyle="width: 25% ; height: 62%" >
                     <div class="product">  
                         <div class="product-grid-item p-p-5">
 

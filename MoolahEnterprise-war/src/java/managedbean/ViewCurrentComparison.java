@@ -7,6 +7,7 @@ package managedbean;
 
 import ejb.entity.ComparisonEntity;
 import ejb.entity.CustomerEntity;
+import ejb.entity.PremiumEntity;
 import ejb.entity.ProductEntity;
 import ejb.stateless.ComparisonSessionBeanLocal;
 import ejb.stateless.CustomerSessionBeanLocal;
@@ -18,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -66,7 +68,7 @@ public class ViewCurrentComparison implements Serializable {
         String dateRequested = format.format(Calendar.getInstance().getTime());
         currentDate = dateRequested;
     }
-
+    
     public void addToComparison(ProductEntityWrapper productToAdd) {
         if (currentComparisons.size() >= 4) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "You have reached the limit of 4 products to compare", null));
@@ -90,6 +92,25 @@ public class ViewCurrentComparison implements Serializable {
                 return;
             }
         }
+
+        
+        int age = new GregorianCalendar().get(GregorianCalendar.YEAR) - currentCustomer.getDateOfBirth().get(GregorianCalendar.YEAR);
+        // add the correct premium to wrapper
+        for (PremiumEntity p : productToAdd.getProductEntity().getListOfPremium()) {
+            if (age >= p.getMinAgeGroup() && age <= p.getMaxAgeGroup()) {
+                productToAdd.setNormalPremium(p);
+                break;
+            }
+        }
+
+        // add the correct smoker premium to wrapper
+        for (PremiumEntity p : productToAdd.getProductEntity().getListOfSmokerPremium()) {
+            if (age >= p.getMinAgeGroup() && age <= p.getMaxAgeGroup()) {
+                productToAdd.setSmokerPremium(p);
+                break;
+            }
+        }
+
         currentComparisons.add(productToAdd);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "You have successfully added this to your compare list", null));
         comparisonSize = currentComparisons.size();

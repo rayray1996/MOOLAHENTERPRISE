@@ -86,6 +86,10 @@ public class ViewProductDetailManagedBean implements Serializable {
     public void dataInit() {
         try {
             productToView = (ProductEntityWrapper) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("productToView");
+            if (productToView == null) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Product not found", null));
+                return;
+            }
             product = productSessionBean.retrieveProductEntityById(productToView.getProductEntity().getProductId());
 
             cust = (CustomerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("customerEntity");
@@ -103,13 +107,20 @@ public class ViewProductDetailManagedBean implements Serializable {
                         listOfPremiums = product.getListOfPremium();
                         product.setListOfSmokerPremium(listOfPremiums);
                     }
-                } 
+                } else {
+                    listOfPremiums = product.getListOfPremium();
+                    product.setListOfSmokerPremium(listOfPremiums);
+                }
             } else {
                 System.out.println("Check entry non smoker");
                 listOfPremiums = product.getListOfPremium();
             }
 
             int dobYear = customerSessionBean.getAgeOfCustomer(cust);
+
+            for (PremiumEntity p : listOfPremiums) {
+                System.out.println(p.getMinAgeGroup() + ", " + p.getMaxAgeGroup() + "\n");
+            }
 
             System.out.println("Date of birth: " + dobYear);
             System.out.println("List of premium size: " + listOfPremiums.size());
@@ -139,7 +150,6 @@ public class ViewProductDetailManagedBean implements Serializable {
             System.out.println("Product does not exists!");
         }
     }
-
 
     public void likeProduct(ActionEvent event) {
         try {
