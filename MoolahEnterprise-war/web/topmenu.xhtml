@@ -22,10 +22,10 @@
             font-size: 14px!important;
             font-family: sans-serif!important;            
         }
-        #currentComparisonCC .ui-button {
+        #currentComparisonCC:comparisonButton .ui-button {
             height:3.5%!important;
-            margin-left:22% !important;
         }
+        
         #logoutForm .ui-button{
 
             margin-left: 227%;
@@ -48,7 +48,7 @@
                 <p:growl>
                     <p:autoUpdate />
                 </p:growl>
-                <p:megaMenu orientation="horizontal" autoDisplay="false" class="bodyText" style="height:3.5%; width:40%; margin-left:22%; margin-top:3%;font-size:14px;">
+                <p:megaMenu orientation="horizontal" autoDisplay="false" class="bodyText" style="height:4.2%; width:40%; margin-left:22%; margin-top:3%;font-size:14px;">
 
                     <p:menuitem value="&nbsp;&nbsp;&nbsp;Home&nbsp;&nbsp;&nbsp;" outcome="/index.xhtml"/>
                     <p:menuitem value="&nbsp;&nbsp;&nbsp;About Us&nbsp;&nbsp;&nbsp;" outcome="/aboutUs.xhtml"/>
@@ -82,7 +82,7 @@
 
         <h:panelGroup rendered="#{sessionScope.isLogin == true}">
 
-            <p:megaMenu class="bodyText" orientation="horizontal" autoDisplay="false" style="height:3.5%; width:40%; margin-left:22%; margin-top:3%;font-size:14px;font-family: sans-serif">
+            <p:megaMenu class="bodyText" orientation="horizontal" autoDisplay="false" style="height:4.2%; width:40%; margin-left:22%; margin-top:3%;font-size:14px;font-family: sans-serif">
 
                 <p:menuitem class="bodyText" value="&nbsp;&nbsp;&nbsp;Home&nbsp;&nbsp;&nbsp;" outcome="/index.xhtml"/>
                 <p:menuitem class="bodyText" value="&nbsp;&nbsp;&nbsp;About Us&nbsp;&nbsp;&nbsp;" outcome="/aboutUs.xhtml"/> 
