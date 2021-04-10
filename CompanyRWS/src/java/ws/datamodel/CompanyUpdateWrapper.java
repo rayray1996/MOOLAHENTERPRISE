@@ -10,6 +10,7 @@ import ejb.entity.PaymentEntity;
 import ejb.entity.PointOfContactEntity;
 import ejb.entity.ProductEntity;
 import ejb.entity.RefundEntity;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.JoinColumn;
@@ -30,6 +31,11 @@ public class CompanyUpdateWrapper {
     private List<ProductEntity> listOfProducts;
 
     public CompanyUpdateWrapper() {
+        listOfPayments = new ArrayList<PaymentEntity>();
+        listOfProducts = new ArrayList<ProductEntity>();
+        listOfPointOfContacts = new ArrayList<PointOfContactEntity>();
+        refund = new RefundEntity();
+        companyEntity = new CompanyEntity();
     }
 
     public CompanyUpdateWrapper(CompanyEntity companyEntity, List<PointOfContactEntity> listOfPointOfContacts, RefundEntity refund, List<PaymentEntity> listOfPayments, List<ProductEntity> listOfProducts) {

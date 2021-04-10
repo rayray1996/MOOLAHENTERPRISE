@@ -12,6 +12,7 @@ import ejb.entity.ProductEntity;
 import ejb.entity.RiderEntity;
 import ejb.stateless.CompanySessionBeanLocal;
 import ejb.stateless.RiderSessionBeanLocal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -65,23 +66,42 @@ public class CompanyResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveAllRecords() {
         try {
+            List<CompanyUpdateWrapper> companyWrapper = new ArrayList<CompanyUpdateWrapper>();
+            int indexforCompanyWrapper = 0;
             List<CompanyEntity> companies = companySessionBeanLocal.retrieveAllActiveCompanies();
             for (CompanyEntity company : companies) {
-                for (ProductEntity product : company.getListOfProducts()) {
-                    product.setCompany(null);
+                companyWrapper.add(new CompanyUpdateWrapper());
+                companyWrapper.get(indexforCompanyWrapper).setCompanyEntity(company);
+                if (company.getListOfPayments() != null && !company.getListOfPayments().isEmpty()) {
+                    companyWrapper.get(indexforCompanyWrapper).setListOfPayments(company.getListOfPayments());
+                    for (PaymentEntity payment : companyWrapper.get(indexforCompanyWrapper).getListOfPayments()) {
+                        payment.setCompany(null);
+                    }
+                }
+                if (company.getListOfPointOfContacts() != null && !company.getListOfPointOfContacts().isEmpty()) {
+                    companyWrapper.get(indexforCompanyWrapper).setListOfPointOfContacts(company.getListOfPointOfContacts());
+                    for (PointOfContactEntity pointOfContact : companyWrapper.get(indexforCompanyWrapper).getListOfPointOfContacts()) {
+                        pointOfContact.setCompany(null);
+                    }
+                }
+                if (company.getListOfProducts() != null && !company.getListOfProducts().isEmpty()) {
+
+                    companyWrapper.get(indexforCompanyWrapper).setListOfProducts(company.getListOfProducts());
+                    for (ProductEntity product : companyWrapper.get(indexforCompanyWrapper).getListOfProducts()) {
+                        product.setCompany(null);
+                    }
                 }
                 if (company.getRefund() != null) {
+
+                    companyWrapper.get(indexforCompanyWrapper).setRefund(company.getRefund());
                     company.getRefund().setCompany(null);
                 }
-                for (PaymentEntity payment : company.getListOfPayments()) {
-                    payment.setCompany(null);
-                }
-                for (PointOfContactEntity pointOfContact : company.getListOfPointOfContacts()) {
-                    pointOfContact.setCompany(null);
-                }
+
+                indexforCompanyWrapper++;
+
             }
 
-            GenericEntity<List<CompanyEntity>> genericEntity = new GenericEntity<List<CompanyEntity>>(companies) {
+            GenericEntity<List<CompanyUpdateWrapper>> genericEntity = new GenericEntity<List<CompanyUpdateWrapper>>(companyWrapper) {
             };
 
             return Response.status(Status.OK).entity(genericEntity).build();
@@ -96,9 +116,12 @@ public class CompanyResource {
     public Response retrieveAllRecordsById(@QueryParam("email") String email) {
         try {
             CompanyEntity company = companySessionBeanLocal.retrieveCompanyByEmail(email);
+            CompanyUpdateWrapper companyWrapper = new CompanyUpdateWrapper();
 
+            companyWrapper.setCompanyEntity(company);
             for (ProductEntity product : company.getListOfProducts()) {
                 product.setCompany(null);
+
             }
             if (company.getRefund() != null) {
                 company.getRefund().setCompany(null);
@@ -109,8 +132,20 @@ public class CompanyResource {
             for (PointOfContactEntity pointOfContact : company.getListOfPointOfContacts()) {
                 pointOfContact.setCompany(null);
             }
+            if (company.getListOfPayments() != null && !company.getListOfPayments().isEmpty()) {
+                companyWrapper.setListOfPayments(company.getListOfPayments());
+            }
+            if (company.getListOfPointOfContacts() != null && !company.getListOfPointOfContacts().isEmpty()) {
+                companyWrapper.setListOfPointOfContacts(company.getListOfPointOfContacts());
+            }
+            if (company.getListOfProducts() != null && !company.getListOfProducts().isEmpty()) {
+                companyWrapper.setListOfProducts(company.getListOfProducts());
+            }
+            if (company.getRefund() != null) {
+                companyWrapper.setRefund(company.getRefund());
+            }
 
-            GenericEntity<CompanyEntity> genericEntity = new GenericEntity<CompanyEntity>(company) {
+            GenericEntity<CompanyUpdateWrapper> genericEntity = new GenericEntity<CompanyUpdateWrapper>(companyWrapper) {
             };
 
             return Response.status(Status.OK).entity(genericEntity).build();
@@ -126,8 +161,12 @@ public class CompanyResource {
         try {
             CompanyEntity company = companySessionBeanLocal.login(email, password);
 
+            CompanyUpdateWrapper companyWrapper = new CompanyUpdateWrapper();
+
+            companyWrapper.setCompanyEntity(company);
             for (ProductEntity product : company.getListOfProducts()) {
                 product.setCompany(null);
+
             }
             if (company.getRefund() != null) {
                 company.getRefund().setCompany(null);
@@ -138,10 +177,21 @@ public class CompanyResource {
             for (PointOfContactEntity pointOfContact : company.getListOfPointOfContacts()) {
                 pointOfContact.setCompany(null);
             }
+            if (company.getListOfPayments() != null && !company.getListOfPayments().isEmpty()) {
+                companyWrapper.setListOfPayments(company.getListOfPayments());
+            }
+            if (company.getListOfPointOfContacts() != null && !company.getListOfPointOfContacts().isEmpty()) {
+                companyWrapper.setListOfPointOfContacts(company.getListOfPointOfContacts());
+            }
+            if (company.getListOfProducts() != null && !company.getListOfProducts().isEmpty()) {
+                companyWrapper.setListOfProducts(company.getListOfProducts());
+            }
+            if (company.getRefund() != null) {
+                companyWrapper.setRefund(company.getRefund());
+            }
 
-            GenericEntity<CompanyEntity> genericEntity = new GenericEntity<CompanyEntity>(company) {
+            GenericEntity<CompanyUpdateWrapper> genericEntity = new GenericEntity<CompanyUpdateWrapper>(companyWrapper) {
             };
-
             return Response.status(Status.OK).entity(genericEntity).build();
         } catch (Exception ex) {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();

@@ -146,10 +146,10 @@ public class PaymentEntityResource {
     @Path("retrieveCurrentYearMonthlyPaymentEntity")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveCurrentYearMonthlyPaymentEntity(@QueryParam("strYear") java.sql.Date year) {
+    public Response retrieveCurrentYearMonthlyPaymentEntity(@QueryParam("strYear") String year) {
         try {
             Calendar dStartDate = new GregorianCalendar();
-            dStartDate.setTime(year);
+            dStartDate.set(Integer.valueOf(year), 0, 1);
             List<MonthlyPaymentEntity> mthlyPmts = companySessionBeanLocal.retrieveCurrentYearMonthlyPaymentEntity(dStartDate);
             for (MonthlyPaymentEntity mthlyPmt : mthlyPmts) {
             }
