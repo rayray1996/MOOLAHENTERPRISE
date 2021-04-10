@@ -5,6 +5,8 @@
  */
 package ws.rest;
 
+import ejb.entity.PaymentEntity;
+import ejb.entity.PointOfContactEntity;
 import ejb.entity.ProductEntity;
 import ejb.stateless.ProductSessionBeanLocal;
 import java.util.List;
@@ -40,20 +42,36 @@ public class ProductResource {
      */
     public ProductResource() {
     }
- @Path("retrieveAllFinancialProducts")
+    /**
+     * error dk why tio cyclic
+     * @return 
+     */
+
+    @Path("retrieveAllFinancialProducts")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveAllFinancialProducts() {
         try {
-            List<ProductEntity> companyEntity = productSessionBeanLocal.retrieveAllFinancialProducts();
-//            for(CompanyEntity ce: companyEntity){
-//                ce.setRefund(null);
-//                ce.setListOfPayments(null);
-//                ce.setListOfPointOfContacts(null);
-//                ce.setListOfProducts(null);
-//                
-//            }
-            GenericEntity<List<ProductEntity>> genericEntity = new GenericEntity<List<ProductEntity>>(companyEntity) {
+            List<ProductEntity> products = productSessionBeanLocal.retrieveAllFinancialProducts();
+            for (ProductEntity product : products) {
+                if (product.getCompany() != null) {
+                    product.getCompany().setListOfProducts(null);
+                    if (product.getCompany().getRefund() != null) {
+                        product.getCompany().getRefund().setCompany(null);
+                    }
+                    if (product.getCompany().getListOfPayments() != null && !product.getCompany().getListOfPayments().isEmpty()) {
+                        for (PaymentEntity pay : product.getCompany().getListOfPayments()) {
+                            pay.setCompany(null);
+                        }
+                    }
+                    if (product.getCompany().getListOfPointOfContacts() != null && !product.getCompany().getListOfPointOfContacts().isEmpty()) {
+                        for (PointOfContactEntity poc : product.getCompany().getListOfPointOfContacts()) {
+                            poc.setCompany(null);
+                        }
+                    }
+                }
+            }
+            GenericEntity<List<ProductEntity>> genericEntity = new GenericEntity<List<ProductEntity>>(products) {
             };
 
             return Response.status(Status.OK).entity(genericEntity).build();

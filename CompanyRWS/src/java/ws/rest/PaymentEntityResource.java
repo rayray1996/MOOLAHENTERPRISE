@@ -26,6 +26,8 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -56,23 +58,30 @@ public class PaymentEntityResource {
     public Response retrieveAllHistoricalTransactions() {
         try {
             List<PaymentEntity> paymentEntity = companySessionBeanLocal.retrieveAllHistoricalTransactions();
-            for (PaymentEntity ce : paymentEntity) {
-                ce.getCompany();
-                for (ProductEntity product : ce.getCompany().getListOfProducts()) {
-                    product.getCompany().setListOfProducts(null);
-                }
-                ce.getCompany().setListOfPayments(null);
 
-                for (PointOfContactEntity poc : ce.getCompany().getListOfPointOfContacts()) {
-                    poc.getCompany().setListOfPointOfContacts(null);
+            for (PaymentEntity mthlyPmt : paymentEntity) {
+                if (mthlyPmt.getCompany() != null) {
+                    mthlyPmt.getCompany().setListOfPayments(null);
+                    if (mthlyPmt.getCompany().getRefund() != null) {
+                        mthlyPmt.getCompany().getRefund().setCompany(null);
+
+                    }
+                    for (PointOfContactEntity poc : mthlyPmt.getCompany().getListOfPointOfContacts()) {
+                        poc.setCompany(null);
+                    }
+                    for (ProductEntity product : mthlyPmt.getCompany().getListOfProducts()) {
+                        product.setCompany(null);
+                    }
                 }
 
             }
+
             GenericEntity<List<PaymentEntity>> genericEntity = new GenericEntity<List<PaymentEntity>>(paymentEntity) {
             };
 
             return Response.status(Status.OK).entity(genericEntity).build();
         } catch (Exception ex) {
+            System.out.println("*************error : " + ex.getMessage());
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
@@ -129,30 +138,46 @@ public class PaymentEntityResource {
 //            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
 //        }
 //    }
-//
-//    @Path("retrieveCurrentYearMonthlyPaymentEntity")
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response retrieveCurrentYearMonthlyPaymentEntity(java.sql.Date month) {
-//        try {
-//            Calendar dStartDate = new GregorianCalendar();
-//            dStartDate.setTime(month);
-//            List<MonthlyPaymentEntity> mthlyPmts = companySessionBeanLocal.retrieveCurrentYearMonthlyPaymentEntity(dStartDate);
-//            for (MonthlyPaymentEntity mthlyPmt : mthlyPmts) {
-//                for (ProductLineItemEntity ple : mthlyPmt.getListOfProductLineItems()) {
-//                    ple.getProduct();
-//                    ple.getProduct().getCompany().setListOfProducts(null);
-//
-//                }
-//            }
-//            GenericEntity<List<MonthlyPaymentEntity>> genericEntity = new GenericEntity<List<MonthlyPaymentEntity>>(mthlyPmts) {
-//            };
-//
-//            return Response.status(Status.OK).entity(genericEntity).build();
-//        } catch (Exception ex) {
-//            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
-//        }
-//    }
+    
+    /**
+     * can only take in date i.e. 2021-04-09
+     * but not 2021-04-09T22:53:47.511Z <-- json date
+     */
+    @Path("retrieveCurrentYearMonthlyPaymentEntity")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveCurrentYearMonthlyPaymentEntity(@QueryParam("strYear") java.sql.Date year) {
+        try {
+            Calendar dStartDate = new GregorianCalendar();
+            dStartDate.setTime(year);
+            List<MonthlyPaymentEntity> mthlyPmts = companySessionBeanLocal.retrieveCurrentYearMonthlyPaymentEntity(dStartDate);
+            for (MonthlyPaymentEntity mthlyPmt : mthlyPmts) {
+            }
+            for (MonthlyPaymentEntity mthlyPmt : mthlyPmts) {
+                if (mthlyPmt.getCompany() != null) {
+                    mthlyPmt.getCompany().setListOfPayments(null);
+                    if (mthlyPmt.getCompany().getRefund() != null) {
+                        mthlyPmt.getCompany().getRefund().setCompany(null);
+
+                    }
+                    for (PointOfContactEntity poc : mthlyPmt.getCompany().getListOfPointOfContacts()) {
+                        poc.setCompany(null);
+                    }
+                    for (ProductEntity product : mthlyPmt.getCompany().getListOfProducts()) {
+                        product.setCompany(null);
+                    }
+                }
+
+            }
+
+            GenericEntity<List<MonthlyPaymentEntity>> genericEntity = new GenericEntity<List<MonthlyPaymentEntity>>(mthlyPmts) {
+            };
+
+            return Response.status(Status.OK).entity(genericEntity).build();
+        } catch (Exception ex) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
 
     private CompanySessionBeanLocal lookupCompanySessionBeanLocal() {
         try {

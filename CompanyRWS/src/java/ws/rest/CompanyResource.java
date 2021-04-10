@@ -159,20 +159,15 @@ public class CompanyResource {
                 CompanyEntity company = newRecord.getCompanyEntity();
                 if (newRecord.getListOfPayments() != null && !newRecord.getListOfPayments().isEmpty()) {
                     company.setListOfPayments(newRecord.getListOfPayments());
-                    System.out.println("came pmt");
                 }
                 if (newRecord.getListOfPointOfContacts() != null && !newRecord.getListOfPointOfContacts().isEmpty()) {
                     company.setListOfPointOfContacts(newRecord.getListOfPointOfContacts());
-                    System.out.println("came poc");
-
                 }
                 if (newRecord.getListOfProducts() != null && !newRecord.getListOfProducts().isEmpty()) {
                     company.setListOfProducts(newRecord.getListOfProducts());
-                    System.out.println("came product");
                 }
                 if (newRecord.getRefund() != null) {
                     company.setRefund(newRecord.getRefund());
-                    System.out.println("came refund");
                 }
                 newRecord.setID();
                 companySessionBeanLocal.updateCompanyInformationWS(company);
@@ -194,11 +189,7 @@ public class CompanyResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createNewRecord(CompanyCreateWrapper newRecord) {
-        //System.out.println("Came record");
         if (newRecord != null) {
-            //   System.out.println("enter not null");
-            // System.out.println("company name" + newRecord.getCompany().getCompanyName());
-
             try {
                 CompanyEntity tempCompany = newRecord.getCompanyEntity();
                 tempCompany.setListOfPayments(null);
@@ -231,7 +222,6 @@ public class CompanyResource {
             } catch (CompanyAlreadyExistException | UnknownPersistenceException | CompanyCreationException | PointOfContactBeanValidationException ex) {
                 return Response.status(Status.BAD_REQUEST).entity(ex.getMessage()).build();
             } catch (Exception ex) {
-                System.out.println("error message ********************" + ex.getMessage());
                 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
             }
         } else {
