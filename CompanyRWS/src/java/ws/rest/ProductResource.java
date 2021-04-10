@@ -6,11 +6,14 @@
 package ws.rest;
 
 import ejb.entity.CreditPaymentEntity;
+import ejb.entity.EndowmentEntity;
 import ejb.entity.MonthlyPaymentEntity;
 import ejb.entity.PaymentEntity;
 import ejb.entity.PointOfContactEntity;
 import ejb.entity.ProductEntity;
 import ejb.entity.ProductLineItemEntity;
+import ejb.entity.TermLifeProductEntity;
+import ejb.entity.WholeLifeProductEntity;
 import ejb.stateless.ProductSessionBeanLocal;
 import java.util.List;
 import java.util.logging.Level;
@@ -22,10 +25,12 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import ws.datamodel.ProductWrapper;
 
 /**
  * REST Web Service
@@ -34,9 +39,9 @@ import javax.ws.rs.core.Response.Status;
  */
 @Path("Product")
 public class ProductResource {
-    
+
     ProductSessionBeanLocal productSessionBeanLocal = lookupProductSessionBeanLocal();
-    
+
     @Context
     private UriInfo context;
 
@@ -58,7 +63,7 @@ public class ProductResource {
         try {
             List<ProductEntity> products = productSessionBeanLocal.retrieveAllFinancialProducts();
             for (ProductEntity product : products) {
-                
+
                 if (product.getCompany() != null) {
                     product.getCompany().setListOfProducts(null);
                     if (product.getCompany().getRefund() != null) {
@@ -80,15 +85,290 @@ public class ProductResource {
                     if (product.getCompany().getListOfPointOfContacts() != null && !product.getCompany().getListOfPointOfContacts().isEmpty()) {
                         for (PointOfContactEntity poc : product.getCompany().getListOfPointOfContacts()) {
                             poc.setCompany(null);
-                            
+
                         }
                     }
-                    
+
                 }
             }
             GenericEntity<List<ProductEntity>> genericEntity = new GenericEntity<List<ProductEntity>>(products) {
             };
-            
+
+            return Response.status(Status.OK).entity(genericEntity).build();
+        } catch (Exception ex) {
+            System.out.println("***********" + ex.getMessage());
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
+
+    @Path("retrieveAllEndowmentProducts")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveAllEndowmentProducts() {
+        try {
+            List<EndowmentEntity> products = productSessionBeanLocal.retrieveAllEndowmentProducts();
+            for (ProductEntity product : products) {
+
+                if (product.getCompany() != null) {
+                    product.getCompany().setListOfProducts(null);
+                    if (product.getCompany().getRefund() != null) {
+                        product.getCompany().getRefund().setCompany(null);
+                    }
+                    if (product.getCompany().getListOfPayments() != null && !product.getCompany().getListOfPayments().isEmpty()) {
+                        for (PaymentEntity pay : product.getCompany().getListOfPayments()) {
+                            pay.setCompany(null);
+                            if (pay instanceof MonthlyPaymentEntity) {
+                                MonthlyPaymentEntity c = ((MonthlyPaymentEntity) pay);
+                                for (ProductLineItemEntity pl : c.getListOfProductLineItems()) {
+                                    if (pl.getProduct() != null) {
+                                        pl.setProduct(null);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (product.getCompany().getListOfPointOfContacts() != null && !product.getCompany().getListOfPointOfContacts().isEmpty()) {
+                        for (PointOfContactEntity poc : product.getCompany().getListOfPointOfContacts()) {
+                            poc.setCompany(null);
+
+                        }
+                    }
+
+                }
+            }
+            GenericEntity<List<EndowmentEntity>> genericEntity = new GenericEntity<List<EndowmentEntity>>(products) {
+            };
+
+            return Response.status(Status.OK).entity(genericEntity).build();
+        } catch (Exception ex) {
+            System.out.println("***********" + ex.getMessage());
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
+
+    @Path("retrieveAllTermLifeProducts")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveAllTermLifeProducts() {
+        try {
+            List<TermLifeProductEntity> products = productSessionBeanLocal.retrieveAllTermLifeProducts();
+            for (ProductEntity product : products) {
+
+                if (product.getCompany() != null) {
+                    product.getCompany().setListOfProducts(null);
+                    if (product.getCompany().getRefund() != null) {
+                        product.getCompany().getRefund().setCompany(null);
+                    }
+                    if (product.getCompany().getListOfPayments() != null && !product.getCompany().getListOfPayments().isEmpty()) {
+                        for (PaymentEntity pay : product.getCompany().getListOfPayments()) {
+                            pay.setCompany(null);
+                            if (pay instanceof MonthlyPaymentEntity) {
+                                MonthlyPaymentEntity c = ((MonthlyPaymentEntity) pay);
+                                for (ProductLineItemEntity pl : c.getListOfProductLineItems()) {
+                                    if (pl.getProduct() != null) {
+                                        pl.setProduct(null);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (product.getCompany().getListOfPointOfContacts() != null && !product.getCompany().getListOfPointOfContacts().isEmpty()) {
+                        for (PointOfContactEntity poc : product.getCompany().getListOfPointOfContacts()) {
+                            poc.setCompany(null);
+
+                        }
+                    }
+
+                }
+            }
+            GenericEntity<List<TermLifeProductEntity>> genericEntity = new GenericEntity<List<TermLifeProductEntity>>(products) {
+            };
+
+            return Response.status(Status.OK).entity(genericEntity).build();
+        } catch (Exception ex) {
+            System.out.println("***********" + ex.getMessage());
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
+
+    @Path("retrieveAllWholeLifeProducts")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveAllWholeLifeProducts() {
+        try {
+            List<WholeLifeProductEntity> products = productSessionBeanLocal.retrieveAllWholeLifeProducts();
+            for (ProductEntity product : products) {
+
+                if (product.getCompany() != null) {
+                    product.getCompany().setListOfProducts(null);
+                    if (product.getCompany().getRefund() != null) {
+                        product.getCompany().getRefund().setCompany(null);
+                    }
+                    if (product.getCompany().getListOfPayments() != null && !product.getCompany().getListOfPayments().isEmpty()) {
+                        for (PaymentEntity pay : product.getCompany().getListOfPayments()) {
+                            pay.setCompany(null);
+                            if (pay instanceof MonthlyPaymentEntity) {
+                                MonthlyPaymentEntity c = ((MonthlyPaymentEntity) pay);
+                                for (ProductLineItemEntity pl : c.getListOfProductLineItems()) {
+                                    if (pl.getProduct() != null) {
+                                        pl.setProduct(null);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (product.getCompany().getListOfPointOfContacts() != null && !product.getCompany().getListOfPointOfContacts().isEmpty()) {
+                        for (PointOfContactEntity poc : product.getCompany().getListOfPointOfContacts()) {
+                            poc.setCompany(null);
+
+                        }
+                    }
+
+                }
+            }
+            GenericEntity<List<WholeLifeProductEntity>> genericEntity = new GenericEntity<List<WholeLifeProductEntity>>(products) {
+            };
+
+            return Response.status(Status.OK).entity(genericEntity).build();
+        } catch (Exception ex) {
+            System.out.println("***********" + ex.getMessage());
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
+
+    @Path("retrieveProductEntityById")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveProductEntityById(@QueryParam("productId") Long productId) {
+        try {
+            ProductEntity product = productSessionBeanLocal.retrieveProductEntityById(productId);
+
+            if (product.getCompany() != null) {
+                product.getCompany().setListOfProducts(null);
+                if (product.getCompany().getRefund() != null) {
+                    product.getCompany().getRefund().setCompany(null);
+                }
+                if (product.getCompany().getListOfPayments() != null && !product.getCompany().getListOfPayments().isEmpty()) {
+                    for (PaymentEntity pay : product.getCompany().getListOfPayments()) {
+                        pay.setCompany(null);
+                        if (pay instanceof MonthlyPaymentEntity) {
+                            MonthlyPaymentEntity c = ((MonthlyPaymentEntity) pay);
+                            for (ProductLineItemEntity pl : c.getListOfProductLineItems()) {
+                                if (pl.getProduct() != null) {
+                                    pl.setProduct(null);
+                                }
+                            }
+                        }
+
+                    }
+                    if (product.getCompany().getListOfPointOfContacts() != null && !product.getCompany().getListOfPointOfContacts().isEmpty()) {
+                        for (PointOfContactEntity poc : product.getCompany().getListOfPointOfContacts()) {
+                            poc.setCompany(null);
+
+                        }
+                    }
+
+                }
+            }
+            GenericEntity<ProductEntity> genericEntity = new GenericEntity<ProductEntity>(product) {
+            };
+
+            return Response.status(Status.OK).entity(genericEntity).build();
+        } catch (Exception ex) {
+            System.out.println("***********" + ex.getMessage());
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
+
+    @Path("searchForProductsByName")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response searchForProductsByName(@QueryParam("name") String name) {
+        try {
+            List<ProductEntity> products = productSessionBeanLocal.searchForProductsByName(name);
+            for (ProductEntity product : products) {
+
+                if (product.getCompany() != null) {
+                    product.getCompany().setListOfProducts(null);
+                    if (product.getCompany().getRefund() != null) {
+                        product.getCompany().getRefund().setCompany(null);
+                    }
+                    if (product.getCompany().getListOfPayments() != null && !product.getCompany().getListOfPayments().isEmpty()) {
+                        for (PaymentEntity pay : product.getCompany().getListOfPayments()) {
+                            pay.setCompany(null);
+                            if (pay instanceof MonthlyPaymentEntity) {
+                                MonthlyPaymentEntity c = ((MonthlyPaymentEntity) pay);
+                                for (ProductLineItemEntity pl : c.getListOfProductLineItems()) {
+                                    if (pl.getProduct() != null) {
+                                        pl.setProduct(null);
+                                    }
+                                }
+                            }
+
+                        }
+                        if (product.getCompany().getListOfPointOfContacts() != null && !product.getCompany().getListOfPointOfContacts().isEmpty()) {
+                            for (PointOfContactEntity poc : product.getCompany().getListOfPointOfContacts()) {
+                                poc.setCompany(null);
+
+                            }
+                        }
+
+                    }
+                }
+            }
+           GenericEntity<List<ProductEntity>> genericEntity = new GenericEntity<List<ProductEntity>>(products) {
+            };
+
+            return Response.status(Status.OK).entity(genericEntity).build();
+        } catch (Exception ex) {
+            System.out.println("***********" + ex.getMessage());
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
+
+    
+    @Path("filterProductsByCriteria")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response filterProductsByCriteria(ProductWrapper productWrapper) {
+        try {
+           // CategoryEnum category, Boolean wantsRider, Boolean isSmoker, BigDecimal sumAssured, Integer coverageTerm, Integer premiumTerm, EndowmentProductEnum endowmentProductEnum, TermLifeProductEnum termLifeProductEnum, WholeLifeProductEnum wholeLifeProductEnum
+           // List<ProductEntity> products = productSessionBeanLocal.filterProductsByCriteria(productWrapper.getCategory(),productWrapper.get);
+          
+             List<ProductEntity> products = productSessionBeanLocal.searchForProductsByName("");
+             for (ProductEntity product : products) {
+
+                if (product.getCompany() != null) {
+                    product.getCompany().setListOfProducts(null);
+                    if (product.getCompany().getRefund() != null) {
+                        product.getCompany().getRefund().setCompany(null);
+                    }
+                    if (product.getCompany().getListOfPayments() != null && !product.getCompany().getListOfPayments().isEmpty()) {
+                        for (PaymentEntity pay : product.getCompany().getListOfPayments()) {
+                            pay.setCompany(null);
+                            if (pay instanceof MonthlyPaymentEntity) {
+                                MonthlyPaymentEntity c = ((MonthlyPaymentEntity) pay);
+                                for (ProductLineItemEntity pl : c.getListOfProductLineItems()) {
+                                    if (pl.getProduct() != null) {
+                                        pl.setProduct(null);
+                                    }
+                                }
+                            }
+
+                        }
+                        if (product.getCompany().getListOfPointOfContacts() != null && !product.getCompany().getListOfPointOfContacts().isEmpty()) {
+                            for (PointOfContactEntity poc : product.getCompany().getListOfPointOfContacts()) {
+                                poc.setCompany(null);
+
+                            }
+                        }
+
+                    }
+                }
+            }
+           GenericEntity<List<ProductEntity>> genericEntity = new GenericEntity<List<ProductEntity>>(products) {
+            };
+
             return Response.status(Status.OK).entity(genericEntity).build();
         } catch (Exception ex) {
             System.out.println("***********" + ex.getMessage());
