@@ -61,7 +61,7 @@ public class PaymentEntityResource {
     private UriInfo context;
 
     /**
-     * Creates a new instance of PaymentEntityResource
+     * Working Creates a new instance of PaymentEntityResource
      */
     public PaymentEntityResource() {
     }
@@ -100,30 +100,47 @@ public class PaymentEntityResource {
         }
     }
 
+    /**
+     * Working
+     *
+     * @param email
+     * @param password
+     * @param startDate
+     * @param endDate
+     * @return
+     */
     @Path("retrieveSpecificHistoricalTransactions")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveSpecificHistoricalTransactions(@QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate, @QueryParam("coyId") Long coyId) {
+    public Response retrieveSpecificHistoricalTransactions(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate) {
         try {
+            CompanyEntity company = companySessionBeanLocal.login(email, password);
+            if (company == null) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Invalid account").build();
+            }
             String[] splitStartDate = startDate.split("-");
             String[] splitEndDate = endDate.split("-");
             Calendar dStartDate = new GregorianCalendar();
-            dStartDate.set(Integer.parseInt(splitStartDate[0]), Integer.parseInt(splitStartDate[1]), Integer.parseInt(splitStartDate[2]), 0, 0);
+            dStartDate.set(Integer.parseInt(splitStartDate[0]), Integer.parseInt(splitStartDate[1]) - 1, Integer.parseInt(splitStartDate[2]), 0, 0);
 
             Calendar dEndDate = new GregorianCalendar();
-            dEndDate.set(Integer.parseInt(splitEndDate[0]), Integer.parseInt(splitEndDate[1]), Integer.parseInt(splitEndDate[2]), 0, 0);
-            List<PaymentEntity> paymentEntity = companySessionBeanLocal.retrieveSpecificHistoricalTransactions(dStartDate, dEndDate, coyId);
+            dEndDate.set(Integer.parseInt(splitEndDate[0]), Integer.parseInt(splitEndDate[1]) - 1, Integer.parseInt(splitEndDate[2]), 0, 0);
+            List<PaymentEntity> paymentEntity = companySessionBeanLocal.retrieveSpecificHistoricalTransactions(dStartDate, dEndDate, company.getCompanyId());
 
-            System.out.println("");
-            for (PaymentEntity ce : paymentEntity) {
-                ce.getCompany();
-                for (ProductEntity product : ce.getCompany().getListOfProducts()) {
-                    product.getCompany().setListOfProducts(null);
+            for (PaymentEntity pay : paymentEntity) {
+                pay.getCompany().setListOfPayments(null);
+                if (pay.getCompany().getListOfPointOfContacts() != null && !pay.getCompany().getListOfPointOfContacts().isEmpty()) {
+                    for (PointOfContactEntity poc : pay.getCompany().getListOfPointOfContacts()) {
+                        poc.setCompany(null);
+                    }
                 }
-                ce.getCompany().setListOfPayments(null);
-
-                for (PointOfContactEntity poc : ce.getCompany().getListOfPointOfContacts()) {
-                    poc.getCompany().setListOfPointOfContacts(null);
+                if (pay.getCompany().getRefund() != null) {
+                    pay.getCompany().getRefund().setCompany(null);
+                }
+                if (pay.getCompany().getListOfProducts() != null && !pay.getCompany().getListOfProducts().isEmpty()) {
+                    for (ProductEntity product : pay.getCompany().getListOfProducts()) {
+                        product.setCompany(null);
+                    }
                 }
 
             }
@@ -131,14 +148,20 @@ public class PaymentEntityResource {
             };
 
             return Response.status(Status.OK).entity(genericEntity).build();
+        } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid account").build();
         } catch (Exception ex) {
-            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+            return Response.status(Response.Status.FORBIDDEN).entity("ex.getMessage()" + ex.getMessage()).build();
         }
+//        } catch (Exception ex) {
+//            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+//        }
     }
 
     /**
      *
-     * Not done, waiting to clarify for ejb
+     * --- error at ejb
+     * Havent implemented login
      *
      * @param month
      * @return
@@ -154,7 +177,7 @@ public class PaymentEntityResource {
             String strYear = splitDate[0];
             String strMonth = splitDate[1];
             dStartDate.set(Integer.parseInt(strYear), Integer.parseInt(strMonth) - 1, 1);
-            System.out.println("*****************************time : " + dStartDate.getTime());
+            System.out.println("***********dStartDate " + dStartDate);
             MonthlyPaymentEntity mthlyPmt = companySessionBeanLocal.retrieveCurrentMonthlyPaymentEntity(dStartDate, coyId);
 
             if (mthlyPmt.getCompany() != null) {
@@ -171,11 +194,6 @@ public class PaymentEntityResource {
                 }
 
             }
-//            for (ProductLineItemEntity ple : mthlyPmt.getListOfProductLineItems()) {
-//                ple.getProduct();
-//                ple.getProduct().getCompany().setListOfProducts(null);
-//
-//            }
             GenericEntity<MonthlyPaymentEntity> genericEntity = new GenericEntity<MonthlyPaymentEntity>(mthlyPmt) {
             };
 
@@ -189,7 +207,9 @@ public class PaymentEntityResource {
     }
 
     /**
-     * can only take in date i.e. 2021-04-09
+     * Error at ejb 
+     * Havent implemented login can only take in date i.e.
+     * 2021-04-09
      */
     @Path("retrieveCurrentYearMonthlyPaymentEntity")
     @GET
@@ -228,7 +248,7 @@ public class PaymentEntityResource {
     }
 
     /**
-     * NOT TESTED
+     * Working
      *
      * @param email
      * @param password
@@ -236,16 +256,16 @@ public class PaymentEntityResource {
      * @param paymentId
      * @return
      */
-
-    @POST
+    @GET
     @Path("makePayment")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateCompanyInformation(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("companyId") Long companyId, @QueryParam("paymentId") Long paymentId) {
+    public Response updateCompanyInformation(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("paymentId") Long paymentId) {
 
         try {
-            if (companySessionBeanLocal.login(email, password) != null) {
-                invoiceSessionBean.makePayment(paymentId, companyId);
+            CompanyEntity company = companySessionBeanLocal.login(email, password);
+            if (company != null) {
+                invoiceSessionBean.makePayment(paymentId, company.getCompanyId());
 
                 return Response.status(Response.Status.OK).entity("").build();
             } else {
@@ -261,7 +281,7 @@ public class PaymentEntityResource {
     }
 
     /**
-     * NOT TESTED
+     * Working
      *
      * @param email
      * @param password

@@ -439,13 +439,15 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
 
     @Override
     public List<PaymentEntity> retrieveSpecificHistoricalTransactions(Calendar startDate, Calendar endDate, Long coyId) {
+        System.out.println("******************startDate:" + startDate.getTime() + " endDate:" + endDate.getTime() + " coyId" + coyId);
         Query query = em.createQuery("SELECT p FROM PaymentEntity p WHERE p.dateTransacted >= :startDate AND p.dateTransacted <= :endDate AND  p.company.companyId =:coyId");
         query.setParameter("startDate", startDate);
         query.setParameter("endDate", endDate);
         query.setParameter("coyId", coyId);
         List<PaymentEntity> results = query.getResultList();
-
+        System.out.println("********p*************");
         for (PaymentEntity p : results) {
+            System.out.println("********p:" + p.getPaymentId());
             if (p instanceof MonthlyPaymentEntity) {
                 ((MonthlyPaymentEntity) p).getListOfProductLineItems().size();
             }
@@ -453,6 +455,15 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
         return results;
     }
 
+    /**
+     * Error:
+     * xception Description: Problem compiling [SELECT mp FROM MonthlyPaymentEntity mp WHERE mp.dateGenerated >= :start AND mp.dateGenerated <= :end AND mp.companyId =:coyId]. 
+        [105, 117] The state field path 'mp.companyId' cannot be resolved to a valid type.
+     * @param month
+     * @param coyId
+     * @return
+     * @throws MonthlyPaymentNotFoundException 
+     */
     @Override
     public MonthlyPaymentEntity retrieveCurrentMonthlyPaymentEntity(Calendar month, Long coyId) throws MonthlyPaymentNotFoundException {
         Calendar start = (Calendar) month.clone();
@@ -460,11 +471,11 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
         start.set(month.get(Calendar.YEAR), month.get(Calendar.MONTH), 1, 0, 0);
         end.set(month.get(Calendar.YEAR), month.get(Calendar.MONTH) + 1, 1, 0, 0);
 
-        System.out.println("************Start: " + start.getTime());
+        System.out.println("***************Start: " + start.getTime());
         System.out.println("**************End: " + end.getTime());
 //        start.add(Calendar.DATE, 30);
 //        end.add(Calendar.DATE, -30);
-        Query query = em.createQuery("SELECT mp FROM MonthlyPaymentEntity mp WHERE mp.dateGenerated >= :start AND mp.dateGenerated <= :end AND mp.companyId =:coyId");
+        Query query = em.createQuery("SELECT mp FROM MonthlyPaymentEntity mp WHERE mp.dateGenerated >= :start AND mp.dateGenerated <= :end AND mp. =:coyId");
         query.setParameter("start", start);
         query.setParameter("end", end);
         query.setParameter("coyId", coyId);

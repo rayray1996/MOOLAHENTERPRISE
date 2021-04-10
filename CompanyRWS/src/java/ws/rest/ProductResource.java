@@ -5,9 +5,12 @@
  */
 package ws.rest;
 
+import ejb.entity.CreditPaymentEntity;
+import ejb.entity.MonthlyPaymentEntity;
 import ejb.entity.PaymentEntity;
 import ejb.entity.PointOfContactEntity;
 import ejb.entity.ProductEntity;
+import ejb.entity.ProductLineItemEntity;
 import ejb.stateless.ProductSessionBeanLocal;
 import java.util.List;
 import java.util.logging.Level;
@@ -31,9 +34,9 @@ import javax.ws.rs.core.Response.Status;
  */
 @Path("Product")
 public class ProductResource {
-
+    
     ProductSessionBeanLocal productSessionBeanLocal = lookupProductSessionBeanLocal();
-
+    
     @Context
     private UriInfo context;
 
@@ -42,11 +45,12 @@ public class ProductResource {
      */
     public ProductResource() {
     }
-    /**
-     * error dk why tio cyclic
-     * @return 
-     */
 
+    /**
+     * working
+     *
+     * @return
+     */
     @Path("retrieveAllFinancialProducts")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -54,6 +58,7 @@ public class ProductResource {
         try {
             List<ProductEntity> products = productSessionBeanLocal.retrieveAllFinancialProducts();
             for (ProductEntity product : products) {
+                
                 if (product.getCompany() != null) {
                     product.getCompany().setListOfProducts(null);
                     if (product.getCompany().getRefund() != null) {
@@ -62,24 +67,35 @@ public class ProductResource {
                     if (product.getCompany().getListOfPayments() != null && !product.getCompany().getListOfPayments().isEmpty()) {
                         for (PaymentEntity pay : product.getCompany().getListOfPayments()) {
                             pay.setCompany(null);
+                            if (pay instanceof MonthlyPaymentEntity) {
+                                MonthlyPaymentEntity c = ((MonthlyPaymentEntity) pay);
+                                for (ProductLineItemEntity pl : c.getListOfProductLineItems()) {
+                                    if (pl.getProduct() != null) {
+                                        pl.setProduct(null);
+                                    }
+                                }
+                            }
                         }
                     }
                     if (product.getCompany().getListOfPointOfContacts() != null && !product.getCompany().getListOfPointOfContacts().isEmpty()) {
                         for (PointOfContactEntity poc : product.getCompany().getListOfPointOfContacts()) {
                             poc.setCompany(null);
+                            
                         }
                     }
+                    
                 }
             }
             GenericEntity<List<ProductEntity>> genericEntity = new GenericEntity<List<ProductEntity>>(products) {
             };
-
+            
             return Response.status(Status.OK).entity(genericEntity).build();
         } catch (Exception ex) {
+            System.out.println("***********" + ex.getMessage());
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
-
+    
     private ProductSessionBeanLocal lookupProductSessionBeanLocal() {
         try {
             javax.naming.Context c = new InitialContext();

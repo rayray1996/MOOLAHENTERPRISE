@@ -65,7 +65,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 
     @Override
     public List<ProductEntity> retrieveAllFinancialProducts() {
-        Query query = em.createQuery("SELECT p FROM ProductEntity p WHERE p.isDeleted = FALSE AND p.company.isDeleted = false AND p.company.isDeactivated = false");
+        Query query = em.createQuery("SELECT p FROM ProductEntity p WHERE p.isDeleted = FALSE AND p.company.isDeleted = FALSE AND p.company.isDeactivated = FALSE");
         List<ProductEntity> results = query.getResultList();
 
         for (ProductEntity e : results) {
@@ -79,7 +79,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 
     @Override
     public List<EndowmentEntity> retrieveAllEndowmentProducts() {
-        Query query = em.createQuery("SELECT e FROM EndowmentEntity e WHERE e.isDeleted = FALSE AND e.company.isDeleted = false AND e.company.isDeactivated = false");
+        Query query = em.createQuery("SELECT e FROM EndowmentEntity e WHERE e.isDeleted = FALSE AND e.company.isDeleted = FALSE AND e.company.isDeactivated = FALSE");
         List<EndowmentEntity> results = query.getResultList();
 
         for (EndowmentEntity e : results) {
@@ -105,7 +105,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         }
         return results;
     }
-    
+
     @Override
     public List<WholeLifeProductEntity> retrieveAllWholeLifeProducts() {
         Query query = em.createQuery("SELECT w FROM WholeLifeProductEntity w WHERE w.isDeleted = FALSE AND w.company.isDeleted = false AND w.company.isDeactivated = false");

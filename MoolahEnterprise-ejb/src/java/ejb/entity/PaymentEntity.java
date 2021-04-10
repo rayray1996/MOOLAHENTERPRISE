@@ -56,7 +56,7 @@ public class PaymentEntity implements Serializable {
     @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.DETACH})
     @JoinColumn(nullable = false)
     @NotNull
-    private CompanyEntity company;
+    protected CompanyEntity company;
 
     public PaymentEntity() {
     }

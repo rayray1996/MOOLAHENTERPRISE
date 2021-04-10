@@ -264,10 +264,10 @@ public class CompanyResource {
             return Response.status(Response.Status.OK).entity("").build();
         } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Invalid account").build();
+        } catch (Exception ex) {
+            return Response.status(Response.Status.FORBIDDEN).entity(ex.getMessage()).build();
         }
     }
-
-  
 
     private CompanySessionBeanLocal lookupCompanySessionBeanLocal() {
         try {
