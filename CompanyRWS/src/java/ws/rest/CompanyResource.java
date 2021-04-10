@@ -11,7 +11,9 @@ import ejb.entity.PointOfContactEntity;
 import ejb.entity.ProductEntity;
 import ejb.entity.RiderEntity;
 import ejb.stateless.CompanySessionBeanLocal;
+import ejb.stateless.InvoiceSessionBeanLocal;
 import ejb.stateless.RiderSessionBeanLocal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -34,8 +36,11 @@ import javax.ws.rs.core.Response.Status;
 import util.exception.CompanyAlreadyExistException;
 import util.exception.CompanyBeanValidaionException;
 import util.exception.CompanyCreationException;
+import util.exception.CompanyDoesNotExistException;
 import util.exception.CompanySQLConstraintException;
 import util.exception.IncorrectLoginParticularsException;
+import util.exception.InvalidPaymentEntityCreationException;
+import util.exception.PaymentEntityAlreadyExistsException;
 import util.exception.PointOfContactBeanValidationException;
 import util.exception.UnknownPersistenceException;
 import util.security.CryptographicHelper;
@@ -49,6 +54,8 @@ import ws.datamodel.CompanyUpdateWrapper;
  */
 @Path("Company")
 public class CompanyResource {
+
+    InvoiceSessionBeanLocal invoiceSessionBean = lookupInvoiceSessionBeanLocal();
 
     RiderSessionBeanLocal riderSessionBeanLocal = lookupRiderSessionBeanLocal();
 
@@ -225,7 +232,7 @@ public class CompanyResource {
                     pointOfContact.setCompany(null);
                 }
 
-                return Response.status(Response.Status.OK).entity(company).build();
+                return Response.status(Response.Status.OK).entity(company.getCompanyId()).build();
             } catch (CompanyAlreadyExistException | UnknownPersistenceException | CompanyCreationException | PointOfContactBeanValidationException ex) {
                 return Response.status(Status.BAD_REQUEST).entity(ex.getMessage()).build();
             } catch (Exception ex) {
@@ -237,6 +244,30 @@ public class CompanyResource {
             return Response.status(Response.Status.BAD_REQUEST).entity("Invalid create new record request").build();
         }
     }
+
+    /**
+     * NOT TESTED YET
+     *
+     * @param email
+     * @param password
+     * @return
+     */
+    @Path("deactivateAccount")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deactivateAccount(@QueryParam("email") String email, @QueryParam("password") String password) {
+        try {
+            CompanyEntity company = companySessionBeanLocal.login(email, password);
+            if (company != null) {
+                companySessionBeanLocal.deactivateAccount(email);
+            }
+            return Response.status(Response.Status.OK).entity("").build();
+        } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid account").build();
+        }
+    }
+
+  
 
     private CompanySessionBeanLocal lookupCompanySessionBeanLocal() {
         try {
@@ -252,6 +283,16 @@ public class CompanyResource {
         try {
             javax.naming.Context c = new InitialContext();
             return (RiderSessionBeanLocal) c.lookup("java:global/MoolahEnterprise/MoolahEnterprise-ejb/RiderSessionBean!ejb.stateless.RiderSessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private InvoiceSessionBeanLocal lookupInvoiceSessionBeanLocal() {
+        try {
+            javax.naming.Context c = new InitialContext();
+            return (InvoiceSessionBeanLocal) c.lookup("java:global/MoolahEnterprise/MoolahEnterprise-ejb/InvoiceSessionBean!ejb.stateless.InvoiceSessionBeanLocal");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);

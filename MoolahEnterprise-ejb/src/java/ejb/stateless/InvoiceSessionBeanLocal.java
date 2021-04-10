@@ -8,9 +8,14 @@ package ejb.stateless;
 import ejb.entity.MonthlyPaymentEntity;
 import util.exception.ProductLineItemException;
 import ejb.entity.ProductLineItemEntity;
+import java.math.BigInteger;
 import javax.ejb.Local;
+import util.exception.CompanyDoesNotExistException;
+import util.exception.InvalidPaymentEntityCreationException;
 import util.exception.MonthlyPaymentAlreadyExistsException;
 import util.exception.MonthlyPaymentException;
+import util.exception.MonthlyPaymentNotFoundException;
+import util.exception.PaymentEntityAlreadyExistsException;
 import util.exception.ProductLineItemAlreadyExistException;
 import util.exception.UnknownPersistenceException;
 
@@ -26,5 +31,9 @@ public interface InvoiceSessionBeanLocal {
     public MonthlyPaymentEntity createMonthlyPayment(MonthlyPaymentEntity newMonthlyPayment) throws MonthlyPaymentAlreadyExistsException, UnknownPersistenceException, MonthlyPaymentException;
 
     public void automatedMonthlyInvoice();
-    
+
+    public void makePayment(Long paymentId, Long companyId) throws MonthlyPaymentNotFoundException, CompanyDoesNotExistException;
+
+    public Long purchaseMoolahCredits(Long companyId, BigInteger creditToBuy) throws CompanyDoesNotExistException, InvalidPaymentEntityCreationException, InvalidPaymentEntityCreationException, UnknownPersistenceException, PaymentEntityAlreadyExistsException;
+
 }
