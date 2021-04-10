@@ -115,7 +115,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
                     }
                 }
                 List<PointOfContactEntity> pocs = new ArrayList<>(newCompany.getListOfPointOfContacts());
-                for(PointOfContactEntity poc : pocs) {
+                for (PointOfContactEntity poc : pocs) {
                     poc.setCompany(newCompany);
                 }
                 em.persist(newCompany);
@@ -235,10 +235,14 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
     }
 
     @Override
-    public void updateCompanyInformationWS(CompanyEntity company) throws UnknownPersistenceException, CompanySQLConstraintException, PointOfContactBeanValidationException, CompanyBeanValidaionException {
+    public CompanyEntity updateCompanyInformationWS(CompanyEntity company, String email, String password) throws UnknownPersistenceException, CompanySQLConstraintException, PointOfContactBeanValidationException, CompanyBeanValidaionException, IncorrectLoginParticularsException {
         Set<ConstraintViolation<CompanyEntity>> companyError = validator.validate(company);
         if (companyError.isEmpty()) {
+
             try {
+                if (login(email, password) == null) {
+                    throw new IncorrectLoginParticularsException("Incorrect login details provided!");
+                }
                 if (company.getListOfPointOfContacts() != null && !company.getListOfPointOfContacts().isEmpty()) {
                     for (PointOfContactEntity pe : company.getListOfPointOfContacts()) {
                         Set<ConstraintViolation<PointOfContactEntity>> pointOfContactError = validator.validate(pe);
@@ -247,10 +251,25 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
                         }
 
                     }
-                }
-                em.merge(company);
+                    for (ProductEntity product : company.getListOfProducts()) {
+                        product.setCompany(company);
+                    }
+                    if (company.getRefund() != null) {
+                        company.getRefund().setCompany(company);
+                    }
+                    for (PaymentEntity payment : company.getListOfPayments()) {
+                        payment.setCompany(company);
+                    }
+                    for (PointOfContactEntity pointOfContact : company.getListOfPointOfContacts()) {
+                        pointOfContact.setCompany(company);
+                    }
+                    em.merge(company);
 
-                em.flush();
+                    em.flush();
+                    return company;
+                }
+                throw new CompanyBeanValidaionException("Please check your point of contacts");
+
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
                     if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
@@ -261,6 +280,8 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
                 } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
+            } catch (IncorrectLoginParticularsException | CompanyDoesNotExistException ex) {
+                throw new IncorrectLoginParticularsException("Incorrect login details provided!");
             }
         } else {
             throw new CompanyBeanValidaionException(prepareInputDataValidationErrorsMessage(companyError));
@@ -416,10 +437,12 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
         return results;
     }
 
-    public List<PaymentEntity> retrieveSpecificHistoricalTransactions(Calendar startDate, Calendar endDate) {
-        Query query = em.createQuery("SELECT p FROM PaymentEntity p WHERE p.dateTransacted >= :startDate AND p.dateTransacted <= :endDate");
+    @Override
+    public List<PaymentEntity> retrieveSpecificHistoricalTransactions(Calendar startDate, Calendar endDate, Long coyId) {
+        Query query = em.createQuery("SELECT p FROM PaymentEntity p WHERE p.dateTransacted >= :startDate AND p.dateTransacted <= :endDate AND  p.company.companyId =:coyId");
         query.setParameter("startDate", startDate);
         query.setParameter("endDate", endDate);
+        query.setParameter("coyId", coyId);
         List<PaymentEntity> results = query.getResultList();
 
         for (PaymentEntity p : results) {
@@ -430,35 +453,51 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
         return results;
     }
 
-    public MonthlyPaymentEntity retrieveCurrentMonthlyPaymentEntity(Calendar month) throws MonthlyPaymentNotFoundException {
+    @Override
+    public MonthlyPaymentEntity retrieveCurrentMonthlyPaymentEntity(Calendar month, Long coyId) throws MonthlyPaymentNotFoundException {
         Calendar start = (Calendar) month.clone();
         Calendar end = (Calendar) month.clone();
-        start.add(Calendar.DATE, 30);
-        end.add(Calendar.DATE, -30);
-        Query query = em.createQuery("SELECT mp FROM MonthlyPaymentEntity mp WHERE mp.dateGenerated >= :start AND mp.dateGenerated <= :end");
+        start.set(month.get(Calendar.YEAR), month.get(Calendar.MONTH), 1, 0, 0);
+        end.set(month.get(Calendar.YEAR), month.get(Calendar.MONTH) + 1, 1, 0, 0);
+
+        System.out.println("************Start: " + start.getTime());
+        System.out.println("**************End: " + end.getTime());
+//        start.add(Calendar.DATE, 30);
+//        end.add(Calendar.DATE, -30);
+        Query query = em.createQuery("SELECT mp FROM MonthlyPaymentEntity mp WHERE mp.dateGenerated >= :start AND mp.dateGenerated <= :end AND mp.companyId =:coyId");
         query.setParameter("start", start);
         query.setParameter("end", end);
-        List<MonthlyPaymentEntity> results = query.getResultList();
-
-        for (MonthlyPaymentEntity mp : results) {
-            if (mp.getDateGenerated().get(Calendar.MONTH) == month.get(Calendar.MONTH)) {
-                return mp;
-            }
+        query.setParameter("coyId", coyId);
+        try {
+            MonthlyPaymentEntity results = (MonthlyPaymentEntity) query.getSingleResult();
+            return results;
+        } catch (NoResultException ex) {
+            throw new MonthlyPaymentNotFoundException("Monthly Payment Invoice cannot be found for Company " + coyId);
         }
+//        if(results!=null ){
+//            return results;
+//        }
+//        for (MonthlyPaymentEntity mp : results) {
+//            if (mp.getDateGenerated().get(Calendar.MONTH) == month.get(Calendar.MONTH)) {
+//                return mp;
+//            }
+//        }
 
-        throw new MonthlyPaymentNotFoundException("Monthly Payment Invoice not found");
+//        throw new MonthlyPaymentNotFoundException("Monthly Payment Invoice not found");
     }
 
-    public List<MonthlyPaymentEntity> retrieveCurrentYearMonthlyPaymentEntity(Calendar year) throws MonthlyPaymentNotFoundException {
+    @Override
+    public List<MonthlyPaymentEntity> retrieveCurrentYearMonthlyPaymentEntity(Calendar year, Long coyId) throws MonthlyPaymentNotFoundException {
         int yearInt = year.get(Calendar.YEAR);
         Calendar start = new GregorianCalendar();
-        start.set(yearInt, 1, 1);
+        start.set(yearInt, 0, 1);
         Calendar end = (Calendar) start.clone();
         end.add(Calendar.MONTH, 12);
 
-        Query query = em.createQuery("SELECT mp FROM MonthlyPaymentEntity mp WHERE mp.dateGenerated >= :start AND mp.dateGenerated <= :end");
+        Query query = em.createQuery("SELECT mp FROM MonthlyPaymentEntity mp WHERE mp.dateGenerated >= :start AND mp.dateGenerated <= :end AND mp.companyId =:coyId");
         query.setParameter("start", start);
         query.setParameter("end", end);
+        query.setParameter("coyId", coyId);
         List<MonthlyPaymentEntity> results = query.getResultList();
 
         if (results.isEmpty()) {

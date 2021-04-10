@@ -35,8 +35,10 @@ import util.exception.CompanyAlreadyExistException;
 import util.exception.CompanyBeanValidaionException;
 import util.exception.CompanyCreationException;
 import util.exception.CompanySQLConstraintException;
+import util.exception.IncorrectLoginParticularsException;
 import util.exception.PointOfContactBeanValidationException;
 import util.exception.UnknownPersistenceException;
+import util.security.CryptographicHelper;
 import ws.datamodel.CompanyCreateWrapper;
 import ws.datamodel.CompanyUpdateWrapper;
 
@@ -66,42 +68,23 @@ public class CompanyResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveAllRecords() {
         try {
-            List<CompanyUpdateWrapper> companyWrapper = new ArrayList<CompanyUpdateWrapper>();
-            int indexforCompanyWrapper = 0;
             List<CompanyEntity> companies = companySessionBeanLocal.retrieveAllActiveCompanies();
             for (CompanyEntity company : companies) {
-                companyWrapper.add(new CompanyUpdateWrapper());
-                companyWrapper.get(indexforCompanyWrapper).setCompanyEntity(company);
-                if (company.getListOfPayments() != null && !company.getListOfPayments().isEmpty()) {
-                    companyWrapper.get(indexforCompanyWrapper).setListOfPayments(company.getListOfPayments());
-                    for (PaymentEntity payment : companyWrapper.get(indexforCompanyWrapper).getListOfPayments()) {
-                        payment.setCompany(null);
-                    }
-                }
-                if (company.getListOfPointOfContacts() != null && !company.getListOfPointOfContacts().isEmpty()) {
-                    companyWrapper.get(indexforCompanyWrapper).setListOfPointOfContacts(company.getListOfPointOfContacts());
-                    for (PointOfContactEntity pointOfContact : companyWrapper.get(indexforCompanyWrapper).getListOfPointOfContacts()) {
-                        pointOfContact.setCompany(null);
-                    }
-                }
-                if (company.getListOfProducts() != null && !company.getListOfProducts().isEmpty()) {
+                for (ProductEntity product : company.getListOfProducts()) {
+                    product.setCompany(null);
 
-                    companyWrapper.get(indexforCompanyWrapper).setListOfProducts(company.getListOfProducts());
-                    for (ProductEntity product : companyWrapper.get(indexforCompanyWrapper).getListOfProducts()) {
-                        product.setCompany(null);
-                    }
                 }
                 if (company.getRefund() != null) {
-
-                    companyWrapper.get(indexforCompanyWrapper).setRefund(company.getRefund());
                     company.getRefund().setCompany(null);
                 }
-
-                indexforCompanyWrapper++;
-
+                for (PaymentEntity payment : company.getListOfPayments()) {
+                    payment.setCompany(null);
+                }
+                for (PointOfContactEntity pointOfContact : company.getListOfPointOfContacts()) {
+                    pointOfContact.setCompany(null);
+                }
             }
-
-            GenericEntity<List<CompanyUpdateWrapper>> genericEntity = new GenericEntity<List<CompanyUpdateWrapper>>(companyWrapper) {
+            GenericEntity<List<CompanyEntity>> genericEntity = new GenericEntity<List<CompanyEntity>>(companies) {
             };
 
             return Response.status(Status.OK).entity(genericEntity).build();
@@ -116,9 +99,6 @@ public class CompanyResource {
     public Response retrieveAllRecordsById(@QueryParam("email") String email) {
         try {
             CompanyEntity company = companySessionBeanLocal.retrieveCompanyByEmail(email);
-            CompanyUpdateWrapper companyWrapper = new CompanyUpdateWrapper();
-
-            companyWrapper.setCompanyEntity(company);
             for (ProductEntity product : company.getListOfProducts()) {
                 product.setCompany(null);
 
@@ -132,20 +112,8 @@ public class CompanyResource {
             for (PointOfContactEntity pointOfContact : company.getListOfPointOfContacts()) {
                 pointOfContact.setCompany(null);
             }
-            if (company.getListOfPayments() != null && !company.getListOfPayments().isEmpty()) {
-                companyWrapper.setListOfPayments(company.getListOfPayments());
-            }
-            if (company.getListOfPointOfContacts() != null && !company.getListOfPointOfContacts().isEmpty()) {
-                companyWrapper.setListOfPointOfContacts(company.getListOfPointOfContacts());
-            }
-            if (company.getListOfProducts() != null && !company.getListOfProducts().isEmpty()) {
-                companyWrapper.setListOfProducts(company.getListOfProducts());
-            }
-            if (company.getRefund() != null) {
-                companyWrapper.setRefund(company.getRefund());
-            }
 
-            GenericEntity<CompanyUpdateWrapper> genericEntity = new GenericEntity<CompanyUpdateWrapper>(companyWrapper) {
+            GenericEntity<CompanyEntity> genericEntity = new GenericEntity<CompanyEntity>(company) {
             };
 
             return Response.status(Status.OK).entity(genericEntity).build();
@@ -161,9 +129,6 @@ public class CompanyResource {
         try {
             CompanyEntity company = companySessionBeanLocal.login(email, password);
 
-            CompanyUpdateWrapper companyWrapper = new CompanyUpdateWrapper();
-
-            companyWrapper.setCompanyEntity(company);
             for (ProductEntity product : company.getListOfProducts()) {
                 product.setCompany(null);
 
@@ -177,20 +142,8 @@ public class CompanyResource {
             for (PointOfContactEntity pointOfContact : company.getListOfPointOfContacts()) {
                 pointOfContact.setCompany(null);
             }
-            if (company.getListOfPayments() != null && !company.getListOfPayments().isEmpty()) {
-                companyWrapper.setListOfPayments(company.getListOfPayments());
-            }
-            if (company.getListOfPointOfContacts() != null && !company.getListOfPointOfContacts().isEmpty()) {
-                companyWrapper.setListOfPointOfContacts(company.getListOfPointOfContacts());
-            }
-            if (company.getListOfProducts() != null && !company.getListOfProducts().isEmpty()) {
-                companyWrapper.setListOfProducts(company.getListOfProducts());
-            }
-            if (company.getRefund() != null) {
-                companyWrapper.setRefund(company.getRefund());
-            }
 
-            GenericEntity<CompanyUpdateWrapper> genericEntity = new GenericEntity<CompanyUpdateWrapper>(companyWrapper) {
+            GenericEntity<CompanyEntity> genericEntity = new GenericEntity<CompanyEntity>(company) {
             };
             return Response.status(Status.OK).entity(genericEntity).build();
         } catch (Exception ex) {
@@ -202,35 +155,36 @@ public class CompanyResource {
     @Path("updateCompanyInformation")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateCompanyInformation(CompanyUpdateWrapper newRecord) {
-        try {
+    public Response updateCompanyInformation(@QueryParam("email") String email, @QueryParam("password") String password, CompanyEntity company) {
+        if (company != null) {
+            try {
 
-            if (newRecord != null) {
-                CompanyEntity company = newRecord.getCompanyEntity();
-                if (newRecord.getListOfPayments() != null && !newRecord.getListOfPayments().isEmpty()) {
-                    company.setListOfPayments(newRecord.getListOfPayments());
+                CompanyEntity tempCompanyEntity = companySessionBeanLocal.updateCompanyInformationWS(company, email, password);
+
+                for (ProductEntity product : tempCompanyEntity.getListOfProducts()) {
+                    product.setCompany(null);
                 }
-                if (newRecord.getListOfPointOfContacts() != null && !newRecord.getListOfPointOfContacts().isEmpty()) {
-                    company.setListOfPointOfContacts(newRecord.getListOfPointOfContacts());
+                if (tempCompanyEntity.getRefund() != null) {
+                    company.getRefund().setCompany(null);
                 }
-                if (newRecord.getListOfProducts() != null && !newRecord.getListOfProducts().isEmpty()) {
-                    company.setListOfProducts(newRecord.getListOfProducts());
+                for (PaymentEntity payment : tempCompanyEntity.getListOfPayments()) {
+                    payment.setCompany(null);
                 }
-                if (newRecord.getRefund() != null) {
-                    company.setRefund(newRecord.getRefund());
+                for (PointOfContactEntity pointOfContact : tempCompanyEntity.getListOfPointOfContacts()) {
+                    pointOfContact.setCompany(null);
                 }
-                newRecord.setID();
-                companySessionBeanLocal.updateCompanyInformationWS(company);
-                return Response.status(Response.Status.OK).entity("Ok").build();
-            } else {
-                return Response.status(Status.NOT_FOUND).entity("You have nothing to update").build();
+
+                return Response.status(Response.Status.OK).entity(tempCompanyEntity).build();
+            } catch (UnknownPersistenceException | CompanySQLConstraintException | PointOfContactBeanValidationException | CompanyBeanValidaionException | IncorrectLoginParticularsException ex) {
+                System.out.println("ex.message" + ex.getMessage());
+                return Response.status(Status.BAD_REQUEST).entity(ex.getMessage()).build();
+            } catch (Exception ex) {
+                System.out.println("ex.message" + ex.getMessage());
+                return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
             }
-        } catch (UnknownPersistenceException | PointOfContactBeanValidationException | CompanyBeanValidaionException ex) {
-            return Response.status(Status.PARTIAL_CONTENT).entity(ex.getMessage()).build();
-        } catch (CompanySQLConstraintException ex) {
-            return Response.status(Status.NOT_MODIFIED).entity(ex.getMessage()).build();
-        } catch (Exception ex) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid update of record request" + ex).build();
+        } else {
+
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid create new record request").build();
         }
 
     }
@@ -253,6 +207,9 @@ public class CompanyResource {
                     }
                 }
 
+                tempCompany.setSalt(CryptographicHelper.getInstance().generateRandomString(32));
+                tempCompany.setPassword(tempCompany.getPassword());
+
                 CompanyEntity company = companySessionBeanLocal.createAccountForCompanyWS(tempCompany);
 
                 for (ProductEntity product : company.getListOfProducts()) {
@@ -272,9 +229,11 @@ public class CompanyResource {
             } catch (CompanyAlreadyExistException | UnknownPersistenceException | CompanyCreationException | PointOfContactBeanValidationException ex) {
                 return Response.status(Status.BAD_REQUEST).entity(ex.getMessage()).build();
             } catch (Exception ex) {
+                System.out.println("ex.message" + ex.getMessage());
                 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
             }
         } else {
+
             return Response.status(Response.Status.BAD_REQUEST).entity("Invalid create new record request").build();
         }
     }

@@ -48,15 +48,16 @@ public interface CompanySessionBeanLocal {
 
     public void resetPassword(String email) throws CompanyDoesNotExistException;
 
-    public List<MonthlyPaymentEntity> retrieveCurrentYearMonthlyPaymentEntity(Calendar year) throws MonthlyPaymentNotFoundException;
+    public List<MonthlyPaymentEntity> retrieveCurrentYearMonthlyPaymentEntity(Calendar year, Long coyId) throws MonthlyPaymentNotFoundException;
 
-    public MonthlyPaymentEntity retrieveCurrentMonthlyPaymentEntity(Calendar month) throws MonthlyPaymentNotFoundException;
+    public MonthlyPaymentEntity retrieveCurrentMonthlyPaymentEntity(Calendar month, Long coyId) throws MonthlyPaymentNotFoundException;
 
-    public List<PaymentEntity> retrieveSpecificHistoricalTransactions(Calendar startDate, Calendar endDate);
+    public List<PaymentEntity> retrieveSpecificHistoricalTransactions(Calendar startDate, Calendar endDate, Long coyId);
 
     public List<PaymentEntity> retrieveAllHistoricalTransactions();
 
     public CompanyEntity createAccountForCompanyWS(CompanyEntity newCompany) throws CompanyAlreadyExistException, UnknownPersistenceException, CompanyCreationException, PointOfContactBeanValidationException;
 
-    public void updateCompanyInformationWS(CompanyEntity company) throws UnknownPersistenceException, CompanySQLConstraintException, PointOfContactBeanValidationException, CompanyBeanValidaionException;
-}
+    public CompanyEntity updateCompanyInformationWS(CompanyEntity company, String email, String password) throws UnknownPersistenceException, CompanySQLConstraintException, PointOfContactBeanValidationException, CompanyBeanValidaionException, IncorrectLoginParticularsException;
+
+    }

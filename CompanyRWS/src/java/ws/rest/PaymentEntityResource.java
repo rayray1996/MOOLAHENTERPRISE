@@ -5,6 +5,7 @@
  */
 package ws.rest;
 
+import com.sun.xml.rpc.processor.modeler.j2ee.xml.homeType;
 import ejb.entity.MonthlyPaymentEntity;
 import ejb.entity.PaymentEntity;
 import ejb.entity.PointOfContactEntity;
@@ -12,6 +13,8 @@ import ejb.entity.ProductEntity;
 import ejb.entity.ProductLineItemEntity;
 import ejb.stateless.CompanySessionBeanLocal;
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -86,73 +89,106 @@ public class PaymentEntityResource {
         }
     }
 
-//    @Path("retrieveSpecificHistoricalTransactions")
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response retrieveSpecificHistoricalTransactions(java.sql.Date startDate, java.sql.Date endDate) {
-//        try {
-//            Calendar dStartDate = new GregorianCalendar();
-//            dStartDate.setTime(startDate);
-//            Calendar dEndDate = new GregorianCalendar();
-//            dEndDate.setTime(endDate);
-//            List<PaymentEntity> paymentEntity = companySessionBeanLocal.retrieveSpecificHistoricalTransactions(dStartDate, dEndDate);
-//            for (PaymentEntity ce : paymentEntity) {
-//                ce.getCompany();
-//                for (ProductEntity product : ce.getCompany().getListOfProducts()) {
-//                    product.getCompany().setListOfProducts(null);
-//                }
-//                ce.getCompany().setListOfPayments(null);
-//
-//                for (PointOfContactEntity poc : ce.getCompany().getListOfPointOfContacts()) {
-//                    poc.getCompany().setListOfPointOfContacts(null);
-//                }
-//
-//            }
-//            GenericEntity<List<PaymentEntity>> genericEntity = new GenericEntity<List<PaymentEntity>>(paymentEntity) {
-//            };
-//
-//            return Response.status(Status.OK).entity(genericEntity).build();
-//        } catch (Exception ex) {
-//            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
-//        }
-//    }
-//
-//    @Path("retrieveCurrentMonthlyPaymentEntity")
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response retrieveCurrentMonthlyPaymentEntity(java.sql.Date month) {
-//        try {
-//            Calendar dStartDate = new GregorianCalendar();
-//            dStartDate.setTime(month);
-//            MonthlyPaymentEntity mthlyPmt = companySessionBeanLocal.retrieveCurrentMonthlyPaymentEntity(dStartDate);
+    @Path("retrieveSpecificHistoricalTransactions")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveSpecificHistoricalTransactions(@QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate, @QueryParam("coyId") Long coyId) {
+        try {
+            String[] splitStartDate = startDate.split("-");
+            String[] splitEndDate = endDate.split("-");
+            Calendar dStartDate = new GregorianCalendar();
+            dStartDate.set(Integer.parseInt(splitStartDate[0]), Integer.parseInt(splitStartDate[1]), Integer.parseInt(splitStartDate[2]), 0, 0);
+
+            Calendar dEndDate = new GregorianCalendar();
+            dEndDate.set(Integer.parseInt(splitEndDate[0]), Integer.parseInt(splitEndDate[1]), Integer.parseInt(splitEndDate[2]), 0, 0);
+            List<PaymentEntity> paymentEntity = companySessionBeanLocal.retrieveSpecificHistoricalTransactions(dStartDate, dEndDate, coyId);
+
+            System.out.println("");
+            for (PaymentEntity ce : paymentEntity) {
+                ce.getCompany();
+                for (ProductEntity product : ce.getCompany().getListOfProducts()) {
+                    product.getCompany().setListOfProducts(null);
+                }
+                ce.getCompany().setListOfPayments(null);
+
+                for (PointOfContactEntity poc : ce.getCompany().getListOfPointOfContacts()) {
+                    poc.getCompany().setListOfPointOfContacts(null);
+                }
+
+            }
+            GenericEntity<List<PaymentEntity>> genericEntity = new GenericEntity<List<PaymentEntity>>(paymentEntity) {
+            };
+
+            return Response.status(Status.OK).entity(genericEntity).build();
+        } catch (Exception ex) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
+
+    /**
+     *
+     * Not done, waiting to clarify for ejb
+     *
+     * @param month
+     * @return
+     */
+    @Path("retrieveCurrentMonthlyPaymentEntity")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveCurrentMonthlyPaymentEntity(@QueryParam("month") String month, @QueryParam("coyId") Long coyId) {
+        Calendar dStartDate = new GregorianCalendar();
+
+        try {
+            String[] splitDate = month.split("-");
+            String strYear = splitDate[0];
+            String strMonth = splitDate[1];
+            dStartDate.set(Integer.parseInt(strYear), Integer.parseInt(strMonth) - 1, 1);
+            System.out.println("*****************************time : " + dStartDate.getTime());
+            MonthlyPaymentEntity mthlyPmt = companySessionBeanLocal.retrieveCurrentMonthlyPaymentEntity(dStartDate, coyId);
+
+            if (mthlyPmt.getCompany() != null) {
+                mthlyPmt.getCompany().setListOfPayments(null);
+                if (mthlyPmt.getCompany().getRefund() != null) {
+                    mthlyPmt.getCompany().getRefund().setCompany(null);
+
+                }
+                for (PointOfContactEntity poc : mthlyPmt.getCompany().getListOfPointOfContacts()) {
+                    poc.setCompany(null);
+                }
+                for (ProductEntity product : mthlyPmt.getCompany().getListOfProducts()) {
+                    product.setCompany(null);
+                }
+
+            }
 //            for (ProductLineItemEntity ple : mthlyPmt.getListOfProductLineItems()) {
 //                ple.getProduct();
 //                ple.getProduct().getCompany().setListOfProducts(null);
 //
 //            }
-//            GenericEntity<MonthlyPaymentEntity> genericEntity = new GenericEntity<MonthlyPaymentEntity>(mthlyPmt) {
-//            };
-//
-//            return Response.status(Status.OK).entity(genericEntity).build();
-//        } catch (Exception ex) {
-//            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
-//        }
-//    }
-    
+            GenericEntity<MonthlyPaymentEntity> genericEntity = new GenericEntity<MonthlyPaymentEntity>(mthlyPmt) {
+            };
+
+            return Response.status(Status.OK).entity(genericEntity).build();
+        } catch (Exception ex) {
+            System.out.println("ex:" + ex.getMessage());
+            System.out.println("time : " + dStartDate.getTime());
+
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
+
     /**
      * can only take in date i.e. 2021-04-09
-     * but not 2021-04-09T22:53:47.511Z <-- json date
      */
     @Path("retrieveCurrentYearMonthlyPaymentEntity")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveCurrentYearMonthlyPaymentEntity(@QueryParam("strYear") String year) {
+    public Response retrieveCurrentYearMonthlyPaymentEntity(@QueryParam("strYear") String year, @QueryParam("coyId") Long coyId) {
         try {
             Calendar dStartDate = new GregorianCalendar();
             dStartDate.set(Integer.valueOf(year), 0, 1);
-            List<MonthlyPaymentEntity> mthlyPmts = companySessionBeanLocal.retrieveCurrentYearMonthlyPaymentEntity(dStartDate);
-            for (MonthlyPaymentEntity mthlyPmt : mthlyPmts) {
-            }
+            List<MonthlyPaymentEntity> mthlyPmts = companySessionBeanLocal.retrieveCurrentYearMonthlyPaymentEntity(dStartDate,coyId);
+
             for (MonthlyPaymentEntity mthlyPmt : mthlyPmts) {
                 if (mthlyPmt.getCompany() != null) {
                     mthlyPmt.getCompany().setListOfPayments(null);
@@ -175,6 +211,7 @@ public class PaymentEntityResource {
 
             return Response.status(Status.OK).entity(genericEntity).build();
         } catch (Exception ex) {
+            System.out.println("ex.message()" + ex.getMessage());
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
