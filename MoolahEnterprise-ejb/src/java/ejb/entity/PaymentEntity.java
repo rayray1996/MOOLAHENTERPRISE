@@ -42,21 +42,21 @@ public class PaymentEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long paymentId;
 
-    private Boolean paid;
+    protected Boolean paid;
 
     @Temporal(TemporalType.DATE)
-    private Calendar dateTransacted; // This one can be null because havent pay then it is null
+    protected Calendar dateTransacted; // This one can be null because havent pay then it is null
 
-    private String paymentNumber;
+    protected String paymentNumber;
 
     @Temporal(TemporalType.DATE)
     @NotNull
-    private Calendar dateGenerated; // This should not be null because it should indicate when it is generated
+    protected Calendar dateGenerated; // This should not be null because it should indicate when it is generated
 
     @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.DETACH})
     @JoinColumn(nullable = false)
     @NotNull
-    private CompanyEntity company;
+    protected CompanyEntity company;
 
     public PaymentEntity() {
     }

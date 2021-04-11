@@ -5,7 +5,12 @@
  */
 package ws.datamodel;
 
+import ejb.entity.FeatureEntity;
+import ejb.entity.PremiumEntity;
+import ejb.entity.ProductEntity;
+import ejb.entity.RiderEntity;
 import java.math.BigDecimal;
+import java.util.List;
 import util.enumeration.CategoryEnum;
 import util.enumeration.EndowmentProductEnum;
 import util.enumeration.TermLifeProductEnum;
@@ -17,15 +22,63 @@ import util.enumeration.WholeLifeProductEnum;
  */
 public class ProductWrapper {
 
-    private CategoryEnum category;
-    private Boolean wantsRider;
-    private Boolean isSmoker;
+    // filter by category
     private BigDecimal sumAssured;
     private Integer coverageTerm;
     private Integer premiumTerm;
     private EndowmentProductEnum endowmentProductEnum;
     private TermLifeProductEnum termLifeProductEnum;
     private WholeLifeProductEnum wholeLifeProductEnum;
+    private CategoryEnum category;
+    private Boolean wantsRider;
+    private Boolean isSmoker;
+
+    //adds on for add product
+    private List<RiderEntity> listOfider;
+    private List<FeatureEntity> listOfAdditionalFeature;
+    private List<PremiumEntity> listOfNonSmokerPremium;
+    private List<PremiumEntity> listOfSmokerPremium;
+    private ProductEntity productEntity;
+
+    public List<RiderEntity> getListOfider() {
+        return listOfider;
+    }
+
+    public void setListOfider(List<RiderEntity> listOfider) {
+        this.listOfider = listOfider;
+    }
+
+    public List<FeatureEntity> getListOfAdditionalFeature() {
+        return listOfAdditionalFeature;
+    }
+
+    public void setListOfAdditionalFeature(List<FeatureEntity> listOfAdditionalFeature) {
+        this.listOfAdditionalFeature = listOfAdditionalFeature;
+    }
+
+    public List<PremiumEntity> getListOfNonSmokerPremium() {
+        return listOfNonSmokerPremium;
+    }
+
+    public void setListOfNonSmokerPremium(List<PremiumEntity> listOfNonSmokerPremium) {
+        this.listOfNonSmokerPremium = listOfNonSmokerPremium;
+    }
+
+    public List<PremiumEntity> getListOfSmokerPremium() {
+        return listOfSmokerPremium;
+    }
+
+    public void setListOfSmokerPremium(List<PremiumEntity> listOfSmokerPremium) {
+        this.listOfSmokerPremium = listOfSmokerPremium;
+    }
+
+    public ProductEntity getProductEntity() {
+        return productEntity;
+    }
+
+    public void setProductEntity(ProductEntity productEntity) {
+        this.productEntity = productEntity;
+    }
 
     public CategoryEnum getCategory() {
         return category;
@@ -98,6 +151,5 @@ public class ProductWrapper {
     public void setWholeLifeProductEnum(WholeLifeProductEnum wholeLifeProductEnum) {
         this.wholeLifeProductEnum = wholeLifeProductEnum;
     }
-    
-    
+
 }

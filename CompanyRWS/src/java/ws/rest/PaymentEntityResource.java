@@ -260,7 +260,7 @@ public class PaymentEntityResource {
     @Path("makePayment")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateCompanyInformation(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("paymentId") Long paymentId) {
+    public Response makePayment(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("paymentId") Long paymentId) {
 
         try {
             CompanyEntity company = companySessionBeanLocal.login(email, password);

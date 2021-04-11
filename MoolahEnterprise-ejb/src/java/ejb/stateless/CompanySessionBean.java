@@ -475,7 +475,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
         System.out.println("**************End: " + end.getTime());
 //        start.add(Calendar.DATE, 30);
 //        end.add(Calendar.DATE, -30);
-        Query query = em.createQuery("SELECT mp FROM MonthlyPaymentEntity mp WHERE mp.dateGenerated >= :start AND mp.dateGenerated <= :end AND mp. =:coyId");
+        Query query = em.createQuery("SELECT mp FROM MonthlyPaymentEntity mp WHERE mp.dateGenerated >= :start AND mp.dateGenerated <= :end AND mp.company.");
         query.setParameter("start", start);
         query.setParameter("end", end);
         query.setParameter("coyId", coyId);
