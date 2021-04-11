@@ -100,7 +100,11 @@ public class ProductResource {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
-
+/**
+ * 
+ * working
+ * @return 
+ */
     @Path("retrieveAllEndowmentProducts")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -145,6 +149,10 @@ public class ProductResource {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
+    /**
+     * working
+     * @return 
+     */
 
     @Path("retrieveAllTermLifeProducts")
     @GET
@@ -190,7 +198,10 @@ public class ProductResource {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
-
+/**
+ * working
+ * @return 
+ */
     @Path("retrieveAllWholeLifeProducts")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -235,7 +246,11 @@ public class ProductResource {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
-
+    /**
+     * working 
+     * @param productId
+     * @return 
+     */
     @Path("retrieveProductEntityById")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -279,6 +294,11 @@ public class ProductResource {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
+    /**
+     * working
+     * @param name
+     * @return 
+     */
 
     @Path("searchForProductsByName")
     @GET
@@ -332,10 +352,12 @@ public class ProductResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response filterProductsByCriteria(ProductWrapper productWrapper) {
         try {
-           // CategoryEnum category, Boolean wantsRider, Boolean isSmoker, BigDecimal sumAssured, Integer coverageTerm, Integer premiumTerm, EndowmentProductEnum endowmentProductEnum, TermLifeProductEnum termLifeProductEnum, WholeLifeProductEnum wholeLifeProductEnum
-           // List<ProductEntity> products = productSessionBeanLocal.filterProductsByCriteria(productWrapper.getCategory(),productWrapper.get);
+          // CategoryEnum category, Boolean wantsRider, Boolean isSmoker, BigDecimal sumAssured, Integer coverageTerm, Integer premiumTerm, EndowmentProductEnum endowmentProductEnum, 
+        //           TermLifeProductEnum termLifeProductEnum, WholeLifeProductEnum wholeLifeProductEnum
+            List<ProductEntity> products = productSessionBeanLocal.filterProductsByCriteria(productWrapper.getCategory(),productWrapper.getWantsRider(),productWrapper.getIsSmoker(),
+                    productWrapper.getSumAssured(), productWrapper.getCoverageTerm(),productWrapper.getPremiumTerm(),productWrapper.getEndowmentProductEnum(), productWrapper.getTermLifeProductEnum(), productWrapper.getWholeLifeProductEnum());
           
-             List<ProductEntity> products = productSessionBeanLocal.searchForProductsByName("");
+           //  List<ProductEntity> products = productSessionBeanLocal.searchForProductsByName("");
              for (ProductEntity product : products) {
 
                 if (product.getCompany() != null) {
