@@ -277,6 +277,35 @@ public class ProductResource {
      * @param productWrapper
      * @return
      */
+    @Path("deleteProductListing")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteProductListing(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("productId") Long productId) {
+        try {
+            CompanyEntity company = companySessionBeanLocal.login(email, password);
+            if (company == null) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Invalid account").build();
+            }
+            productSessionBeanLocal.deleteProductListing(productId);
+
+            GenericEntity<String> genericEntity = new GenericEntity<String>("Ok") {
+            };
+
+            return Response.status(Status.OK).entity(genericEntity).build();
+        } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid account").build();
+        } catch (Exception ex) {
+            System.out.println("***********" + ex.getMessage());
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
+
+    /**
+     * not tested
+     *
+     * @param productWrapper
+     * @return
+     */
     @Path("filterProductsByCriteria")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
