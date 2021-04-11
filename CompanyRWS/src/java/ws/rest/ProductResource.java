@@ -356,7 +356,7 @@ public class ProductResource {
         //           TermLifeProductEnum termLifeProductEnum, WholeLifeProductEnum wholeLifeProductEnum
             List<ProductEntity> products = productSessionBeanLocal.filterProductsByCriteria(productWrapper.getCategory(),productWrapper.getWantsRider(),productWrapper.getIsSmoker(),
                     productWrapper.getSumAssured(), productWrapper.getCoverageTerm(),productWrapper.getPremiumTerm(),productWrapper.getEndowmentProductEnum(), productWrapper.getTermLifeProductEnum(), productWrapper.getWholeLifeProductEnum());
-          
+           
            //  List<ProductEntity> products = productSessionBeanLocal.searchForProductsByName("");
              for (ProductEntity product : products) {
 
