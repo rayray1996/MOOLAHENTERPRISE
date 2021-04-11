@@ -160,8 +160,8 @@ public class PaymentEntityResource {
 
     /**
      *
-     * --- error at ejb
-     * Havent implemented login
+     * working
+     * month : 2021-01-21
      *
      * @param month
      * @return
@@ -201,15 +201,14 @@ public class PaymentEntityResource {
         } catch (Exception ex) {
             System.out.println("ex:" + ex.getMessage());
             System.out.println("time : " + dStartDate.getTime());
-
+            System.out.println("error message:" + ex.getMessage());
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
 
     /**
-     * Error at ejb 
-     * Havent implemented login can only take in date i.e.
-     * 2021-04-09
+     * working 
+     * value for strYear : 2021
      */
     @Path("retrieveCurrentYearMonthlyPaymentEntity")
     @GET

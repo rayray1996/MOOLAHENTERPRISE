@@ -38,6 +38,8 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import util.exception.CompanyDoesNotExistException;
+import util.exception.IncorrectLoginParticularsException;
 import ws.datamodel.ProductWrapper;
 
 /**
@@ -238,6 +240,38 @@ public class ProductResource {
     }
 
     /**
+     * working
+     *
+     * @param name
+     * @return
+     */
+    @Path("retrieveListOfProductByCompany")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveListOfProductByCompany(@QueryParam("email") String email, @QueryParam("password") String password) {
+        try {
+            CompanyEntity company = companySessionBeanLocal.login(email, password);
+            if (company == null) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Invalid account").build();
+            }
+            List<ProductEntity> products = productSessionBeanLocal.retrieveListOfProductByCompany(company.getCompanyEmail());
+            for (ProductEntity product : products) {
+
+                product = nullifyProduct(product);
+            }
+            GenericEntity<List<ProductEntity>> genericEntity = new GenericEntity<List<ProductEntity>>(products) {
+            };
+
+            return Response.status(Status.OK).entity(genericEntity).build();
+        } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid account").build();
+        } catch (Exception ex) {
+            System.out.println("***********" + ex.getMessage());
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
+
+    /**
      * not tested
      *
      * @param productWrapper
@@ -269,7 +303,7 @@ public class ProductResource {
     }
 
     /**
-     * NOT TESTED
+     * working
      *
      * @param email
      * @param password
@@ -284,25 +318,34 @@ public class ProductResource {
             try {
                 CompanyEntity company = companySessionBeanLocal.login(email, password);
                 if (company != null) {
-                    
+                    System.out.println(" came company");
+                    if (newRecord instanceof EndowmentEntity) {
+                        System.out.println("endowment enum:" + ((EndowmentEntity) newRecord).getProductEnum());
+                    }
+                    if (newRecord instanceof TermLifeProductEntity) {
+                        System.out.println("TermLifeProductEntity enum:" + ((TermLifeProductEntity) newRecord).getProductEnum());
+                    }
+                    if (newRecord instanceof WholeLifeProductEntity) {
+                        System.out.println("WholeLifeProductEntity enum:" + ((WholeLifeProductEntity) newRecord).getProductEnum());
+                    }
+
                     ProductEntity product = newRecord;
-                    
+
                     List<RiderEntity> listOfRiders = newRecord.getListOfRiders();
                     List<PremiumEntity> listOfPremium = newRecord.getListOfPremium();
                     List<PremiumEntity> listOfSmoker = newRecord.getListOfSmokerPremium();
-                    List<FeatureEntity> listOfFeatures =newRecord.getListOfAdditionalFeatures();
-                   
+                    List<FeatureEntity> listOfFeatures = newRecord.getListOfAdditionalFeatures();
+
                     //cut of tie
                     product.setListOfAdditionalFeatures(new ArrayList<FeatureEntity>());
                     product.setListOfPremium(new ArrayList<PremiumEntity>());
                     product.setListOfSmokerPremium(new ArrayList<PremiumEntity>());
                     product.setListOfRiders(new ArrayList<RiderEntity>());
-                    
-                    
-                    product = productSessionBeanLocal.createProductListing(product, company.getCompanyId(), listOfRiders,
-                           listOfPremium, listOfSmoker, listOfFeatures);
-                    product = nullifyProduct(product);
-                    return Response.status(Response.Status.OK).entity(product).build();
+
+                    ProductEntity returnProduct = productSessionBeanLocal.createProductListing(product, company.getCompanyId(), listOfRiders,
+                            listOfPremium, listOfSmoker, listOfFeatures);
+                    returnProduct = nullifyProduct(returnProduct);
+                    return Response.status(Response.Status.OK).entity(returnProduct).build();
                 } else {
 
                     return Response.status(Response.Status.BAD_REQUEST).entity("Invalid create new record request").build();
