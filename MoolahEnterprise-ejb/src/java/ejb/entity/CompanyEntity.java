@@ -104,8 +104,7 @@ public class CompanyEntity implements Serializable {
     private List<ProductEntity> listOfProducts;
 
     private String resetPasswordPathParam;
-
-    @NotNull
+    
     private String companyImage;
 
     @NotNull
@@ -140,7 +139,7 @@ public class CompanyEntity implements Serializable {
         this.companyImage = companyImage;
         this.companyUrl = companyUrl;
 
-        setPassword(password);
+        setPasswordHash(password);
     }
 
     public byte[] getProfilePic() {
@@ -151,12 +150,16 @@ public class CompanyEntity implements Serializable {
         this.profilePic = profilePic;
     }
 
-    public void setPassword(String password) {
+    public void setPasswordHash(String password) {
         if (password != null) {
             this.password = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + this.salt));
         } else {
             this.password = null;
         }
+    }
+    
+    public void setPassword(String password){
+        this.password = password;
     }
 
     public String getPassword() {
@@ -330,8 +333,8 @@ public class CompanyEntity implements Serializable {
     public void setCompanyUrl(String companyUrl) {
         this.companyUrl = companyUrl;
     }
-
-    @Override
+    
+    
     public int hashCode() {
         int hash = 3;
         return hash;

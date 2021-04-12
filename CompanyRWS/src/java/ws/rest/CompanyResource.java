@@ -162,11 +162,13 @@ public class CompanyResource {
     @Path("updateCompanyInformation")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateCompanyInformation(@QueryParam("email") String email, @QueryParam("password") String password, CompanyEntity company) {
+    public Response updateCompanyInformation(CompanyEntity company) {
         if (company != null) {
             try {
 
-                CompanyEntity tempCompanyEntity = companySessionBeanLocal.updateCompanyInformationWS(company, email, password);
+                System.out.println("Company Pw: " + company.getPassword());
+
+                CompanyEntity tempCompanyEntity = companySessionBeanLocal.updateCompanyInformationWS(company);
 
                 for (ProductEntity product : tempCompanyEntity.getListOfProducts()) {
                     product.setCompany(null);
@@ -182,7 +184,7 @@ public class CompanyResource {
                 }
 
                 return Response.status(Response.Status.OK).entity(tempCompanyEntity).build();
-            } catch (UnknownPersistenceException | CompanySQLConstraintException | PointOfContactBeanValidationException | CompanyBeanValidaionException | IncorrectLoginParticularsException ex) {
+            } catch (UnknownPersistenceException | CompanySQLConstraintException | PointOfContactBeanValidationException | CompanyBeanValidaionException ex) {
                 System.out.println("ex.message" + ex.getMessage());
                 return Response.status(Status.BAD_REQUEST).entity(ex.getMessage()).build();
             } catch (Exception ex) {
@@ -267,6 +269,61 @@ public class CompanyResource {
         } catch (Exception ex) {
             return Response.status(Response.Status.FORBIDDEN).entity(ex.getMessage()).build();
         }
+    }
+
+    @POST
+    @Path("updateCompanyPassword")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateCompanyPassword(CompanyEntity updateCompany, @QueryParam("oldPassword") String oldPassword, @QueryParam("newPassword") String newPassword, @QueryParam("repeatNewPassword") String repeatNewPassword
+    ) {
+        System.out.println("updateCompany = " + updateCompany);
+        System.out.println("oldPassword = " + oldPassword);
+        System.out.println("newPassword = " + newPassword);
+        System.out.println("repeatNewPassword = " + repeatNewPassword);
+        if (updateCompany != null && oldPassword != null && newPassword != null && repeatNewPassword != null) {
+            try {
+                String salt = updateCompany.getSalt();
+                String oldSaltedPassword = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(oldPassword + salt));
+
+                if (!oldSaltedPassword.equals(updateCompany.getPassword())) {
+                    return Response.status(Status.BAD_REQUEST).entity("Old password does not match current password").build();
+                }
+
+                if (!newPassword.equals(repeatNewPassword)) {
+                    return Response.status(Status.BAD_REQUEST).entity("New passwords do not match").build();
+                }
+
+                String newPasswordSalted = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(newPassword + salt));
+                updateCompany.setPassword(newPasswordSalted);
+                CompanyEntity tempCompanyEntity = companySessionBeanLocal.updateCompanyInformationWS(updateCompany);
+
+                for (ProductEntity product : tempCompanyEntity.getListOfProducts()) {
+                    product.setCompany(null);
+                }
+                if (tempCompanyEntity.getRefund() != null) {
+                    tempCompanyEntity.getRefund().setCompany(null);
+                }
+                for (PaymentEntity payment : tempCompanyEntity.getListOfPayments()) {
+                    payment.setCompany(null);
+                }
+                for (PointOfContactEntity pointOfContact : tempCompanyEntity.getListOfPointOfContacts()) {
+                    pointOfContact.setCompany(null);
+                }
+
+                return Response.status(Response.Status.OK).entity(tempCompanyEntity).build();
+            } catch (UnknownPersistenceException | CompanySQLConstraintException | PointOfContactBeanValidationException | CompanyBeanValidaionException ex) {
+                System.out.println("ex.message" + ex.getMessage());
+                return Response.status(Status.BAD_REQUEST).entity(ex.getMessage()).build();
+            } catch (Exception ex) {
+                System.out.println("ex.message" + ex.getMessage());
+                return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+            }
+        } else {
+
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid change password request").build();
+        }
+
     }
 
     private CompanySessionBeanLocal lookupCompanySessionBeanLocal() {
