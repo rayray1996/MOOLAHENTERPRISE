@@ -58,6 +58,6 @@ public interface CompanySessionBeanLocal {
 
     public CompanyEntity createAccountForCompanyWS(CompanyEntity newCompany) throws CompanyAlreadyExistException, UnknownPersistenceException, CompanyCreationException, PointOfContactBeanValidationException;
 
-    public CompanyEntity updateCompanyInformationWS(CompanyEntity company, String email, String password) throws UnknownPersistenceException, CompanySQLConstraintException, PointOfContactBeanValidationException, CompanyBeanValidaionException, IncorrectLoginParticularsException;
+    public CompanyEntity updateCompanyInformationWS(CompanyEntity company) throws UnknownPersistenceException, CompanySQLConstraintException, PointOfContactBeanValidationException, CompanyBeanValidaionException, IncorrectLoginParticularsException;
 
     }

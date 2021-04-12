@@ -235,14 +235,27 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
     }
 
     @Override
-    public CompanyEntity updateCompanyInformationWS(CompanyEntity company, String email, String password) throws UnknownPersistenceException, CompanySQLConstraintException, PointOfContactBeanValidationException, CompanyBeanValidaionException, IncorrectLoginParticularsException {
+    public CompanyEntity updateCompanyInformationWS(CompanyEntity company) throws UnknownPersistenceException, CompanySQLConstraintException, PointOfContactBeanValidationException, CompanyBeanValidaionException, IncorrectLoginParticularsException {
         Set<ConstraintViolation<CompanyEntity>> companyError = validator.validate(company);
         if (companyError.isEmpty()) {
 
             try {
-                if (login(email, password) == null) {
-                    throw new IncorrectLoginParticularsException("Incorrect login details provided!");
-                }
+//                company = em.find(CompanyEntity.class, company.getCompanyId());
+                String oldPassword = new String (company.getPassword());
+                String oldSalt = new String (company.getSalt());
+//                String attemptPassword = password;
+//                System.out.println("attemptPassword = " + attemptPassword);
+                System.out.println("oldPassword = " + oldPassword);
+                System.out.println("OldSalt : " + oldSalt);
+//                System.out.println("");
+//                
+                System.out.println("oldEmail = " + company.getCompanyEmail());
+//                System.out.println("attemptEmail = " + email);
+//                String oldEmail = company.getCompanyEmail();
+//                String attemptEmail = email;
+//                if (!(oldEmail.equals(attemptEmail) && oldPassword.equals(attemptPassword))) {
+//                    throw new IncorrectLoginParticularsException("Incorrect login details provided!");
+//                }
                 if (company.getListOfPointOfContacts() != null && !company.getListOfPointOfContacts().isEmpty()) {
                     for (PointOfContactEntity pe : company.getListOfPointOfContacts()) {
                         Set<ConstraintViolation<PointOfContactEntity>> pointOfContactError = validator.validate(pe);
@@ -251,6 +264,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
                         }
 
                     }
+                    
                     for (ProductEntity product : company.getListOfProducts()) {
                         product.setCompany(company);
                     }
@@ -266,6 +280,10 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
                     em.merge(company);
 
                     em.flush();
+                    company.setSalt(oldSalt);
+                    company.setPassword(oldPassword);
+                    System.out.println("New Pw: " + company.getPassword());
+                    System.out.println("New Salt: " + company.getSalt());
                     return company;
                 }
                 throw new CompanyBeanValidaionException("Please check your point of contacts");
@@ -280,9 +298,10 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
                 } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
-            } catch (IncorrectLoginParticularsException | CompanyDoesNotExistException ex) {
-                throw new IncorrectLoginParticularsException("Incorrect login details provided!");
             }
+//            catch (IncorrectLoginParticularsException ex) {
+//                throw new IncorrectLoginParticularsException("Incorrect login details provided!");
+//            }
         } else {
             throw new CompanyBeanValidaionException(prepareInputDataValidationErrorsMessage(companyError));
         }
