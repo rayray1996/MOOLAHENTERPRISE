@@ -411,33 +411,60 @@ public class ProductResource {
     }
 
     public ProductEntity nullifyProduct(ProductEntity product) {
-        if (product.getCompany() != null) {
-            product.getCompany().setListOfProducts(null);
-            if (product.getCompany().getRefund() != null) {
-                product.getCompany().getRefund().setCompany(null);
-            }
-            if (product.getCompany().getListOfPayments() != null && !product.getCompany().getListOfPayments().isEmpty()) {
-                for (PaymentEntity pay : product.getCompany().getListOfPayments()) {
-                    pay.setCompany(null);
-                    if (pay instanceof MonthlyPaymentEntity) {
-                        MonthlyPaymentEntity c = ((MonthlyPaymentEntity) pay);
-                        for (ProductLineItemEntity pl : c.getListOfProductLineItems()) {
-                            if (pl.getProduct() != null) {
-                                pl.setProduct(null);
+//        if (product.getCompany() != null) {
+//            product.getCompany().setListOfProducts(null);
+//            if (product.getCompany().getRefund() != null) {
+//                product.getCompany().getRefund().setCompany(null);
+//            }
+//            if (product.getCompany().getListOfPayments() != null && !product.getCompany().getListOfPayments().isEmpty()) {
+//                for (PaymentEntity pay : product.getCompany().getListOfPayments()) {
+//                    pay.setCompany(null);
+//                    if (pay instanceof MonthlyPaymentEntity) {
+//                        MonthlyPaymentEntity c = ((MonthlyPaymentEntity) pay);
+//                        for (ProductLineItemEntity pl : c.getListOfProductLineItems()) {
+//                            if (pl.getProduct() != null) {
+//                                pl.setProduct(null);
+//                            }
+//                        }
+//                    }
+//
+//                }
+//                if (product.getCompany().getListOfPointOfContacts() != null && !product.getCompany().getListOfPointOfContacts().isEmpty()) {
+//                    for (PointOfContactEntity poc : product.getCompany().getListOfPointOfContacts()) {
+//                        poc.setCompany(null);
+//
+//                    }
+//                }
+//
+//            }
+//        }
+        
+          if (product.getCompany() != null) {
+                    product.getCompany().setListOfProducts(null);
+                    if (product.getCompany().getRefund() != null) {
+                        product.getCompany().getRefund().setCompany(null);
+                    }
+                    if (product.getCompany().getListOfPayments() != null && !product.getCompany().getListOfPayments().isEmpty()) {
+                        for (PaymentEntity pay : product.getCompany().getListOfPayments()) {
+                            pay.setCompany(null);
+                            if (pay instanceof MonthlyPaymentEntity) {
+                                MonthlyPaymentEntity c = ((MonthlyPaymentEntity) pay);
+                                for (ProductLineItemEntity pl : c.getListOfProductLineItems()) {
+                                    if (pl.getProduct() != null) {
+                                        pl.setProduct(null);
+                                    }
+                                }
                             }
+                        }
+                    }
+                    if (product.getCompany().getListOfPointOfContacts() != null && !product.getCompany().getListOfPointOfContacts().isEmpty()) {
+                        for (PointOfContactEntity poc : product.getCompany().getListOfPointOfContacts()) {
+                            poc.setCompany(null);
+
                         }
                     }
 
                 }
-                if (product.getCompany().getListOfPointOfContacts() != null && !product.getCompany().getListOfPointOfContacts().isEmpty()) {
-                    for (PointOfContactEntity poc : product.getCompany().getListOfPointOfContacts()) {
-                        poc.setCompany(null);
-
-                    }
-                }
-
-            }
-        }
         return product;
     }
 }

@@ -166,8 +166,8 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
     @Override
     public CompanyEntity login(String companyEmail, String password) throws CompanyDoesNotExistException, IncorrectLoginParticularsException {
         CompanyEntity currcompany = retrieveCompanyByEmail(companyEmail);
-        String passwordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + currcompany.getSalt()));
-        if (currcompany.getPassword().equals(passwordHash)) {
+      //  String passwordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + currcompany.getSalt()));
+        if (currcompany.getPassword().equals(password)) {
             return currcompany;
         } else {
             throw new IncorrectLoginParticularsException("Incorrect login details provided!");
