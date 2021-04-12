@@ -444,8 +444,9 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
     }
 
     @Override
-    public List<MonthlyPaymentEntity> retrieveAllUnpaidPayment() {
-        Query query = em.createQuery("SELECT mp FROM MonthlyPaymentEntity mp WHERE mp.paid = false");
+    public List<MonthlyPaymentEntity> retrieveAllUnpaidPayment(String email) {
+        Query query = em.createQuery("SELECT DISTINCT mp FROM MonthlyPaymentEntity mp WHERE mp.paid = false AND mp.company.companyEmail = :email");
+        query.setParameter("email", email);
         return query.getResultList();
     }
 
