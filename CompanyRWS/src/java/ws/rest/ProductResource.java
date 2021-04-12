@@ -246,8 +246,7 @@ public class ProductResource {
                 productEntityWrapper.setProductType("WHOLELIFEPRODUCT");
                 productEntityWrapper.setProductEnum(((WholeLifeProductEntity) product).getProductEnum().toString());
             }
-            
-            
+
             GenericEntity<ProductEntityWrapper> genericEntity = new GenericEntity<ProductEntityWrapper>(productEntityWrapper) {
             };
 
@@ -458,7 +457,7 @@ public class ProductResource {
      * @param newRecord
      * @return
      */
-    @Path("WholeLifeProductEntity")
+    @Path(" WholeLifeProductEntity")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -516,10 +515,107 @@ public class ProductResource {
                 return Response.status(Response.Status.OK).entity(prod).build();
             } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
 //                System.out.println("ex.message" + ex.getMessage());
-                System.out.println("ex.message" + ex.getMessage());
+                System.out.println("ex.message incorrect login" + ex.getMessage());
                 return Response.status(Status.BAD_REQUEST).entity(ex.getMessage()).build();
             } catch (UnknownPersistenceException | ProductAlreadyExistsException | InvalidProductCreationException exception) {
-                System.out.println("ex.message" + exception.getMessage());
+                System.out.println("ex.message unknown" + exception.getMessage());
+                return Response.status(Status.BAD_REQUEST).entity(exception.getMessage()).build();
+            } catch (Exception ex) {
+                System.out.println("ex.message" + ex.getMessage());
+                return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+            }
+        } else {
+
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid create new record request").build();
+        }
+
+    }
+
+    @POST
+    @Path("updateProductInformationTermLife")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateProductInformationTermLife(TermLifeProductEntity product, @QueryParam("email") String email, @QueryParam("password") String password) {
+        if (product != null) {
+            try {
+
+                CompanyEntity tempCompanyEntity = companySessionBeanLocal.login(email, password);
+                ProductEntity prod = productSessionBeanLocal.updateProductListingWS(product);
+                prod = nullifyProduct(prod);
+                TermLifeProductEntity termlife = (TermLifeProductEntity) prod;
+
+                return Response.status(Response.Status.OK).entity(termlife).build();
+            } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
+//                System.out.println("ex.message" + ex.getMessage());
+                System.out.println("ex.message incorrect login" + ex.getMessage());
+                return Response.status(Status.BAD_REQUEST).entity(ex.getMessage()).build();
+            } catch (UnknownPersistenceException | ProductAlreadyExistsException | InvalidProductCreationException exception) {
+                System.out.println("ex.message unknown" + exception.getMessage());
+                return Response.status(Status.BAD_REQUEST).entity(exception.getMessage()).build();
+            } catch (Exception ex) {
+                System.out.println("ex.message" + ex.getMessage());
+                return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+            }
+        } else {
+
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid create new record request").build();
+        }
+
+    }
+    
+    @POST
+    @Path("updateProductInformationWholeLife")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateProductInformationWholeLife(WholeLifeProductEntity product, @QueryParam("email") String email, @QueryParam("password") String password) {
+        if (product != null) {
+            try {
+
+                CompanyEntity tempCompanyEntity = companySessionBeanLocal.login(email, password);
+                ProductEntity prod = productSessionBeanLocal.updateProductListingWS(product);
+                prod = nullifyProduct(prod);
+                WholeLifeProductEntity wholeLfe = (WholeLifeProductEntity) prod;
+
+                return Response.status(Response.Status.OK).entity(wholeLfe).build();
+            } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
+//                System.out.println("ex.message" + ex.getMessage());
+                System.out.println("ex.message incorrect login" + ex.getMessage());
+                return Response.status(Status.BAD_REQUEST).entity(ex.getMessage()).build();
+            } catch (UnknownPersistenceException | ProductAlreadyExistsException | InvalidProductCreationException exception) {
+                System.out.println("ex.message unknown" + exception.getMessage());
+                return Response.status(Status.BAD_REQUEST).entity(exception.getMessage()).build();
+            } catch (Exception ex) {
+                System.out.println("ex.message" + ex.getMessage());
+                return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+            }
+        } else {
+
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid create new record request").build();
+        }
+
+    }
+    
+     
+    @POST
+    @Path("updateProductInformationEndowment")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateProductInformationEndowment(EndowmentEntity product, @QueryParam("email") String email, @QueryParam("password") String password) {
+        if (product != null) {
+            try {
+
+                CompanyEntity tempCompanyEntity = companySessionBeanLocal.login(email, password);
+                ProductEntity prod = productSessionBeanLocal.updateProductListingWS(product);
+                prod = nullifyProduct(prod);
+                EndowmentEntity endowment = (EndowmentEntity) prod;
+
+                return Response.status(Response.Status.OK).entity(endowment).build();
+            } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
+//                System.out.println("ex.message" + ex.getMessage());
+                System.out.println("ex.message incorrect login" + ex.getMessage());
+                return Response.status(Status.BAD_REQUEST).entity(ex.getMessage()).build();
+            } catch (UnknownPersistenceException | ProductAlreadyExistsException | InvalidProductCreationException exception) {
+                System.out.println("ex.message unknown" + exception.getMessage());
                 return Response.status(Status.BAD_REQUEST).entity(exception.getMessage()).build();
             } catch (Exception ex) {
                 System.out.println("ex.message" + ex.getMessage());
