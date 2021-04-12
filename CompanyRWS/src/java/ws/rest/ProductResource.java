@@ -47,7 +47,7 @@ import util.exception.InvalidProductCreationException;
 import util.exception.PointOfContactBeanValidationException;
 import util.exception.ProductAlreadyExistsException;
 import util.exception.UnknownPersistenceException;
-import ws.datamodel.ProductWrapper;
+import ws.datamodel.ProductEntityWrapper;
 
 /**
  * REST Web Service
@@ -223,6 +223,40 @@ public class ProductResource {
     /**
      * working
      *
+     * @param productId
+     * @return
+     */
+    @Path("retrieveProductEntityWrapperById")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveProductEntityWrapperById(@QueryParam("productId") Long productId) {
+        try {
+            ProductEntity product = productSessionBeanLocal.retrieveProductEntityById(productId);
+
+            product = nullifyProduct(product);
+            ProductEntityWrapper productEntityWrapper = new ProductEntityWrapper();
+            productEntityWrapper.setProduct(product);
+            if (product instanceof EndowmentEntity) {
+                productEntityWrapper.setProductEnum(((EndowmentEntity) product).getProductEnum().toString());
+            } else if (product instanceof TermLifeProductEntity) {
+                productEntityWrapper.setProductEnum(((TermLifeProductEntity) product).getProductEnum().toString());
+            } else if (product instanceof WholeLifeProductEntity) {
+                productEntityWrapper.setProductEnum(((WholeLifeProductEntity) product).getProductEnum().toString());
+            }
+
+            GenericEntity<ProductEntityWrapper> genericEntity = new GenericEntity<ProductEntityWrapper>(productEntityWrapper) {
+            };
+
+            return Response.status(Status.OK).entity(genericEntity).build();
+        } catch (Exception ex) {
+            System.out.println("***********" + ex.getMessage());
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
+
+    /**
+     * working
+     *
      * @param name
      * @return
      */
@@ -301,37 +335,6 @@ public class ProductResource {
             return Response.status(Status.OK).entity(genericEntity).build();
         } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Invalid account").build();
-        } catch (Exception ex) {
-            System.out.println("***********" + ex.getMessage());
-            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
-        }
-    }
-
-    /**
-     * not tested
-     *
-     * @param productWrapper
-     * @return
-     */
-    @Path("filterProductsByCriteria")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response filterProductsByCriteria(ProductWrapper productWrapper) {
-        try {
-            // CategoryEnum category, Boolean wantsRider, Boolean isSmoker, BigDecimal sumAssured, Integer coverageTerm, Integer premiumTerm, EndowmentProductEnum endowmentProductEnum, 
-            //           TermLifeProductEnum termLifeProductEnum, WholeLifeProductEnum wholeLifeProductEnum
-            List<ProductEntity> products = productSessionBeanLocal.filterProductsByCriteria(productWrapper.getCategory(), productWrapper.getWantsRider(), productWrapper.getIsSmoker(),
-                    productWrapper.getSumAssured(), productWrapper.getCoverageTerm(), productWrapper.getPremiumTerm(), productWrapper.getEndowmentProductEnum(), productWrapper.getTermLifeProductEnum(), productWrapper.getWholeLifeProductEnum());
-
-            //  List<ProductEntity> products = productSessionBeanLocal.searchForProductsByName("");
-            for (ProductEntity product : products) {
-
-                product = nullifyProduct(product);
-            }
-            GenericEntity<List<ProductEntity>> genericEntity = new GenericEntity<List<ProductEntity>>(products) {
-            };
-
-            return Response.status(Status.OK).entity(genericEntity).build();
         } catch (Exception ex) {
             System.out.println("***********" + ex.getMessage());
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
@@ -509,8 +512,10 @@ public class ProductResource {
                 return Response.status(Response.Status.OK).entity(prod).build();
             } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
 //                System.out.println("ex.message" + ex.getMessage());
+                System.out.println("ex.message" + ex.getMessage());
                 return Response.status(Status.BAD_REQUEST).entity(ex.getMessage()).build();
             } catch (UnknownPersistenceException | ProductAlreadyExistsException | InvalidProductCreationException exception) {
+                System.out.println("ex.message" + exception.getMessage());
                 return Response.status(Status.BAD_REQUEST).entity(exception.getMessage()).build();
             } catch (Exception ex) {
                 System.out.println("ex.message" + ex.getMessage());
