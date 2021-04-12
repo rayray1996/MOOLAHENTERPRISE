@@ -6,6 +6,7 @@
 package ejb.stateless;
 
 import ejb.entity.MonthlyPaymentEntity;
+import ejb.entity.PaymentEntity;
 import util.exception.ProductLineItemException;
 import ejb.entity.ProductLineItemEntity;
 import java.math.BigInteger;
@@ -35,5 +36,7 @@ public interface InvoiceSessionBeanLocal {
     public void makePayment(Long paymentId, Long companyId) throws MonthlyPaymentNotFoundException, CompanyDoesNotExistException;
 
     public Long purchaseMoolahCredits(Long companyId, BigInteger creditToBuy) throws CompanyDoesNotExistException, InvalidPaymentEntityCreationException, InvalidPaymentEntityCreationException, UnknownPersistenceException, PaymentEntityAlreadyExistsException;
+
+    public MonthlyPaymentEntity retrieveMonthlyPaymentById(Long monthlyPaymentId) throws MonthlyPaymentNotFoundException;
 
 }

@@ -61,7 +61,7 @@ public interface CompanySessionBeanLocal {
 
     public CompanyEntity updateCompanyInformationWS(CompanyEntity company) throws UnknownPersistenceException, CompanySQLConstraintException, PointOfContactBeanValidationException, CompanyBeanValidaionException, IncorrectLoginParticularsException;
 
-    public List<MonthlyPaymentEntity> retrieveAllUnpaidPayment();
+    public List<MonthlyPaymentEntity> retrieveAllUnpaidPayment(String email);
 
     public CompanyEntity retrieveCompanyByOTP(String email, String path) throws InvalidOTPException ;
 

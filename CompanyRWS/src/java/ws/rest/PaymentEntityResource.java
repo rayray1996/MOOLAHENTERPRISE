@@ -312,7 +312,7 @@ public class PaymentEntityResource {
         try {
             CompanyEntity company = companySessionBeanLocal.login(email, password);
 
-            List<MonthlyPaymentEntity> paymentEntity = companySessionBeanLocal.retrieveAllUnpaidPayment();
+            List<MonthlyPaymentEntity> paymentEntity = companySessionBeanLocal.retrieveAllUnpaidPayment(email);
 
             for (MonthlyPaymentEntity mthlyPmt : paymentEntity) {
                 if (mthlyPmt.getCompany() != null) {
@@ -332,6 +332,39 @@ public class PaymentEntityResource {
             }
 
             GenericEntity<List<MonthlyPaymentEntity>> genericEntity = new GenericEntity<List<MonthlyPaymentEntity>>(paymentEntity) {
+            };
+
+            return Response.status(Status.OK).entity(genericEntity).build();
+        } catch (Exception ex) {
+            System.out.println("*************error : " + ex.getMessage());
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
+
+    @Path("retrieveMonthlyPaymentById")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveMonthlyPaymentById(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("id") Long id) {
+        try {
+            CompanyEntity company = companySessionBeanLocal.login(email, password);
+
+            MonthlyPaymentEntity paymentEntity = invoiceSessionBean.retrieveMonthlyPaymentById(id);
+
+            if (paymentEntity.getCompany() != null) {
+                paymentEntity.getCompany().setListOfPayments(null);
+                if (paymentEntity.getCompany().getRefund() != null) {
+                    paymentEntity.getCompany().getRefund().setCompany(null);
+
+                }
+                for (PointOfContactEntity poc : paymentEntity.getCompany().getListOfPointOfContacts()) {
+                    poc.setCompany(null);
+                }
+                for (ProductEntity product : paymentEntity.getCompany().getListOfProducts()) {
+                    product.setCompany(null);
+                }
+            }
+
+            GenericEntity<MonthlyPaymentEntity> genericEntity = new GenericEntity<MonthlyPaymentEntity>(paymentEntity) {
             };
 
             return Response.status(Status.OK).entity(genericEntity).build();

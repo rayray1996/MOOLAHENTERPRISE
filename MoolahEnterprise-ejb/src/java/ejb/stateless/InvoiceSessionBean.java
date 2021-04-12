@@ -78,15 +78,17 @@ public class InvoiceSessionBean implements InvoiceSessionBeanLocal {
         validator = validatorFactory.getValidator();
     }
 
-    public PaymentEntity retrieveMonthlyPaymentById(Long monthlyPaymentId) throws MonthlyPaymentNotFoundException {
-        PaymentEntity monthlyPayment = em.find(PaymentEntity.class, monthlyPaymentId);
+    @Override
+    public MonthlyPaymentEntity retrieveMonthlyPaymentById(Long monthlyPaymentId) throws MonthlyPaymentNotFoundException {
+        MonthlyPaymentEntity monthlyPayment = em.find(MonthlyPaymentEntity.class, monthlyPaymentId);
         if (monthlyPayment == null) {
             throw new MonthlyPaymentNotFoundException("Monthly payment is not found");
         } else {
             return monthlyPayment;
         }
     }
-
+    
+    @Override
     public Long purchaseMoolahCredits(Long companyId, BigInteger creditToBuy) throws CompanyDoesNotExistException, InvalidPaymentEntityCreationException, InvalidPaymentEntityCreationException, UnknownPersistenceException, PaymentEntityAlreadyExistsException {
         CompanyEntity company = em.find(CompanyEntity.class, companyId);
 
@@ -124,7 +126,8 @@ public class InvoiceSessionBean implements InvoiceSessionBeanLocal {
         }
 
     }
-
+    
+    @Override
     public void makePayment(Long paymentId, Long companyId) throws MonthlyPaymentNotFoundException, CompanyDoesNotExistException {
         CompanyEntity company = em.find(CompanyEntity.class, companyId);
         MonthlyPaymentEntity payment = em.find(MonthlyPaymentEntity.class, paymentId);
@@ -141,7 +144,6 @@ public class InvoiceSessionBean implements InvoiceSessionBeanLocal {
             payment.setDateTransacted(date);
         }
     }
-    
 
     private String generatePaymentNumber() {
         Query query = em.createQuery("SELECT MAX(p.paymentId) FROM PaymentEntity p");
@@ -178,7 +180,7 @@ public class InvoiceSessionBean implements InvoiceSessionBeanLocal {
                 MonthlyPaymentEntity monthlyPayment = new MonthlyPaymentEntity(date, company);
                 monthlyPayment = createMonthlyPayment(monthlyPayment);
                 company.getListOfPayments().add(monthlyPayment);
-
+                monthlyPayment.setPaymentNumber(generatePaymentNumber());
                 for (ProductEntity product : listOfProducts) {
 
                     ClickThroughEntity clickThrough = product.getClickThroughInfo();
