@@ -160,8 +160,7 @@ public class PaymentEntityResource {
 
     /**
      *
-     * working
-     * month : 2021-01-21
+     * working month : 2021-01-21
      *
      * @param month
      * @return
@@ -207,8 +206,7 @@ public class PaymentEntityResource {
     }
 
     /**
-     * working 
-     * value for strYear : 2021
+     * working value for strYear : 2021
      */
     @Path("retrieveCurrentYearMonthlyPaymentEntity")
     @GET
@@ -304,6 +302,42 @@ public class PaymentEntityResource {
 
         } catch (Exception ex) {
             return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
+        }
+    }
+
+    @Path("retrieveAllUnpaidMonthlyPayment")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveAllUnpaidMonthlyPayment(@QueryParam("email") String email, @QueryParam("password") String password) {
+        try {
+            CompanyEntity company = companySessionBeanLocal.login(email, password);
+
+            List<MonthlyPaymentEntity> paymentEntity = companySessionBeanLocal.retrieveAllUnpaidPayment();
+
+            for (MonthlyPaymentEntity mthlyPmt : paymentEntity) {
+                if (mthlyPmt.getCompany() != null) {
+                    mthlyPmt.getCompany().setListOfPayments(null);
+                    if (mthlyPmt.getCompany().getRefund() != null) {
+                        mthlyPmt.getCompany().getRefund().setCompany(null);
+
+                    }
+                    for (PointOfContactEntity poc : mthlyPmt.getCompany().getListOfPointOfContacts()) {
+                        poc.setCompany(null);
+                    }
+                    for (ProductEntity product : mthlyPmt.getCompany().getListOfProducts()) {
+                        product.setCompany(null);
+                    }
+                }
+
+            }
+
+            GenericEntity<List<MonthlyPaymentEntity>> genericEntity = new GenericEntity<List<MonthlyPaymentEntity>>(paymentEntity) {
+            };
+
+            return Response.status(Status.OK).entity(genericEntity).build();
+        } catch (Exception ex) {
+            System.out.println("*************error : " + ex.getMessage());
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
 
