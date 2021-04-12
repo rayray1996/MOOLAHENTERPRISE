@@ -160,8 +160,8 @@ public class PaymentEntityResource {
 
     /**
      *
-     * --- error at ejb
-     * Havent implemented login
+     * working
+     * month : 2021-01-21
      *
      * @param month
      * @return
@@ -201,15 +201,14 @@ public class PaymentEntityResource {
         } catch (Exception ex) {
             System.out.println("ex:" + ex.getMessage());
             System.out.println("time : " + dStartDate.getTime());
-
+            System.out.println("error message:" + ex.getMessage());
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
 
     /**
-     * Error at ejb 
-     * Havent implemented login can only take in date i.e.
-     * 2021-04-09
+     * working 
+     * value for strYear : 2021
      */
     @Path("retrieveCurrentYearMonthlyPaymentEntity")
     @GET
@@ -260,7 +259,7 @@ public class PaymentEntityResource {
     @Path("makePayment")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateCompanyInformation(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("paymentId") Long paymentId) {
+    public Response makePayment(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("paymentId") Long paymentId) {
 
         try {
             CompanyEntity company = companySessionBeanLocal.login(email, password);

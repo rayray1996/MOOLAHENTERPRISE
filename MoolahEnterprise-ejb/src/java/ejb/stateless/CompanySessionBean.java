@@ -475,13 +475,11 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
     }
 
     /**
-     * Error:
-     * xception Description: Problem compiling [SELECT mp FROM MonthlyPaymentEntity mp WHERE mp.dateGenerated >= :start AND mp.dateGenerated <= :end AND mp.companyId =:coyId]. 
-        [105, 117] The state field path 'mp.companyId' cannot be resolved to a valid type.
-     * @param month
-     * @param coyId
-     * @return
-     * @throws MonthlyPaymentNotFoundException 
+     * Error: exception Description: Problem compiling [SELECT mp FROM
+     * MonthlyPaymentEntity mp WHERE mp.dateGenerated >= :start AND
+     * mp.dateGenerated <= :end AND mp.companyId =:coyId]. [105, 117] The state
+     * field path 'mp.companyId' cannot be resolved to a valid type. @param
+     * month @param coyId @return @throws MonthlyPaymentNotFoundException
      */
     @Override
     public MonthlyPaymentEntity retrieveCurrentMonthlyPaymentEntity(Calendar month, Long coyId) throws MonthlyPaymentNotFoundException {
@@ -490,20 +488,26 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
         start.set(month.get(Calendar.YEAR), month.get(Calendar.MONTH), 1, 0, 0);
         end.set(month.get(Calendar.YEAR), month.get(Calendar.MONTH) + 1, 1, 0, 0);
 
-        System.out.println("***************Start: " + start.getTime());
-        System.out.println("**************End: " + end.getTime());
 //        start.add(Calendar.DATE, 30);
 //        end.add(Calendar.DATE, -30);
-        Query query = em.createQuery("SELECT mp FROM MonthlyPaymentEntity mp WHERE mp.dateGenerated >= :start AND mp.dateGenerated <= :end AND mp. =:coyId");
+        Query query = em.createQuery("SELECT mp FROM PaymentEntity mp WHERE mp.dateGenerated >= :start AND mp.dateGenerated <= :end AND mp.company.companyId =:coyId");
         query.setParameter("start", start);
         query.setParameter("end", end);
         query.setParameter("coyId", coyId);
-        try {
-            MonthlyPaymentEntity results = (MonthlyPaymentEntity) query.getSingleResult();
-            return results;
-        } catch (NoResultException ex) {
-            throw new MonthlyPaymentNotFoundException("Monthly Payment Invoice cannot be found for Company " + coyId);
+
+        List<PaymentEntity> results = query.getResultList();
+        MonthlyPaymentEntity mthlyPmt = null;
+
+        for (PaymentEntity pe : results) {
+            if (pe instanceof MonthlyPaymentEntity) {
+                mthlyPmt = (MonthlyPaymentEntity) pe;
+
+                return mthlyPmt;
+
+            }
         }
+        
+        throw new MonthlyPaymentNotFoundException("Monthly Payment Invoice not found");
 //        if(results!=null ){
 //            return results;
 //        }
@@ -512,7 +516,6 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
 //                return mp;
 //            }
 //        }
-
 //        throw new MonthlyPaymentNotFoundException("Monthly Payment Invoice not found");
     }
 
@@ -524,23 +527,30 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
         Calendar end = (Calendar) start.clone();
         end.add(Calendar.MONTH, 12);
 
-        Query query = em.createQuery("SELECT mp FROM MonthlyPaymentEntity mp WHERE mp.dateGenerated >= :start AND mp.dateGenerated <= :end AND mp.companyId =:coyId");
+        Query query = em.createQuery("SELECT mp FROM PaymentEntity mp WHERE mp.dateGenerated >= :start AND mp.dateGenerated <= :end AND mp.company.companyId=:coyId");
         query.setParameter("start", start);
         query.setParameter("end", end);
         query.setParameter("coyId", coyId);
-        List<MonthlyPaymentEntity> results = query.getResultList();
+        List<PaymentEntity> results = query.getResultList();
+        List<MonthlyPaymentEntity> finalResult = new ArrayList<>();
 
-        if (results.isEmpty()) {
-            throw new MonthlyPaymentNotFoundException("No Monthly Payment Invoice(s) are found");
-        }
-
-        for (int i = 0; i < results.size(); i++) {
-            if (results.get(i).getDateGenerated().get(Calendar.YEAR) != yearInt) {
-                results.remove(i);
+        for (PaymentEntity mp : results) {
+            if (mp instanceof MonthlyPaymentEntity) {
+                finalResult.add((MonthlyPaymentEntity) mp);
             }
         }
 
-        return results;
+        if (finalResult.isEmpty()) {
+            throw new MonthlyPaymentNotFoundException("No Monthly Payment Invoice(s) are found");
+        }
+
+        for (int i = 0; i < finalResult.size(); i++) {
+            if (finalResult.get(i).getDateGenerated().get(Calendar.YEAR) != yearInt) {
+                finalResult.remove(i);
+            }
+        }
+
+        return finalResult;
     }
 
     @Override

@@ -164,7 +164,7 @@ public class InvoiceSessionBean implements InvoiceSessionBeanLocal {
      * requesting them to log in and complete payment
      */
     //    @Schedule(hour = "7", minute = "0", second = "0", dayOfMonth = "1", month = "*", year = "*", persistent = false)
-    @Schedule(hour = "*", minute = "*/4", second = "0", dayOfMonth = "*", month = "*", year = "*", persistent = false)
+    @Schedule(hour = "0", minute = "0", second = "0", dayOfMonth = "*", month = "*", year = "*", persistent = false)
     @Override
     public void automatedMonthlyInvoice() {
         try {
