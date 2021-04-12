@@ -564,12 +564,12 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
     @Override
     public void resetPassword(String email) throws CompanyDoesNotExistException {
         try {
-            CompanyEntity company = (CompanyEntity) em.createNamedQuery("findCustWithEmail").setParameter("custEmail", email).getSingleResult();
-
-            int min = 0;
-            int max = 99999;
-
-            int value = (int) (Math.random() * (max - min + 1) + min);
+            //   CompanyEntity company = (CompanyEntity) em.createNamedQuery("findCustWithEmail").setParameter("custEmail", email).getSingleResult();
+            CompanyEntity company = (CompanyEntity) em.createQuery("SELECT c FROM CompanyEntity c where c.companyEmail=:companyEmail").setParameter("companyEmail", email).getSingleResult();
+            int min = 100000;
+            int max = 999999;
+            int range = (max - min) + 1;
+            int value = (int) (Math.random() * range) + min ;
             // String pathParam = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(String.valueOf(value)));
             String pathParam = String.valueOf(value);
             company.setResetPasswordPathParam(pathParam);
@@ -578,10 +578,13 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
             expiryDate.add(GregorianCalendar.MINUTE, 30);
             company.setExpiryDateOfPathParam(expiryDate);
 
+            TimerConfig timerConfig = new TimerConfig(company, true);
+
+            timerService.createSingleActionTimer(expiryDate.getTime(), timerConfig);
             // send email 
             emailSessionBean.emailResetPassword(company, pathParam, email, requestedDate);
         } catch (NoResultException ex) {
-            throw new CompanyDoesNotExistException("Customer does not exists!");
+            throw new CompanyDoesNotExistException("Company does not exists!");
         }
     }
 

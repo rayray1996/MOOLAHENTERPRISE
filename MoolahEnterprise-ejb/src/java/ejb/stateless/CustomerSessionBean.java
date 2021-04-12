@@ -156,7 +156,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 
             TimerConfig timerConfig = new TimerConfig(cust, true);
 
-//            timerService.createSingleActionTimer(expiryDate.getTime(), timerConfig);
+            timerService.createSingleActionTimer(expiryDate.getTime(), timerConfig);
         } catch (NoResultException ex) {
             throw new CustomerDoesNotExistsException("Customer does not exists!");
         }

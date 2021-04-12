@@ -287,11 +287,11 @@ public class EmailManager {
 
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
-        String dateRequested = format.format(requestedDate);
+        String dateRequested = format.format((requestedDate.getTime()));
 
         emailBody += "Dear " + company.getCompanyName() + "\n\n";
         emailBody += "You have requested to reset your password on " + dateRequested + "\n\n";
-        emailBody += "Please click the following link: " + ".../?param=" + pathParam + "\n\n";
+        emailBody += "Please use this password to reset your password. The password is : " + pathParam + "\n\n";
 
         emailBody += "Yours Sincerely, \nMoolah Enterprise";
 

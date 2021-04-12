@@ -291,8 +291,9 @@ public class CompanyResource {
         try {
             companySessionBeanLocal.resetPassword(email);
 
-            return Response.status(Response.Status.OK).entity("").build();
+            return Response.status(Response.Status.OK).entity(true).build();
         } catch (CompanyDoesNotExistException ex) {
+
             return Response.status(Response.Status.BAD_REQUEST).entity("Invalid account").build();
         } catch (Exception ex) {
             return Response.status(Response.Status.FORBIDDEN).entity(ex.getMessage()).build();
@@ -306,14 +307,28 @@ public class CompanyResource {
      * @param password
      * @return
      */
-    @Path("resetPassword")
+    @Path("resetCompanyPassword")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveCompanyByOTP(@QueryParam("email") String email, @QueryParam("otp") String otp) {
+    public Response retrieveCompanyByOTP(@QueryParam("email") String email, @QueryParam("otp") String otp, @QueryParam("newPassword") String newPassword, @QueryParam("repeatPassword") String repeatPassword) {
         try {
             CompanyEntity company = companySessionBeanLocal.retrieveCompanyByOTP(email, otp);
-            company = nullifyCompany(company);
-            return Response.status(Response.Status.OK).entity(company).build();
+            if (repeatPassword != null && newPassword != null) {
+
+                if (!newPassword.equals(repeatPassword)) {
+                    return Response.status(Status.CONFLICT).entity("New passwords do not match").build();
+                }
+
+                String salt = company.getSalt();
+
+                String newPasswordSalted = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(newPassword + salt));
+                company.setPassword(newPasswordSalted);
+                CompanyEntity tempCompanyEntity = companySessionBeanLocal.updateCompanyInformationWS(company);
+
+                return Response.status(Response.Status.OK).entity(true).build();
+            } else {
+                return Response.status(Status.BAD_REQUEST).entity("Repeat password and new password must not be empty").build();
+            }
         } catch (InvalidOTPException ex) {
             return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
         } catch (Exception ex) {
@@ -325,7 +340,12 @@ public class CompanyResource {
     @Path("updateCompanyPassword")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateCompanyPassword(CompanyEntity updateCompany, @QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("oldPassword") String oldPassword, @QueryParam("newPassword") String newPassword, @QueryParam("repeatNewPassword") String repeatNewPassword
+    public Response updateCompanyPassword(CompanyEntity updateCompany,
+            @QueryParam("email") String email,
+            @QueryParam("password") String password,
+            @QueryParam("oldPassword") String oldPassword,
+            @QueryParam("newPassword") String newPassword,
+            @QueryParam("repeatNewPassword") String repeatNewPassword
     ) {
         System.out.println("updateCompany = " + updateCompany);
         System.out.println("oldPassword = " + oldPassword);
