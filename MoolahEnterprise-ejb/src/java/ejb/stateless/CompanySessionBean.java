@@ -53,6 +53,7 @@ import util.exception.CompanyCreationException;
 import util.exception.CompanyDoesNotExistException;
 import util.exception.CompanySQLConstraintException;
 import util.exception.IncorrectLoginParticularsException;
+import util.exception.InvalidOTPException;
 import util.exception.MonthlyPaymentNotFoundException;
 import util.exception.PointOfContactBeanValidationException;
 import util.exception.RefundCreationException;
@@ -566,11 +567,11 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
             CompanyEntity company = (CompanyEntity) em.createNamedQuery("findCustWithEmail").setParameter("custEmail", email).getSingleResult();
 
             int min = 0;
-            int max = 999999999;
+            int max = 99999;
 
             int value = (int) (Math.random() * (max - min + 1) + min);
-            String pathParam = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(String.valueOf(value)));
-
+            // String pathParam = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(String.valueOf(value)));
+            String pathParam = String.valueOf(value);
             company.setResetPasswordPathParam(pathParam);
             Calendar expiryDate = new GregorianCalendar();
             Calendar requestedDate = (Calendar) expiryDate.clone();
@@ -581,6 +582,30 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
             emailSessionBean.emailResetPassword(company, pathParam, email, requestedDate);
         } catch (NoResultException ex) {
             throw new CompanyDoesNotExistException("Customer does not exists!");
+        }
+    }
+
+    @Override
+    public CompanyEntity retrieveCompanyByOTP(String email, String path) throws InvalidOTPException {
+        try {
+            CompanyEntity companyEntity = (CompanyEntity) em.createQuery("SELECT c FROM CompanyEntity c WHERE c.resetPasswordPathParam =:pathParam AND c.companyEmail=:companyEmail").setParameter("pathParam", path).setParameter("companyEmail", email).getSingleResult();
+            companyEntity.getListOfPayments().size();
+            companyEntity.getListOfPointOfContacts().size();
+            companyEntity.getListOfProducts().size();
+            companyEntity.getProfilePic();
+            for (ProductEntity prod : companyEntity.getListOfProducts()) {
+                prod.getListOfAdditionalFeatures().size();
+                prod.getClickThroughInfo();
+                prod.getListOfPremium().size();
+                prod.getListOfRiders().size();
+                prod.getListOfSmokerPremium().size();
+                prod.getProductCategoryPricing();
+                prod.getCompany().getRefund();
+            }
+
+            return companyEntity;
+        } catch (NoResultException ex) {
+            throw new InvalidOTPException("Invalid OTP");
         }
     }
 

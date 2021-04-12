@@ -237,13 +237,17 @@ public class ProductResource {
             ProductEntityWrapper productEntityWrapper = new ProductEntityWrapper();
             productEntityWrapper.setProduct(product);
             if (product instanceof EndowmentEntity) {
+                productEntityWrapper.setProductType("ENDOWMENT");
                 productEntityWrapper.setProductEnum(((EndowmentEntity) product).getProductEnum().toString());
             } else if (product instanceof TermLifeProductEntity) {
+                productEntityWrapper.setProductType("TERMLIFEPRODUCT");
                 productEntityWrapper.setProductEnum(((TermLifeProductEntity) product).getProductEnum().toString());
             } else if (product instanceof WholeLifeProductEntity) {
+                productEntityWrapper.setProductType("WHOLELIFEPRODUCT");
                 productEntityWrapper.setProductEnum(((WholeLifeProductEntity) product).getProductEnum().toString());
             }
-
+            
+            
             GenericEntity<ProductEntityWrapper> genericEntity = new GenericEntity<ProductEntityWrapper>(productEntityWrapper) {
             };
 

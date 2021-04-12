@@ -19,6 +19,7 @@ import util.exception.CompanyCreationException;
 import util.exception.CompanyDoesNotExistException;
 import util.exception.CompanySQLConstraintException;
 import util.exception.IncorrectLoginParticularsException;
+import util.exception.InvalidOTPException;
 import util.exception.MonthlyPaymentNotFoundException;
 import util.exception.PointOfContactBeanValidationException;
 import util.exception.UnknownPersistenceException;
@@ -62,4 +63,6 @@ public interface CompanySessionBeanLocal {
 
     public List<MonthlyPaymentEntity> retrieveAllUnpaidPayment();
 
-    }
+    public CompanyEntity retrieveCompanyByOTP(String email, String path) throws InvalidOTPException ;
+
+}
