@@ -162,7 +162,7 @@ public class CompanyResource {
     @Path("updateCompanyInformation")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateCompanyInformation(CompanyEntity company) {
+    public Response updateCompanyInformation(CompanyEntity company, @QueryParam("email") String email, @QueryParam("password") String password) {
         if (company != null) {
             try {
                 
@@ -219,8 +219,8 @@ public class CompanyResource {
                 }
                 
                 tempCompany.setSalt(CryptographicHelper.getInstance().generateRandomString(32));
-                tempCompany.setPassword(tempCompany.getPassword());
-                
+                tempCompany.setPasswordHash(tempCompany.getPassword());
+
                 CompanyEntity company = companySessionBeanLocal.createAccountForCompanyWS(tempCompany);
                 
                 for (ProductEntity product : company.getListOfProducts()) {
@@ -278,7 +278,7 @@ public class CompanyResource {
     @Path("updateCompanyPassword")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateCompanyPassword(CompanyEntity updateCompany, @QueryParam("oldPassword") String oldPassword, @QueryParam("newPassword") String newPassword, @QueryParam("repeatNewPassword") String repeatNewPassword
+    public Response updateCompanyPassword(CompanyEntity updateCompany, @QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("oldPassword") String oldPassword, @QueryParam("newPassword") String newPassword, @QueryParam("repeatNewPassword") String repeatNewPassword
     ) {
         System.out.println("updateCompany = " + updateCompany);
         System.out.println("oldPassword = " + oldPassword);

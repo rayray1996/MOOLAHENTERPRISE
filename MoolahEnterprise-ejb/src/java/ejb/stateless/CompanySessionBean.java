@@ -241,8 +241,8 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
 
             try {
 //                company = em.find(CompanyEntity.class, company.getCompanyId());
-                String oldPassword = new String (company.getPassword());
-                String oldSalt = new String (company.getSalt());
+                String oldPassword = new String(company.getPassword());
+                String oldSalt = new String(company.getSalt());
 //                String attemptPassword = password;
 //                System.out.println("attemptPassword = " + attemptPassword);
                 System.out.println("oldPassword = " + oldPassword);
@@ -264,7 +264,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
                         }
 
                     }
-                    
+
                     for (ProductEntity product : company.getListOfProducts()) {
                         product.setCompany(company);
                     }
@@ -443,6 +443,12 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
         }
     }
 
+    @Override
+    public List<MonthlyPaymentEntity> retrieveAllUnpaidPayment() {
+        Query query = em.createQuery("SELECT mp FROM MonthlyPaymentEntity mp WHERE mp.paid = false");
+        return query.getResultList();
+    }
+
     public List<PaymentEntity> retrieveAllHistoricalTransactions() {
         Query query = em.createQuery("SELECT p FROM PaymentEntity p");
         List<PaymentEntity> results = query.getResultList();
@@ -506,7 +512,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
 
             }
         }
-        
+
         throw new MonthlyPaymentNotFoundException("Monthly Payment Invoice not found");
 //        if(results!=null ){
 //            return results;
