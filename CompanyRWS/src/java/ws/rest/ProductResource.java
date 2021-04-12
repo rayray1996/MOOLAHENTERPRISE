@@ -31,6 +31,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
@@ -38,9 +39,15 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import util.exception.CompanyBeanValidaionException;
 import util.exception.CompanyDoesNotExistException;
+import util.exception.CompanySQLConstraintException;
 import util.exception.IncorrectLoginParticularsException;
-import ws.datamodel.ProductWrapper;
+import util.exception.InvalidProductCreationException;
+import util.exception.PointOfContactBeanValidationException;
+import util.exception.ProductAlreadyExistsException;
+import util.exception.UnknownPersistenceException;
+import ws.datamodel.ProductEntityWrapper;
 
 /**
  * REST Web Service
@@ -216,6 +223,44 @@ public class ProductResource {
     /**
      * working
      *
+     * @param productId
+     * @return
+     */
+    @Path("retrieveProductEntityWrapperById")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveProductEntityWrapperById(@QueryParam("productId") Long productId) {
+        try {
+            ProductEntity product = productSessionBeanLocal.retrieveProductEntityById(productId);
+
+            product = nullifyProduct(product);
+            ProductEntityWrapper productEntityWrapper = new ProductEntityWrapper();
+            productEntityWrapper.setProduct(product);
+            if (product instanceof EndowmentEntity) {
+                productEntityWrapper.setProductType("ENDOWMENT");
+                productEntityWrapper.setProductEnum(((EndowmentEntity) product).getProductEnum().toString());
+            } else if (product instanceof TermLifeProductEntity) {
+                productEntityWrapper.setProductType("TERMLIFEPRODUCT");
+                productEntityWrapper.setProductEnum(((TermLifeProductEntity) product).getProductEnum().toString());
+            } else if (product instanceof WholeLifeProductEntity) {
+                productEntityWrapper.setProductType("WHOLELIFEPRODUCT");
+                productEntityWrapper.setProductEnum(((WholeLifeProductEntity) product).getProductEnum().toString());
+            }
+            
+            
+            GenericEntity<ProductEntityWrapper> genericEntity = new GenericEntity<ProductEntityWrapper>(productEntityWrapper) {
+            };
+
+            return Response.status(Status.OK).entity(genericEntity).build();
+        } catch (Exception ex) {
+            System.out.println("***********" + ex.getMessage());
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
+
+    /**
+     * working
+     *
      * @param name
      * @return
      */
@@ -301,37 +346,6 @@ public class ProductResource {
     }
 
     /**
-     * not tested
-     *
-     * @param productWrapper
-     * @return
-     */
-    @Path("filterProductsByCriteria")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response filterProductsByCriteria(ProductWrapper productWrapper) {
-        try {
-            // CategoryEnum category, Boolean wantsRider, Boolean isSmoker, BigDecimal sumAssured, Integer coverageTerm, Integer premiumTerm, EndowmentProductEnum endowmentProductEnum, 
-            //           TermLifeProductEnum termLifeProductEnum, WholeLifeProductEnum wholeLifeProductEnum
-            List<ProductEntity> products = productSessionBeanLocal.filterProductsByCriteria(productWrapper.getCategory(), productWrapper.getWantsRider(), productWrapper.getIsSmoker(),
-                    productWrapper.getSumAssured(), productWrapper.getCoverageTerm(), productWrapper.getPremiumTerm(), productWrapper.getEndowmentProductEnum(), productWrapper.getTermLifeProductEnum(), productWrapper.getWholeLifeProductEnum());
-
-            //  List<ProductEntity> products = productSessionBeanLocal.searchForProductsByName("");
-            for (ProductEntity product : products) {
-
-                product = nullifyProduct(product);
-            }
-            GenericEntity<List<ProductEntity>> genericEntity = new GenericEntity<List<ProductEntity>>(products) {
-            };
-
-            return Response.status(Status.OK).entity(genericEntity).build();
-        } catch (Exception ex) {
-            System.out.println("***********" + ex.getMessage());
-            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
-        }
-    }
-
-    /**
      * working
      *
      * @param email
@@ -339,26 +353,18 @@ public class ProductResource {
      * @param newRecord
      * @return
      */
+    @Path("Endownment")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createNewRecord(@QueryParam("email") String email, @QueryParam("password") String password, ProductEntity newRecord) {
+    public Response createNewRecordForEndowment(@QueryParam("email") String email, @QueryParam("password") String password, EndowmentEntity newRecord) {
+        System.out.println("create new record **** *");
         if (newRecord != null) {
             try {
                 CompanyEntity company = companySessionBeanLocal.login(email, password);
                 if (company != null) {
-                    System.out.println(" came company");
-                    if (newRecord instanceof EndowmentEntity) {
-                        System.out.println("endowment enum:" + ((EndowmentEntity) newRecord).getProductEnum());
-                    }
-                    if (newRecord instanceof TermLifeProductEntity) {
-                        System.out.println("TermLifeProductEntity enum:" + ((TermLifeProductEntity) newRecord).getProductEnum());
-                    }
-                    if (newRecord instanceof WholeLifeProductEntity) {
-                        System.out.println("WholeLifeProductEntity enum:" + ((WholeLifeProductEntity) newRecord).getProductEnum());
-                    }
 
-                    ProductEntity product = newRecord;
+                    EndowmentEntity product = newRecord;
 
                     List<RiderEntity> listOfRiders = newRecord.getListOfRiders();
                     List<PremiumEntity> listOfPremium = newRecord.getListOfPremium();
@@ -370,6 +376,8 @@ public class ProductResource {
                     product.setListOfPremium(new ArrayList<PremiumEntity>());
                     product.setListOfSmokerPremium(new ArrayList<PremiumEntity>());
                     product.setListOfRiders(new ArrayList<RiderEntity>());
+                    product.getCompany().setListOfProducts(null);
+                    product.setCompany(null);
 
                     ProductEntity returnProduct = productSessionBeanLocal.createProductListing(product, company.getCompanyId(), listOfRiders,
                             listOfPremium, listOfSmoker, listOfFeatures);
@@ -388,6 +396,140 @@ public class ProductResource {
 
             return Response.status(Response.Status.BAD_REQUEST).entity("Invalid create new record request").build();
         }
+    }
+
+    /**
+     * working
+     *
+     * @param email
+     * @param password
+     * @param newRecord
+     * @return
+     */
+    @Path("TermLifeProductEntity")
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createNewRecordForTermLifeProductEntity(@QueryParam("email") String email, @QueryParam("password") String password, TermLifeProductEntity newRecord) {
+        System.out.println("create new record **** *");
+        if (newRecord != null) {
+            try {
+                CompanyEntity company = companySessionBeanLocal.login(email, password);
+                if (company != null) {
+                    TermLifeProductEntity product = newRecord;
+
+                    List<RiderEntity> listOfRiders = newRecord.getListOfRiders();
+                    List<PremiumEntity> listOfPremium = newRecord.getListOfPremium();
+                    List<PremiumEntity> listOfSmoker = newRecord.getListOfSmokerPremium();
+                    List<FeatureEntity> listOfFeatures = newRecord.getListOfAdditionalFeatures();
+
+                    //cut of tie
+                    product.setListOfAdditionalFeatures(new ArrayList<FeatureEntity>());
+                    product.setListOfPremium(new ArrayList<PremiumEntity>());
+                    product.setListOfSmokerPremium(new ArrayList<PremiumEntity>());
+                    product.setListOfRiders(new ArrayList<RiderEntity>());
+                    product.getCompany().setListOfProducts(null);
+                    product.setCompany(null);
+
+                    ProductEntity returnProduct = productSessionBeanLocal.createProductListing(product, company.getCompanyId(), listOfRiders,
+                            listOfPremium, listOfSmoker, listOfFeatures);
+                    returnProduct = nullifyProduct(returnProduct);
+                    return Response.status(Response.Status.OK).entity(returnProduct).build();
+                } else {
+
+                    return Response.status(Response.Status.BAD_REQUEST).entity("Invalid create new record request").build();
+                }
+
+            } catch (Exception ex) {
+                System.out.println("***********ex.message" + ex.getMessage());
+                return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+            }
+        } else {
+
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid create new record request").build();
+        }
+    }
+
+    /**
+     * working
+     *
+     * @param email
+     * @param password
+     * @param newRecord
+     * @return
+     */
+    @Path("WholeLifeProductEntity")
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createNewRecordForWholeLifeProductEntity(@QueryParam("email") String email, @QueryParam("password") String password, WholeLifeProductEntity newRecord) {
+        if (newRecord != null) {
+            try {
+                CompanyEntity company = companySessionBeanLocal.login(email, password);
+                if (company != null) {
+
+                    WholeLifeProductEntity wholeLifeProductEntity = newRecord;
+
+                    List<RiderEntity> listOfRiders = newRecord.getListOfRiders();
+                    List<PremiumEntity> listOfPremium = newRecord.getListOfPremium();
+                    List<PremiumEntity> listOfSmoker = newRecord.getListOfSmokerPremium();
+                    List<FeatureEntity> listOfFeatures = newRecord.getListOfAdditionalFeatures();
+                    newRecord.getCompany().setListOfProducts(null);
+                    //cut of tie
+                    wholeLifeProductEntity.setListOfAdditionalFeatures(new ArrayList<FeatureEntity>());
+                    wholeLifeProductEntity.setListOfPremium(new ArrayList<PremiumEntity>());
+                    wholeLifeProductEntity.setListOfSmokerPremium(new ArrayList<PremiumEntity>());
+                    wholeLifeProductEntity.setListOfRiders(new ArrayList<RiderEntity>());
+                    wholeLifeProductEntity.getCompany().setListOfProducts(null);
+                    wholeLifeProductEntity.setCompany(null);
+                    ProductEntity returnProduct = productSessionBeanLocal.createProductListing(wholeLifeProductEntity, company.getCompanyId(), listOfRiders,
+                            listOfPremium, listOfSmoker, listOfFeatures);
+                    returnProduct = nullifyProduct(returnProduct);
+                    return Response.status(Response.Status.OK).entity(returnProduct).build();
+                } else {
+
+                    return Response.status(Response.Status.BAD_REQUEST).entity("Invalid create new record request").build();
+                }
+
+            } catch (Exception ex) {
+                System.out.println("***********ex.message" + ex.getMessage());
+                return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+            }
+        } else {
+
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid create new record request").build();
+        }
+    }
+
+    @POST
+    @Path("updateProductInformation")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateProductInformation(ProductEntity product, @QueryParam("email") String email, @QueryParam("password") String password) {
+        if (product != null) {
+            try {
+
+                CompanyEntity tempCompanyEntity = companySessionBeanLocal.login(email, password);
+                ProductEntity prod = productSessionBeanLocal.updateProductListingWS(product);
+                prod = nullifyProduct(prod);
+
+                return Response.status(Response.Status.OK).entity(prod).build();
+            } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
+//                System.out.println("ex.message" + ex.getMessage());
+                System.out.println("ex.message" + ex.getMessage());
+                return Response.status(Status.BAD_REQUEST).entity(ex.getMessage()).build();
+            } catch (UnknownPersistenceException | ProductAlreadyExistsException | InvalidProductCreationException exception) {
+                System.out.println("ex.message" + exception.getMessage());
+                return Response.status(Status.BAD_REQUEST).entity(exception.getMessage()).build();
+            } catch (Exception ex) {
+                System.out.println("ex.message" + ex.getMessage());
+                return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+            }
+        } else {
+
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid create new record request").build();
+        }
+
     }
 
     private ProductSessionBeanLocal lookupProductSessionBeanLocal() {
@@ -411,6 +553,34 @@ public class ProductResource {
     }
 
     public ProductEntity nullifyProduct(ProductEntity product) {
+//        if (product.getCompany() != null) {
+//            product.getCompany().setListOfProducts(null);
+//            if (product.getCompany().getRefund() != null) {
+//                product.getCompany().getRefund().setCompany(null);
+//            }
+//            if (product.getCompany().getListOfPayments() != null && !product.getCompany().getListOfPayments().isEmpty()) {
+//                for (PaymentEntity pay : product.getCompany().getListOfPayments()) {
+//                    pay.setCompany(null);
+//                    if (pay instanceof MonthlyPaymentEntity) {
+//                        MonthlyPaymentEntity c = ((MonthlyPaymentEntity) pay);
+//                        for (ProductLineItemEntity pl : c.getListOfProductLineItems()) {
+//                            if (pl.getProduct() != null) {
+//                                pl.setProduct(null);
+//                            }
+//                        }
+//                    }
+//
+//                }
+//                if (product.getCompany().getListOfPointOfContacts() != null && !product.getCompany().getListOfPointOfContacts().isEmpty()) {
+//                    for (PointOfContactEntity poc : product.getCompany().getListOfPointOfContacts()) {
+//                        poc.setCompany(null);
+//
+//                    }
+//                }
+//
+//            }
+//        }
+
         if (product.getCompany() != null) {
             product.getCompany().setListOfProducts(null);
             if (product.getCompany().getRefund() != null) {
@@ -427,16 +597,15 @@ public class ProductResource {
                             }
                         }
                     }
-
                 }
-                if (product.getCompany().getListOfPointOfContacts() != null && !product.getCompany().getListOfPointOfContacts().isEmpty()) {
-                    for (PointOfContactEntity poc : product.getCompany().getListOfPointOfContacts()) {
-                        poc.setCompany(null);
-
-                    }
-                }
-
             }
+            if (product.getCompany().getListOfPointOfContacts() != null && !product.getCompany().getListOfPointOfContacts().isEmpty()) {
+                for (PointOfContactEntity poc : product.getCompany().getListOfPointOfContacts()) {
+                    poc.setCompany(null);
+
+                }
+            }
+
         }
         return product;
     }

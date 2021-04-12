@@ -39,6 +39,7 @@ import util.exception.CompanyCreationException;
 import util.exception.CompanyDoesNotExistException;
 import util.exception.CompanySQLConstraintException;
 import util.exception.IncorrectLoginParticularsException;
+import util.exception.InvalidOTPException;
 import util.exception.InvalidPaymentEntityCreationException;
 import util.exception.PaymentEntityAlreadyExistsException;
 import util.exception.PointOfContactBeanValidationException;
@@ -77,19 +78,20 @@ public class CompanyResource {
         try {
             List<CompanyEntity> companies = companySessionBeanLocal.retrieveAllActiveCompanies();
             for (CompanyEntity company : companies) {
-                for (ProductEntity product : company.getListOfProducts()) {
-                    product.setCompany(null);
-
-                }
-                if (company.getRefund() != null) {
-                    company.getRefund().setCompany(null);
-                }
-                for (PaymentEntity payment : company.getListOfPayments()) {
-                    payment.setCompany(null);
-                }
-                for (PointOfContactEntity pointOfContact : company.getListOfPointOfContacts()) {
-                    pointOfContact.setCompany(null);
-                }
+                company = nullifyCompany(company);
+//                for (ProductEntity product : company.getListOfProducts()) {
+//                    product.setCompany(null);
+//
+//                }
+//                if (company.getRefund() != null) {
+//                    company.getRefund().setCompany(null);
+//                }
+//                for (PaymentEntity payment : company.getListOfPayments()) {
+//                    payment.setCompany(null);
+//                }
+//                for (PointOfContactEntity pointOfContact : company.getListOfPointOfContacts()) {
+//                    pointOfContact.setCompany(null);
+//                }
             }
             GenericEntity<List<CompanyEntity>> genericEntity = new GenericEntity<List<CompanyEntity>>(companies) {
             };
@@ -106,19 +108,20 @@ public class CompanyResource {
     public Response retrieveAllRecordsById(@QueryParam("email") String email) {
         try {
             CompanyEntity company = companySessionBeanLocal.retrieveCompanyByEmail(email);
-            for (ProductEntity product : company.getListOfProducts()) {
-                product.setCompany(null);
-
-            }
-            if (company.getRefund() != null) {
-                company.getRefund().setCompany(null);
-            }
-            for (PaymentEntity payment : company.getListOfPayments()) {
-                payment.setCompany(null);
-            }
-            for (PointOfContactEntity pointOfContact : company.getListOfPointOfContacts()) {
-                pointOfContact.setCompany(null);
-            }
+            company = nullifyCompany(company);
+//            for (ProductEntity product : company.getListOfProducts()) {
+//                product.setCompany(null);
+//
+//            }
+//            if (company.getRefund() != null) {
+//                company.getRefund().setCompany(null);
+//            }
+//            for (PaymentEntity payment : company.getListOfPayments()) {
+//                payment.setCompany(null);
+//            }
+//            for (PointOfContactEntity pointOfContact : company.getListOfPointOfContacts()) {
+//                pointOfContact.setCompany(null);
+//            }
 
             GenericEntity<CompanyEntity> genericEntity = new GenericEntity<CompanyEntity>(company) {
             };
@@ -134,21 +137,23 @@ public class CompanyResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveAllRecordsByLogin(@QueryParam("email") String email, @QueryParam("password") String password) {
         try {
+            System.out.println("email : " + email + " password" + password);
             CompanyEntity company = companySessionBeanLocal.login(email, password);
 
-            for (ProductEntity product : company.getListOfProducts()) {
-                product.setCompany(null);
-
-            }
-            if (company.getRefund() != null) {
-                company.getRefund().setCompany(null);
-            }
-            for (PaymentEntity payment : company.getListOfPayments()) {
-                payment.setCompany(null);
-            }
-            for (PointOfContactEntity pointOfContact : company.getListOfPointOfContacts()) {
-                pointOfContact.setCompany(null);
-            }
+            company = nullifyCompany(company);
+//            for (ProductEntity product : company.getListOfProducts()) {
+//                product.setCompany(null);
+//
+//            }
+//            if (company.getRefund() != null) {
+//                company.getRefund().setCompany(null);
+//            }
+//            for (PaymentEntity payment : company.getListOfPayments()) {
+//                payment.setCompany(null);
+//            }
+//            for (PointOfContactEntity pointOfContact : company.getListOfPointOfContacts()) {
+//                pointOfContact.setCompany(null);
+//            }
 
             GenericEntity<CompanyEntity> genericEntity = new GenericEntity<CompanyEntity>(company) {
             };
@@ -166,22 +171,20 @@ public class CompanyResource {
         if (company != null) {
             try {
 
-                System.out.println("Company Pw: " + company.getPassword());
-
                 CompanyEntity tempCompanyEntity = companySessionBeanLocal.updateCompanyInformationWS(company);
-
-                for (ProductEntity product : tempCompanyEntity.getListOfProducts()) {
-                    product.setCompany(null);
-                }
-                if (tempCompanyEntity.getRefund() != null) {
-                    company.getRefund().setCompany(null);
-                }
-                for (PaymentEntity payment : tempCompanyEntity.getListOfPayments()) {
-                    payment.setCompany(null);
-                }
-                for (PointOfContactEntity pointOfContact : tempCompanyEntity.getListOfPointOfContacts()) {
-                    pointOfContact.setCompany(null);
-                }
+                tempCompanyEntity = nullifyCompany(company);
+//                for (ProductEntity product : tempCompanyEntity.getListOfProducts()) {
+//                    product.setCompany(null);
+//                }
+//                if (tempCompanyEntity.getRefund() != null) {
+//                    company.getRefund().setCompany(null);
+//                }
+//                for (PaymentEntity payment : tempCompanyEntity.getListOfPayments()) {
+//                    payment.setCompany(null);
+//                }
+//                for (PointOfContactEntity pointOfContact : tempCompanyEntity.getListOfPointOfContacts()) {
+//                    pointOfContact.setCompany(null);
+//                }
 
                 return Response.status(Response.Status.OK).entity(tempCompanyEntity).build();
             } catch (UnknownPersistenceException | CompanySQLConstraintException | PointOfContactBeanValidationException | CompanyBeanValidaionException ex) {
@@ -202,6 +205,7 @@ public class CompanyResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createNewRecord(CompanyCreateWrapper newRecord) {
+
         if (newRecord != null) {
             try {
                 CompanyEntity tempCompany = newRecord.getCompanyEntity();
@@ -221,34 +225,36 @@ public class CompanyResource {
 
                 CompanyEntity company = companySessionBeanLocal.createAccountForCompanyWS(tempCompany);
 
-                for (ProductEntity product : company.getListOfProducts()) {
-                    product.setCompany(null);
-                }
-                if (company.getRefund() != null) {
-                    company.getRefund().setCompany(null);
-                }
-                for (PaymentEntity payment : company.getListOfPayments()) {
-                    payment.setCompany(null);
-                }
-                for (PointOfContactEntity pointOfContact : company.getListOfPointOfContacts()) {
-                    pointOfContact.setCompany(null);
-                }
+                company = nullifyCompany(company);
+//                for (ProductEntity product : company.getListOfProducts()) {
+//                    product.setCompany(null);
+//                }
+//                if (company.getRefund() != null) {
+//                    company.getRefund().setCompany(null);
+//                }
+//                for (PaymentEntity payment : company.getListOfPayments()) {
+//                    payment.setCompany(null);
+//                }
+//                for (PointOfContactEntity pointOfContact : company.getListOfPointOfContacts()) {
+//                    pointOfContact.setCompany(null);
+//                }
 
                 return Response.status(Response.Status.OK).entity(company.getCompanyId()).build();
             } catch (CompanyAlreadyExistException | UnknownPersistenceException | CompanyCreationException | PointOfContactBeanValidationException ex) {
+                System.out.println("Error at 1");
                 return Response.status(Status.BAD_REQUEST).entity(ex.getMessage()).build();
             } catch (Exception ex) {
                 System.out.println("ex.message" + ex.getMessage());
                 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
             }
         } else {
-
+            System.out.println("Error at 2");
             return Response.status(Response.Status.BAD_REQUEST).entity("Invalid create new record request").build();
         }
     }
 
     /**
-     * NOT TESTED YET
+     * Working
      *
      * @param email
      * @param password
@@ -271,11 +277,75 @@ public class CompanyResource {
         }
     }
 
+    /**
+     * not tested
+     *
+     * @param email
+     * @param password
+     * @return
+     */
+    @Path("sendOTP")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response resetPassword(@QueryParam("email") String email) {
+        try {
+            companySessionBeanLocal.resetPassword(email);
+
+            return Response.status(Response.Status.OK).entity(true).build();
+        } catch (CompanyDoesNotExistException ex) {
+
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid account").build();
+        } catch (Exception ex) {
+            return Response.status(Response.Status.FORBIDDEN).entity(ex.getMessage()).build();
+        }
+    }
+
+    /**
+     * not tested
+     *
+     * @param email
+     * @param password
+     * @return
+     */
+    @Path("resetCompanyPassword")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveCompanyByOTP(@QueryParam("email") String email, @QueryParam("otp") String otp, @QueryParam("newPassword") String newPassword, @QueryParam("repeatPassword") String repeatPassword) {
+        try {
+            CompanyEntity company = companySessionBeanLocal.retrieveCompanyByOTP(email, otp);
+            if (repeatPassword != null && newPassword != null) {
+
+                if (!newPassword.equals(repeatPassword)) {
+                    return Response.status(Status.CONFLICT).entity("New passwords do not match").build();
+                }
+
+                String salt = company.getSalt();
+
+                String newPasswordSalted = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(newPassword + salt));
+                company.setPassword(newPasswordSalted);
+                CompanyEntity tempCompanyEntity = companySessionBeanLocal.updateCompanyInformationWS(company);
+
+                return Response.status(Response.Status.OK).entity(true).build();
+            } else {
+                return Response.status(Status.BAD_REQUEST).entity("Repeat password and new password must not be empty").build();
+            }
+        } catch (InvalidOTPException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
+        } catch (Exception ex) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
+
     @POST
     @Path("updateCompanyPassword")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateCompanyPassword(CompanyEntity updateCompany, @QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("oldPassword") String oldPassword, @QueryParam("newPassword") String newPassword, @QueryParam("repeatNewPassword") String repeatNewPassword
+    public Response updateCompanyPassword(CompanyEntity updateCompany,
+            @QueryParam("email") String email,
+            @QueryParam("password") String password,
+            @QueryParam("oldPassword") String oldPassword,
+            @QueryParam("newPassword") String newPassword,
+            @QueryParam("repeatNewPassword") String repeatNewPassword
     ) {
         System.out.println("updateCompany = " + updateCompany);
         System.out.println("oldPassword = " + oldPassword);
@@ -354,5 +424,21 @@ public class CompanyResource {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);
         }
+    }
+
+    public CompanyEntity nullifyCompany(CompanyEntity company) {
+        for (ProductEntity product : company.getListOfProducts()) {
+            product.setCompany(null);
+        }
+        if (company.getRefund() != null) {
+            company.getRefund().setCompany(null);
+        }
+        for (PaymentEntity payment : company.getListOfPayments()) {
+            payment.setCompany(null);
+        }
+        for (PointOfContactEntity pointOfContact : company.getListOfPointOfContacts()) {
+            pointOfContact.setCompany(null);
+        }
+        return company;
     }
 }

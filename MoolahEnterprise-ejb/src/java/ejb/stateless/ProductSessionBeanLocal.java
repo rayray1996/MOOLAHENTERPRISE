@@ -55,5 +55,5 @@ public interface ProductSessionBeanLocal {
 
     public ProductEntity createProductListing(ProductEntity newProduct, Long companyId, List<RiderEntity> riders, List<PremiumEntity> premiums, List<PremiumEntity> smokerPremiums, List<FeatureEntity> features) throws ProductAlreadyExistsException, UnknownPersistenceException, InvalidProductCreationException;
 
-   
+      public ProductEntity updateProductListingWS(ProductEntity updateProduct) throws ProductAlreadyExistsException, UnknownPersistenceException, InvalidProductCreationException;
 }
