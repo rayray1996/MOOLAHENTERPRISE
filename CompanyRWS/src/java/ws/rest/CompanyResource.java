@@ -134,6 +134,7 @@ public class CompanyResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveAllRecordsByLogin(@QueryParam("email") String email, @QueryParam("password") String password) {
         try {
+            System.out.println("email : " + email + " password" + password);
             CompanyEntity company = companySessionBeanLocal.login(email, password);
             
             for (ProductEntity product : company.getListOfProducts()) {

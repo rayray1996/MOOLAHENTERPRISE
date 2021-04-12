@@ -412,6 +412,8 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 
                 company.getListOfProducts().add(newProduct);
                 newProduct.setCompany(company);
+
+                em.flush();
                 return newProduct;
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
@@ -489,6 +491,66 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
                     + "\n" + prepareInputDataValidationErrorsMessage(premiumError)
                     + "\n" + prepareInputDataValidationErrorsMessage(featureError));
         }
+    }
+
+    @Override
+    public ProductEntity updateProductListingWS(ProductEntity updateProduct) throws ProductAlreadyExistsException, UnknownPersistenceException, InvalidProductCreationException {
+        Set<ConstraintViolation<ProductEntity>> productError = validator.validate(updateProduct);
+        Set<ConstraintViolation<RiderEntity>> riderError = new HashSet<>();
+        Set<ConstraintViolation<PremiumEntity>> premiumError = new HashSet<>();
+        Set<ConstraintViolation<FeatureEntity>> featureError = new HashSet<>();
+
+        for (RiderEntity r : updateProduct.getListOfRiders()) {
+            riderError = validator.validate(r);
+            if (!riderError.isEmpty()) {
+                break;
+            }
+        }
+
+        // validate premiums
+        for (PremiumEntity p : updateProduct.getListOfPremium()) {
+            premiumError = validator.validate(p);
+            if (!premiumError.isEmpty()) {
+                break;
+            }
+        }
+
+        for (PremiumEntity p : updateProduct.getListOfSmokerPremium()) {
+            premiumError = validator.validate(p);
+            if (!premiumError.isEmpty()) {
+                break;
+            }
+        }
+
+        for (FeatureEntity f : updateProduct.getListOfAdditionalFeatures()) {
+            featureError = validator.validate(f);
+            if (!featureError.isEmpty()) {
+                break;
+            }
+        }
+
+        if (productError.isEmpty() && riderError.isEmpty() && featureError.isEmpty() && premiumError.isEmpty()) {
+            try {
+                em.merge(updateProduct);
+                em.flush();
+            } catch (PersistenceException ex) {
+                if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
+                    if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
+                        throw new ProductAlreadyExistsException("Product already exists!");
+                    } else {
+                        throw new UnknownPersistenceException(ex.getMessage());
+                    }
+                } else {
+                    throw new UnknownPersistenceException(ex.getMessage());
+                }
+            }
+        } else {
+            throw new InvalidProductCreationException(prepareInputDataValidationErrorsMessage(productError)
+                    + "\n" + prepareInputDataValidationErrorsMessage(riderError)
+                    + "\n" + prepareInputDataValidationErrorsMessage(premiumError)
+                    + "\n" + prepareInputDataValidationErrorsMessage(featureError));
+        }
+        return updateProduct;
     }
 
     @Override
