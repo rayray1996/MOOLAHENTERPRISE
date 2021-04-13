@@ -6,6 +6,7 @@
 package ws.rest;
 
 import com.sun.xml.rpc.processor.modeler.j2ee.xml.homeType;
+import ejb.Singleton.MoolahCreditConverterLocal;
 import ejb.entity.CompanyEntity;
 import ejb.entity.MonthlyPaymentEntity;
 import ejb.entity.PaymentEntity;
@@ -14,6 +15,7 @@ import ejb.entity.ProductEntity;
 import ejb.entity.ProductLineItemEntity;
 import ejb.stateless.CompanySessionBeanLocal;
 import ejb.stateless.InvoiceSessionBeanLocal;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Date;
 import java.text.DateFormat;
@@ -53,6 +55,8 @@ import util.exception.UnknownPersistenceException;
 @Path("PaymentEntity")
 public class PaymentEntityResource {
 
+    MoolahCreditConverterLocal moolahCreditConverter = lookupMoolahCreditConverterLocal();
+
     InvoiceSessionBeanLocal invoiceSessionBean = lookupInvoiceSessionBeanLocal();
 
     CompanySessionBeanLocal companySessionBeanLocal = lookupCompanySessionBeanLocal();
@@ -64,6 +68,17 @@ public class PaymentEntityResource {
      * Working Creates a new instance of PaymentEntityResource
      */
     public PaymentEntityResource() {
+    }
+
+    @Path("getCostOfCredit")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCostOfCredit(@QueryParam("email") String email, @QueryParam("password") String password) {
+        BigDecimal cost = moolahCreditConverter.getCostOfCreditInSGD();
+
+        GenericEntity<BigDecimal> genericEntity = new GenericEntity<BigDecimal>(cost) {
+        };
+        return Response.status(Status.OK).entity(genericEntity).build();
     }
 
     @Path("retrieveAllHistoricalTransactions")
@@ -394,4 +409,13 @@ public class PaymentEntityResource {
         }
     }
 
+    private MoolahCreditConverterLocal lookupMoolahCreditConverterLocal() {
+        try {
+            javax.naming.Context c = new InitialContext();
+            return (MoolahCreditConverterLocal) c.lookup("java:global/MoolahEnterprise/MoolahEnterprise-ejb/MoolahCreditConverter!ejb.Singleton.MoolahCreditConverterLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
 }
