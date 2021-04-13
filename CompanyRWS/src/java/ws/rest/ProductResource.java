@@ -457,7 +457,7 @@ public class ProductResource {
      * @param newRecord
      * @return
      */
-    @Path(" WholeLifeProductEntity")
+    @Path("WholeLifeProductEntity")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
