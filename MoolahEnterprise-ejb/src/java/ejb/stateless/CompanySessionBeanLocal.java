@@ -65,4 +65,6 @@ public interface CompanySessionBeanLocal {
 
     public CompanyEntity retrieveCompanyByOTP(String email, String path) throws InvalidOTPException ;
 
+    public void reactivateAccount(String email) throws CompanyDoesNotExistException;
+
 }
