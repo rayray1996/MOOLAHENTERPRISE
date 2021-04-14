@@ -5,8 +5,10 @@
  */
 package ws.datamodel;
 
+import ejb.entity.MonthlyPaymentEntity;
 import ejb.entity.PaymentEntity;
 import ejb.entity.ProductEntity;
+import ejb.entity.ProductLineItemEntity;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -17,24 +19,22 @@ import java.util.List;
  * @author sohqi
  */
 public class PaymentEntityWrapper {
-    private List<PaymentEntity> listOfPayments;
-    private BigInteger totalPayable;
- 
-   public PaymentEntityWrapper(){
-       listOfPayments = new ArrayList<>();
-   }
-   public PaymentEntityWrapper(List<PaymentEntity> listOfPayment, BigInteger totalPayable){
-       this();
-       this.listOfPayments = listOfPayment;
-       this.totalPayable = totalPayable;
-   }
 
-    public List<PaymentEntity> getListOfPayments() {
-        return listOfPayments;
+    private PaymentEntity paymentEntity;
+    private BigInteger totalPayable;
+    private List<ProductLineItemEntity> listOfProductLineItemEntity;
+
+    public PaymentEntityWrapper() {
+        paymentEntity = new PaymentEntity();
+        listOfProductLineItemEntity = new ArrayList<>();
+
     }
 
-    public void setListOfPayments(List<PaymentEntity> listOfPayments) {
-        this.listOfPayments = listOfPayments;
+    public PaymentEntityWrapper(PaymentEntity paymentEntity, BigInteger totalPayable, List<ProductLineItemEntity> listOfProductLineItemEntity) {
+        this();
+        this.listOfProductLineItemEntity = listOfProductLineItemEntity;
+        this.totalPayable = totalPayable;
+        this.paymentEntity = paymentEntity;
     }
 
     public BigInteger getTotalPayable() {
@@ -45,5 +45,20 @@ public class PaymentEntityWrapper {
         this.totalPayable = totalPayable;
     }
 
-    
+    public PaymentEntity getPaymentEntity() {
+        return paymentEntity;
+    }
+
+    public void setPaymentEntity(PaymentEntity paymentEntity) {
+        this.paymentEntity = paymentEntity;
+    }
+
+    public List<ProductLineItemEntity> getListOfProductLineItemEntity() {
+        return listOfProductLineItemEntity;
+    }
+
+    public void setListOfProductLineItemEntity(List<ProductLineItemEntity> listOfProductLineItemEntity) {
+        this.listOfProductLineItemEntity = listOfProductLineItemEntity;
+    }
+
 }
