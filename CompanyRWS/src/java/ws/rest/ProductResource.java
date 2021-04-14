@@ -535,16 +535,24 @@ public class ProductResource {
     @Path("updateProductInformationTermLife")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateProductInformationTermLife(TermLifeProductEntity product, @QueryParam("email") String email, @QueryParam("password") String password) {
+    public Response updateProductInformationTermLife(ProductEntity product, @QueryParam("email") String email, @QueryParam("password") String password) {
         if (product != null) {
             try {
 
                 CompanyEntity tempCompanyEntity = companySessionBeanLocal.login(email, password);
+
                 ProductEntity prod = productSessionBeanLocal.updateProductListingWS(product);
                 prod = nullifyProduct(prod);
                 TermLifeProductEntity termlife = (TermLifeProductEntity) prod;
-
-                return Response.status(Response.Status.OK).entity(termlife).build();
+                ProductEntityWrapper pr = new ProductEntityWrapper();
+                if (prod.getIsAvailableToSmokers()) {
+                    pr.setIsSmoker("true");
+                } else {
+                    pr.setIsSmoker("false");
+                }
+                pr.setProductType("TERMLIFEPRODUCT");
+                pr.setProductEnum(termlife.getProductEnum().toString());
+                return Response.status(Response.Status.OK).entity(pr).build();
             } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
 //                System.out.println("ex.message" + ex.getMessage());
                 System.out.println("ex.message incorrect login" + ex.getMessage());
@@ -562,7 +570,7 @@ public class ProductResource {
         }
 
     }
-    
+
     @POST
     @Path("updateProductInformationWholeLife")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -575,8 +583,15 @@ public class ProductResource {
                 ProductEntity prod = productSessionBeanLocal.updateProductListingWS(product);
                 prod = nullifyProduct(prod);
                 WholeLifeProductEntity wholeLfe = (WholeLifeProductEntity) prod;
-
-                return Response.status(Response.Status.OK).entity(wholeLfe).build();
+                ProductEntityWrapper pr = new ProductEntityWrapper();
+                if (prod.getIsAvailableToSmokers()) {
+                    pr.setIsSmoker("true");
+                } else {
+                    pr.setIsSmoker("false");
+                }
+                pr.setProductType("WHOLELIFEPRODUCT");
+                pr.setProductEnum(product.getProductEnum().toString());
+                return Response.status(Response.Status.OK).entity(pr).build();
             } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
 //                System.out.println("ex.message" + ex.getMessage());
                 System.out.println("ex.message incorrect login" + ex.getMessage());
@@ -594,8 +609,7 @@ public class ProductResource {
         }
 
     }
-    
-     
+
     @POST
     @Path("updateProductInformationEndowment")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -608,8 +622,15 @@ public class ProductResource {
                 ProductEntity prod = productSessionBeanLocal.updateProductListingWS(product);
                 prod = nullifyProduct(prod);
                 EndowmentEntity endowment = (EndowmentEntity) prod;
-
-                return Response.status(Response.Status.OK).entity(endowment).build();
+                ProductEntityWrapper pr = new ProductEntityWrapper();
+                if (prod.getIsAvailableToSmokers()) {
+                    pr.setIsSmoker("true");
+                } else {
+                    pr.setIsSmoker("false");
+                }
+                pr.setProductType("ENDOWMENT");
+                pr.setProductEnum(product.getProductEnum().toString());
+                return Response.status(Response.Status.OK).entity(pr).build();
             } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
 //                System.out.println("ex.message" + ex.getMessage());
                 System.out.println("ex.message incorrect login" + ex.getMessage());
