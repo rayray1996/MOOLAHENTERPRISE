@@ -69,6 +69,5 @@ public interface CompanySessionBeanLocal {
 
     public void reactivateAccount(String email) throws CompanyDoesNotExistException;
 
-    public void reactivateAccount(String email) throws CompanyDoesNotExistException;
 
 }
