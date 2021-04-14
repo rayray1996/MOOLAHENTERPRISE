@@ -13,11 +13,17 @@ import ejb.entity.RiderEntity;
 import ejb.stateless.CompanySessionBeanLocal;
 import ejb.stateless.InvoiceSessionBeanLocal;
 import ejb.stateless.RiderSessionBeanLocal;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.ws.rs.Consumes;
@@ -253,148 +259,190 @@ public class CompanyResource {
         }
     }
 
-    /**
-     * Working
-     *
-     * @param email
-     * @param password
-     * @return
-     */
-    @Path("deactivateAccount")
+    @Path("retrieveUploadPath")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deactivateAccount(@QueryParam("email") String email, @QueryParam("password") String password) {
-        try {
-            CompanyEntity company = companySessionBeanLocal.login(email, password);
-            if (company != null) {
-                companySessionBeanLocal.deactivateAccount(email);
-            }
-            return Response.status(Response.Status.OK).entity("").build();
-        } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid account").build();
-        } catch (Exception ex) {
-            return Response.status(Response.Status.FORBIDDEN).entity(ex.getMessage()).build();
+    public Response retrieveUploadPath() {
+//        String newFilePath = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("alternatedocroot_1");
+        String newFilePath = "C:/glassfish-5.1.0-uploadedfiles/uploadedFiles";
+        System.out.println("newFilePath = " + newFilePath);
+        if (newFilePath != null && !newFilePath.equals("")) {
+            GenericEntity<String> genericEntity = new GenericEntity<String>(newFilePath) {
+            };
+            return Response.status(Status.OK).entity(genericEntity).build();
+        } else {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Path does not exist").build();
         }
-    }
 
-    /**
-     * not tested
-     *
-     * @param email
-     * @param password
-     * @return
-     */
-    @Path("sendOTP")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response resetPassword(@QueryParam("email") String email) {
-        try {
-            companySessionBeanLocal.resetPassword(email);
-
-            return Response.status(Response.Status.OK).entity(true).build();
-        } catch (CompanyDoesNotExistException ex) {
-
-            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid account").build();
-        } catch (Exception ex) {
-            return Response.status(Response.Status.FORBIDDEN).entity(ex.getMessage()).build();
         }
-    }
 
-    /**
-     * not tested
-     *
-     * @param email
-     * @param password
-     * @return
-     */
-    @Path("resetCompanyPassword")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveCompanyByOTP(@QueryParam("email") String email, @QueryParam("otp") String otp, @QueryParam("newPassword") String newPassword, @QueryParam("repeatPassword") String repeatPassword) {
+        /**
+         * Working
+         *
+         * @param email
+         * @param password
+         * @return
+         */
+        @Path("deactivateAccount")
+        @GET
+        @Produces(MediaType.APPLICATION_JSON)
+        public Response deactivateAccount
+        (@QueryParam("email")
+        String email, 
+        @QueryParam("password") String password
+        
+            ) {
         try {
-            CompanyEntity company = companySessionBeanLocal.retrieveCompanyByOTP(email, otp);
-            if (repeatPassword != null && newPassword != null) {
-
-                if (!newPassword.equals(repeatPassword)) {
-                    return Response.status(Status.CONFLICT).entity("New passwords do not match").build();
+                CompanyEntity company = companySessionBeanLocal.login(email, password);
+                if (company != null) {
+                    companySessionBeanLocal.deactivateAccount(email);
                 }
+                return Response.status(Response.Status.OK).entity("").build();
+            } catch ( CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Invalid account").build();
+            } catch (Exception ex) {
+                return Response.status(Response.Status.FORBIDDEN).entity(ex.getMessage()).build();
+            }
+        }
 
-                String salt = company.getSalt();
-
-                String newPasswordSalted = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(newPassword + salt));
-                company.setPassword(newPasswordSalted);
-                CompanyEntity tempCompanyEntity = companySessionBeanLocal.updateCompanyInformationWS(company);
+        /**
+         * not tested
+         *
+         * @param email
+         * @param password
+         * @return
+         */
+        @Path("sendOTP")
+        @GET
+        @Produces(MediaType.APPLICATION_JSON)
+        public Response resetPassword
+        (@QueryParam("email")
+        String email
+        
+            ) {
+        try {
+                companySessionBeanLocal.resetPassword(email);
 
                 return Response.status(Response.Status.OK).entity(true).build();
-            } else {
-                return Response.status(Status.BAD_REQUEST).entity("Repeat password and new password must not be empty").build();
-            }
-        } catch (InvalidOTPException ex) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
-        } catch (Exception ex) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
-        }
-    }
+            } catch (CompanyDoesNotExistException ex) {
 
-    @POST
-    @Path("updateCompanyPassword")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updateCompanyPassword(CompanyEntity updateCompany,
-            @QueryParam("email") String email,
-            @QueryParam("password") String password,
-            @QueryParam("oldPassword") String oldPassword,
-            @QueryParam("newPassword") String newPassword,
-            @QueryParam("repeatNewPassword") String repeatNewPassword
-    ) {
-        System.out.println("updateCompany = " + updateCompany);
-        System.out.println("oldPassword = " + oldPassword);
-        System.out.println("newPassword = " + newPassword);
-        System.out.println("repeatNewPassword = " + repeatNewPassword);
-        if (updateCompany != null && oldPassword != null && newPassword != null && repeatNewPassword != null) {
-            try {
-                String salt = updateCompany.getSalt();
-                String oldSaltedPassword = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(oldPassword + salt));
-
-                if (!oldSaltedPassword.equals(updateCompany.getPassword())) {
-                    return Response.status(Status.BAD_REQUEST).entity("Old password does not match current password").build();
-                }
-
-                if (!newPassword.equals(repeatNewPassword)) {
-                    return Response.status(Status.BAD_REQUEST).entity("New passwords do not match").build();
-                }
-
-                String newPasswordSalted = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(newPassword + salt));
-                updateCompany.setPassword(newPasswordSalted);
-                CompanyEntity tempCompanyEntity = companySessionBeanLocal.updateCompanyInformationWS(updateCompany);
-
-                for (ProductEntity product : tempCompanyEntity.getListOfProducts()) {
-                    product.setCompany(null);
-                }
-                if (tempCompanyEntity.getRefund() != null) {
-                    tempCompanyEntity.getRefund().setCompany(null);
-                }
-                for (PaymentEntity payment : tempCompanyEntity.getListOfPayments()) {
-                    payment.setCompany(null);
-                }
-                for (PointOfContactEntity pointOfContact : tempCompanyEntity.getListOfPointOfContacts()) {
-                    pointOfContact.setCompany(null);
-                }
-
-                return Response.status(Response.Status.OK).entity(tempCompanyEntity).build();
-            } catch (UnknownPersistenceException | CompanySQLConstraintException | PointOfContactBeanValidationException | CompanyBeanValidaionException ex) {
-                System.out.println("ex.message" + ex.getMessage());
-                return Response.status(Status.BAD_REQUEST).entity(ex.getMessage()).build();
+                return Response.status(Response.Status.BAD_REQUEST).entity("Invalid account").build();
             } catch (Exception ex) {
-                System.out.println("ex.message" + ex.getMessage());
-                return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+                return Response.status(Response.Status.FORBIDDEN).entity(ex.getMessage()).build();
             }
-        } else {
-
-            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid change password request").build();
         }
 
-    }
+        /**
+         * not tested
+         *
+         * @param email
+         * @param password
+         * @return
+         */
+        @Path("resetCompanyPassword")
+        @GET
+        @Produces(MediaType.APPLICATION_JSON)
+        public Response retrieveCompanyByOTP
+        (@QueryParam("email")
+        String email, 
+        @QueryParam("otp") String otp, 
+        @QueryParam("newPassword") String newPassword, 
+        @QueryParam("repeatPassword") String repeatPassword
+        
+            ) {
+        try {
+                CompanyEntity company = companySessionBeanLocal.retrieveCompanyByOTP(email, otp);
+                if (repeatPassword != null && newPassword != null) {
+
+                    if (!newPassword.equals(repeatPassword)) {
+                        return Response.status(Status.CONFLICT).entity("New passwords do not match").build();
+                    }
+
+                    String salt = company.getSalt();
+
+                    String newPasswordSalted = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(newPassword + salt));
+                    company.setPassword(newPasswordSalted);
+                    CompanyEntity tempCompanyEntity = companySessionBeanLocal.updateCompanyInformationWS(company);
+
+                    return Response.status(Response.Status.OK).entity(true).build();
+                } else {
+                    return Response.status(Status.BAD_REQUEST).entity("Repeat password and new password must not be empty").build();
+                }
+            } catch ( InvalidOTPException ex) {
+                return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
+            } catch (Exception ex) {
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+            }
+        }
+
+        @POST
+        @Path("updateCompanyPassword")
+        @Consumes(MediaType.APPLICATION_JSON)
+        @Produces(MediaType.APPLICATION_JSON)
+        public Response updateCompanyPassword
+        (CompanyEntity updateCompany,
+                
+        @QueryParam("email") String email,
+                
+        @QueryParam("password") String password,
+                
+        @QueryParam("oldPassword") String oldPassword,
+                
+        @QueryParam("newPassword") String newPassword,
+                
+        @QueryParam("repeatNewPassword") String repeatNewPassword
+        
+            ) {
+        System.out.println("updateCompany = " + updateCompany);
+            System.out.println("oldPassword = " + oldPassword);
+            System.out.println("newPassword = " + newPassword);
+            System.out.println("repeatNewPassword = " + repeatNewPassword);
+            if (updateCompany != null && oldPassword != null && newPassword != null && repeatNewPassword != null) {
+                try {
+                    String salt = updateCompany.getSalt();
+                    String oldSaltedPassword = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(oldPassword + salt));
+
+                    if (!oldSaltedPassword.equals(updateCompany.getPassword())) {
+                        return Response.status(Status.BAD_REQUEST).entity("Old password does not match current password").build();
+                    }
+
+                    if (!newPassword.equals(repeatNewPassword)) {
+                        return Response.status(Status.BAD_REQUEST).entity("New passwords do not match").build();
+                    }
+
+                    String newPasswordSalted = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(newPassword + salt));
+                    updateCompany.setPassword(newPasswordSalted);
+                    CompanyEntity tempCompanyEntity = companySessionBeanLocal.updateCompanyInformationWS(updateCompany);
+
+                    for ( ProductEntity product : tempCompanyEntity.getListOfProducts()) {
+                        product.setCompany(null);
+                    }
+                    if (tempCompanyEntity.getRefund() != null) {
+                        tempCompanyEntity.getRefund().setCompany(null);
+                    }
+                    for (PaymentEntity payment : tempCompanyEntity.getListOfPayments()) {
+                        payment.setCompany(null);
+                    }
+                    for (PointOfContactEntity pointOfContact : tempCompanyEntity.getListOfPointOfContacts()) {
+                        pointOfContact.setCompany(null);
+                    }
+
+                    return Response.status(Response.Status.OK).entity(tempCompanyEntity).build();
+                } catch (UnknownPersistenceException | CompanySQLConstraintException | PointOfContactBeanValidationException | CompanyBeanValidaionException ex) {
+                    System.out.println("ex.message" + ex.getMessage());
+                    return Response.status(Status.BAD_REQUEST).entity(ex.getMessage()).build();
+                } catch (Exception ex) {
+                    System.out.println("ex.message" + ex.getMessage());
+                    return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+                }
+            } else {
+
+                return Response.status(Response.Status.BAD_REQUEST).entity("Invalid change password request").build();
+            }
+
+        }
+
+    
 
     private CompanySessionBeanLocal lookupCompanySessionBeanLocal() {
         try {

@@ -13,6 +13,10 @@ import ejb.entity.PaymentEntity;
 import ejb.entity.PointOfContactEntity;
 import ejb.entity.ProductEntity;
 import ejb.entity.RefundEntity;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.Instant;
@@ -38,6 +42,8 @@ import javax.ejb.Timeout;
 import javax.ejb.Timer;
 import javax.ejb.TimerConfig;
 import javax.ejb.TimerService;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -338,8 +344,8 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
     public void reactivateAccount(String email) throws CompanyDoesNotExistException {
         CompanyEntity company = retrieveCompanyByEmail(email);
         company.setIsDeactivated(false);
-        
-         Collection<Timer> timers = timerService.getTimers();
+
+        Collection<Timer> timers = timerService.getTimers();
 
         try {
             for (Timer timer : timers) {
@@ -353,8 +359,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
         } catch (NoSuchObjectLocalException ex) {
             System.out.println("Timer has been cancelled for account deactivation per company request or does not exists! Msg: " + ex.getMessage());
         }
-        
-        
+
     }
 
     @Override
