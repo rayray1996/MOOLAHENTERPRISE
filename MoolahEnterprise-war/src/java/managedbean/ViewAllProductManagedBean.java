@@ -17,6 +17,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -31,6 +33,7 @@ import util.enumeration.EndowmentProductEnum;
 import util.enumeration.TermLifeProductEnum;
 import util.enumeration.WholeLifeProductEnum;
 import util.exception.InvalidFilterCriteriaException;
+import util.exception.ProductIsDeletedException;
 import util.exception.ProductNotFoundException;
 import util.helper.ProductEntityWrapper;
 
@@ -215,9 +218,9 @@ public class ViewAllProductManagedBean implements Serializable{
                 listOfProducts.add(new ProductEntityWrapper(r, getParentClassAsString(r), getChildEnumAsString(r)));
                 filteredProducts.add(new ProductEntityWrapper(r, getParentClassAsString(r), getChildEnumAsString(r)));
             }
-        } catch (InvalidFilterCriteriaException | ProductNotFoundException ex) {
+        } catch (InvalidFilterCriteriaException | ProductNotFoundException | ProductIsDeletedException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, ex.toString(), null));
-        }
+        } 
     }
 
     private String getParentClassAsString(ProductEntity p) {

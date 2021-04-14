@@ -337,7 +337,7 @@ public class ProductResource {
             }
             productSessionBeanLocal.deleteProductListing(productId);
 
-            GenericEntity<String> genericEntity = new GenericEntity<String>("Ok") {
+            GenericEntity<String> genericEntity = new GenericEntity<String>("") {
             };
 
             return Response.status(Status.OK).entity(genericEntity).build();
@@ -540,12 +540,13 @@ public class ProductResource {
     @Path("updateProductInformationTermLife")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateProductInformationTermLife(TermLifeProductEntity product, @QueryParam("email") String email, @QueryParam("password") String password) {
+    public Response updateProductInformationTermLife(TermLifeProductEntity product, @QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("isSmoker") boolean isSmoker) {
         if (product != null) {
             try {
 
                 CompanyEntity tempCompanyEntity = companySessionBeanLocal.login(email, password);
-                System.out.println("Check smoker for record: " + product.getIsAvailableToSmokers());
+                System.out.println("Check smoker for record: " + isSmoker);
+                product.setIsAvailableToSmokers(isSmoker);
                 ProductEntity prod = productSessionBeanLocal.updateProductListingWS(product);
                 prod = nullifyProduct(prod);
                 TermLifeProductEntity termlife = (TermLifeProductEntity) prod;
@@ -581,12 +582,13 @@ public class ProductResource {
     @Path("updateProductInformationWholeLife")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateProductInformationWholeLife(WholeLifeProductEntity product, @QueryParam("email") String email, @QueryParam("password") String password) {
+    public Response updateProductInformationWholeLife(WholeLifeProductEntity product, @QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("isSmoker") boolean isSmoker) {
         if (product != null) {
             try {
 
                 CompanyEntity tempCompanyEntity = companySessionBeanLocal.login(email, password);
-                System.out.println("Check smoker for record: " + product.getIsAvailableToSmokers());
+                System.out.println("Check smoker for record: " + isSmoker);
+                product.setIsAvailableToSmokers(isSmoker);
                 ProductEntity prod = productSessionBeanLocal.updateProductListingWS(product);
                 prod = nullifyProduct(prod);
                 WholeLifeProductEntity wholeLfe = (WholeLifeProductEntity) prod;
@@ -622,12 +624,13 @@ public class ProductResource {
     @Path("updateProductInformationEndowment")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateProductInformationEndowment(EndowmentEntity product, @QueryParam("email") String email, @QueryParam("password") String password) {
+    public Response updateProductInformationEndowment(EndowmentEntity product, @QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("isSmoker") boolean isSmoker) {
         if (product != null) {
             try {
 
                 CompanyEntity tempCompanyEntity = companySessionBeanLocal.login(email, password);
-                System.out.println("Check smoker for record: " + product.getIsAvailableToSmokers());
+                System.out.println("Check smoker for record: " + isSmoker);
+                product.setIsAvailableToSmokers(isSmoker);
                 ProductEntity prod = productSessionBeanLocal.updateProductListingWS(product);
                 prod = nullifyProduct(prod);
                 EndowmentEntity endowment = (EndowmentEntity) prod;

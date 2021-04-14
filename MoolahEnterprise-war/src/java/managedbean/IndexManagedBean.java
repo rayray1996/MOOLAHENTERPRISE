@@ -30,6 +30,7 @@ import util.enumeration.EndowmentProductEnum;
 import util.enumeration.TermLifeProductEnum;
 import util.enumeration.WholeLifeProductEnum;
 import util.exception.CustomerDoesNotExistsException;
+import util.exception.ProductIsDeletedException;
 import util.exception.ProductNotFoundException;
 import util.helper.ProductEntityWrapper;
 
@@ -90,7 +91,7 @@ public class IndexManagedBean implements Serializable {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("productToView", wrapper);
             System.out.println("Product ID: " + productId);
             FacesContext.getCurrentInstance().getExternalContext().redirect("product/viewProductDetail.xhtml");
-        } catch (ProductNotFoundException ex) {
+        } catch (ProductNotFoundException | ProductIsDeletedException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Product cannot be found! EX: " + ex.getMessage(), null));
         }
     }

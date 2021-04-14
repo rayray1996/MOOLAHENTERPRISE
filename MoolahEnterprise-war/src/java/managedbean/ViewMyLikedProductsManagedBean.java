@@ -15,6 +15,8 @@ import ejb.stateless.ProductSessionBeanLocal;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -27,6 +29,7 @@ import util.enumeration.TermLifeProductEnum;
 import util.enumeration.WholeLifeProductEnum;
 import util.exception.CustomerDoesNotExistsException;
 import util.exception.CustomerUpdateException;
+import util.exception.ProductIsDeletedException;
 import util.exception.ProductNotFoundException;
 import util.exception.UnknownPersistenceException;
 import util.helper.ProductEntityWrapper;
@@ -71,7 +74,7 @@ public class ViewMyLikedProductsManagedBean implements Serializable {
             ProductEntityWrapper wrapper = new ProductEntityWrapper(productToView, getParentClassAsString(productToView), getChildEnumAsString(productToView));
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("productToView", wrapper);
             FacesContext.getCurrentInstance().getExternalContext().redirect("../product/viewProductDetail.xhtml");
-        } catch (ProductNotFoundException ex) {
+        } catch (ProductNotFoundException | ProductIsDeletedException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
         }
 

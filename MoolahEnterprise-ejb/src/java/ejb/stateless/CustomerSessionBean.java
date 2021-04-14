@@ -45,6 +45,7 @@ import util.exception.CustomerDoesNotExistsException;
 import util.exception.CustomerPasswordExistsException;
 import util.exception.CustomerUpdateException;
 import util.exception.IncorrectLoginParticularsException;
+import util.exception.ProductIsDeletedException;
 import util.exception.ProductNotFoundException;
 import util.exception.UnknownPersistenceException;
 import util.security.CryptographicHelper;
@@ -238,14 +239,14 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     }
 
     @Override
-    public void likeAProduct(Long custID, Long likedProdId) throws CustomerDoesNotExistsException, ProductNotFoundException {
+    public void likeAProduct(Long custID, Long likedProdId) throws CustomerDoesNotExistsException, ProductNotFoundException, ProductIsDeletedException {
         CustomerEntity cust = retrieveCustomerById(custID);
         ProductEntity prod = productSessionBean.retrieveProductEntityById(likedProdId);
         cust.getListOfLikeProducts().add(prod);
     }
 
     @Override
-    public void removeLikedProduct(Long custId, Long prodId) throws ProductNotFoundException, CustomerDoesNotExistsException {
+    public void removeLikedProduct(Long custId, Long prodId) throws ProductNotFoundException, CustomerDoesNotExistsException, ProductIsDeletedException {
         CustomerEntity cust = retrieveCustomerById(custId);
         ProductEntity prod = productSessionBean.retrieveProductEntityById(prodId);
 
