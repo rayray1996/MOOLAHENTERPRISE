@@ -20,6 +20,7 @@ import java.math.BigInteger;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -124,7 +125,7 @@ public class PaymentEntityResource {
      * @param endDate
      * @return
      */
-        @Path("retrieveSpecificHistoricalTransactions")
+    @Path("retrieveSpecificHistoricalTransactions")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveSpecificHistoricalTransactions(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate) {
@@ -160,6 +161,60 @@ public class PaymentEntityResource {
 
             }
             GenericEntity<List<PaymentEntity>> genericEntity = new GenericEntity<List<PaymentEntity>>(paymentEntity) {
+            };
+
+            return Response.status(Status.OK).entity(genericEntity).build();
+        } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid account").build();
+        } catch (Exception ex) {
+            return Response.status(Response.Status.FORBIDDEN).entity("ex.getMessage()" + ex.getMessage()).build();
+        }
+//        } catch (Exception ex) {
+//            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+//        }
+    }
+    
+    
+    @Path("retrieveSpecificMonthlyHistoricalTransactions")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveSpecificMonthlyHistoricalTransactions(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate) {
+        try {
+            CompanyEntity company = companySessionBeanLocal.login(email, password);
+            if (company == null) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Invalid account").build();
+            }
+            String[] splitStartDate = startDate.split("-");
+            String[] splitEndDate = endDate.split("-");
+            Calendar dStartDate = new GregorianCalendar();
+            dStartDate.set(Integer.parseInt(splitStartDate[0]), Integer.parseInt(splitStartDate[1]) - 1, Integer.parseInt(splitStartDate[2]), 0, 0);
+
+            Calendar dEndDate = new GregorianCalendar();
+            dEndDate.set(Integer.parseInt(splitEndDate[0]), Integer.parseInt(splitEndDate[1]) - 1, Integer.parseInt(splitEndDate[2]), 0, 0);
+            List<PaymentEntity> paymentEntity = companySessionBeanLocal.retrieveSpecificHistoricalTransactions(dStartDate, dEndDate, company.getCompanyId());
+
+            for (PaymentEntity pay : paymentEntity) {
+                pay.getCompany().setListOfPayments(null);
+                if (pay.getCompany().getListOfPointOfContacts() != null && !pay.getCompany().getListOfPointOfContacts().isEmpty()) {
+                    for (PointOfContactEntity poc : pay.getCompany().getListOfPointOfContacts()) {
+                        poc.setCompany(null);
+                    }
+                }
+                if (pay.getCompany().getRefund() != null) {
+                    pay.getCompany().getRefund().setCompany(null);
+                }
+                if (pay.getCompany().getListOfProducts() != null && !pay.getCompany().getListOfProducts().isEmpty()) {
+                    for (ProductEntity product : pay.getCompany().getListOfProducts()) {
+                        product.setCompany(null);
+                    }
+                }
+
+            }
+            List<MonthlyPaymentEntity> mthly = new ArrayList<>();
+            for(PaymentEntity pay: paymentEntity){
+                mthly.add((MonthlyPaymentEntity)pay);
+            }
+            GenericEntity<List<MonthlyPaymentEntity>> genericEntity = new GenericEntity<List<MonthlyPaymentEntity>>(mthly) {
             };
 
             return Response.status(Status.OK).entity(genericEntity).build();
