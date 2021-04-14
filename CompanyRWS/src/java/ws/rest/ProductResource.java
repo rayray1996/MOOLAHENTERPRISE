@@ -562,7 +562,7 @@ public class ProductResource {
         }
 
     }
-    
+
     @POST
     @Path("updateProductInformationWholeLife")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -572,6 +572,7 @@ public class ProductResource {
             try {
 
                 CompanyEntity tempCompanyEntity = companySessionBeanLocal.login(email, password);
+                System.out.println("Check smoker for record: " + product.getIsAvailableToSmokers());
                 ProductEntity prod = productSessionBeanLocal.updateProductListingWS(product);
                 prod = nullifyProduct(prod);
                 WholeLifeProductEntity wholeLfe = (WholeLifeProductEntity) prod;
@@ -594,8 +595,7 @@ public class ProductResource {
         }
 
     }
-    
-     
+
     @POST
     @Path("updateProductInformationEndowment")
     @Consumes(MediaType.APPLICATION_JSON)
