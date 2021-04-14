@@ -67,4 +67,6 @@ public interface CompanySessionBeanLocal {
 
     public CompanyEntity alreadyLoginChecked(String companyEmail, String password) throws CompanyDoesNotExistException, IncorrectLoginParticularsException;
 
+    public void reactivateAccount(String email) throws CompanyDoesNotExistException;
+
 }

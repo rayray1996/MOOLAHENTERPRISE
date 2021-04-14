@@ -70,7 +70,7 @@ public class ViewMyLikedProductsManagedBean implements Serializable {
             ProductEntity productToView = productSessionBean.retrieveProductEntityById(productIdToView);
             ProductEntityWrapper wrapper = new ProductEntityWrapper(productToView, getParentClassAsString(productToView), getChildEnumAsString(productToView));
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("productToView", wrapper);
-            FacesContext.getCurrentInstance().getExternalContext().redirect("product/viewProductDetail.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("../product/viewProductDetail.xhtml");
         } catch (ProductNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
         }

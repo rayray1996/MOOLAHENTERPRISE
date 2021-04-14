@@ -168,11 +168,11 @@ public class ViewCurrentComparison implements Serializable {
     }
 
     public void redirectToViewRecommendedProduct() throws IOException {
-        FacesContext.getCurrentInstance().getExternalContext().redirect("product/ViewRecommendedProduct.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("../product/ViewRecommendedProduct.xhtml");
     }
 
     public void redirectToViewAllProduct() throws IOException {
-        FacesContext.getCurrentInstance().getExternalContext().redirect("product/viewAllProduct.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("../product/viewAllProduct.xhtml");
     }
 
     public List<ProductEntityWrapper> getCurrentComparisons() {

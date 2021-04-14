@@ -337,10 +337,33 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
                 }
             }
         } catch (NoSuchObjectLocalException ex) {
-            System.out.println("Timer has been cancelled or does not exists! Msg: " + ex.getMessage());
+            System.out.println("Timer has been cancelled for deactivation (due to insufficient credit) or does not exists! Msg: " + ex.getMessage());
         }
 
 //        Timer timerToStop = timerService.
+    }
+
+    @Override
+    public void reactivateAccount(String email) throws CompanyDoesNotExistException {
+        CompanyEntity company = retrieveCompanyByEmail(email);
+        company.setIsDeactivated(false);
+        
+         Collection<Timer> timers = timerService.getTimers();
+
+        try {
+            for (Timer timer : timers) {
+                if (timer.getInfo() != null) {
+                    CompanyEntity companyInTimer = (CompanyEntity) timer.getInfo();
+                    if (companyInTimer.getCompanyId().equals(company.getCompanyId())) {
+                        timer.cancel();
+                    }
+                }
+            }
+        } catch (NoSuchObjectLocalException ex) {
+            System.out.println("Timer has been cancelled for account deactivation per company request or does not exists! Msg: " + ex.getMessage());
+        }
+        
+        
     }
 
     @Override
@@ -376,7 +399,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
         try {
             CompanyEntity company = (CompanyEntity) timer.getInfo();
             company = retrieveCompanyByEmail(company.getCompanyEmail());
-            System.err.println("TImeout method triggered! Company: " + company.getCompanyId());
+            System.err.println("Timeout method triggered! Company: " + company.getCompanyId());
 
             //COMPANY CURRENTLY DEACTIVATED, transitioning to DELETED:  initiate refund, set all products to isDeleted, set company to isDeleted
             if (company.isIsDeactivated()) {
@@ -420,8 +443,10 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
      * This method carries out automated checks on the each company's credit
      * balance to ensure that there is no negative amount
      */
-//    @Schedule(hour = "7", minute = "0", second = "0", dayOfMonth = "20", month = "*", year = "*", persistent = false)
-//    @Schedule(hour = "*/5", minute = "0", second = "0", dayOfMonth = "*", month = "*", year = "*", persistent = false)
+//  Actual Deployment timer
+//  @Schedule(hour = "7", minute = "0", second = "0", dayOfMonth = "20", month = "*", year = "*", persistent = false)
+//  Demo timer
+    @Schedule(hour = "*", minute = "*/30", second = "0", dayOfMonth = "*", month = "*", year = "*", persistent = false)
     public void automatedCheckCreditBalance() {
         System.out.println("Timer service triggered!");
         List<CompanyEntity> listOfCompanies = em.createQuery("SELECT coy FROM CompanyEntity coy WHERE coy.isDeleted = false").getResultList();

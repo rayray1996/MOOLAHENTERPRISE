@@ -105,9 +105,9 @@ public class DataInitSessionBean {
         if (em.find(CompanyEntity.class, 1L) == null) {
             try {
                 // Create Company
-                CompanyEntity alibabaCompany = new CompanyEntity("Alibaba", "MoolahTesting1233@gmail.com", "BZ8899202", "96968959", "password", BigInteger.valueOf(1300L), "aia-group-limited-vector-logo.svg", "https://www.aia.com.sg/en/our-products.html");
+                CompanyEntity alibabaCompany = new CompanyEntity("Alibaba", "MoolahTesting1233@gmail.com", "BZ8899202", "96968959", "password", BigInteger.valueOf(3000L), "aia-group-limited-vector-logo.svg", "https://www.aia.com.sg/en/our-products.html");
                 alibabaCompany = companySessionBean.createAccountForCompany(alibabaCompany);
-                CompanyEntity tencentCompany = new CompanyEntity("Tencent", "raynnic2020@gmail.com", "BA1828371", "12345678", "password", BigInteger.valueOf(500L), "aviva logo transparent.svg", "https://www.aviva.com.sg/en/contact-us/");
+                CompanyEntity tencentCompany = new CompanyEntity("Tencent", "raynnic2020@gmail.com", "BA1828371", "12345678", "password", BigInteger.valueOf(1001L), "aviva logo transparent.svg", "https://www.aviva.com.sg/en/contact-us/");
                 tencentCompany = companySessionBean.createAccountForCompany(tencentCompany);
 
                 //  Create Point of Contacts
