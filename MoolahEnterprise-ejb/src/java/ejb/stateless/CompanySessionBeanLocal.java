@@ -63,8 +63,11 @@ public interface CompanySessionBeanLocal {
 
     public List<MonthlyPaymentEntity> retrieveAllUnpaidPayment(String email);
 
-    public CompanyEntity retrieveCompanyByOTP(String email, String path) throws InvalidOTPException ;
+    public CompanyEntity retrieveCompanyByOTP(String email, String path) throws InvalidOTPException;
+
+    public CompanyEntity alreadyLoginChecked(String companyEmail, String password) throws CompanyDoesNotExistException, IncorrectLoginParticularsException;
 
     public void reactivateAccount(String email) throws CompanyDoesNotExistException;
+
 
 }

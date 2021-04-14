@@ -246,6 +246,12 @@ public class ProductResource {
                 productEntityWrapper.setProductType("WHOLELIFEPRODUCT");
                 productEntityWrapper.setProductEnum(((WholeLifeProductEntity) product).getProductEnum().toString());
             }
+            if (product.getIsAvailableToSmokers()) {
+                productEntityWrapper.setIsSmoker("true");
+            } else if (!product.getIsAvailableToSmokers()) {
+                productEntityWrapper.setIsSmoker("false");
+            }
+            
 
             GenericEntity<ProductEntityWrapper> genericEntity = new GenericEntity<ProductEntityWrapper>(productEntityWrapper) {
             };
@@ -540,11 +546,20 @@ public class ProductResource {
             try {
 
                 CompanyEntity tempCompanyEntity = companySessionBeanLocal.login(email, password);
+
                 ProductEntity prod = productSessionBeanLocal.updateProductListingWS(product);
                 prod = nullifyProduct(prod);
                 TermLifeProductEntity termlife = (TermLifeProductEntity) prod;
-
-                return Response.status(Response.Status.OK).entity(termlife).build();
+                ProductEntityWrapper pr = new ProductEntityWrapper();
+                if (prod.getIsAvailableToSmokers()) {
+                    pr.setIsSmoker("true");
+                } else {
+                    pr.setIsSmoker("false");
+                }
+                pr.setProductType("TERMLIFEPRODUCT");
+                pr.setProduct(prod);
+                pr.setProductEnum(termlife.getProductEnum().toString());
+                return Response.status(Response.Status.OK).entity(pr).build();
             } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
 //                System.out.println("ex.message" + ex.getMessage());
                 System.out.println("ex.message incorrect login" + ex.getMessage());
@@ -562,7 +577,7 @@ public class ProductResource {
         }
 
     }
-    
+
     @POST
     @Path("updateProductInformationWholeLife")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -572,11 +587,20 @@ public class ProductResource {
             try {
 
                 CompanyEntity tempCompanyEntity = companySessionBeanLocal.login(email, password);
+                System.out.println("Check smoker for record: " + product.getIsAvailableToSmokers());
                 ProductEntity prod = productSessionBeanLocal.updateProductListingWS(product);
                 prod = nullifyProduct(prod);
                 WholeLifeProductEntity wholeLfe = (WholeLifeProductEntity) prod;
-
-                return Response.status(Response.Status.OK).entity(wholeLfe).build();
+                ProductEntityWrapper pr = new ProductEntityWrapper();
+                if (prod.getIsAvailableToSmokers()) {
+                    pr.setIsSmoker("true");
+                } else {
+                    pr.setIsSmoker("false");
+                }
+                pr.setProductType("WHOLELIFEPRODUCT");
+                pr.setProduct(prod);
+                pr.setProductEnum(product.getProductEnum().toString());
+                return Response.status(Response.Status.OK).entity(pr).build();
             } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
 //                System.out.println("ex.message" + ex.getMessage());
                 System.out.println("ex.message incorrect login" + ex.getMessage());
@@ -594,8 +618,7 @@ public class ProductResource {
         }
 
     }
-    
-     
+
     @POST
     @Path("updateProductInformationEndowment")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -608,8 +631,16 @@ public class ProductResource {
                 ProductEntity prod = productSessionBeanLocal.updateProductListingWS(product);
                 prod = nullifyProduct(prod);
                 EndowmentEntity endowment = (EndowmentEntity) prod;
-
-                return Response.status(Response.Status.OK).entity(endowment).build();
+                ProductEntityWrapper pr = new ProductEntityWrapper();
+                if (prod.getIsAvailableToSmokers()) {
+                    pr.setIsSmoker("true");
+                } else {
+                    pr.setIsSmoker("false");
+                }
+                pr.setProductType("ENDOWMENT");
+                pr.setProduct(prod);
+                pr.setProductEnum(product.getProductEnum().toString());
+                return Response.status(Response.Status.OK).entity(pr).build();
             } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
 //                System.out.println("ex.message" + ex.getMessage());
                 System.out.println("ex.message incorrect login" + ex.getMessage());

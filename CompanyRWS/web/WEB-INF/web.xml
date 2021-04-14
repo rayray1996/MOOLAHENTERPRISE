@@ -41,4 +41,10 @@
         <local>ejb.Singleton.MoolahCreditConverterLocal</local>
         <ejb-link>MoolahEnterprise-ejb.jar#MoolahCreditConverter</ejb-link>
     </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>RefundSessionBean</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.stateless.RefundSessionBeanLocal</local>
+        <ejb-link>MoolahEnterprise-ejb.jar#RefundSessionBean</ejb-link>
+    </ejb-local-ref>
 </web-app>

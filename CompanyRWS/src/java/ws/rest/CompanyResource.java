@@ -9,16 +9,16 @@ import ejb.entity.CompanyEntity;
 import ejb.entity.PaymentEntity;
 import ejb.entity.PointOfContactEntity;
 import ejb.entity.ProductEntity;
+import ejb.entity.RefundEntity;
 import ejb.entity.RiderEntity;
 import ejb.stateless.CompanySessionBeanLocal;
 import ejb.stateless.InvoiceSessionBeanLocal;
+import ejb.stateless.RefundSessionBeanLocal;
 import ejb.stateless.RiderSessionBeanLocal;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,6 +61,8 @@ import ws.datamodel.CompanyUpdateWrapper;
  */
 @Path("Company")
 public class CompanyResource {
+
+    RefundSessionBeanLocal refundSessionBean = lookupRefundSessionBeanLocal();
 
     InvoiceSessionBeanLocal invoiceSessionBean = lookupInvoiceSessionBeanLocal();
 
@@ -488,5 +490,15 @@ public class CompanyResource {
             pointOfContact.setCompany(null);
         }
         return company;
+    }
+
+    private RefundSessionBeanLocal lookupRefundSessionBeanLocal() {
+        try {
+            javax.naming.Context c = new InitialContext();
+            return (RefundSessionBeanLocal) c.lookup("java:global/MoolahEnterprise/MoolahEnterprise-ejb/RefundSessionBean!ejb.stateless.RefundSessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
     }
 }

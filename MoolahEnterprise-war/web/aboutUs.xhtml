@@ -43,6 +43,31 @@
                 center: [103.8464, 1.2746], // starting position [lng, lat]
                 zoom: 17 // starting zoom
             });
+
+            // Set options
+            var marker = new mapboxgl.Marker({
+                color: "#800000",
+                draggable: false
+            }).setLngLat([103.8464, 1.2746])
+                    .addTo(map);
+
+
+            var markerHeight = 50, markerRadius = 10, linearOffset = 25;
+            var popupOffsets = {
+                'top': [0, 0],
+                'top-left': [0, 0],
+                'top-right': [0, 0],
+                'bottom': [0, -markerHeight],
+                'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+                'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+                'left': [markerRadius, (markerHeight - markerRadius) * -1],
+                'right': [-markerRadius, (markerHeight - markerRadius) * -1]
+            };
+            var popup = new mapboxgl.Popup({offset: popupOffsets, className: 'my-class'})
+                    .setLngLat([103.8464, 1.2746])
+                    .setHTML("<h5> Moolah is here! </h5>")
+                    .setMaxWidth("200px")
+                    .addTo(map);
         </script>
 
         <br/>

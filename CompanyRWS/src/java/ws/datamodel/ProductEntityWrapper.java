@@ -25,7 +25,8 @@ public class ProductEntityWrapper {
     private ProductEntity product;
     private String productEnum;
     private String productType;
-
+    private String isSmoker;
+    
     // filter by category
 //    private BigDecimal sumAssured;
 //    private Integer coverageTerm;
@@ -47,13 +48,23 @@ public class ProductEntityWrapper {
         
     }
 
-    public ProductEntityWrapper(ProductEntity product, String productEnum) {
+    public ProductEntityWrapper(ProductEntity product, String productEnum, String isSmoker) {
         this();
         this.product = product;
         this.productEnum = productEnum;
         this.productType = productType;
+        this.isSmoker = isSmoker;
     }
 
+    public String getIsSmoker() {
+        return isSmoker;
+    }
+
+    public void setIsSmoker(String isSmoker) {
+        this.isSmoker = isSmoker;
+    }
+
+    
     public ProductEntity getProduct() {
         return product;
     }
