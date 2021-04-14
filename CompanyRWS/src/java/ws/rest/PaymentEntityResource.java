@@ -46,6 +46,7 @@ import util.exception.IncorrectLoginParticularsException;
 import util.exception.InvalidPaymentEntityCreationException;
 import util.exception.PaymentEntityAlreadyExistsException;
 import util.exception.UnknownPersistenceException;
+import ws.datamodel.PaymentEntityWrapper;
 
 /**
  * REST Web Service
@@ -124,7 +125,7 @@ public class PaymentEntityResource {
      * @param endDate
      * @return
      */
-        @Path("retrieveSpecificHistoricalTransactions")
+    @Path("retrieveSpecificHistoricalTransactions")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveSpecificHistoricalTransactions(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate) {
@@ -159,6 +160,9 @@ public class PaymentEntityResource {
                 }
 
             }
+            PaymentEntityWrapper pew = new PaymentEntityWrapper();
+            pew.setListOfPayments(paymentEntity);
+            pew.setTotalPayable(((MonthlyPaymentEntity)paymentEntity).getTotalPayable());
             GenericEntity<List<PaymentEntity>> genericEntity = new GenericEntity<List<PaymentEntity>>(paymentEntity) {
             };
 

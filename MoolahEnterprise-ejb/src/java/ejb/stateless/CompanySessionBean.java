@@ -502,7 +502,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
     @Override
     public List<PaymentEntity> retrieveSpecificHistoricalTransactions(Calendar startDate, Calendar endDate, Long coyId) {
         System.out.println("******************startDate:" + startDate.getTime() + " endDate:" + endDate.getTime() + " coyId" + coyId);
-        Query query = em.createQuery("SELECT p FROM PaymentEntity p where p.company.companyId = :coyId AND p.dateGenerated >= :startDate AND p.dateGenerated <= :endDate");
+        Query query = em.createQuery("SELECT p FROM PaymentEntity p where p.company.companyId = :coyId AND p.dateGenerated >= :startDate AND p.dateGenerated <= :endDate order by p.dateGenerated ASC ");
         query.setParameter("startDate", startDate);
         query.setParameter("endDate", endDate);
         query.setParameter("coyId", coyId);
