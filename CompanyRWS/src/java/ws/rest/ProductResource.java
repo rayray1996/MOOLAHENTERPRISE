@@ -246,6 +246,12 @@ public class ProductResource {
                 productEntityWrapper.setProductType("WHOLELIFEPRODUCT");
                 productEntityWrapper.setProductEnum(((WholeLifeProductEntity) product).getProductEnum().toString());
             }
+            if (product.getIsAvailableToSmokers()) {
+                productEntityWrapper.setIsSmoker("true");
+            } else if (!product.getIsAvailableToSmokers()) {
+                productEntityWrapper.setIsSmoker("false");
+            }
+            
 
             GenericEntity<ProductEntityWrapper> genericEntity = new GenericEntity<ProductEntityWrapper>(productEntityWrapper) {
             };
