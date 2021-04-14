@@ -9,12 +9,16 @@ import ejb.entity.CompanyEntity;
 import ejb.entity.PaymentEntity;
 import ejb.entity.PointOfContactEntity;
 import ejb.entity.ProductEntity;
+import ejb.entity.RefundEntity;
 import ejb.entity.RiderEntity;
 import ejb.stateless.CompanySessionBeanLocal;
 import ejb.stateless.InvoiceSessionBeanLocal;
+import ejb.stateless.RefundSessionBeanLocal;
 import ejb.stateless.RiderSessionBeanLocal;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -55,6 +59,8 @@ import ws.datamodel.CompanyUpdateWrapper;
  */
 @Path("Company")
 public class CompanyResource {
+
+    RefundSessionBeanLocal refundSessionBean = lookupRefundSessionBeanLocal();
 
     InvoiceSessionBeanLocal invoiceSessionBean = lookupInvoiceSessionBeanLocal();
 
@@ -265,11 +271,20 @@ public class CompanyResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response deactivateAccount(@QueryParam("email") String email, @QueryParam("password") String password) {
         try {
-            CompanyEntity company = companySessionBeanLocal.login(email, password);
+            CompanyEntity company = companySessionBeanLocal.alreadyLoginChecked(email, password);
             if (company != null) {
+                System.out.println("compan not null");
                 companySessionBeanLocal.deactivateAccount(email);
+                RefundEntity newRefund = new RefundEntity();
+                newRefund.setCompany(company);
+                newRefund.setRefundDate(new GregorianCalendar());
+                newRefund.setTotalAmount(new BigDecimal(0.1).multiply(new BigDecimal(company.getCreditOwned())));
+                refundSessionBean.createNewRefund(newRefund);
+                return Response.status(Response.Status.OK).entity(newRefund.getTotalAmount()).build();
+            } else {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Invalid request to deactivate due to wrong credential.").build();
             }
-            return Response.status(Response.Status.OK).entity("").build();
+
         } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Invalid account").build();
         } catch (Exception ex) {
@@ -440,5 +455,15 @@ public class CompanyResource {
             pointOfContact.setCompany(null);
         }
         return company;
+    }
+
+    private RefundSessionBeanLocal lookupRefundSessionBeanLocal() {
+        try {
+            javax.naming.Context c = new InitialContext();
+            return (RefundSessionBeanLocal) c.lookup("java:global/MoolahEnterprise/MoolahEnterprise-ejb/RefundSessionBean!ejb.stateless.RefundSessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
     }
 }

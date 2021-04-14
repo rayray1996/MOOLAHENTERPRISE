@@ -169,7 +169,16 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
         System.out.println("Login : password:" + password);
         CompanyEntity currcompany = retrieveCompanyByEmail(companyEmail);
         String passwordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + currcompany.getSalt()));
-        if (currcompany.getPassword().equals(passwordHash)) {
+        if (currcompany.getPassword().equals(passwordHash) && !currcompany.isIsDeactivated()) {
+            return currcompany;
+        } else {
+            throw new IncorrectLoginParticularsException("Incorrect login details provided!");
+        }
+    }
+
+    public CompanyEntity alreadyLoginChecked(String companyEmail, String password) throws CompanyDoesNotExistException, IncorrectLoginParticularsException {
+        CompanyEntity currcompany = retrieveCompanyByEmail(companyEmail);
+        if (currcompany.getPassword().equals(password)) {
             return currcompany;
         } else {
             throw new IncorrectLoginParticularsException("Incorrect login details provided!");
@@ -468,7 +477,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
     @Override
     public List<PaymentEntity> retrieveSpecificHistoricalTransactions(Calendar startDate, Calendar endDate, Long coyId) {
         System.out.println("******************startDate:" + startDate.getTime() + " endDate:" + endDate.getTime() + " coyId" + coyId);
-        Query query = em.createQuery("SELECT p FROM PaymentEntity p WHERE p.dateTransacted >= :startDate AND p.dateTransacted <= :endDate AND  p.company.companyId =:coyId");
+        Query query = em.createQuery("SELECT p FROM PaymentEntity p where p.company.companyId = :coyId AND p.dateGenerated >= :startDate AND p.dateGenerated <= :endDate");
         query.setParameter("startDate", startDate);
         query.setParameter("endDate", endDate);
         query.setParameter("coyId", coyId);
@@ -570,7 +579,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
             int min = 100000;
             int max = 999999;
             int range = (max - min) + 1;
-            int value = (int) (Math.random() * range) + min ;
+            int value = (int) (Math.random() * range) + min;
             // String pathParam = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(String.valueOf(value)));
             String pathParam = String.valueOf(value);
             company.setResetPasswordPathParam(pathParam);
