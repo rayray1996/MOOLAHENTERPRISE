@@ -251,7 +251,6 @@ public class ProductResource {
             } else if (!product.getIsAvailableToSmokers()) {
                 productEntityWrapper.setIsSmoker("false");
             }
-            
 
             GenericEntity<ProductEntityWrapper> genericEntity = new GenericEntity<ProductEntityWrapper>(productEntityWrapper) {
             };
@@ -546,7 +545,7 @@ public class ProductResource {
             try {
 
                 CompanyEntity tempCompanyEntity = companySessionBeanLocal.login(email, password);
-
+                System.out.println("Check smoker for record: " + product.getIsAvailableToSmokers());
                 ProductEntity prod = productSessionBeanLocal.updateProductListingWS(product);
                 prod = nullifyProduct(prod);
                 TermLifeProductEntity termlife = (TermLifeProductEntity) prod;
@@ -628,6 +627,7 @@ public class ProductResource {
             try {
 
                 CompanyEntity tempCompanyEntity = companySessionBeanLocal.login(email, password);
+                System.out.println("Check smoker for record: " + product.getIsAvailableToSmokers());
                 ProductEntity prod = productSessionBeanLocal.updateProductListingWS(product);
                 prod = nullifyProduct(prod);
                 EndowmentEntity endowment = (EndowmentEntity) prod;
