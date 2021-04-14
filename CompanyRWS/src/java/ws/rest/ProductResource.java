@@ -535,7 +535,7 @@ public class ProductResource {
     @Path("updateProductInformationTermLife")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateProductInformationTermLife(ProductEntity product, @QueryParam("email") String email, @QueryParam("password") String password) {
+    public Response updateProductInformationTermLife(TermLifeProductEntity product, @QueryParam("email") String email, @QueryParam("password") String password) {
         if (product != null) {
             try {
 
@@ -551,6 +551,7 @@ public class ProductResource {
                     pr.setIsSmoker("false");
                 }
                 pr.setProductType("TERMLIFEPRODUCT");
+                pr.setProduct(prod);
                 pr.setProductEnum(termlife.getProductEnum().toString());
                 return Response.status(Response.Status.OK).entity(pr).build();
             } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
@@ -591,6 +592,7 @@ public class ProductResource {
                     pr.setIsSmoker("false");
                 }
                 pr.setProductType("WHOLELIFEPRODUCT");
+                pr.setProduct(prod);
                 pr.setProductEnum(product.getProductEnum().toString());
                 return Response.status(Response.Status.OK).entity(pr).build();
             } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
@@ -630,6 +632,7 @@ public class ProductResource {
                     pr.setIsSmoker("false");
                 }
                 pr.setProductType("ENDOWMENT");
+                pr.setProduct(prod);
                 pr.setProductEnum(product.getProductEnum().toString());
                 return Response.status(Response.Status.OK).entity(pr).build();
             } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
