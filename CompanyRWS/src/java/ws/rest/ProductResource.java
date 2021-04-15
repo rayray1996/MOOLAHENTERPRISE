@@ -361,7 +361,7 @@ public class ProductResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createNewRecordForEndowment(@QueryParam("email") String email, @QueryParam("password") String password, EndowmentEntity newRecord) {
+    public Response createNewRecordForEndowment(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("isSmoker") boolean isSmoker, EndowmentEntity newRecord) {
         System.out.println("create new record **** *");
         if (newRecord != null) {
             try {
@@ -369,6 +369,8 @@ public class ProductResource {
                 if (company != null) {
 
                     EndowmentEntity product = newRecord;
+                    System.out.println("Check smoker for record: " + isSmoker);
+                    product.setIsAvailableToSmokers(isSmoker);
 
                     List<RiderEntity> listOfRiders = newRecord.getListOfRiders();
                     List<PremiumEntity> listOfPremium = newRecord.getListOfPremium();
@@ -408,20 +410,22 @@ public class ProductResource {
      * @param email
      * @param password
      * @param newRecord
+     * @param isSmoker
      * @return
      */
     @Path("TermLifeProductEntity")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createNewRecordForTermLifeProductEntity(@QueryParam("email") String email, @QueryParam("password") String password, TermLifeProductEntity newRecord) {
+    public Response createNewRecordForTermLifeProductEntity(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("isSmoker") boolean isSmoker, TermLifeProductEntity newRecord) {
         System.out.println("create new record **** *");
         if (newRecord != null) {
             try {
                 CompanyEntity company = companySessionBeanLocal.login(email, password);
                 if (company != null) {
                     TermLifeProductEntity product = newRecord;
-
+                    System.out.println("Check smoker for record: " + isSmoker);
+                    product.setIsAvailableToSmokers(isSmoker);
                     List<RiderEntity> listOfRiders = newRecord.getListOfRiders();
                     List<PremiumEntity> listOfPremium = newRecord.getListOfPremium();
                     List<PremiumEntity> listOfSmoker = newRecord.getListOfSmokerPremium();
@@ -466,13 +470,15 @@ public class ProductResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createNewRecordForWholeLifeProductEntity(@QueryParam("email") String email, @QueryParam("password") String password, WholeLifeProductEntity newRecord) {
+    public Response createNewRecordForWholeLifeProductEntity(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("isSmoker") boolean isSmoker, WholeLifeProductEntity newRecord) {
         if (newRecord != null) {
             try {
                 CompanyEntity company = companySessionBeanLocal.login(email, password);
                 if (company != null) {
 
                     WholeLifeProductEntity wholeLifeProductEntity = newRecord;
+                    System.out.println("Check smoker for record: " + isSmoker);
+                    wholeLifeProductEntity.setIsAvailableToSmokers(isSmoker);
 
                     List<RiderEntity> listOfRiders = newRecord.getListOfRiders();
                     List<PremiumEntity> listOfPremium = newRecord.getListOfPremium();
