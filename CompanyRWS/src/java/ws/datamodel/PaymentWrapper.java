@@ -5,6 +5,7 @@
  */
 package ws.datamodel;
 
+import ejb.entity.CreditPaymentEntity;
 import ejb.entity.MonthlyPaymentEntity;
 import ejb.entity.PaymentEntity;
 import ejb.entity.ProductEntity;
@@ -18,23 +19,28 @@ import java.util.List;
  *
  * @author sohqi
  */
-public class PaymentEntityWrapper {
-
+public class PaymentWrapper {
+    //cater to all
     private PaymentEntity paymentEntity;
+    //cater to monthly
     private BigInteger totalPayable;
     private List<ProductLineItemEntity> listOfProductLineItemEntity;
+    //cater to credit
+    private CreditPaymentEntity creditPaymentEntity;
+    
 
-    public PaymentEntityWrapper() {
+    public PaymentWrapper() {
         paymentEntity = new PaymentEntity();
         listOfProductLineItemEntity = new ArrayList<>();
-
+        creditPaymentEntity = new CreditPaymentEntity();
     }
 
-    public PaymentEntityWrapper(PaymentEntity paymentEntity, BigInteger totalPayable, List<ProductLineItemEntity> listOfProductLineItemEntity) {
+    public PaymentWrapper(PaymentEntity paymentEntity, BigInteger totalPayable, List<ProductLineItemEntity> listOfProductLineItemEntity, CreditPaymentEntity creditPaymentEntity) {
         this();
         this.listOfProductLineItemEntity = listOfProductLineItemEntity;
         this.totalPayable = totalPayable;
         this.paymentEntity = paymentEntity;
+        this.creditPaymentEntity = creditPaymentEntity;
     }
 
     public BigInteger getTotalPayable() {
@@ -59,6 +65,14 @@ public class PaymentEntityWrapper {
 
     public void setListOfProductLineItemEntity(List<ProductLineItemEntity> listOfProductLineItemEntity) {
         this.listOfProductLineItemEntity = listOfProductLineItemEntity;
+    }
+
+    public CreditPaymentEntity getCreditPaymentEntity() {
+        return creditPaymentEntity;
+    }
+
+    public void setCreditPaymentEntity(CreditPaymentEntity creditPaymentEntity) {
+        this.creditPaymentEntity = creditPaymentEntity;
     }
 
 }

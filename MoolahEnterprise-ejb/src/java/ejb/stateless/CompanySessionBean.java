@@ -8,6 +8,7 @@ package ejb.stateless;
 import com.sun.org.apache.bcel.internal.generic.DADD;
 import ejb.Singleton.MoolahCreditConverterLocal;
 import ejb.entity.CompanyEntity;
+import ejb.entity.CreditPaymentEntity;
 import ejb.entity.MonthlyPaymentEntity;
 import ejb.entity.PaymentEntity;
 import ejb.entity.PointOfContactEntity;
@@ -521,6 +522,8 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
         }
         return results;
     }
+    
+  
 
     /**
      * Error: exception Description: Problem compiling [SELECT mp FROM
