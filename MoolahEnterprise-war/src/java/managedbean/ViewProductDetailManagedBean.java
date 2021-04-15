@@ -35,6 +35,7 @@ import util.exception.CustomerDoesNotExistsException;
 import util.exception.CustomerUpdateException;
 import util.exception.InvalidProductCreationException;
 import util.exception.ProductAlreadyExistsException;
+import util.exception.ProductIsDeletedException;
 import util.exception.ProductNotFoundException;
 import util.exception.UnknownPersistenceException;
 import util.helper.AffordabilityWrapper;
@@ -146,9 +147,9 @@ public class ViewProductDetailManagedBean implements Serializable {
             customerLikeProduct();
             hasCounted = false;
 
-        } catch (ProductNotFoundException | CustomerDoesNotExistsException ex) {
+        } catch (ProductNotFoundException | CustomerDoesNotExistsException | ProductIsDeletedException ex) {
             System.out.println("Product does not exists!");
-        }
+        } 
     }
 
     public void likeProduct(ActionEvent event) {
@@ -169,7 +170,7 @@ public class ViewProductDetailManagedBean implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product has been saved to your profile!", null));
             }
 
-        } catch (CustomerDoesNotExistsException | ProductNotFoundException | UnknownPersistenceException | CustomerUpdateException ex) {
+        } catch (CustomerDoesNotExistsException | ProductNotFoundException | UnknownPersistenceException | CustomerUpdateException | ProductIsDeletedException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
         }
     }

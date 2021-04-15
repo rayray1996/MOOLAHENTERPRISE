@@ -18,6 +18,7 @@ import util.exception.CustomerDoesNotExistsException;
 import util.exception.CustomerPasswordExistsException;
 import util.exception.CustomerUpdateException;
 import util.exception.IncorrectLoginParticularsException;
+import util.exception.ProductIsDeletedException;
 import util.exception.ProductNotFoundException;
 import util.exception.UnknownPersistenceException;
 
@@ -36,9 +37,9 @@ public interface CustomerSessionBeanLocal {
 
     public CustomerEntity retrieveCustomerById(Long id) throws CustomerDoesNotExistsException;
 
-    public void likeAProduct(Long custID, Long likedProdId) throws CustomerDoesNotExistsException, ProductNotFoundException;
+    public void likeAProduct(Long custID, Long likedProdId) throws CustomerDoesNotExistsException, ProductNotFoundException, ProductIsDeletedException;
 
-    public void removeLikedProduct(Long custId, Long prodId) throws ProductNotFoundException, CustomerDoesNotExistsException;
+    public void removeLikedProduct(Long custId, Long prodId) throws ProductNotFoundException, CustomerDoesNotExistsException, ProductIsDeletedException;
 
     public List<ProductEntity> viewLikedProductList(Long custId) throws CustomerDoesNotExistsException;
 

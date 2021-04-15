@@ -11,6 +11,7 @@ import javax.ejb.Local;
 import util.exception.PremiumAlreadyExistException;
 import util.exception.PremiumCreationException;
 import util.exception.PremiumDoesNotExistException;
+import util.exception.ProductIsDeletedException;
 import util.exception.ProductNotFoundException;
 import util.exception.UnknownPersistenceException;
 
@@ -21,13 +22,13 @@ import util.exception.UnknownPersistenceException;
 @Local
 public interface PremiumSessionBeanLocal {
 
-    public List<PremiumEntity> retrieveListOfPremiumEntityForProduct(Long productId) throws ProductNotFoundException;
+    public List<PremiumEntity> retrieveListOfPremiumEntityForProduct(Long productId) throws ProductNotFoundException, ProductIsDeletedException;
 
     public PremiumEntity retrievePremiumEntityById(Long premiumId) throws PremiumDoesNotExistException;
 
     public void deletePremium(Long premiumId) throws PremiumDoesNotExistException, ProductNotFoundException;
 
-    public List<PremiumEntity> retrieveListOfSmokerPremiumEntityForProduct(Long productId) throws ProductNotFoundException;
+    public List<PremiumEntity> retrieveListOfSmokerPremiumEntityForProduct(Long productId) throws ProductNotFoundException, ProductIsDeletedException;
 
 
 }

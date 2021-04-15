@@ -22,6 +22,7 @@ import javax.validation.ValidatorFactory;
 import util.exception.PremiumAlreadyExistException;
 import util.exception.PremiumCreationException;
 import util.exception.PremiumDoesNotExistException;
+import util.exception.ProductIsDeletedException;
 import util.exception.ProductNotFoundException;
 import util.exception.UnknownPersistenceException;
 
@@ -48,7 +49,7 @@ public class PremiumSessionBean implements PremiumSessionBeanLocal {
 
     //do retrieve method and 1 more for feature entity
     @Override
-    public List<PremiumEntity> retrieveListOfPremiumEntityForProduct(Long productId) throws ProductNotFoundException {
+    public List<PremiumEntity> retrieveListOfPremiumEntityForProduct(Long productId) throws ProductNotFoundException, ProductIsDeletedException {
         ProductEntity product = productSessionBean.retrieveProductEntityById(productId);
         List<PremiumEntity> listOfPremium = product.getListOfPremium();
         return listOfPremium;
@@ -66,7 +67,7 @@ public class PremiumSessionBean implements PremiumSessionBeanLocal {
 
     //do retrieve method and 1 more for feature entity
     @Override
-    public List<PremiumEntity> retrieveListOfSmokerPremiumEntityForProduct(Long productId) throws ProductNotFoundException {
+    public List<PremiumEntity> retrieveListOfSmokerPremiumEntityForProduct(Long productId) throws ProductNotFoundException, ProductIsDeletedException {
         ProductEntity product = productSessionBean.retrieveProductEntityById(productId);
         List<PremiumEntity> listOfPremium = product.getListOfSmokerPremium();
         return listOfPremium;

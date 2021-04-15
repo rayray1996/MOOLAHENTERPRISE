@@ -22,6 +22,7 @@ import javax.validation.ValidatorFactory;
 import util.exception.FeatureAlreadyExistsException;
 import util.exception.FeatureCreationException;
 import util.exception.FeatureDoesNotExistsException;
+import util.exception.ProductIsDeletedException;
 import util.exception.ProductNotFoundException;
 import util.exception.UnknownPersistenceException;
 
@@ -47,7 +48,7 @@ public class FeatureSessionBean implements FeatureSessionBeanLocal {
     }
 
     @Override
-    public List<FeatureEntity> retrieveListOfFeatures(Long productId) throws ProductNotFoundException {
+    public List<FeatureEntity> retrieveListOfFeatures(Long productId) throws ProductNotFoundException, ProductIsDeletedException {
         ProductEntity product = productSessionBean.retrieveProductEntityById(productId);
         List<FeatureEntity> listOfFeatures = product.getListOfAdditionalFeatures();
         return listOfFeatures;
