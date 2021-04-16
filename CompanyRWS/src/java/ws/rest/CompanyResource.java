@@ -6,9 +6,11 @@
 package ws.rest;
 
 import ejb.entity.CompanyEntity;
+import ejb.entity.MonthlyPaymentEntity;
 import ejb.entity.PaymentEntity;
 import ejb.entity.PointOfContactEntity;
 import ejb.entity.ProductEntity;
+import ejb.entity.ProductLineItemEntity;
 import ejb.entity.RefundEntity;
 import ejb.entity.RiderEntity;
 import ejb.stateless.CompanySessionBeanLocal;
@@ -463,10 +465,16 @@ public class CompanyResource {
         }
         for (PaymentEntity payment : company.getListOfPayments()) {
             payment.setCompany(null);
+            if(payment instanceof MonthlyPaymentEntity){
+               for(ProductLineItemEntity prod: ((MonthlyPaymentEntity) payment).getListOfProductLineItems()){
+                   prod.getProduct().setCompany(null);
+               }
+            }
         }
         for (PointOfContactEntity pointOfContact : company.getListOfPointOfContacts()) {
             pointOfContact.setCompany(null);
         }
+        
         return company;
     }
 

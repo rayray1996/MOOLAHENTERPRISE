@@ -8,6 +8,7 @@ package ejb.stateless;
 import com.sun.org.apache.bcel.internal.generic.DADD;
 import ejb.Singleton.MoolahCreditConverterLocal;
 import ejb.entity.CompanyEntity;
+import ejb.entity.CreditPaymentEntity;
 import ejb.entity.MonthlyPaymentEntity;
 import ejb.entity.PaymentEntity;
 import ejb.entity.PointOfContactEntity;
@@ -509,7 +510,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
     @Override
     public List<PaymentEntity> retrieveSpecificHistoricalTransactions(Calendar startDate, Calendar endDate, Long coyId) {
         System.out.println("******************startDate:" + startDate.getTime() + " endDate:" + endDate.getTime() + " coyId" + coyId);
-        Query query = em.createQuery("SELECT p FROM PaymentEntity p where p.company.companyId = :coyId AND p.dateGenerated >= :startDate AND p.dateGenerated <= :endDate");
+        Query query = em.createQuery("SELECT p FROM PaymentEntity p where p.company.companyId = :coyId AND p.dateGenerated >= :startDate AND p.dateGenerated <= :endDate order by p.dateGenerated ASC ");
         query.setParameter("startDate", startDate);
         query.setParameter("endDate", endDate);
         query.setParameter("coyId", coyId);
@@ -523,6 +524,8 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
         }
         return results;
     }
+    
+  
 
     /**
      * Error: exception Description: Problem compiling [SELECT mp FROM

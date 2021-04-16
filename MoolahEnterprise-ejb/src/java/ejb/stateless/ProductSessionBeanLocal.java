@@ -23,6 +23,7 @@ import util.exception.CompanyDoesNotExistException;
 import util.exception.InvalidFilterCriteriaException;
 import util.exception.InvalidProductCreationException;
 import util.exception.ProductAlreadyExistsException;
+import util.exception.ProductIsDeletedException;
 import util.exception.ProductNotFoundException;
 import util.exception.UnknownPersistenceException;
 
@@ -39,7 +40,7 @@ public interface ProductSessionBeanLocal {
 
     public List<ProductEntity> searchForProductsByName(String name);
 
-    public ProductEntity retrieveProductEntityById(Long productId) throws ProductNotFoundException;
+    public ProductEntity retrieveProductEntityById(Long productId) throws ProductNotFoundException, ProductIsDeletedException;
 
     public List<WholeLifeProductEntity> retrieveAllWholeLifeProducts();
 
@@ -51,9 +52,9 @@ public interface ProductSessionBeanLocal {
 
     public List<ProductEntity> retrieveListOfProductByCompany(String email) throws CompanyDoesNotExistException;
 
-    public List<ProductEntity> filterProductsByCriteria(CategoryEnum category, Boolean wantsRider, Boolean isSmoker, BigDecimal sumAssured, Integer coverageTerm, Integer premiumTerm, EndowmentProductEnum endowmentProductEnum, TermLifeProductEnum termLifeProductEnum, WholeLifeProductEnum wholeLifeProductEnum) throws InvalidFilterCriteriaException, ProductNotFoundException;
+    public List<ProductEntity> filterProductsByCriteria(CategoryEnum category, Boolean wantsRider, Boolean isSmoker, BigDecimal sumAssured, Integer coverageTerm, Integer premiumTerm, EndowmentProductEnum endowmentProductEnum, TermLifeProductEnum termLifeProductEnum, WholeLifeProductEnum wholeLifeProductEnum) throws InvalidFilterCriteriaException, ProductNotFoundException, ProductIsDeletedException;
 
     public ProductEntity createProductListing(ProductEntity newProduct, Long companyId, List<RiderEntity> riders, List<PremiumEntity> premiums, List<PremiumEntity> smokerPremiums, List<FeatureEntity> features) throws ProductAlreadyExistsException, UnknownPersistenceException, InvalidProductCreationException;
 
-      public ProductEntity updateProductListingWS(ProductEntity updateProduct) throws ProductAlreadyExistsException, UnknownPersistenceException, InvalidProductCreationException;
+    public ProductEntity updateProductListingWS(ProductEntity updateProduct) throws ProductAlreadyExistsException, UnknownPersistenceException, InvalidProductCreationException;
 }

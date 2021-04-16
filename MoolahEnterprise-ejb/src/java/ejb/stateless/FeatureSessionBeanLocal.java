@@ -11,6 +11,7 @@ import javax.ejb.Local;
 import util.exception.FeatureAlreadyExistsException;
 import util.exception.FeatureCreationException;
 import util.exception.FeatureDoesNotExistsException;
+import util.exception.ProductIsDeletedException;
 import util.exception.ProductNotFoundException;
 import util.exception.UnknownPersistenceException;
 
@@ -21,7 +22,7 @@ import util.exception.UnknownPersistenceException;
 @Local
 public interface FeatureSessionBeanLocal {
 
-    public List<FeatureEntity> retrieveListOfFeatures(Long productId) throws ProductNotFoundException;
+    public List<FeatureEntity> retrieveListOfFeatures(Long productId) throws ProductNotFoundException, ProductIsDeletedException;
 
     public FeatureEntity retrieveFeatureEntitybyId(Long featureId) throws FeatureDoesNotExistsException;
 
