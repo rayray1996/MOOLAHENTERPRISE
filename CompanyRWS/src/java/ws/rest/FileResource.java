@@ -1,6 +1,11 @@
 package ws.restful;
 
 import ejb.entity.CompanyEntity;
+import ejb.entity.MonthlyPaymentEntity;
+import ejb.entity.PaymentEntity;
+import ejb.entity.PointOfContactEntity;
+import ejb.entity.ProductEntity;
+import ejb.entity.ProductLineItemEntity;
 import ejb.stateless.CompanySessionBeanLocal;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -90,20 +95,44 @@ public class FileResource {
             uploadedFileInputStream.close();
             company.setCompanyImage(companyId + "." + extension);
             companySessionBean.updateCompanyInformation(company);
-            return Response.status(Status.OK).entity("ok").build();
+            company = nullifyCompany(company);
+            return Response.status(Status.OK).entity(company).build();
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
 
-            return Response.status(Status.INTERNAL_SERVER_ERROR).entity("file processing error").build();
+            return Response.status(Status.FORBIDDEN).entity("file processing error").build();
         } catch (IOException ex) {
             ex.printStackTrace();
 
-            return Response.status(Status.INTERNAL_SERVER_ERROR).entity("file processing error").build();
+            return Response.status(Status.BAD_GATEWAY).entity("file processing error").build();
         } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException | UnknownPersistenceException | CompanySQLConstraintException ex) {
             return Response.status(Status.BAD_REQUEST).entity("You are not logged in").build();
         }
     }
 
+    private CompanyEntity nullifyCompany(CompanyEntity company) {
+        for (ProductEntity product : company.getListOfProducts()) {
+            product.setCompany(null);
+        }
+        if (company.getRefund() != null) {
+            company.getRefund().setCompany(null);
+        }
+        for (PaymentEntity payment : company.getListOfPayments()) {
+            payment.setCompany(null);
+            if(payment instanceof MonthlyPaymentEntity){
+               for(ProductLineItemEntity prod: ((MonthlyPaymentEntity) payment).getListOfProductLineItems()){
+                   prod.getProduct().setCompany(null);
+               }
+            }
+        }
+        for (PointOfContactEntity pointOfContact : company.getListOfPointOfContacts()) {
+            pointOfContact.setCompany(null);
+        }
+        
+        return company;
+    }
+
+    
     private CompanySessionBeanLocal lookupCompanySessionBeanLocal() {
         try {
             javax.naming.Context c = new InitialContext();
