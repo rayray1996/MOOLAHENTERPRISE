@@ -18,85 +18,82 @@
         <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces"/>
 
 
-        <h:panelGroup rendered="#{sessionScope.isLogin == false}">
+        <ui:fragment rendered="#{sessionScope.isLogin == false}">
+            <h:panelGroup>
 
-            <p:messages globalOnly="true"/>
+                <p:messages globalOnly="true"/>
 
-            <br/>
-            <br/>
-            <div style="width: 60%; margin-left: auto; margin-right: auto; text-align: center; line-height: 2.5">
-                <p:outputLabel style="font-family: sans-serif; font-size: 18px"> Moolah aims to provide young adults a quick overview of the different financial products offered by financial institutions. 
-                    On top of that, it allows users to compare the products offered by different institutions. 
-                    For users who are unsure of what financial products are suitable for them, 
-                    our application can also feature products which are more relevant to them based on the results of the questionnaire posed to them.
-                    <br/>
-                    <br/>
-                    Currently our application displays products from these companies: 
-                    <br/>
-                </p:outputLabel>
-            </div>
+                <br/>
+                <br/>
+                <div style="width: 60%; margin-left: auto; margin-right: auto; text-align: center; line-height: 2.5">
+                    <p:outputLabel style="font-family: sans-serif; font-size: 18px"> Moolah aims to provide young adults a quick overview of the different financial products offered by financial institutions. 
+                        On top of that, it allows users to compare the products offered by different institutions. 
+                        For users who are unsure of what financial products are suitable for them, 
+                        our application can also feature products which are more relevant to them based on the results of the questionnaire posed to them.
+                        <br/>
+                        <br/>
+                        Currently our application displays products from these companies: 
+                        <br/>
+                    </p:outputLabel>
+                </div>
 
-            <br/>
-            <figure class="aia logo" style="text-align: center">
-                <p:graphicImage library="images" name="aia-group-limited-vector-logo.svg" height="180" width="200" alt="aia" />
-                <p:graphicImage library="images" name="aviva logo transparent.svg" height="180" width="200 " alt="aviva" style=" margin-left: 5%" />
-                <p:graphicImage library="images" name="prudential-2.svg" height="200" width="200 " alt="prudential" style=" margin-left: 5%" />
-                <p:graphicImage library="images" name="GE.svg" height="200" width="200 " alt="ge" style=" margin-left: 5%" />
+                <br/>
+                <figure class="aia logo" style="text-align: center">
+                    <p:graphicImage library="images" name="aia-group-limited-vector-logo.svg" height="180" width="200" alt="aia" />
+                    <p:graphicImage library="images" name="aviva logo transparent.svg" height="180" width="200 " alt="aviva" style=" margin-left: 5%" />
+                    <p:graphicImage library="images" name="prudential-2.svg" height="200" width="200 " alt="prudential" style=" margin-left: 5%" />
+                    <p:graphicImage library="images" name="GE.svg" height="200" width="200 " alt="ge" style=" margin-left: 5%" />
 
-            </figure>
-
-
-        </h:panelGroup>
+                </figure>
 
 
-        <h:form id="productToView" rendered="#{sessionScope.isLogin == true}" >
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <h3 style="text-align: center; font-size:18px;">Recommended Products For You</h3>
+            </h:panelGroup>
+        </ui:fragment>
 
-            <div class="card">
-                <p:carousel value="#{indexManagedBean.listOfProduct}" var="product" responsive="false" numVisible="4" autoPlayInterval="10000" 
-                            style="width:75%; margin-left: auto; margin-right: auto;" itemStyle="width: 25% ; height: 62%" >
-                    <div class="product">  
-                        <div class="product-grid-item p-p-5">
+        <ui:fragment rendered="#{sessionScope.isLogin == true}">
+            <h:form id="productToView" rendered="#{sessionScope.isLogin == true}" >
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <h3 style="text-align: center; font-size:18px;">Recommended Products For You</h3>
 
-                            <div class="product-grid-item-content">
-                                <div style="margin: 0px auto; text-align: center">
-                                    <p:graphicImage library="images" name="#{product.company.companyImage}" height="200" width="200 " alt="This is the image of the company" />
+                <div class="card">
+                    <p:carousel value="#{indexManagedBean.listOfProduct}" var="product" responsive="false" numVisible="4" autoPlayInterval="10000" 
+                                style="width:75%; margin-left: auto; margin-right: auto;" itemStyle="width: 25% ; height: 62%" >
+                        <div class="product">  
+                            <div class="product-grid-item p-p-5">                            
+                                <div class="product-grid-item-content">
+                                    <div style="margin: 0px auto; text-align: center">
+                                        <p:graphicImage library="images" name="#{product.company.companyImage}" height="200" width="200 " alt="This is the image of the company" />
+                                    </div>
+                                    <br/>
+                                    <div class="product-name" style="font-size: 15px;text-align: center; line-height: 1.5; padding-left: 5%; padding-right: 5%; font-weight: bold">#{product.productName}</div>
+                                    <br/>
+                                    <div class="product-description" style="text-align: center; line-height: 1.5; padding-left: 5%; padding-right: 5%">#{product.description}</div>
                                 </div>
                                 <br/>
-                                <div class="product-name" style="text-align: center; line-height: 1.5; padding-left: 5%; padding-right: 5%; font-weight: bold">#{product.productName}</div>
                                 <br/>
-                                <div class="product-description" style="text-align: center; line-height: 1.5; padding-left: 5%; padding-right: 5%">#{product.description}</div>
-                            </div>
-                            <br/>
-                            <br/>
-                            <div class="product-grid-item-bottom" style="padding-left: 5%">
-                                <h:outputText value="Assured Sum: $#{product.assuredSum}" styleClass="product-price" style="text-align: center; font-weight: bold">
-                                    <f:convertNumber currencySymbol="$" type="currency"/>
-                                </h:outputText>
-                                <br/>
-                                <br/>
-                                <p:commandButton type="submit" value="View Product" icon="ui-icon-document" actionListener="#{indexManagedBean.viewProduct}" style="float: left; text-align: center">
-                                    <f:attribute name="productId" value="#{product.productId}"/>
-                                </p:commandButton>
+                                <div class="product-grid-item-bottom" style="padding-left: 5%">
+                                    <h:outputText value="Assured Sum: $#{product.assuredSum}" styleClass="product-price" style="text-align: center; font-weight: bold">
+                                        <f:convertNumber currencySymbol="$" type="currency"/>
+                                    </h:outputText>
+                                    <br/>
+                                    <br/>
+                                    <p:commandButton type="submit" value="View Product" icon="ui-icon-document" actionListener="#{indexManagedBean.viewProduct}" style="float: left; text-align: center">
+                                        <f:attribute name="productId" value="#{product.productId}"/>
+                                    </p:commandButton>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <f:facet name="footer">
-                        In total there are #{indexManagedBean.listOfProduct.size()} products.
-                    </f:facet>
-                </p:carousel>
-            </div>
-
-
-
-
-
-        </h:form>
+                        <f:facet name="footer">
+                            In total there are #{indexManagedBean.listOfProduct.size()} products.
+                        </f:facet>
+                    </p:carousel>
+                </div>
+            </h:form>
+        </ui:fragment>
 
     </ui:define>
 

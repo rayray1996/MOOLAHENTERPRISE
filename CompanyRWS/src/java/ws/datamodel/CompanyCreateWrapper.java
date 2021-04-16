@@ -10,6 +10,7 @@ import ejb.entity.PaymentEntity;
 import ejb.entity.PointOfContactEntity;
 import ejb.entity.ProductEntity;
 import ejb.entity.RefundEntity;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,5 +46,4 @@ public class CompanyCreateWrapper {
     public void setListOfPointOfContacts(List<PointOfContactEntity> listOfPointOfContacts) {
         this.listOfPointOfContacts = listOfPointOfContacts;
     }
-
 }

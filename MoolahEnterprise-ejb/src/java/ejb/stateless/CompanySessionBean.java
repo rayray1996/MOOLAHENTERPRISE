@@ -94,13 +94,15 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
     private SessionContext sessionContext;
 
     private TimerService timerService;
+    
+    
 
     public CompanySessionBean() {
         validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
-
     }
 
+    
     @PostConstruct
     public void init() {
         timerService = sessionContext.getTimerService();

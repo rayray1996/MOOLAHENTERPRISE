@@ -10,15 +10,44 @@
     <ui:define name="content" >   
         <h:outputStylesheet library="css" name="default.css" />
         <style>
-            .save_monthly{
+            .save_monthly1{
                 width:25%;
                 border:1px solid grey;
                 border-radius:20px;
                 text-align: center;
                 padding:2%;
-                font-size:1.2em;
+                font-size:1.3em;
+                background: url("../resources/images/financial-calculator-time2.jpg");
+                background-repeat: no-repeat;
+                background-size: 500px 280px;            
+                background-position: center;
             }
 
+            .save_monthly2{
+                width:25%;
+                border:1px solid grey;
+                border-radius:20px;
+                text-align: center;
+                padding:2%;
+                font-size:1.3em;
+                background: url("../resources/images/financial-calculator-calculate2.jpg");
+                background-repeat: no-repeat;
+                background-size: 500px 280px;            
+                background-position: center;
+            }
+
+            .save_monthly3{
+                width:25%;
+                border:1px solid grey;
+                border-radius:20px;
+                text-align: center;
+                padding:2%;
+                font-size:1.3em;
+                background: url("../resources/images/financial-calculator-savings2.jpg");
+                background-repeat: no-repeat;
+                background-size: 500px 280px;            
+                background-position: center;
+            }
         </style>
         <br/>
         <br/>
@@ -27,7 +56,7 @@
         <br/>
         <h1 style="text-align:center;" class="pageHeader">What do you wish to calculate?</h1>
         <h:form>
-            <div class="save_monthly" style="margin-top:2%; margin-left:2%;">
+            <div class="save_monthly1" style="margin-top:2%; margin-left:2%;">
                 <p>
                     How much do I need to save every month to achieve my financial goal by a certain period of time?
                 </p>
@@ -37,7 +66,7 @@
 
                 <p:commandLink value="Calculate now!" actionListener="#{financialCalculator_HomeManagedBean.monthlySaveToAchieveGoals}"/>
             </div>
-            <div class="save_monthly" style="margin-top:-11.5%; margin-left:35.5%;" >
+            <div class="save_monthly2" style="margin-top:-11.5%; margin-left:35.5%;" >
                 <p>
                     How long will it take for me to save a certain amount based on my current spending and saving habits?
                 </p> 
@@ -47,7 +76,7 @@
 
                 <p:commandLink value="Calculate now!" actionListener="#{financialCalculator_HomeManagedBean.howLongToSaveAmt}" />
             </div>
-            <div class="save_monthly" style="margin-top:-11.5%; margin-left:69%;">
+            <div class="save_monthly3" style="margin-top:-11.5%; margin-left:69%;">
                 <p>
                     How much will I have after saving a certain amount every year over several year?
                 </p>

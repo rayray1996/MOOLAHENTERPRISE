@@ -6,11 +6,11 @@
     </context-param>
     <context-param>
         <param-name>alternatedocroot_1</param-name>
-        <param-value>C:/glassfish-5.1.0-uploadedfiles/uploadedFiles</param-value>
+        <param-value>C:/Users/rayta/OneDrive/Desktop/NUS_Notes/Y2S2/IS3106/Project/MoolahEnterprise/MoolahEnterprise-war/web/resources/images</param-value>
     </context-param>
     <context-param>
         <param-name>primefaces.THEME</param-name>
-        <param-value>cupertino</param-value>
+        <param-value>ui-lightness</param-value>
     </context-param>
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>

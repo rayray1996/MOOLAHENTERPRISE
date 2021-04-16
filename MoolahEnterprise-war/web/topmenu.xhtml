@@ -15,11 +15,11 @@
             margin-top: 10%
         }
         .bodyText{
-            font-size: 14px!important;
+            font-size: 16px!important;
             font-family: sans-serif!important;
         }
         #button .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button{
-            font-size: 14px!important;
+            font-size: 15px!important;
             font-family: sans-serif!important;            
         }
         #currentComparisonCC:comparisonButton .ui-button {
@@ -31,15 +31,34 @@
             margin-left: 227%;
             margin-top: -14%;
             width: 109%;
+        }
 
+        .menuLabel {
+            font-family: sans-serif; font-size: 16px;
+        }
+
+        .ui-menuitem-link {
+            font-weight:bold; 
+            font-family: sans-serif; 
+            font-size: 16px;
+            display: block;
+            width: 92%;
+            outline: 0;
+            text-decoration: none;
+            font-weight: 400;
+            border: solid 1px transparent;
+            float: left;
+            line-height: 16px;
+            padding: .3em;
+            cursor: pointer;
         }
     </style>
 
     <header>
         <h:outputStylesheet library="css" name="default.css" />
-        
+
         <h:link class="companyLogo" style="float:left; " outcome="/index.xhtml" >
-            <p:graphicImage library="images" name="c1_logo.png" height="50" width="20" alt="Moolah" style="width:130%; height:15%; margin-top:-31%; margin-left:18%;" />
+            <p:graphicImage library="images" name="Moolah Enterprise Logo Transparent.svg" height="50" width="20" alt="Moolah" style="width:100%; height:15%; margin-top:-31%; margin-left:12%;" />
         </h:link>
 
         <h:panelGroup rendered="#{sessionScope.isLogin == false || sessionScope.isLogin == NULL}">
@@ -48,11 +67,11 @@
                 <p:growl>
                     <p:autoUpdate />
                 </p:growl>
-                <p:megaMenu orientation="horizontal" autoDisplay="false" class="bodyText" style="height:4.2%; width:40%; margin-left:22%; margin-top:3%;font-size:14px;">
+                <p:megaMenu orientation="horizontal" autoDisplay="false" class="bodyText" style="background: none; border: none; height:4.2%; width:40%; margin-left:25%; margin-top:3%;font-size:16px;font-family: sans-serif">
 
-                    <p:menuitem value="&nbsp;&nbsp;&nbsp;Home&nbsp;&nbsp;&nbsp;" outcome="/index.xhtml"/>
-                    <p:menuitem value="&nbsp;&nbsp;&nbsp;About Us&nbsp;&nbsp;&nbsp;" outcome="/aboutUs.xhtml"/>
-                    <p:menuitem value="&nbsp;&nbsp;&nbsp;Create Account&nbsp;&nbsp;&nbsp;" outcome="/createAccount.xhtml"/>
+                    <p:menuitem class="menuLabel" value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Home&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" outcome="/index.xhtml"/>
+                    <p:menuitem class="menuLabel" value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;About Us&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" outcome="/aboutUs.xhtml"/>
+                    <p:menuitem class="menuLabel" value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create Account&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" outcome="/createAccount.xhtml"/>
 
 
                 </p:megaMenu>
@@ -60,14 +79,14 @@
 
                 <br/>
                 <br/>
-                <div style="float:right; width:18%;font-size:14px;margin-top:-6%;margin-right:0%;" class="bodyText">
+                <div style="width:18%;font-size:16px;margin-top:-6%; margin-left: 75%;" class="bodyText">
                     <p:outputLabel for="email" value="Email" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <p:inputText id="email" value="#{moolahLoginManagedBean.email}" size="16" required="true" requiredMessage="Email is required" maxlength="32">
                         <f:validateLength minimum="4" />
                     </p:inputText>
                     <br/>
                     <br/>
-                    <p:outputLabel for="password" value="Password" />&nbsp;
+                    <p:outputLabel for="password" value="Password" />&nbsp;&nbsp;
                     <p:password id="password" value="#{moolahLoginManagedBean.password}" size="16" required="true" requiredMessage="Password is required" maxlength="32">
                         <f:validateLength minimum="4" />
                     </p:password>
@@ -82,28 +101,28 @@
 
         <h:panelGroup rendered="#{sessionScope.isLogin == true}">
 
-            <p:megaMenu class="bodyText" orientation="horizontal" autoDisplay="false" style="height:4.2%; width:40%; margin-left:22%; margin-top:3%;font-size:14px;font-family: sans-serif">
+            <p:megaMenu class="bodyText" orientation="horizontal" autoDisplay="false" style="background: none; border: none; height:4.2%; width:40%; margin-left:25%; margin-top:3%;font-size:16px;font-family: sans-serif">
 
-                <p:menuitem class="bodyText" value="&nbsp;&nbsp;&nbsp;Home&nbsp;&nbsp;&nbsp;" outcome="/index.xhtml"/>
-                <p:menuitem class="bodyText" value="&nbsp;&nbsp;&nbsp;About Us&nbsp;&nbsp;&nbsp;" outcome="/aboutUs.xhtml"/> 
-                <p:submenu class="bodyText" label="&nbsp;&nbsp;&nbsp;Products&nbsp;&nbsp;&nbsp;">
+                <p:menuitem class="menuLabel" value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Home&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" outcome="/index.xhtml"/>
+                <p:menuitem class="menuLabel" value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;About Us&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" outcome="/aboutUs.xhtml"/> 
+                <p:submenu id="subMenuProduct" label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Products&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;">
                     <p:column>
-                        <p:submenu class="bodyText" label="Products">
-                            <p:menuitem class="bodyText" value="Recommend For Me" outcome="/product/ViewRecommendedProduct.xhtml" />
-                            <p:menuitem class="bodyText" value="Search for Products " outcome="/product/viewAllProduct.xhtml" /></p:submenu>
+                        <p:submenu class="menuLabel" style="font-size: 16px; font-family: sans-serif" label="Products">
+                            <p:menuitem class="menuLabel" value="Recommend For Me" outcome="/product/ViewRecommendedProduct.xhtml" />
+                            <p:menuitem class="menuLabel" value="Search for Products " outcome="/product/viewAllProduct.xhtml" /></p:submenu>
                     </p:column>
                 </p:submenu>
-                <p:menuitem class="bodyText" value="&nbsp;&nbsp;&nbsp;Financial Calculator&nbsp;&nbsp;&nbsp;" outcome="/financialCalculators/financialCalculator_home.xhtml"/>
+                <p:menuitem class="menuLabel" value="&nbsp;&nbsp;&nbsp;Financial Calculator&nbsp;&nbsp;&nbsp;" outcome="/financialCalculators/financialCalculator_home.xhtml"/>
 
 
             </p:megaMenu>
 
 
             <div style="margin-left: 80%; margin-top:-4%;">
-                <h:outputText value="You are login as #{sessionScope.customerEntity.fullName}" />&nbsp;
+                <h:outputText class="bodyText" style="font-size: 16px!important; font-family: sans-serif!important" value="You are logged in as #{sessionScope.customerEntity.fullName}" />&nbsp;
             </div>
             <br/>
-            <div id="comparisonDiv" style="float:right;width:31%">
+            <div id="comparisonDiv" style="margin-left: 67%;width:31%">
                 <ezcomp:currentComparison id="currentComparisonCC"> </ezcomp:currentComparison>
                 <h:form id="logoutForm" class="bodyText">
                     <p:menuButton id="button" value ="My Account" style="height:3.5%; margin-top:-2%;">

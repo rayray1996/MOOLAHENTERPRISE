@@ -20,6 +20,10 @@
                 font-size:14px;
                 font-family: sans-serif;
             }
+/*
+*/           #card #affordTab .ui-widget-header{
+                background: none;
+            }
         </style>
 
         <br/>
@@ -56,8 +60,8 @@
             <p:autoUpdate/>
         </p:growl>
 
-        <div class="card" style="margin: 0 auto;">
-            <p:tabView class="bodyText" style="width:57%!important;text-align: center;margin: 0 auto;">
+        <div id="card" class="card" style="margin: 0 auto;">
+            <p:tabView id="affordTab" class="bodyText" style="width:57%!important;text-align: center;margin: 0 auto;">
                 <p:tab title="Product Details" >
                     <p:panelGrid class="bodyText" columns="2" style="margin-left: auto; width: 60%; margin-right: auto">
                         <p:column>
@@ -199,7 +203,7 @@
 
                 </p:tab>
 
-                <p:tab title="Your Affordability Table">
+                <p:tab id="affordTab" title="Your Affordability Table">
                     <h2 class="bodyText" style="text-align: center">This is a generated affordability table for #{viewProductDetailManagedBean.product.productName}</h2>
                     <p class="bodyText" style=" margin-left: 18%; text-align: justify; font-size: 10px!important">**First year calculation is based on current cash on hand and investments. Subsequent years has accounted for the yearly expense and yearly income.</p>
                     <p:dataTable id="affordabilityTable" widgetVar="affordTable" value="#{viewProductDetailManagedBean.listOfAffordability}" 

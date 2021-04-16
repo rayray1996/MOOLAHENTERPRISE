@@ -289,16 +289,17 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         BigDecimal yearThreeCapital = nextThreeYearsOfCapital.get(2);
 
         String smokerString = "";
+        System.out.println("customer smoker =" + customer.getSmoker());
         if (customer.getSmoker()) {
-            smokerString = "(p.isAvailableToSmoker = true)";
+            smokerString = "AND (p.isAvailableToSmoker = true)";
         } else {
-            smokerString = "(p.isAvailableToSmoker = true and p.isAvailableToSmoker = false)";
+            smokerString = "AND (p.isAvailableToSmoker = true or p.isAvailableToSmoker = false)";
         }
         /*
         Recommend products based on 3 years affordability
          */
         // need to recommend products at their age
-        Query query = em.createQuery("SELECT p FROM ProductEntity p, IN (p.listOfPremium) premium WHERE p.isDeleted = false AND p.company.isDeleted = false AND p.company.isDeactivated = false AND :age >= premium.minAgeGroup AND :age <= premium.maxAgeGroup AND :yearOne >= premium.premiumValue AND :yearTwo >= premium.premiumValue AND :yearThree >= premium.premiumValue AND " + smokerString);
+        Query query = em.createQuery("SELECT p FROM ProductEntity p, IN (p.listOfPremium) premium WHERE p.isDeleted = false AND p.company.isDeleted = false AND p.company.isDeactivated = false AND :age >= premium.minAgeGroup AND :age <= premium.maxAgeGroup AND :yearOne >= premium.premiumValue AND :yearTwo >= premium.premiumValue AND :yearThree >= premium.premiumValue " + smokerString);
         query.setParameter("age", age);
         query.setParameter("yearOne", yearOneCapital);
         query.setParameter("yearTwo", yearOneCapital);
