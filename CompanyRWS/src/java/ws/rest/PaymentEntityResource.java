@@ -306,6 +306,7 @@ public class PaymentEntityResource {
                    listOfPaymentWrapper.add(new PaymentWrapper());
                    listOfPaymentWrapper.get(index).setCreditPaymentEntity((CreditPaymentEntity) pe);
                    listOfPaymentWrapper.get(index).setPaymentEntity(pe);
+                   index++;
                }
             }
             

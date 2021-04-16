@@ -7,16 +7,21 @@ package ejb.Singleton;
 
 import ejb.entity.AssetEntity;
 import ejb.entity.CategoryPricingEntity;
+import ejb.entity.ClickThroughEntity;
 import ejb.entity.CompanyEntity;
 import ejb.entity.CustomerEntity;
 import ejb.entity.EndowmentEntity;
 import ejb.entity.FeatureEntity;
+import ejb.entity.MonthlyPaymentEntity;
+import ejb.entity.PaymentEntity;
 import ejb.entity.PointOfContactEntity;
 import ejb.entity.PremiumEntity;
 import ejb.entity.ProductEntity;
+import ejb.entity.ProductLineItemEntity;
 import ejb.entity.RiderEntity;
 import ejb.entity.TermLifeProductEntity;
 import ejb.entity.WholeLifeProductEntity;
+import ejb.stateless.ClickthroughSessionBeanLocal;
 import ejb.stateless.CompanySessionBeanLocal;
 import ejb.stateless.CustomerSessionBeanLocal;
 import ejb.stateless.EmailSessionBeanLocal;
@@ -28,8 +33,10 @@ import ejb.stateless.RiderSessionBeanLocal;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -38,7 +45,14 @@ import javax.ejb.Singleton;
 import javax.ejb.LocalBean;
 import javax.ejb.Startup;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
+import javax.persistence.Query;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import util.enumeration.CategoryEnum;
 import util.enumeration.EndowmentProductEnum;
 import util.enumeration.GenderEnum;
@@ -54,10 +68,14 @@ import util.exception.FeatureAlreadyExistsException;
 import util.exception.FeatureCreationException;
 import util.exception.InvalidPointOfContactCreationException;
 import util.exception.InvalidProductCreationException;
+import util.exception.MonthlyPaymentAlreadyExistsException;
+import util.exception.MonthlyPaymentException;
 import util.exception.PointOfContactAlreadyExistsException;
 import util.exception.PremiumAlreadyExistException;
 import util.exception.PremiumCreationException;
 import util.exception.ProductAlreadyExistsException;
+import util.exception.ProductLineItemAlreadyExistException;
+import util.exception.ProductLineItemException;
 import util.exception.ProductNotFoundException;
 import util.exception.RiderAlreadyExistException;
 import util.exception.RiderCreationException;
@@ -71,6 +89,9 @@ import util.exception.UnknownPersistenceException;
 @LocalBean
 @Startup
 public class DataInitSessionBean {
+
+    @EJB
+    private ClickthroughSessionBeanLocal clickthroughSessionBean;
 
     @EJB
     private PremiumSessionBeanLocal premiumSessionBean;
@@ -101,6 +122,21 @@ public class DataInitSessionBean {
 
     @PostConstruct
     public void dataInit() {
+        int year = 2019;
+        int month = 3;
+        int day = 10;
+
+        List<PaymentEntity> listOfPayment = em.createQuery("SELECT c FROM PaymentEntity c where c.company.companyId=2 AND c.dateGenerated<>NULL").getResultList();
+        for (PaymentEntity pay : listOfPayment) {
+            if (month % 12 == 0) {
+                year += 1;
+                month = 0;
+            }
+            Calendar cal = new GregorianCalendar();
+            cal.set(year, month, day);
+            pay.setDateTransacted(cal);
+            month++;
+        }
 
         if (em.find(CompanyEntity.class, 1L) == null) {
             try {
@@ -150,7 +186,7 @@ public class DataInitSessionBean {
                 List<FeatureEntity> listOfFeature = new ArrayList<>();
                 List<RiderEntity> listOfRiders = new ArrayList<>();
                 List<PremiumEntity> listOfPremium = new ArrayList<>();
-                 List<PremiumEntity> listOfSmokerPremium = new ArrayList<>();
+                List<PremiumEntity> listOfSmokerPremium = new ArrayList<>();
 
 //              BigDecimal riderPremiumValue, String riderDescription
                 RiderEntity rider01 = new RiderEntity("95% Coverage with 5% Co-payment", BigDecimal.valueOf(1200), "This rider is for Alibaba Endowment Product 01");
@@ -1022,10 +1058,118 @@ public class DataInitSessionBean {
 
                 coy2TermLifeProduct03 = productSessionBean.createProductListing(coy2TermLifeProduct03, tencentCompany.getCompanyId(), listOfcoy2Riders10, listOfcoy2Premium10, new ArrayList<PremiumEntity>(), listOfcoy2Features10);
 
+                automatedMonthlyInvoice();
+
             } catch (CompanyAlreadyExistException | UnknownPersistenceException | CompanyCreationException | PointOfContactAlreadyExistsException
                     | InvalidPointOfContactCreationException | CustomerAlreadyExistException | CustomerCreationException | ProductAlreadyExistsException | InvalidProductCreationException ex) {
                 System.out.println(ex.getMessage());
 
+            }
+        }
+
+    }
+
+    public void automatedMonthlyInvoice() {
+        int year = 2018;
+        int month = 0;
+        int day = 7;
+        try {
+            System.out.println("*****************************************Invoice triggered!");
+            for (int i = 0; i < 100; i++) {
+                List<CompanyEntity> listOfCompanies = companySessionBean.retrieveAllActiveCompanies();
+                for (CompanyEntity company : listOfCompanies) {
+                    List<ProductEntity> listOfProducts = productSessionBean.retrieveListOfProductByCompany(company.getCompanyEmail());
+                    if (month % 12 == 0) {
+                        year += 1;
+                        month = 0;
+                    }
+                    Calendar date = new GregorianCalendar();
+                    date.set(year, month, day);
+
+                    //This monthly payment has yet to be paid by the company
+                    MonthlyPaymentEntity monthlyPayment = new MonthlyPaymentEntity(date, company);
+                    monthlyPayment = createMonthlyPayment(monthlyPayment);
+                    company.getListOfPayments().add(monthlyPayment);
+                    monthlyPayment.setPaymentNumber(generatePaymentNumber());
+                    for (ProductEntity product : listOfProducts) {
+
+                        ClickThroughEntity clickThrough = product.getClickThroughInfo();
+                        BigInteger monthlyClicks = clickThrough.getMonthCounter();
+                        BigInteger monthlySubtotal = clickthroughSessionBean.calculateMonthlyProductPrice(product.getProductId());
+                        BigInteger monthlySubscription = product.getProductCategoryPricing().getFixedSubscriptionCredit();
+
+                        ProductLineItemEntity newProdLineItem = new ProductLineItemEntity(product, monthlyClicks, monthlySubtotal, monthlySubscription);
+                        newProdLineItem = createProductLineItem(newProdLineItem);
+                        monthlyPayment.getListOfProductLineItems().add(newProdLineItem);
+
+                        BigInteger newMonthlySubtotal = monthlyPayment.getTotalPayable().add(newProdLineItem.getMonthlySubtotalCredit());
+                        monthlyPayment.setTotalPayable(newMonthlySubtotal);
+
+                    }
+                    month++;
+
+                    //  System.out.println("Check prior to email sending");
+                    //  emailSessionBean.emailMonthlyPaymentInvoice(monthlyPayment, company.getCompanyEmail());
+                    //    System.out.println("Email sent for: " + company.getCompanyName());
+                }
+            }
+        } catch (CompanyDoesNotExistException | MonthlyPaymentAlreadyExistsException | UnknownPersistenceException | MonthlyPaymentException
+                | ProductNotFoundException | ProductLineItemAlreadyExistException | ProductLineItemException ex) {
+            System.out.println(ex.getMessage());
+        }
+
+    }
+
+    public MonthlyPaymentEntity createMonthlyPayment(MonthlyPaymentEntity newMonthlyPayment) throws MonthlyPaymentAlreadyExistsException, UnknownPersistenceException, MonthlyPaymentException {
+        try {
+            em.persist(newMonthlyPayment);
+            em.flush();
+
+            return newMonthlyPayment;
+        } catch (PersistenceException ex) {
+            if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
+                if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
+                    throw new MonthlyPaymentAlreadyExistsException("Monthly Payment already exists!");
+                } else {
+                    throw new UnknownPersistenceException(ex.getMessage());
+                }
+            } else {
+                throw new UnknownPersistenceException(ex.getMessage());
+
+            }
+        }
+    }
+
+    private String generatePaymentNumber() {
+        Query query = em.createQuery("SELECT MAX(p.paymentId) FROM PaymentEntity p");
+        try {
+            Long paymentId = (Long) query.getSingleResult();
+            paymentId++;
+            String paymentNumber = "" + paymentId;
+            while (paymentNumber.length() < 8) {
+                paymentNumber = "0" + paymentNumber;
+            }
+            return "A" + paymentNumber;
+        } catch (NoResultException ex) {
+            return "A00000001";
+        }
+    }
+
+    public ProductLineItemEntity createProductLineItem(ProductLineItemEntity newProductLineItem) throws ProductLineItemAlreadyExistException, UnknownPersistenceException, ProductLineItemException {
+        try {
+            em.persist(newProductLineItem);
+            em.flush();
+
+            return newProductLineItem;
+        } catch (PersistenceException ex) {
+            if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
+                if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
+                    throw new ProductLineItemAlreadyExistException("Product Line Item already exists!");
+                } else {
+                    throw new UnknownPersistenceException(ex.getMessage());
+                }
+            } else {
+                throw new UnknownPersistenceException(ex.getMessage());
             }
         }
 
