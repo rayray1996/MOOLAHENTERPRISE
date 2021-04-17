@@ -33,8 +33,15 @@ public class ClickthroughSessionBean implements ClickthroughSessionBeanLocal {
         if (product == null) {
             throw new ProductNotFoundException("Product is not found");
         } else {
-            product.getClickThroughInfo().getMonthCounter().add(BigInteger.ONE);
-            product.getClickThroughInfo().getOverallCounter().add(BigInteger.ONE);
+
+            BigInteger newCounterMonth = product.getClickThroughInfo().getMonthCounter().add(BigInteger.ONE);
+            product.getClickThroughInfo().setMonthCounter(newCounterMonth);
+            System.out.println("Clickthrough month count: " + product.getClickThroughInfo().getMonthCounter());
+
+            BigInteger newCounterYear = product.getClickThroughInfo().getOverallCounter().add(BigInteger.ONE);
+            product.getClickThroughInfo().setOverallCounter(newCounterYear);
+            System.out.println("Clickthrough overall count: " + product.getClickThroughInfo().getOverallCounter());
+
         }
     }
 

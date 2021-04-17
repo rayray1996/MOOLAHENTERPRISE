@@ -196,6 +196,10 @@ public class InvoiceSessionBean implements InvoiceSessionBeanLocal {
 
                     BigInteger newMonthlySubtotal = monthlyPayment.getTotalPayable().add(newProdLineItem.getMonthlySubtotalCredit());
                     monthlyPayment.setTotalPayable(newMonthlySubtotal);
+                    
+                    clickThrough.setMonthCounter(BigInteger.ZERO);
+                    System.out.println("Reset monthly counter: " + clickThrough.getMonthCounter());
+                    System.out.println("ClickThrough payment counter: " + monthlyClicks);
 
                 }
                 System.out.println("Check prior to email sending");

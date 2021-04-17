@@ -23,11 +23,6 @@
         </style>
         <h:outputStylesheet library="css" name="default.css" />
         <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces"/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
 
         <div>
             <h1 style="text-align: center" class="pageHeader">My Profile</h1> 
@@ -36,9 +31,9 @@
 
 
 
-        <h:form id="myProfileForm">
+        <h:form id="myProfileForm" style="text-align: center">
             <p:commandButton style="margin-left: 70%" icon="pi pi-pencil" id="editProfile" update="myProfileForm" actionListener="#{myProfileManagedBean.updateForm}" rendered="#{myProfileManagedBean.editable == false}"/>
-            <p:panelGrid style="margin: 0 auto;" styleClass="noBorders" rendered="#{myProfileManagedBean.editable == false}" >
+            <p:panelGrid style="margin-left: auto; margin-right: auto" styleClass="noBorders" rendered="#{myProfileManagedBean.editable == false}" >
 
 
                 <p:row styleClass="panelGrid_row_height_account_registration">
@@ -123,7 +118,7 @@
                 </p:row>
             </p:panelGrid>
 
-            <p:panelGrid style="margin: 0 auto;" styleClass="noBorders"  rendered="#{myProfileManagedBean.editable == true}" >
+            <p:panelGrid style="margin-left: auto; margin-right: auto" styleClass="noBorders"  rendered="#{myProfileManagedBean.editable == true}" >
 
 
                 <p:row styleClass="panelGrid_row_height_account_registration">
@@ -209,13 +204,11 @@
                     </p:column>
                 </p:row>
 
-                <p:row styleClass="panelGrid_row_height_account_registration">
-                    <p:column style="text-align: center" colspan="2">
-                        <p:commandButton id="updateProfile" value="Update My Profile" type="submit" update="myProfileForm" actionListener="#{myProfileManagedBean.updateMyProfile}"/> &nbsp;
-                    </p:column>
-                </p:row>
 
             </p:panelGrid>
+            <br/>
+            <p:commandButton id="updateProfile" value="Update My Profile" type="submit" update="myProfileForm" rendered="#{myProfileManagedBean.editable == true}" actionListener="#{myProfileManagedBean.updateMyProfile}"/> &nbsp;
+
 
         </h:form>
 

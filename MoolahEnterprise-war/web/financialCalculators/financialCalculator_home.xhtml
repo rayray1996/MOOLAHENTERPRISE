@@ -19,7 +19,7 @@
                 font-size:1.3em;
                 background: url("../resources/images/financial-calculator-time2.jpg");
                 background-repeat: no-repeat;
-                background-size: 500px 280px;            
+                background-size: 550px 300px;            
                 background-position: center;
             }
 
@@ -32,7 +32,7 @@
                 font-size:1.3em;
                 background: url("../resources/images/financial-calculator-calculate2.jpg");
                 background-repeat: no-repeat;
-                background-size: 500px 280px;            
+                background-size: 550px 300px;            
                 background-position: center;
             }
 
@@ -45,18 +45,13 @@
                 font-size:1.3em;
                 background: url("../resources/images/financial-calculator-savings2.jpg");
                 background-repeat: no-repeat;
-                background-size: 500px 280px;            
+                background-size: 550px 300px;            
                 background-position: center;
             }
         </style>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
         <h1 style="text-align:center;" class="pageHeader">What do you wish to calculate?</h1>
         <h:form>
-            <div class="save_monthly1" style="margin-top:2%; margin-left:2%;">
+            <div class="save_monthly1" style="margin-top:5.25%; margin-left:2%; font-weight: bolder">
                 <p>
                     How much do I need to save every month to achieve my financial goal by a certain period of time?
                 </p>
@@ -64,9 +59,9 @@
                 <br/>
                 <br/>
 
-                <p:commandLink value="Calculate now!" actionListener="#{financialCalculator_HomeManagedBean.monthlySaveToAchieveGoals}"/>
+                <p:commandLink value="CALCULATE NOW!" actionListener="#{financialCalculator_HomeManagedBean.monthlySaveToAchieveGoals}"/>
             </div>
-            <div class="save_monthly2" style="margin-top:-11.5%; margin-left:35.5%;" >
+            <div class="save_monthly2" style="margin-top:-11.90%; margin-left:35.5%; font-weight: bolder" >
                 <p>
                     How long will it take for me to save a certain amount based on my current spending and saving habits?
                 </p> 
@@ -74,16 +69,16 @@
                 <br/>
                 <br/>
 
-                <p:commandLink value="Calculate now!" actionListener="#{financialCalculator_HomeManagedBean.howLongToSaveAmt}" />
+                <p:commandLink value="CALCULATE NOW!" actionListener="#{financialCalculator_HomeManagedBean.howLongToSaveAmt}" />
             </div>
-            <div class="save_monthly3" style="margin-top:-11.5%; margin-left:69%;">
+            <div class="save_monthly3" style="margin-top:-11.85%; margin-left:69%; font-weight: bolder">
                 <p>
                     How much will I have after saving a certain amount every year over several year?
                 </p>
                 <br/>
                 <br/>
                 <br/>
-                <p:commandLink value="Calculate now!" actionListener="#{financialCalculator_HomeManagedBean.yearlyAmtAfterSaving}"/>
+                <p:commandLink value="CALCULATE NOW!" actionListener="#{financialCalculator_HomeManagedBean.yearlyAmtAfterSaving}"/>
 
             </div>
 

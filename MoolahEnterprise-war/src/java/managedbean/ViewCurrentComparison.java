@@ -166,7 +166,7 @@ public class ViewCurrentComparison implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "This comparison is not unique", null));
         }
     }
-
+    
     public void redirectToViewRecommendedProduct() throws IOException {
         FacesContext.getCurrentInstance().getExternalContext().redirect("../product/ViewRecommendedProduct.xhtml");
     }
