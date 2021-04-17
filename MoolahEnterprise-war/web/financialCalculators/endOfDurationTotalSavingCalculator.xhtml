@@ -34,7 +34,7 @@
                 <p:inputNumber  minValue="0" decimalPlaces="2" class="endOfDurationTotalSaving_calculator_input" value="#{endOfDUrationTotalSavingCalculatorManagedBean.currentlySaving}" placeholder="Enter your annual saving amount" required="true" requiredMessage="Annual saving amount is required!"/><br/><br/>
                 <p:outputLabel value="No of years time to achieve the stated amount?"/><br/><br/>
                 <p:inputNumber  minValue="1"  decimalPlaces="0" class="endOfDurationTotalSaving_calculator_input" value="#{endOfDUrationTotalSavingCalculatorManagedBean.noOfYear}" placeholder="Enter your no of year" required="true" requiredMessage="No of year is required!"/><br/><br/>
-                <p:commandButton type="submit" actionListener="#{endOfDUrationTotalSavingCalculatorManagedBean.computeEndOfDurationTotalAmt}" value ="Compute" /><br/><br/>
+                <p:commandButton type="submit" actionListener="#{endOfDUrationTotalSavingCalculatorManagedBean.computeEndOfDurationTotalAmt}" value ="Compute" update="@form"/><br/><br/>
                 <h:panelGroup rendered="#{(endOfDUrationTotalSavingCalculatorManagedBean.totalAmt != null and endOfDUrationTotalSavingCalculatorManagedBean.totalAmt>=0)}">
                     <p:outputLabel value="By saving $#{endOfDUrationTotalSavingCalculatorManagedBean.currentlySaving} every year, you are expected to have $#{endOfDUrationTotalSavingCalculatorManagedBean.totalAmt} after #{endOfDUrationTotalSavingCalculatorManagedBean.noOfYear} years!"/>&nbsp;
                 </h:panelGroup>

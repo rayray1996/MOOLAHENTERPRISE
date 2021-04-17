@@ -21,6 +21,8 @@ import ejb.entity.WholeLifeProductEntity;
 import ejb.stateless.CompanySessionBeanLocal;
 import ejb.stateless.ProductSessionBeanLocal;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -666,6 +668,42 @@ public class ProductResource {
             return Response.status(Response.Status.BAD_REQUEST).entity("Invalid create new record request").build();
         }
 
+    }
+
+    @Path("filterProductByDateCreated")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveSpecificMonthlyCreditHistoricalTransactions(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate, @QueryParam("productName") String productName, @QueryParam ("productCategory") String productCategory) {
+        try {
+            CompanyEntity company = companySessionBeanLocal.login(email, password);
+            if (company == null) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Invalid account").build();
+            }
+            String[] splitStartDate = startDate.split("-");
+            String[] splitEndDate = endDate.split("-");
+            Calendar dStartDate = new GregorianCalendar();
+            dStartDate.set(Integer.parseInt(splitStartDate[0]), Integer.parseInt(splitStartDate[1]) - 1, Integer.parseInt(splitStartDate[2]), 0, 0);
+
+            Calendar dEndDate = new GregorianCalendar();
+            dEndDate.set(Integer.parseInt(splitEndDate[0]), Integer.parseInt(splitEndDate[1]) - 1, Integer.parseInt(splitEndDate[2]), 0, 0);
+            List<ProductEntity> productList = productSessionBeanLocal.retrieveSpecificHistoricalTransactions(dStartDate, dEndDate, company.getCompanyId(), productName, productCategory);
+            for (ProductEntity p : productList) {
+                p = nullifyProduct(p);
+
+            }
+
+            GenericEntity<List<ProductEntity>> genericEntity = new GenericEntity<List<ProductEntity>>(productList) {
+            };
+
+            return Response.status(Status.OK).entity(genericEntity).build();
+        } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid account").build();
+        } catch (Exception ex) {
+            return Response.status(Response.Status.FORBIDDEN).entity("ex.getMessage()" + ex.getMessage()).build();
+        }
+//        } catch (Exception ex) {
+//            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+//        }
     }
 
     private ProductSessionBeanLocal lookupProductSessionBeanLocal() {

@@ -168,7 +168,7 @@ public class InvoiceSessionBean implements InvoiceSessionBeanLocal {
     //    Actual Deployment Timer 
     //    @Schedule(hour = "7", minute = "0", second = "0", dayOfMonth = "1", month = "*", year = "*", persistent = false)
     // Timer for demo
-    @Schedule(hour = "*", minute = "*/30", second = "0", dayOfMonth = "*", month = "*", year = "*", persistent = false)
+    @Schedule(hour = "12", minute = "*", second = "0", dayOfMonth = "*", month = "*", year = "*", persistent = false)
     @Override
     public void automatedMonthlyInvoice() {
         try {
