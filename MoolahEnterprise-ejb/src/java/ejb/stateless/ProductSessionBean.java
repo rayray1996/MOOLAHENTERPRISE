@@ -19,6 +19,7 @@ import ejb.entity.TermLifeProductEntity;
 import ejb.entity.WholeLifeProductEntity;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -129,9 +130,9 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         ProductEntity product = em.find(ProductEntity.class, productId);
         if (product == null) {
             throw new ProductNotFoundException("Product is not found");
-        } else if (product.isIsDeleted() == true){
+        } else if (product.isIsDeleted() == true) {
             throw new ProductIsDeletedException("Product has been deleted!");
-        }  else {
+        } else {
             product.getListOfAdditionalFeatures().size();
             product.getListOfPremium().size();
             product.getListOfRiders().size();
@@ -153,6 +154,32 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
             p.getListOfSmokerPremium().size();
         }
 
+        return results;
+    }
+
+    @Override
+    public List<ProductEntity> retrieveSpecificHistoricalTransactions(Calendar startDate, Calendar endDate, Long coyId) {
+        startDate.set(Calendar.MINUTE, 0);
+        startDate.set(Calendar.HOUR, 0);
+        startDate.set(Calendar.SECOND, 0);
+        
+        endDate.set(Calendar.MINUTE, 59);
+        endDate.set(Calendar.HOUR, 23);
+        endDate.set(Calendar.SECOND, 59);
+        
+        System.out.println("******************startDate:" + startDate.getTime() + " endDate:" + endDate.getTime() + " coyId" + coyId);
+        Query query = em.createQuery("SELECT p FROM ProductEntity p where p.company.companyId = :coyId AND p.productDateCreated >= :startDate AND p.productDateCreated <= :endDate order by p.productDateCreated ASC ");
+        query.setParameter("startDate", startDate);
+        query.setParameter("endDate", endDate);
+        query.setParameter("coyId", coyId);
+        List<ProductEntity> results = query.getResultList();
+
+        for (ProductEntity p : results) {
+            p.getListOfAdditionalFeatures().size();
+            p.getListOfPremium().size();
+            p.getListOfRiders().size();
+            p.getListOfSmokerPremium().size();
+        }
         return results;
     }
 

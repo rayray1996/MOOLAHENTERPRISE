@@ -122,6 +122,21 @@ public class DataInitSessionBean {
 
     @PostConstruct
     public void dataInit() {
+        int syear = 2018;
+        int smonth = 0;
+        int sday = 7;
+        List<ProductEntity> lisOfProduct = em.createQuery("SELECT p FROM ProductEntity p").getResultList();
+        for (ProductEntity p : lisOfProduct) {
+            if (smonth % 12 == 0) {
+                syear += 1;
+                smonth = 0;
+            }
+            Calendar c = new GregorianCalendar();
+            c.set(syear, smonth, sday);
+            p.setProductDateCreated(c);
+            smonth++;
+        }
+
         int year = 2019;
         int month = 3;
         int day = 10;
