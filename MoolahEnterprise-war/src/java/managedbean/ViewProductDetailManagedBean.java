@@ -16,7 +16,6 @@ import ejb.stateless.PremiumSessionBeanLocal;
 import ejb.stateless.ProductSessionBeanLocal;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -141,11 +140,31 @@ public class ViewProductDetailManagedBean implements Serializable {
                 }
             }
 
-            AffordabilityWrapper tempWrapper = new AffordabilityWrapper(listOfAssetCust.get(0), listOfAssetCust.get(0).subtract(custPremiums.get(0).getPremiumValue()));
+            AffordabilityWrapper tempWrapper = new AffordabilityWrapper();
+            AffordabilityWrapper tempWrapper2 = new AffordabilityWrapper();
+            AffordabilityWrapper tempWrapper3 = new AffordabilityWrapper();
+
+            if (custPremiums.get(0) != null) {
+                tempWrapper = new AffordabilityWrapper(listOfAssetCust.get(0), listOfAssetCust.get(0).subtract(custPremiums.get(0).getPremiumValue()));
+            } else {
+                tempWrapper = new AffordabilityWrapper(new BigDecimal("-1"), new BigDecimal("-1"));
+            }
             listOfAffordability.add(tempWrapper);
-            AffordabilityWrapper tempWrapper2 = new AffordabilityWrapper(listOfAssetCust.get(1).subtract(custPremiums.get(0).getPremiumValue()), listOfAssetCust.get(1).subtract(custPremiums.get(0).getPremiumValue()).subtract(custPremiums.get(1).getPremiumValue()));
+
+            if (custPremiums.get(1) != null) {
+                tempWrapper2 = new AffordabilityWrapper(listOfAssetCust.get(1).subtract(custPremiums.get(0).getPremiumValue()), listOfAssetCust.get(1).subtract(custPremiums.get(0).getPremiumValue()).subtract(custPremiums.get(1).getPremiumValue()));
+            } else {
+                tempWrapper = new AffordabilityWrapper(new BigDecimal("-1"), new BigDecimal("-1"));
+            }
+
             listOfAffordability.add(tempWrapper2);
-            AffordabilityWrapper tempWrapper3 = new AffordabilityWrapper(listOfAssetCust.get(2).subtract(custPremiums.get(0).getPremiumValue()).subtract(custPremiums.get(1).getPremiumValue()), listOfAssetCust.get(2).subtract(custPremiums.get(0).getPremiumValue()).subtract(custPremiums.get(1).getPremiumValue()).subtract(custPremiums.get(2).getPremiumValue()));
+
+            if (custPremiums.get(2) != null) {
+                tempWrapper3 = new AffordabilityWrapper(listOfAssetCust.get(2).subtract(custPremiums.get(0).getPremiumValue()).subtract(custPremiums.get(1).getPremiumValue()), listOfAssetCust.get(2).subtract(custPremiums.get(0).getPremiumValue()).subtract(custPremiums.get(1).getPremiumValue()).subtract(custPremiums.get(2).getPremiumValue()));
+            } else {
+                tempWrapper3 = new AffordabilityWrapper(new BigDecimal("-1"), new BigDecimal("-1"));
+            }
+
             listOfAffordability.add(tempWrapper3);
 
             customerLikeProduct();
