@@ -1,4 +1,4 @@
-/*
+    /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -168,7 +168,7 @@ public class InvoiceSessionBean implements InvoiceSessionBeanLocal {
     //    Actual Deployment Timer 
     //    @Schedule(hour = "7", minute = "0", second = "0", dayOfMonth = "1", month = "*", year = "*", persistent = false)
     // Timer for demo
-    @Schedule(hour = "0", minute = "0", second = "0", dayOfMonth = "*", month = "*", year = "*", persistent = false)
+//    @Schedule(hour = "*", minute = "*/1", second = "0", dayOfMonth = "*", month = "*", year = "*", persistent = false)
     @Override
     public void automatedMonthlyInvoice() {
         try {

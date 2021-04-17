@@ -209,11 +209,13 @@
                         </p:column>
 
                         <p:column headerText="Liquid Assets" style="width: 20% !important; ">
-                            <h:outputText value="$#{afford.affordability}" />
+                            <h:outputText rendered="#{afford.affordability lt 1}" value="nil" />
+                            <h:outputText rendered="#{afford.affordability gt 0}" value="#{afford.affordability}" />
                         </p:column>                            
 
                         <p:column headerText="After paying premium" style="width: 20% !important; ">
-                            <h:outputText value="$#{afford.amountAfterPremium}" />
+                            <h:outputText rendered="#{afford.amountAfterPremium lt 1}" value="$#{afford.amountAfterPremium}" />
+                            <h:outputText rendered="#{afford.amountAfterPremium gt 0}" value="#{afford.amountAfterPremium}" />
                         </p:column>
 
                     </p:dataTable>
