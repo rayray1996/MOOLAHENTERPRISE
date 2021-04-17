@@ -673,7 +673,7 @@ public class ProductResource {
     @Path("filterProductByDateCreated")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveSpecificMonthlyCreditHistoricalTransactions(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate) {
+    public Response retrieveSpecificMonthlyCreditHistoricalTransactions(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate, @QueryParam("productName") String productName, @QueryParam ("productCategory") String productCategory) {
         try {
             CompanyEntity company = companySessionBeanLocal.login(email, password);
             if (company == null) {
@@ -686,7 +686,7 @@ public class ProductResource {
 
             Calendar dEndDate = new GregorianCalendar();
             dEndDate.set(Integer.parseInt(splitEndDate[0]), Integer.parseInt(splitEndDate[1]) - 1, Integer.parseInt(splitEndDate[2]), 0, 0);
-            List<ProductEntity> productList = productSessionBeanLocal.retrieveSpecificHistoricalTransactions(dStartDate, dEndDate, company.getCompanyId());
+            List<ProductEntity> productList = productSessionBeanLocal.retrieveSpecificHistoricalTransactions(dStartDate, dEndDate, company.getCompanyId(), productName, productCategory);
             for (ProductEntity p : productList) {
                 p = nullifyProduct(p);
 

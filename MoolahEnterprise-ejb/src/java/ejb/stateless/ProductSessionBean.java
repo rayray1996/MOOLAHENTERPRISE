@@ -16,6 +16,7 @@ import ejb.entity.PremiumEntity;
 import ejb.entity.ProductEntity;
 import ejb.entity.RiderEntity;
 import ejb.entity.TermLifeProductEntity;
+import ejb.entity.TermLifeProductEntity_;
 import ejb.entity.WholeLifeProductEntity;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -158,29 +159,74 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
     }
 
     @Override
-    public List<ProductEntity> retrieveSpecificHistoricalTransactions(Calendar startDate, Calendar endDate, Long coyId) {
+    public List<ProductEntity> retrieveSpecificHistoricalTransactions(Calendar startDate, Calendar endDate, Long coyId, String productName, String productCategory) {
         startDate.set(Calendar.MINUTE, 0);
         startDate.set(Calendar.HOUR, 0);
         startDate.set(Calendar.SECOND, 0);
-        
+
         endDate.set(Calendar.MINUTE, 59);
         endDate.set(Calendar.HOUR, 23);
         endDate.set(Calendar.SECOND, 59);
-        
+        String strProductName = "%" + productName +"%";
         System.out.println("******************startDate:" + startDate.getTime() + " endDate:" + endDate.getTime() + " coyId" + coyId);
-        Query query = em.createQuery("SELECT p FROM ProductEntity p where p.company.companyId = :coyId AND p.productDateCreated >= :startDate AND p.productDateCreated <= :endDate order by p.productDateCreated ASC ");
+        Query query = em.createQuery("SELECT p FROM ProductEntity p where p.company.companyId = :coyId AND p.productDateCreated >= :startDate AND p.productDateCreated <= :endDate AND p.productName LIKE :productName order by p.productDateCreated ASC ");
         query.setParameter("startDate", startDate);
         query.setParameter("endDate", endDate);
         query.setParameter("coyId", coyId);
+        query.setParameter("productName", strProductName);
         List<ProductEntity> results = query.getResultList();
+        List<ProductEntity> returnResult = new ArrayList<>();
+        if (productCategory.toUpperCase().equals("ENDOWMENT")) {
 
-        for (ProductEntity p : results) {
-            p.getListOfAdditionalFeatures().size();
-            p.getListOfPremium().size();
-            p.getListOfRiders().size();
-            p.getListOfSmokerPremium().size();
+            for (ProductEntity p : results) {
+                if (p instanceof EndowmentEntity) {
+                    returnResult.add(p);
+                    p.getListOfAdditionalFeatures().size();
+                    p.getListOfPremium().size();
+                    p.getListOfRiders().size();
+                    p.getListOfSmokerPremium().size();
+                }
+            }
+
+        } else if (productCategory.toUpperCase().equals("WHOLELIFE")) {
+            for (ProductEntity p : results) {
+                if (p instanceof WholeLifeProductEntity) {
+                    returnResult.add(p);
+                    p.getListOfAdditionalFeatures().size();
+                    p.getListOfPremium().size();
+                    p.getListOfRiders().size();
+                    p.getListOfSmokerPremium().size();
+                }
+            }
+        } else if (productCategory.toUpperCase().equals("TERMLIFE")) {
+            for (ProductEntity p : results) {
+                if (p instanceof TermLifeProductEntity) {
+                    returnResult.add(p);
+                    p.getListOfAdditionalFeatures().size();
+                    p.getListOfPremium().size();
+                    p.getListOfRiders().size();
+                    p.getListOfSmokerPremium().size();
+                }
+            }
+        } else {
+            for (ProductEntity p : results) {
+
+                returnResult.add(p);
+                p.getListOfAdditionalFeatures().size();
+                p.getListOfPremium().size();
+                p.getListOfRiders().size();
+                p.getListOfSmokerPremium().size();
+
+            }
         }
-        return results;
+        return returnResult;
+
+//        for (ProductEntity p : results) {
+//            p.getListOfAdditionalFeatures().size();
+//            p.getListOfPremium().size();
+//            p.getListOfRiders().size();
+//            p.getListOfSmokerPremium().size();
+//        }
     }
 
     @Override
