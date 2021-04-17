@@ -168,7 +168,7 @@ public class InvoiceSessionBean implements InvoiceSessionBeanLocal {
     //    Actual Deployment Timer 
     //    @Schedule(hour = "7", minute = "0", second = "0", dayOfMonth = "1", month = "*", year = "*", persistent = false)
     // Timer for demo
-    @Schedule(hour = "*", minute = "*/3", second = "0", dayOfMonth = "*", month = "*", year = "*", persistent = false)
+    @Schedule(hour = "12", minute = "*", second = "0", dayOfMonth = "*", month = "*", year = "*", persistent = false)
     @Override
     public void automatedMonthlyInvoice() {
         try {
@@ -196,6 +196,10 @@ public class InvoiceSessionBean implements InvoiceSessionBeanLocal {
 
                     BigInteger newMonthlySubtotal = monthlyPayment.getTotalPayable().add(newProdLineItem.getMonthlySubtotalCredit());
                     monthlyPayment.setTotalPayable(newMonthlySubtotal);
+                    
+                    clickThrough.setMonthCounter(BigInteger.ZERO);
+                    System.out.println("Reset monthly counter: " + clickThrough.getMonthCounter());
+                    System.out.println("ClickThrough payment counter: " + monthlyClicks);
 
                 }
                 System.out.println("Check prior to email sending");

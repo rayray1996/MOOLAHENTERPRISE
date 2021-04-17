@@ -13,6 +13,7 @@ import ejb.entity.RiderEntity;
 import ejb.entity.TermLifeProductEntity;
 import ejb.entity.WholeLifeProductEntity;
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.List;
 import javax.ejb.Local;
 import util.enumeration.CategoryEnum;
@@ -57,4 +58,6 @@ public interface ProductSessionBeanLocal {
     public ProductEntity createProductListing(ProductEntity newProduct, Long companyId, List<RiderEntity> riders, List<PremiumEntity> premiums, List<PremiumEntity> smokerPremiums, List<FeatureEntity> features) throws ProductAlreadyExistsException, UnknownPersistenceException, InvalidProductCreationException;
 
     public ProductEntity updateProductListingWS(ProductEntity updateProduct) throws ProductAlreadyExistsException, UnknownPersistenceException, InvalidProductCreationException;
+
+    public List<ProductEntity> retrieveSpecificHistoricalTransactions(Calendar startDate, Calendar endDate, Long coyId, String productName, String productCategory);
 }

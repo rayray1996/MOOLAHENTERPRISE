@@ -9,6 +9,7 @@ import ejb.entity.CompanyEntity;
 import ejb.entity.CustomerEntity;
 import ejb.entity.PremiumEntity;
 import ejb.entity.ProductEntity;
+import ejb.stateless.ClickthroughSessionBeanLocal;
 import ejb.stateless.CompanySessionBeanLocal;
 import ejb.stateless.CustomerSessionBeanLocal;
 import ejb.stateless.PremiumSessionBeanLocal;
@@ -48,6 +49,9 @@ import util.helper.ProductEntityWrapper;
 @Named(value = "viewProductDetailManagedBean")
 @ViewScoped
 public class ViewProductDetailManagedBean implements Serializable {
+
+    @EJB
+    private ClickthroughSessionBeanLocal clickthroughSessionBean;
 
     @EJB
     private PremiumSessionBeanLocal premiumSessionBean;
@@ -149,7 +153,7 @@ public class ViewProductDetailManagedBean implements Serializable {
 
         } catch (ProductNotFoundException | CustomerDoesNotExistsException | ProductIsDeletedException ex) {
             System.out.println("Product does not exists!");
-        } 
+        }
     }
 
     public void likeProduct(ActionEvent event) {
@@ -178,13 +182,14 @@ public class ViewProductDetailManagedBean implements Serializable {
     public void addCount() {
         if (!hasCounted) {
             try {
-                BigInteger newCounter = product.getClickThroughInfo().getMonthCounter().add(BigInteger.ONE);
-                product.getClickThroughInfo().setMonthCounter(newCounter);
+                clickthroughSessionBean.addClickToProduct(product.getProductId());
                 System.out.println("EndTime Prod ID: " + product.getProductId());
-                System.out.println("New Counter: " + newCounter);
+                product = productSessionBean.retrieveProductEntityById(productToView.getProductEntity().getProductId());
+
+                System.out.println("New Counter: " + product.getClickThroughInfo().getMonthCounter());
                 productSessionBean.updateProductListing(product);
                 hasCounted = true;
-            } catch (ProductAlreadyExistsException | UnknownPersistenceException | InvalidProductCreationException ex) {
+            } catch (ProductAlreadyExistsException | UnknownPersistenceException | InvalidProductCreationException | ProductNotFoundException | ProductIsDeletedException ex) {
                 System.out.println(ex.getMessage());
             }
         }

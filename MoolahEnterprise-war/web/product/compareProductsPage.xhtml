@@ -154,12 +154,7 @@
                 adjustWidth()
             });
         </script>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-
+        
         <div style=" text-align: center;">
             <h:outputText style="font-weight: bold;" class="pageHeader" value="Compare Product"/>
         </div>
@@ -167,6 +162,7 @@
         <br/>
 
         <h:form id="noProductBlockForm">
+
             <ui:fragment id="noProductBlock" rendered="#{viewCurrentComparison.currentComparisons.size() == 0}">
                 <div style="text-align:center;" >
                     <h:outputText class="bodyText"  value="You have not added any products to compare"/>
@@ -184,6 +180,9 @@
         </h:form>
 
         <h:form id="productTableBlockForm">
+
+            <p:poll interval="1"  update="productTableBlockForm" oncomplete="adjustWidth()" />
+
             <ui:fragment id="productTableBlock" rendered="#{viewCurrentComparison.currentComparisons.size() > 0}">
                 <div style="width:90%;margin: 0 auto;" id="compareProductsDiv">
                     <p:commandButton value="Save Comparison" onclick="PF('saveComparisonDialog').show()" class="bodyText" style="float:right;"/>

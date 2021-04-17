@@ -25,7 +25,7 @@
             <br/>
             <br/>
             <br/>
-            <h3 style="color:#0070a3; text-align:center;">Duration to save a certain amount based on my current spending and saving habits? </h3><br/>
+            <h3 style="color:#0070a3; text-align:center; font-size: 18px">Duration to save a certain amount based on my current spending and saving habits? </h3><br/>
             <div class="monthlySaveToAchieve bodyText" style="margin-left:37%;">
                 <p:outputLabel value="How much do I have currently?"/><br/><br/>
                 <p:inputNumber minValue="0" decimalPlaces="2" class="financial_calculator_input" value="#{durationToSaveCalculator.currentlyHave}" placeholder="Enter how much ($) do I have currently" required="true" requiredMessage="How much do I currently have is required!"/><br/><br/>
@@ -36,7 +36,7 @@
                 <p:inputNumber minValue="1" decimalPlaces="2" class="financial_calculator_input" value="#{durationToSaveCalculator.aimingAmt}" placeholder="Enter your aiming amount" required="true" requiredMessage="Aiming amount is required!"/><br/><br/>
                 <p:outputLabel value="What is my current savings for every year?"/><br/><br/>
                 <p:inputNumber  decimalPlaces="2"  class="financial_calculator_input" value="#{durationToSaveCalculator.currentlySaving}" placeholder="Enter your annual saving amount" required="true" requiredMessage="Annual saving amount is required!" /><br/><br/>
-                <p:commandButton type="submit" actionListener="#{durationToSaveCalculator.computeHowLong}" value ="Compute" /><br/><br/>
+                <p:commandButton type="submit" actionListener="#{durationToSaveCalculator.computeHowLong}" value ="Compute" update="@form"/><br/><br/>
 
                 <h:panelGroup rendered="#{(durationToSaveCalculator.noOfYear != null and durationToSaveCalculator.noOfYear>0 and durationToSaveCalculator.noOfYear lt 150)}">
                     <h:outputLabel value="By saving "/>
