@@ -673,7 +673,7 @@ public class ProductResource {
     @Path("filterProductByDateCreated")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveSpecificMonthlyCreditHistoricalTransactions(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate, @QueryParam("productName") String productName, @QueryParam ("productCategory") String productCategory) {
+    public Response retrieveSpecificMonthlyCreditHistoricalTransactions(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate, @QueryParam("productName") String productName, @QueryParam("productCategory") String productCategory) {
         try {
             CompanyEntity company = companySessionBeanLocal.login(email, password);
             if (company == null) {
@@ -699,11 +699,8 @@ public class ProductResource {
         } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Invalid account").build();
         } catch (Exception ex) {
-            return Response.status(Response.Status.FORBIDDEN).entity("ex.getMessage()" + ex.getMessage()).build();
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
-//        } catch (Exception ex) {
-//            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
-//        }
     }
 
     private ProductSessionBeanLocal lookupProductSessionBeanLocal() {
