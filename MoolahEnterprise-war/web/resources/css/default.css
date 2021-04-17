@@ -73,3 +73,9 @@ a:link:hover, a:visited:hover  {
     font-weight: bold;
     text-align: center;
 }
+
+.ui-growl{
+    right: 82%;
+    top: 2%;
+    
+}
