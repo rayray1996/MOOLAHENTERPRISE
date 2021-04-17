@@ -32,9 +32,11 @@ MoolahEnterprise-war/nbproject/private/
 MoolahEnterprise-war/build/
 MoolahEnterprise-war/dist/
 
-MoolahEnterprise-war/web/WEB-INF
+MoolahEnterprise-war/web/WEB-INF/glassfish-web.xml
+MoolahEnterprise-war/web/WEB-INF/web.xml
 
-CompanyRWS/web/WEB-INF
+CompanyRWS/web/WEB-INF/glassfish-web.xml
+CompanyRWS/web/WEB-INF/web.xml
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
