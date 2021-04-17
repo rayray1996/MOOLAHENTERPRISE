@@ -454,7 +454,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
 //  Actual Deployment timer
 //  @Schedule(hour = "7", minute = "0", second = "0", dayOfMonth = "20", month = "*", year = "*", persistent = false)
 //  Demo timer
-    @Schedule(hour = "*", minute = "*/30", second = "0", dayOfMonth = "*", month = "*", year = "*", persistent = false)
+    @Schedule(hour = "*/2", minute = "0", second = "0", dayOfMonth = "*", month = "*", year = "*", persistent = false)
     public void automatedCheckCreditBalance() {
         System.out.println("Timer service triggered!");
         List<CompanyEntity> listOfCompanies = em.createQuery("SELECT coy FROM CompanyEntity coy WHERE coy.isDeleted = false").getResultList();

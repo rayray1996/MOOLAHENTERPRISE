@@ -24,6 +24,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import util.security.CryptographicHelper;
@@ -75,6 +76,7 @@ public class CompanyEntity implements Serializable {
     private Calendar verificationDate;
 
     @NotNull
+    @Min(0)
     private BigInteger creditOwned;
 
     @NotNull
