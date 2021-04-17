@@ -61,27 +61,27 @@
 
         </style>
 
-        <br/>
         <h1 style="text-align: center" class="pageHeader">Create an Account</h1> 
 
         <h:form id="accountForm">
 
-            <p:panelGrid style="margin-left: 24%;" styleClass="noBorders" >
+            <p:panelGrid style="margin-left: 28%;" styleClass="noBorders" >
 
                 <p:row styleClass="panelGrid_row_height_account_registration">
-                    <p:column class="panelGrid_col2_colStyle">
-                        <p:outputLabel class="bodyText" value="Full Name:"/><br/>
+                    <p:column class="panelGrid_col2_colStyle" style="padding: 20px 0 0 20px">
+                        <p:outputLabel class="bodyText" value="Full Name:" /><br/>
                         <p:inputText class="panelGrid_col2_formInputBox" id="name" value="#{createAccountManagedBean.customer.fullName}" placeholder="Enter your name" required="true" requiredMessage="Name is required!"/>
                     </p:column>
                     &nbsp;
-                    <p:column styleClass="panelGrid_col2_colStyle">
+                    <p:column styleClass="panelGrid_col2_colStyle" style="padding: 20px 0 0 20px">
                         <p:outputLabel class="bodyText" value="Birth Date:"/><br/>
                         <p:datePicker yearNavigator="true" yearRange="1900:2021" maxdate="#{createAccountManagedBean.currentDate}"  styleClass="panelGrid_col2_formInputBox" id="birthdate" value="#{createAccountManagedBean.dateOfBirth}" placeholder="Click here to select your birth date" required="true" requiredMessage="Birthdate is required!"/>
                     </p:column>
                 </p:row>
 
+
                 <p:row styleClass="panelGrid_row_height_account_registration">
-                    <p:column styleClass="panelGrid_col2_colStyle">
+                    <p:column styleClass="panelGrid_col2_colStyle" style="padding: 20px 0 0 20px">
                         <p:outputLabel class="bodyText" value="Gender:"/><br/>
                         <p:selectOneRadio class="bodyText" id="gender" value="#{createAccountManagedBean.customer.gender}" required="true" requiredMessage="Gender is required!">
                             <f:selectItem class="bodyText" itemLabel="Male" itemValue="MALE"/>
@@ -89,14 +89,14 @@
                         </p:selectOneRadio>                    
                     </p:column>
                     &nbsp;
-                    <p:column styleClass="panelGrid_col2_colStyle">
+                    <p:column styleClass="panelGrid_col2_colStyle" style="padding: 20px 0 0 20px">
                         <p:outputLabel class="bodyText" value="Phone Number:"/><br/>
                         <p:inputText class="bodyText" styleClass="panelGrid_col2_formInputBox" id="phoneNumber" value="#{createAccountManagedBean.customer.phoneNumber}" placeholder="Enter your phone number" required="true" requiredMessage="Phone Number is required!"/>
                     </p:column>
                 </p:row>
 
                 <p:row styleClass="panelGrid_row_height_account_registration">
-                    <p:column styleClass="panelGrid_col2_colStyle">
+                    <p:column styleClass="panelGrid_col2_colStyle" style="padding: 20px 0 0 20px">
                         <p:outputLabel class="bodyText" value="Have you smoked in the last 3 years?:"/><br/>
                         <p:selectOneRadio class="bodyText" id="smoker" value="#{createAccountManagedBean.customer.smoker}" required="true" requiredMessage="You need to declare if you had smoked in the last 3 years!">
                             <f:selectItem class="bodyText" itemLabel="Yes" itemValue="true"/>
@@ -104,14 +104,14 @@
                         </p:selectOneRadio>                    
                     </p:column>
                     &nbsp;
-                    <p:column styleClass="panelGrid_col2_colStyle">
+                    <p:column styleClass="panelGrid_col2_colStyle" style="padding: 20px 0 0 20px">
                         <p:outputLabel class="bodyText" value="Email Address:"/><br/>
                         <p:inputText class="bodyText" styleClass="panelGrid_col2_formInputBox" id="email" value="#{createAccountManagedBean.customer.email}" placeholder="Enter your email address" required="true" requiredMessage="Email address is required!"/>
                     </p:column>
                 </p:row>
 
                 <p:row styleClass="panelGrid_row_height_account_registration">
-                    <p:column styleClass="panelGrid_col2_colStyle">
+                    <p:column styleClass="panelGrid_col2_colStyle" style="padding: 20px 0 0 20px">
                         <p:outputLabel class="bodyText" value="Marital Status:"/><br/>
                         <p:selectOneRadio class="bodyText" id="maritalStatus1" value="#{createAccountManagedBean.customer.isMarried}" required="true" requiredMessage="You need to declare your marital status!">
                             <f:selectItem class="bodyText" itemLabel="Is Married" itemValue="true"/>
@@ -120,45 +120,45 @@
 
                     </p:column>
                     &nbsp;
-                    <p:column styleClass="panelGrid_col2_colStyle">
+                    <p:column styleClass="panelGrid_col2_colStyle" style="padding: 20px 0 0 20px">
                         <p:outputLabel class="bodyText" value="Password:"/><br/>
                         <p:password class="bodyText" styleClass="panelGrid_col2_formInputBox" id="password" value="#{createAccountManagedBean.customer.password}" placeholder="Enter your password" required="true" requiredMessage="Password is required!"/>
                     </p:column>
                 </p:row>
 
                 <p:row styleClass="panelGrid_row_height_account_registration">
-                    <p:column styleClass="panelGrid_col2_colStyle">
+                    <p:column styleClass="panelGrid_col2_colStyle" style="padding: 20px 0 0 20px">
                         <p:outputLabel class="bodyText"  value="Cash On Hand:"/><br/>
                         <p:inputText class="bodyText" styleClass="panelGrid_col2_formInputBox" id="cashOnHand" value="#{createAccountManagedBean.customer.asset.cashInHand}" placeholder="Enter your cash on hand" required="true" requiredMessage="Cash on hand field is required!"/>
                     </p:column>
                     &nbsp;
-                    <p:column styleClass="panelGrid_col2_colStyle">
+                    <p:column styleClass="panelGrid_col2_colStyle" style="padding: 20px 0 0 20px">
                         <p:outputLabel class="bodyText" value="Investments:"/><br/>
                         <p:inputText class="bodyText" styleClass="panelGrid_col2_formInputBox" id="investments" value="#{createAccountManagedBean.customer.asset.investments}" placeholder="Enter your investments" required="true" requiredMessage="Investment field is required!"/>
                     </p:column>
                 </p:row>
 
                 <p:row styleClass="panelGrid_row_height_account_registration">
-                    <p:column styleClass="panelGrid_col2_colStyle">
+                    <p:column styleClass="panelGrid_col2_colStyle" style="padding: 20px 0 0 20px">
                         <p:outputLabel class="bodyText" value="Monthly Income:"/><br/>
                         <p:inputText class="bodyText" styleClass="panelGrid_col2_formInputBox" id="monthlyIncome" value="#{createAccountManagedBean.customer.asset.monthlyIncome}" placeholder="Enter your Monthly Income" required="true" requiredMessage="Monthly Income field is required!"/>
                     </p:column>
                     &nbsp;
-                    <p:column styleClass="panelGrid_col2_colStyle">
+                    <p:column styleClass="panelGrid_col2_colStyle" style="padding: 20px 0 0 20px">
                         <p:outputLabel class="bodyText" value="Monthly Expenses:"/><br/>
                         <p:inputText class="bodyText" styleClass="panelGrid_col2_formInputBox" id="monthlyExpenses" value="#{createAccountManagedBean.customer.asset.monthlyExpense}" placeholder="Enter your Monthly Expenses" required="true" requiredMessage="Monthly Expenses field is required!"/>
                     </p:column>
                 </p:row>
-                <p:row styleClass="panelGrid_row_height_account_registration">
-                    <p:column style="text-align: center" colspan="2">
-                        <br/>
-                        <p:commandButton id="reset" value="Reset" type="reset"/>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <p:commandButton update="accountForm" id="submitAccountRegistration" value="Create Account" type="submit" actionListener="#{createAccountManagedBean.createAccount}"/> &nbsp;
-                    </p:column>
-                </p:row>
 
             </p:panelGrid>
+
+            <div style="text-align: center">
+                <br/>
+                <p:commandButton id="reset" value="Reset" type="reset"/>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <p:commandButton update="accountForm" id="submitAccountRegistration" value="Create Account" type="submit" actionListener="#{createAccountManagedBean.createAccount}"/> &nbsp;
+
+            </div>
         </h:form>
 
         <p:growl>

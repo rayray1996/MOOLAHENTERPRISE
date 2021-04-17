@@ -73,7 +73,7 @@ public class MoolahEnterpriseFilter implements Filter {
                     checkCustomerLink(requestServletPath2, httpServletResponse, httpSession, request, response, httpServletRequest);
                     chain.doFilter(request, response);
                 } else {
-                    chain.doFilter(request, response);
+                    httpServletResponse.sendRedirect(CONTEXT_ROOT + "/accessRightError.xhtml");
                 }
             }
         } else {
@@ -92,8 +92,7 @@ public class MoolahEnterpriseFilter implements Filter {
                 || path.equals("/aboutUs.xhtml")
                 || path.startsWith("/resetPassword.xhtml")
                 || path.startsWith("/createAccount.xhtml")
-                || path.startsWith("/product/ViewRecommendedProduct.xhtml")
-                || path.startsWith("/product/viewProductDetail.xhtml")) {
+                || path.startsWith("/resources/images/")) {
 
             return true;
         } else {
