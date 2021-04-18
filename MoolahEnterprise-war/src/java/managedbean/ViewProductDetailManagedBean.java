@@ -144,14 +144,14 @@ public class ViewProductDetailManagedBean implements Serializable {
             AffordabilityWrapper tempWrapper2 = new AffordabilityWrapper();
             AffordabilityWrapper tempWrapper3 = new AffordabilityWrapper();
 
-            if (custPremiums.get(0) != null) {
+            if (custPremiums.size() >= 1) {
                 tempWrapper = new AffordabilityWrapper(listOfAssetCust.get(0), listOfAssetCust.get(0).subtract(custPremiums.get(0).getPremiumValue()));
             } else {
                 tempWrapper = new AffordabilityWrapper(new BigDecimal("-1"), new BigDecimal("-1"));
             }
             listOfAffordability.add(tempWrapper);
 
-            if (custPremiums.get(1) != null) {
+            if (custPremiums.size() >= 2) {
                 tempWrapper2 = new AffordabilityWrapper(listOfAssetCust.get(1).subtract(custPremiums.get(0).getPremiumValue()), listOfAssetCust.get(1).subtract(custPremiums.get(0).getPremiumValue()).subtract(custPremiums.get(1).getPremiumValue()));
             } else {
                 tempWrapper = new AffordabilityWrapper(new BigDecimal("-1"), new BigDecimal("-1"));
@@ -159,7 +159,7 @@ public class ViewProductDetailManagedBean implements Serializable {
 
             listOfAffordability.add(tempWrapper2);
 
-            if (custPremiums.get(2) != null) {
+            if (custPremiums.size() >= 3) {
                 tempWrapper3 = new AffordabilityWrapper(listOfAssetCust.get(2).subtract(custPremiums.get(0).getPremiumValue()).subtract(custPremiums.get(1).getPremiumValue()), listOfAssetCust.get(2).subtract(custPremiums.get(0).getPremiumValue()).subtract(custPremiums.get(1).getPremiumValue()).subtract(custPremiums.get(2).getPremiumValue()));
             } else {
                 tempWrapper3 = new AffordabilityWrapper(new BigDecimal("-1"), new BigDecimal("-1"));

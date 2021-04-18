@@ -383,7 +383,7 @@ public class CompanySessionBean implements CompanySessionBeanLocal {
         LocalDateTime expirationDate = LocalDateTime.now();
 
         //Testing code - For showcase
-        expirationDate = expirationDate.plusMinutes(5);
+        expirationDate = expirationDate.plusMinutes(1);
 
         //Deployment code - Business Logic
 //        expirationDate = expirationDate.plusMonths(6);
