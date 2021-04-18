@@ -6,7 +6,7 @@
     </context-param>
     <context-param>
         <param-name>alternatedocroot_1</param-name>
-        <param-value>D:/NUS/Y2S2/IS3106/project/Clone2_pf/MOOLAHENTERPRISE/MoolahEnterprise-war/web/resources/images</param-value>
+        <param-value>C:/Users/nickg/Desktop/IS3106/GroupProject/MOOLAHENTERPRISE/MoolahEnterprise-war/web/resources/images/</param-value>
     </context-param>
     <context-param>
         <param-name>primefaces.THEME</param-name>
