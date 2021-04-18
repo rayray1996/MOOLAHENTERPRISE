@@ -12,5 +12,5 @@
       <description>Keep a copy of the generated servlet class' java code.</description>
     </property>
   </jsp-config>
-  <property name="alternatedocroot_1" value="from=/companyImages/* dir=C:/Users/nickg/Desktop/IS3106/GroupProject/MOOLAHENTERPRISE/MoolahEnterprise-war/web/resources/images/"/>
+  <property name="alternatedocroot_1" value="from=/companyImages/* dir=D:/NUS/Y2S2/IS3106/project/Clone2_pf/MOOLAHENTERPRISE/MoolahEnterprise-war/web/resources/images"/>
 </glassfish-web-app>

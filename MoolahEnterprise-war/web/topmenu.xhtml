@@ -8,9 +8,6 @@
                 xmlns:ezcomp="http://xmlns.jcp.org/jsf/composite/ezcomp">
 
     <style>
-        .ui-growl {
-            right:20%;
-        }
         #loggedinDisplay .ui-menubutton .ui-button{
             margin-top: 10%
         }
@@ -70,7 +67,7 @@
         <h:panelGroup rendered="#{sessionScope.isLogin == false || sessionScope.isLogin == NULL}">
             <h:form id="loginForm" style="z-index: 100; margin-top: -12%">
 
-                <p:growl>
+                <p:growl >
                     <p:autoUpdate />
                 </p:growl>
                 <p:megaMenu orientation="horizontal" autoDisplay="false" class="bodyText" style="background: none; border: none; height:4.2%; width:40%; margin-left:25%; margin-top:3%;font-size:16px;font-family: sans-serif">

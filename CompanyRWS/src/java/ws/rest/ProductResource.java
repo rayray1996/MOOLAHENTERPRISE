@@ -518,30 +518,30 @@ public class ProductResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateProductInformation(ProductEntity product, @QueryParam("email") String email, @QueryParam("password") String password) {
-        if (product != null) {
-            try {
-
-                CompanyEntity tempCompanyEntity = companySessionBeanLocal.login(email, password);
-                ProductEntity prod = productSessionBeanLocal.updateProductListingWS(product);
-                prod = nullifyProduct(prod);
-
-                return Response.status(Response.Status.OK).entity(prod).build();
-            } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
+//        if (product != null) {
+//            try {
+//
+//                CompanyEntity tempCompanyEntity = companySessionBeanLocal.login(email, password);
+//                ProductEntity prod = productSessionBeanLocal.updateProductListingWS(product);
+//                prod = nullifyProduct(prod);
+//
+//                return Response.status(Response.Status.OK).entity(prod).build();
+//            } catch (CompanyDoesNotExistException | IncorrectLoginParticularsException ex) {
+////                System.out.println("ex.message" + ex.getMessage());
+//                System.out.println("ex.message incorrect login" + ex.getMessage());
+//                return Response.status(Status.BAD_REQUEST).entity(ex.getMessage()).build();
+//            } catch (UnknownPersistenceException | ProductAlreadyExistsException | InvalidProductCreationException exception) {
+//                System.out.println("ex.message unknown" + exception.getMessage());
+//                return Response.status(Status.BAD_REQUEST).entity(exception.getMessage()).build();
+//            } catch (Exception ex) {
 //                System.out.println("ex.message" + ex.getMessage());
-                System.out.println("ex.message incorrect login" + ex.getMessage());
-                return Response.status(Status.BAD_REQUEST).entity(ex.getMessage()).build();
-            } catch (UnknownPersistenceException | ProductAlreadyExistsException | InvalidProductCreationException exception) {
-                System.out.println("ex.message unknown" + exception.getMessage());
-                return Response.status(Status.BAD_REQUEST).entity(exception.getMessage()).build();
-            } catch (Exception ex) {
-                System.out.println("ex.message" + ex.getMessage());
-                return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
-            }
-        } else {
-
-            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid create new record request").build();
-        }
-
+//                return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+//            }
+//        } else {
+//
+//            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid create new record request").build();
+//        }
+        return null;
     }
 
     @POST

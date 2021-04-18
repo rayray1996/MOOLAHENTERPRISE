@@ -239,7 +239,7 @@ public class CompanyResource {
 
                 tempCompany.setSalt(CryptographicHelper.getInstance().generateRandomString(32));
                 tempCompany.setPasswordHash(tempCompany.getPassword());
-
+                tempCompany.setCompanyImage("Employee-256.png");
                 CompanyEntity company = companySessionBeanLocal.createAccountForCompanyWS(tempCompany);
 
                 company = nullifyCompany(company);

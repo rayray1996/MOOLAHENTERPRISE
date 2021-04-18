@@ -35,6 +35,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import jdk.nashorn.internal.ir.BreakableNode;
+import jdk.nashorn.internal.parser.TokenType;
 import util.enumeration.CategoryEnum;
 import util.enumeration.EndowmentProductEnum;
 import util.enumeration.TermLifeProductEnum;
@@ -167,7 +168,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         endDate.set(Calendar.MINUTE, 59);
         endDate.set(Calendar.HOUR, 23);
         endDate.set(Calendar.SECOND, 59);
-        String strProductName = "%" + productName +"%";
+        String strProductName = "%" + productName + "%";
         System.out.println("******************startDate:" + startDate.getTime() + " endDate:" + endDate.getTime() + " coyId" + coyId);
         Query query = em.createQuery("SELECT p FROM ProductEntity p where p.company.companyId = :coyId AND p.productDateCreated >= :startDate AND p.productDateCreated <= :endDate AND p.productName LIKE :productName order by p.productDateCreated ASC ");
         query.setParameter("startDate", startDate);
@@ -585,25 +586,39 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 
     @Override
     public ProductEntity updateProductListingWS(ProductEntity updateProduct) throws ProductAlreadyExistsException, UnknownPersistenceException, InvalidProductCreationException {
-        for (ProductEntity prod : updateProduct.getCompany().getListOfProducts()) {
-            prod.setCompany(updateProduct.getCompany());
-        }
-        if (updateProduct.getCompany().getRefund() != null) {
-            updateProduct.getCompany().getRefund().setCompany(updateProduct.getCompany());
-        }
-        for (PointOfContactEntity poc : updateProduct.getCompany().getListOfPointOfContacts()) {
-            poc.setCompany(updateProduct.getCompany());
-        }
-        for (PaymentEntity pay : updateProduct.getCompany().getListOfPayments()) {
-            pay.setCompany(updateProduct.getCompany());
-        }
+     // CompanyEntity com = (em.find(CompanyEntity.class, custId) );
+      ProductEntity pro = (em.find(ProductEntity.class, updateProduct.getProductId()));
+        pro.setListOfAdditionalFeatures(updateProduct.getListOfAdditionalFeatures());
+        pro.setListOfPremium(updateProduct.getListOfPremium());
+        pro.setListOfRiders(updateProduct.getListOfRiders());
+        pro.setListOfSmokerPremium(updateProduct.getListOfSmokerPremium());
+       
+        pro.setProductName(updateProduct.getProductName());
+        pro.setDescription(updateProduct.getDescription());
+        pro.setCoverageTerm(updateProduct.getCoverageTerm());
+        pro.setAssuredSum(updateProduct.getAssuredSum());
+        pro.setPremiumTerm(updateProduct.getPremiumTerm());
+        pro.setAverageInterestRate(updateProduct.getAverageInterestRate());
+        pro.setPolicyCurrency(updateProduct.getPolicyCurrency());
+        pro.setIsAvailableToSmokers(updateProduct.getIsAvailableToSmokers());
+        
+        
+//        if (updateProduct.getCompany().getRefund() != null) {
+//            updateProduct.getCompany().getRefund().setCompany(updateProduct.getCompany());
+//        }
+//        for (PointOfContactEntity poc : updateProduct.getCompany().getListOfPointOfContacts()) {
+//            poc.setCompany(updateProduct.getCompany());
+//        }
+//        for (PaymentEntity pay : updateProduct.getCompany().getListOfPayments()) {
+//            pay.setCompany(updateProduct.getCompany());
+//        }
 
-        Set<ConstraintViolation<ProductEntity>> productError = validator.validate(updateProduct);
+        Set<ConstraintViolation<ProductEntity>> productError = validator.validate(pro);
         Set<ConstraintViolation<RiderEntity>> riderError = new HashSet<>();
         Set<ConstraintViolation<PremiumEntity>> premiumError = new HashSet<>();
         Set<ConstraintViolation<FeatureEntity>> featureError = new HashSet<>();
 
-        for (RiderEntity r : updateProduct.getListOfRiders()) {
+        for (RiderEntity r : pro.getListOfRiders()) {
             riderError = validator.validate(r);
             if (!riderError.isEmpty()) {
                 break;
@@ -611,21 +626,21 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         }
 
         // validate premiums
-        for (PremiumEntity p : updateProduct.getListOfPremium()) {
+        for (PremiumEntity p : pro.getListOfPremium()) {
             premiumError = validator.validate(p);
             if (!premiumError.isEmpty()) {
                 break;
             }
         }
 
-        for (PremiumEntity p : updateProduct.getListOfSmokerPremium()) {
+        for (PremiumEntity p : pro.getListOfSmokerPremium()) {
             premiumError = validator.validate(p);
             if (!premiumError.isEmpty()) {
                 break;
             }
         }
 
-        for (FeatureEntity f : updateProduct.getListOfAdditionalFeatures()) {
+        for (FeatureEntity f : pro.getListOfAdditionalFeatures()) {
             featureError = validator.validate(f);
             if (!featureError.isEmpty()) {
                 break;
@@ -633,8 +648,12 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         }
 
         if (productError.isEmpty() && riderError.isEmpty() && featureError.isEmpty() && premiumError.isEmpty()) {
+           // ProductEntity prod = null;
             try {
-                em.merge(updateProduct);
+
+              
+
+                em.merge(pro);
                 em.flush();
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {

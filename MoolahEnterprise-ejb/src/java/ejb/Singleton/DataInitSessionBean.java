@@ -122,7 +122,7 @@ public class DataInitSessionBean {
 
     @PostConstruct
     public void dataInit() {
-        int syear = 2018;
+      /*  int syear = 2018;
         int smonth = 0;
         int sday = 7;
         List<ProductEntity> lisOfProduct = em.createQuery("SELECT p FROM ProductEntity p").getResultList();
@@ -152,7 +152,7 @@ public class DataInitSessionBean {
             pay.setDateTransacted(cal);
             month++;
         }
-
+*/
         if (em.find(CompanyEntity.class, 1L) == null) {
             try {
                 // Create Company
@@ -1073,7 +1073,7 @@ public class DataInitSessionBean {
 
                 coy2TermLifeProduct03 = productSessionBean.createProductListing(coy2TermLifeProduct03, tencentCompany.getCompanyId(), listOfcoy2Riders10, listOfcoy2Premium10, new ArrayList<PremiumEntity>(), listOfcoy2Features10);
 
-                automatedMonthlyInvoice();
+              //  automatedMonthlyInvoice();
 
             } catch (CompanyAlreadyExistException | UnknownPersistenceException | CompanyCreationException | PointOfContactAlreadyExistsException
                     | InvalidPointOfContactCreationException | CustomerAlreadyExistException | CustomerCreationException | ProductAlreadyExistsException | InvalidProductCreationException ex) {
