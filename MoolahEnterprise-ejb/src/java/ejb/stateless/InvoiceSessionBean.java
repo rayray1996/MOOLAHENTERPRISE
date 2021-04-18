@@ -176,7 +176,9 @@ public class InvoiceSessionBean implements InvoiceSessionBeanLocal {
             List<CompanyEntity> listOfCompanies = companySessionBean.retrieveAllActiveCompanies();
             for (CompanyEntity company : listOfCompanies) {
                 List<ProductEntity> listOfProducts = productSessionBean.retrieveListOfProductByCompany(company.getCompanyEmail());
-
+                if(listOfProducts.isEmpty()) {
+                    continue;
+                }
                 Calendar date = Calendar.getInstance();
                 //This monthly payment has yet to be paid by the company
                 MonthlyPaymentEntity monthlyPayment = new MonthlyPaymentEntity(date, company);
